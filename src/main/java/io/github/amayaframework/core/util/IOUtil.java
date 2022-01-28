@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class IOUtil {
-    private static final String RESOURCES_PATH = "src/main/resources";
     private static final String LOGO_NAME = "logo.txt";
     private static final String ART_NAME = "art.txt";
 
@@ -20,14 +20,12 @@ public class IOUtil {
     }
 
     public static String readResourceFile(String name) {
-        FileInputStream stream;
-        try {
-            stream = new FileInputStream(RESOURCES_PATH + "/" + name);
-        } catch (Exception e) {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        InputStream stream = classLoader.getResourceAsStream(name);
+        if (stream == null) {
             return "";
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        return reader.lines().reduce("", (left, right) -> left + right + "\n");
+        return readInputStream(stream, StandardCharsets.UTF_8);
     }
 
     public static String readInputStream(InputStream stream, Charset charset) {
