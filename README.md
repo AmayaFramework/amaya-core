@@ -69,23 +69,20 @@ sequentially on some data, called Pipeline.
 
 This is a simplified diagram of what a typical pipeline data lifecycle looks like.
 
-![Pipelines_1](https://github.com/amayaframework/amaya-core/raw/main/images/pipelines_1.png)
+![Pipelines_1](https://github.com/amayaframework/amaya-core-api/raw/main/images/pipelines_1.png)
 
 The core of the framework provides a basic set of actions for the pipeline, which allows
 processing incoming requests in accordance with the declared functionality.
 
-There are 6 actions in total, but for the first 3 there are 2 different variations: for the sun server and for servlets.
-All their names are described in the Stage enum.
+There are 6 actions in total. All their names are described in the Stage enum.
 In this order they are executed:
 <p>Input actions:</p>
 
-* SunFindRouteAction (receives: SunRequestData, returns SunRequestData) /
-  ServletFindRouteAction (receives: ServletRequestData, returns ServletRequestData)
-* SunParseRequestAction (receives: SunRequestData, returns SunRequestData) /
-  ServletParseRequestAction (receives: ServletRequestData, returns ServletRequestData)
-* SunParseRequestCookiesAction (receives: SunRequestData, returns SunRequestData) /
-  ParseRequestCookiesAction (receives: ServletRequestData, returns ServletRequestData)
-* InvokeControllerAction (receives: returns RequestData, returns HttpResponse)
+* FindRouteAction (Not implemented)
+* ParseRequestAction (Not implemented)
+* ParseRequestBodyAction (receives: returns RequestData, returns RequestData)
+* ParseRequestCookiesAction (Not implemented)
+* InvokeControllerAction (receives: RequestData, returns HttpResponse)
 
 <p>Output actions:</p>
 
@@ -104,10 +101,6 @@ added when the appropriate configuration is enabled in the config.
 <p>Output actions:</p>
 
 * InputResultDebugAction (receives: PipelineResult, returns PipelineResult)
-
-Note: in order to avoid the need to create two different variations of pipeline actions when creating plugins,
-SunRequestData and ServletRequestData containing data about the server implementation were inherited from
-the universal RequestData.
 
 Thanks to this separation, almost any necessary functionality can be added by simply inserting
 the necessary actions between existing ones.
@@ -129,19 +122,7 @@ class MyConfigurator implements Configurator {
 
 The framework uses exactly the same mechanism for default pipeline configuration.
 
-Then you just add your configurator to the builder.
-
-```Java
-public class Main {
-    public static void main(String[] args) throws IOException {
-        AmayaServer server = new AmayaBuilder().
-                bind(8080).
-                addConfigurator(new MyConfigurator()).
-                build();
-        server.start();
-    }
-}
-```
+Then you just add your configurator to the builder in your framework realization.
 
 Also, you can add a collection of configurators at once, which will overwrite the one set earlier,
 or add configurators one by one - they will be executed in the order of addition.
@@ -203,7 +184,7 @@ Also, all the necessary information for this is contained in javadocs.
 This type of plugins simply implies a set of filter classes packaged in a library.
 All you need to create such a plugin is:
 
-1) Fill in your build file correctly
+1) Connect the necessary dependencies
 <p>For gradle, it will be like:</p>
 
 ```Groovy
@@ -242,8 +223,7 @@ All you need to create such a plugin is:
 ```Groovy
 dependencies {
     implementation group: 'com.github.romanqed', name: 'jutils', version: 'LATEST'
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: 'LATEST'
-    implementation group: 'io.github.amayaframework', name: 'core', version: 'LATEST'
+    implementation group: 'io.github.amayaframework', name: 'core-api', version: 'LATEST'
 }
 ```
 2) Create a stage enum that lists all your actions and in the future will help other
@@ -288,10 +268,10 @@ public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
 public class MyPipelineConfigurator implements Configurator {
     @Override
     public void accept(IOHandler handler) {
-        Pipeline input = handler.input();
-        Pipeline output = handler.output();
+        Pipeline input = handler.getInput();
+        Pipeline output = handler.getOutput();
         input.insertAfter(
-                Stage.PARSE_REQUEST.name(),
+                Stage.PARSE_REQUEST_BODY.name(),
                 MyStage.MY_STAGE_1.name(),
                 new MyStage1Action()
         );
@@ -306,19 +286,7 @@ public class MyPipelineConfigurator implements Configurator {
 
 3) Build and publish your library to any convenient repository
 4) Connect your library to an Amaya Framework-based project
-5) Add your configurator to the framework server
-
-```Java
-public class Server {
-    public static void main(String[] args) throws IOException {
-        AmayaServer server = new AmayaBuilder().
-                addConfigurator(new MyPipelineConfigurator()).
-                build();
-        server.start();
-    }
-}
-```
-
+5) Add your configurator to the framework builder
 6) Enjoy your beautiful data format!
 
 In the same way, you can change not only the body and any content included in the request and response,
@@ -369,7 +337,12 @@ the author might have forgotten to invent or implement some things, so he is wai
 ## Built With
 
 * [Gradle](https://gradle.org) - Dependency management
+* [classindex](https://github.com/atteo/classindex) - Annotation scanning
+* [cglib](https://github.com/cglib/cglib) - Method wrapping
 * [slf4j](https://www.slf4j.org) - Logging facade
+* [javax.servet](https://docs.oracle.com/javaee/7/api/javax/servlet/Servlet.html) - Servlets
+* [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
+* [amaya-filters](https://github.com/AmayaFramework/amaya-filters) - Implementation of string and content filters
 
 ## Authors
 * **RomanQed** - *Main work* - [RomanQed](https://github.com/RomanQed)
