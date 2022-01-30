@@ -158,4 +158,14 @@ public class ParseUtil {
                 "Headers: " + response.getHeaderMap() + "\n" +
                 "Cookies: " + response.getCookies() + "\n";
     }
+
+    public static String normalizePath(String path) {
+        if (path.equals("/")) {
+            path = "";
+        }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
+    }
 }
