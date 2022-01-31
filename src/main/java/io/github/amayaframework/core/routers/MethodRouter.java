@@ -53,7 +53,7 @@ public abstract class MethodRouter implements Router<MethodRoute> {
 
     @Override
     public Collection<MethodRoute> getRoutes() {
-        List<MethodRoute> ret = new LinkedList<>();
+        Collection<MethodRoute> ret = new HashSet<>();
         routes.values().forEach(e -> ret.addAll(e.values()));
         return ret;
     }
