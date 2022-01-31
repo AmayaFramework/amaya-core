@@ -26,7 +26,7 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     @Override
     public String getHeader(String key) {
         List<String> header = getHeaders(key);
-        if (header != null) {
+        if (header != null && !header.isEmpty()) {
             return header.get(0);
         }
         return null;
