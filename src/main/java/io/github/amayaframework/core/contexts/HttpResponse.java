@@ -140,7 +140,9 @@ public class HttpResponse extends AbstractHttpTransaction {
     public void setContentType(ContentType type) {
         super.setContentType(type);
         String headerValue = type.getHeader();
-        headerValue += "; " + ParseUtil.CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
+        if (type.isString()) {
+            headerValue += "; " + ParseUtil.CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
+        }
         headers.set(ParseUtil.CONTENT_HEADER, headerValue);
     }
 }
