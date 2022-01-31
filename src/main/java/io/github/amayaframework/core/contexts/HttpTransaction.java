@@ -1,16 +1,17 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.util.Attachable;
+
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>An interface describing the general case of a http transaction.</p>
  * <p>It is basic for the {@link HttpRequest} and {@link HttpResponse} classes</p>
  */
-public interface HttpTransaction {
+public interface HttpTransaction extends Attachable {
     /**
      * Returns the transaction body unchanged
      *
@@ -55,29 +56,6 @@ public interface HttpTransaction {
      * @return first value of header
      */
     String getHeader(String key);
-
-    /**
-     * Returns all stored attachments that could have been changed during the transaction processing transaction.
-     *
-     * @return {@link Map}
-     */
-    Map<String, Object> getAttachments();
-
-    /**
-     * Returns a specific attachment
-     *
-     * @param key which is related to attachment
-     * @return {@link Object}
-     */
-    Object getAttachment(String key);
-
-    /**
-     * Puts the attachment in the attachment {@link Map}
-     *
-     * @param key   which is related to attachment
-     * @param value which contains attachment
-     */
-    void setAttachment(String key, Object value);
 
     /**
      * Returns a list of cookies that belong to this transaction.

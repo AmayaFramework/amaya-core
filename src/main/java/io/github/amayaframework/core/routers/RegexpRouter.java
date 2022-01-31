@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.routers;
 
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.routes.MethodRoute;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -11,28 +12,28 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>A class describing the implementation of the router that supports the processing of paths with parameters.</p>
  * <p>Implemented using regular expressions.</p>
  */
-public class RegexpRouter extends AbstractRouter {
-    private final Map<HttpMethod, Set<Route>> regexpRoutes;
+public class RegexpRouter extends MethodRouter {
+    private final Map<HttpMethod, Set<MethodRoute>> regexpRoutes;
 
     public RegexpRouter() {
         regexpRoutes = new ConcurrentHashMap<>();
     }
 
     @Override
-    public Route follow(HttpMethod method, String route) {
-        Map<String, Route> methodRoutes = routes.get(method);
+    public MethodRoute follow(HttpMethod method, String route) {
+        Map<String, MethodRoute> methodRoutes = routes.get(method);
         if (methodRoutes == null) {
             return null;
         }
-        Route found = methodRoutes.get(route);
+        MethodRoute found = methodRoutes.get(route);
         if (found != null) {
             return found;
         }
-        Set<Route> regexps = regexpRoutes.get(method);
+        Set<MethodRoute> regexps = regexpRoutes.get(method);
         if (regexps == null) {
             return null;
         }
-        for (Route checked : regexps) {
+        for (MethodRoute checked : regexps) {
             if (checked.matches(route)) {
                 return checked;
             }
@@ -41,17 +42,17 @@ public class RegexpRouter extends AbstractRouter {
     }
 
     @Override
-    public void addRoute(HttpMethod method, Route route) {
+    public void addRoute(HttpMethod method, MethodRoute route) {
         super.addRoute(method, route);
         if (route.isRegexp()) {
-            Set<Route> methodRoutes = regexpRoutes.computeIfAbsent(method, k -> new HashSet<>());
+            Set<MethodRoute> methodRoutes = regexpRoutes.computeIfAbsent(method, k -> new HashSet<>());
             methodRoutes.add(route);
         }
     }
 
     @Override
-    public Route removeRoute(HttpMethod method, String pattern) {
-        Route ret = super.removeRoute(method, pattern);
+    public MethodRoute removeRoute(HttpMethod method, String pattern) {
+        MethodRoute ret = super.removeRoute(method, pattern);
         if (ret.isRegexp()) {
             regexpRoutes.get(method).remove(ret);
         }

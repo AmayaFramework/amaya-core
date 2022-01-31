@@ -3,7 +3,7 @@ package io.github.amayaframework.core.wrapping;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.HttpTransaction;
-import io.github.amayaframework.core.routers.InvalidFormatException;
+import io.github.amayaframework.core.util.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

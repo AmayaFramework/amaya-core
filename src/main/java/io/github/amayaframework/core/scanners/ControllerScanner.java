@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.scanners;
 
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.routers.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.ReflectUtils;
 import org.slf4j.Logger;

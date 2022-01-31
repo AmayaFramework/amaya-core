@@ -1,24 +1,25 @@
 package io.github.amayaframework.core.routers;
 
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.routes.MethodRoute;
+import io.github.amayaframework.core.util.DuplicateException;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractRouter implements Router {
-    protected Map<HttpMethod, Map<String, Route>> routes;
+public abstract class MethodRouter implements Router<MethodRoute> {
+    protected Map<HttpMethod, Map<String, MethodRoute>> routes;
 
-    public AbstractRouter() {
+    public MethodRouter() {
         routes = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void addRoute(HttpMethod method, Route route) {
+    public void addRoute(HttpMethod method, MethodRoute route) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(route);
         String key = route.route();
-        Map<String, Route> methodRoutes = routes.get(method);
+        Map<String, MethodRoute> methodRoutes = routes.get(method);
         if (methodRoutes == null) {
             methodRoutes = new ConcurrentHashMap<>();
             routes.put(method, methodRoutes);
@@ -29,10 +30,10 @@ public abstract class AbstractRouter implements Router {
     }
 
     @Override
-    public Route getRoute(HttpMethod method, String pattern) {
+    public MethodRoute getRoute(HttpMethod method, String pattern) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(pattern);
-        Map<String, Route> methodRoutes = routes.get(method);
+        Map<String, MethodRoute> methodRoutes = routes.get(method);
         if (methodRoutes == null) {
             return null;
         }
@@ -40,13 +41,20 @@ public abstract class AbstractRouter implements Router {
     }
 
     @Override
-    public Route removeRoute(HttpMethod method, String pattern) {
+    public MethodRoute removeRoute(HttpMethod method, String pattern) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(pattern);
-        Map<String, Route> methodRoutes = routes.get(method);
+        Map<String, MethodRoute> methodRoutes = routes.get(method);
         if (methodRoutes == null) {
             return null;
         }
         return methodRoutes.remove(pattern);
+    }
+
+    @Override
+    public Collection<MethodRoute> getRoutes() {
+        List<MethodRoute> ret = new LinkedList<>();
+        routes.values().forEach(e -> ret.addAll(e.values()));
+        return ret;
     }
 }

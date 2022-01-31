@@ -1,11 +1,11 @@
 package io.github.amayaframework.core.controllers;
 
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.routers.DuplicateException;
-import io.github.amayaframework.core.routers.Route;
-import io.github.amayaframework.core.routers.Router;
+import io.github.amayaframework.core.routers.MethodRouter;
+import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.scanners.RouteScanner;
 import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.core.util.DuplicateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +22,13 @@ import java.util.Objects;
 public abstract class AbstractController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final Router router;
+    private final MethodRouter router;
     private String route;
 
     public AbstractController() {
         router = AmayaConfig.INSTANCE.getRouter();
         RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRoutePacker());
-        Map<HttpMethod, List<Route>> found;
+        Map<HttpMethod, List<MethodRoute>> found;
         try {
             found = scanner.find();
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public abstract class AbstractController implements Controller {
         }
     }
 
-    private void debugLog(Map<HttpMethod, List<Route>> found) {
+    private void debugLog(Map<HttpMethod, List<MethodRoute>> found) {
         StringBuilder message = new StringBuilder("Controller successfully initialized\nAdded methods: ");
         found.forEach((method, routes) -> {
             message.append(method).append('[');
@@ -70,7 +70,7 @@ public abstract class AbstractController implements Controller {
     }
 
     @Override
-    public Router router() {
+    public MethodRouter getRouter() {
         return router;
     }
 

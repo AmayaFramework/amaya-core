@@ -2,7 +2,7 @@ package io.github.amayaframework.core.pipelines;
 
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.routers.Route;
+import io.github.amayaframework.core.routes.MethodRoute;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -13,22 +13,22 @@ import java.util.Objects;
  * Common form.
  */
 public abstract class RequestData {
-    private Route route;
+    private MethodRoute route;
     private String path;
     private HttpMethod method;
     private HttpRequest request;
 
-    protected RequestData(Route route, String path, HttpMethod method) {
+    protected RequestData(MethodRoute route, String path, HttpMethod method) {
         this.route = route;
         this.path = path;
         this.method = method;
     }
 
-    public Route getRoute() {
+    public MethodRoute getRoute() {
         return route;
     }
 
-    public void setRoute(Route route) {
+    public void setRoute(MethodRoute route) {
         this.route = Objects.requireNonNull(route);
     }
 

@@ -1,8 +1,7 @@
-package io.github.amayaframework.core.routers;
+package io.github.amayaframework.core.routes;
 
-import com.github.romanqed.jutils.util.Checks;
-import io.github.amayaframework.core.contexts.HttpRequest;
-import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.util.DuplicateParameterException;
+import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.Variable;
 import io.github.amayaframework.filters.StringFilter;
@@ -11,24 +10,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Route {
     private static final Pattern BRACKETS = Pattern.compile("\\{([^{}]+)}");
     private static final String PARAMETER = "([^/]+)";
-
+    private final String route;
+    private final List<Variable<String, StringFilter>> parameters;
+    private final boolean regexp;
     private Pattern pattern;
-    private String route;
-    private List<Variable<String, StringFilter>> parameters;
-    private Function<HttpRequest, HttpResponse> body;
-    private boolean regexp;
 
-    private Route() {
-    }
-
-    public static Route compile(String route, Function<HttpRequest, HttpResponse> body) {
+    public Route(String route) {
         Objects.requireNonNull(route);
         if (route.equals("/")) {
             route = "";
@@ -36,10 +29,9 @@ public class Route {
         if (!route.isEmpty() && !ParseUtil.ROUTE.matcher(route).matches()) {
             throw new InvalidRouteFormatException(route);
         }
-        Route ret = new Route();
         Matcher brackets = BRACKETS.matcher(route);
         boolean found = brackets.find();
-        ret.regexp = found;
+        regexp = found;
         List<Variable<String, StringFilter>> parameters = new ArrayList<>();
         while (found) {
             route = route.replace(brackets.group(), PARAMETER);
@@ -50,17 +42,11 @@ public class Route {
             parameters.add(parameter);
             found = brackets.find();
         }
-        ret.parameters = Collections.unmodifiableList(parameters);
-        if (ret.regexp) {
-            ret.pattern = Pattern.compile(route);
+        this.parameters = Collections.unmodifiableList(parameters);
+        if (regexp) {
+            pattern = Pattern.compile(route);
         }
-        ret.route = route;
-        ret.body = Checks.requireNonNullElse(body, request -> null);
-        return ret;
-    }
-
-    public static Route compile(String route) {
-        return compile(route, null);
+        this.route = route;
     }
 
     public Pattern pattern() {
@@ -77,10 +63,6 @@ public class Route {
 
     public boolean matches(String route) {
         return this.route.equals(route) || pattern.matcher(route).matches();
-    }
-
-    public HttpResponse apply(HttpRequest request) {
-        return body.apply(request);
     }
 
     public boolean isRegexp() {

@@ -5,7 +5,7 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.routers.Route;
+import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.ReflectUtils;
 import io.github.amayaframework.core.wrapping.Packer;
 
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 
-public class RouteScanner implements Scanner<Map<HttpMethod, List<Route>>> {
+public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>> {
     private final Controller instance;
     private final Class<? extends Controller> clazz;
     private final Packer packer;
@@ -25,9 +25,9 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<Route>>> {
         this.packer = Objects.requireNonNull(packer);
     }
 
-    public Map<HttpMethod, List<Route>> find() throws InvocationTargetException, IllegalAccessException {
+    public Map<HttpMethod, List<MethodRoute>> find() throws InvocationTargetException, IllegalAccessException {
         Method[] declaredMethods = clazz.getDeclaredMethods();
-        Map<HttpMethod, List<Route>> ret = new HashMap<>();
+        Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         List<Pair<HttpMethod, String>> found;
         for (Method method : declaredMethods) {
             found = ReflectUtils.extractMethodRoutes(method);
@@ -39,12 +39,12 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<Route>>> {
         return ret;
     }
 
-    private Map<HttpMethod, List<Route>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
+    private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
         Function<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
-        Map<HttpMethod, List<Route>> ret = new HashMap<>();
+        Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         for (Pair<HttpMethod, String> route : source) {
             ret.computeIfAbsent(route.getKey(), key -> new ArrayList<>()).
-                    add(Route.compile(route.getValue(), body));
+                    add(new MethodRoute(route.getValue(), method, body));
         }
         return ret;
     }

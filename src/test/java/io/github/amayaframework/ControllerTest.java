@@ -6,9 +6,9 @@ import io.github.amayaframework.core.controllers.AbstractController;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.methods.Post;
-import io.github.amayaframework.core.routers.DuplicateException;
-import io.github.amayaframework.core.routers.InvalidRouteFormatException;
-import io.github.amayaframework.core.routers.Router;
+import io.github.amayaframework.core.util.DuplicateException;
+import io.github.amayaframework.core.util.InvalidRouteFormatException;
+import io.github.amayaframework.core.routers.MethodRouter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +18,11 @@ public class ControllerTest extends Assertions {
     @Test
     public void testCorrect() {
         Correct correct = new Correct();
-        Router router = correct.router();
-        HttpResponse get = router.follow(HttpMethod.GET, "").apply(null);
-        HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").apply(null);
-        HttpResponse post = router.follow(HttpMethod.POST, "").apply(null);
-        HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").apply(null);
+        MethodRouter router = correct.getRouter();
+        HttpResponse get = router.follow(HttpMethod.GET, "").getBody().apply(null);
+        HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").getBody().apply(null);
+        HttpResponse post = router.follow(HttpMethod.POST, "").getBody().apply(null);
+        HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").getBody().apply(null);
         assertAll(
                 () -> assertEquals(get.getBody(), "get"),
                 () -> assertEquals(getWithId.getBody(), "getWithId"),

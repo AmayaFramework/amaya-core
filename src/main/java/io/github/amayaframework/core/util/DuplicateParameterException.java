@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.routers;
+package io.github.amayaframework.core.util;
 
 public class DuplicateParameterException extends DuplicateException {
     public DuplicateParameterException() {

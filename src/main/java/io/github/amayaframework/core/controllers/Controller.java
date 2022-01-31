@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.controllers;
 
+import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.Router;
 
 /**
@@ -12,7 +13,7 @@ public interface Controller {
      *
      * @return {@link Router}
      */
-    Router router();
+    MethodRouter getRouter();
 
     /**
      * Returns the path to which the controller is bound

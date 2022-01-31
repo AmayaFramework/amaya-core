@@ -35,7 +35,7 @@ public class ReflectUtils {
     public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method)
             throws InvocationTargetException, IllegalAccessException {
         Objects.requireNonNull(method);
-        List<Pair<HttpMethod, String>> ret = new ArrayList<>();
+        List<Pair<HttpMethod, String>> ret = new LinkedList<>();
         for (Annotation annotation : method.getDeclaredAnnotations()) {
             HttpMethod httpMethod = HttpMethod.fromAnnotation(annotation);
             if (httpMethod != null) {

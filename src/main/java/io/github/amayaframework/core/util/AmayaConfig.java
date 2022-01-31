@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.util;
 
+import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
-import io.github.amayaframework.core.routers.Router;
 import io.github.amayaframework.core.wrapping.InjectPacker;
 import io.github.amayaframework.core.wrapping.Packer;
 import org.slf4j.Logger;
@@ -62,16 +62,16 @@ public class AmayaConfig {
         fields.put(Field.ROUTE_PACKER, packer);
     }
 
-    public Router getRouter() {
+    public MethodRouter getRouter() {
         try {
             Class<?> routerClass = (Class<?>) fields.get(Field.ROUTER);
-            return (Router) routerClass.newInstance();
+            return (MethodRouter) routerClass.newInstance();
         } catch (Exception e) {
             throw new IllegalStateException("Can not instantiate Router!", e);
         }
     }
 
-    public void setRouter(Class<? extends Router> routerClass) {
+    public void setRouter(Class<? extends MethodRouter> routerClass) {
         Objects.requireNonNull(routerClass);
         this.setField(Field.ROUTER, routerClass);
     }

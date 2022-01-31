@@ -10,6 +10,6 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 public class InvokeControllerAction extends PipelineAction<RequestData, HttpResponse> {
     @Override
     public HttpResponse apply(RequestData requestData) {
-        return requestData.getRoute().apply(requestData.getRequest());
+        return requestData.getRoute().getBody().apply(requestData.getRequest());
     }
 }
