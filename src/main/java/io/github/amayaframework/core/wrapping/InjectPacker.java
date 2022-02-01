@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.wrapping;
 
+import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ReflectUtils;
@@ -12,7 +13,6 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * A class describing the implementation of a packer
@@ -50,7 +50,7 @@ public class InjectPacker extends AbstractPacker {
     }
 
     @Override
-    public Function<HttpRequest, HttpResponse> pack(Object instance, Method method)
+    public Action<HttpRequest, HttpResponse> pack(Object instance, Method method)
             throws InvocationTargetException, IllegalAccessException {
         Objects.requireNonNull(instance);
         Objects.requireNonNull(method);

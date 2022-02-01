@@ -4,7 +4,10 @@ import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.DuplicateException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class MethodRouter implements Router<MethodRoute> {

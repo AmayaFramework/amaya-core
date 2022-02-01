@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.util;
 
-import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
 import io.github.amayaframework.filters.ContentFilter;
@@ -148,14 +147,6 @@ public class ParseUtil {
         } catch (Exception e) {
             return defaultCharset;
         }
-    }
-
-    public static String getResponseData(HttpResponse response) {
-        return "Code: " + response.getCode() + "\n" +
-                "Body: " + response.getBody() + "\n" +
-                "Attachments: " + response.getAttachments() + "\n" +
-                "Headers: " + response.getHeaderMap() + "\n" +
-                "Cookies: " + response.getCookies() + "\n";
     }
 
     public static String normalizePath(String path) {

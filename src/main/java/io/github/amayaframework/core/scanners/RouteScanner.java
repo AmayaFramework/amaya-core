@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.scanners;
 
-import com.github.romanqed.jutils.structs.Pair;
+import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
@@ -12,7 +13,6 @@ import io.github.amayaframework.core.wrapping.Packer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Function;
 
 public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>> {
     private final Controller instance;
@@ -40,7 +40,7 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
     }
 
     private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
-        Function<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
+        Action<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         for (Pair<HttpMethod, String> route : source) {
             ret.computeIfAbsent(route.getKey(), key -> new ArrayList<>()).

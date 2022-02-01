@@ -1,10 +1,9 @@
 package io.github.amayaframework.core.pipelines;
 
 import com.github.romanqed.jutils.http.HttpCode;
-import com.github.romanqed.jutils.structs.pipeline.PipelineInterruptException;
+import com.github.romanqed.jutils.pipeline.PipelineInterruptException;
+import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.contexts.Responses;
-
-import java.util.function.Function;
 
 /**
  * <p>An abstract class containing supporting code for implementing an action.
@@ -12,7 +11,7 @@ import java.util.function.Function;
  * <p>@param {@link T} type of receiving parameter</p>
  * <p>@param {@link R} type of parameter to be returned</p>
  */
-public abstract class PipelineAction<T, R> implements Function<T, R> {
+public abstract class PipelineAction<T, R> implements Action<T, R> {
     /**
      * <p>A method that allows you to break the pipeline with the given result.</p>
      * <p>Note: Java does not recognize it as return or throw, so in some cases it is necessary to make an

@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.util;
 
-import com.github.romanqed.jutils.structs.Pair;
+
+import com.github.romanqed.jutils.util.Pair;
 
 public class Variable<K, V> extends Pair<K, V> {
     public Variable(K key, V value) {

@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.wrapping;
 
+import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.HttpTransaction;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
-import java.util.function.Function;
 
 public abstract class AbstractPacker implements Packer {
     private static final Logger logger = LoggerFactory.getLogger(Packer.class);
@@ -25,7 +25,7 @@ public abstract class AbstractPacker implements Packer {
     }
 
     @Override
-    public Function<HttpRequest, HttpResponse> checkedPack(Object instance, Method method) {
+    public Action<HttpRequest, HttpResponse> checkedPack(Object instance, Method method) {
         try {
             return pack(instance, method);
         } catch (Exception e) {

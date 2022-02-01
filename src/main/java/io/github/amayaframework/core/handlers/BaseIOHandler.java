@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.structs.pipeline.Pipeline;
-import com.github.romanqed.jutils.structs.pipeline.PipelineResult;
+import com.github.romanqed.jutils.pipeline.Pipeline;
+import com.github.romanqed.jutils.pipeline.PipelineResult;
 import com.github.romanqed.jutils.util.Checks;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
@@ -15,14 +15,12 @@ import java.util.Objects;
 
 public class BaseIOHandler implements IOHandler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final Pipeline input;
-    private final Pipeline output;
+    private final Pipeline pipeline;
     private final Controller controller;
     private final Collection<Configurator> defaultConfigurators;
 
     public BaseIOHandler(Controller controller, Collection<Configurator> defaultConfigurators) {
-        input = new Pipeline();
-        output = new Pipeline();
+        pipeline = new Pipeline();
         this.controller = Objects.requireNonNull(controller);
         Objects.requireNonNull(defaultConfigurators);
         defaultConfigurators.forEach(Objects::requireNonNull);
@@ -30,13 +28,8 @@ public class BaseIOHandler implements IOHandler {
     }
 
     @Override
-    public Pipeline getInput() {
-        return input;
-    }
-
-    @Override
-    public Pipeline getOutput() {
-        return output;
+    public Pipeline getPipeline() {
+        return pipeline;
     }
 
     @Override
@@ -45,8 +38,7 @@ public class BaseIOHandler implements IOHandler {
         configurators.forEach(e -> e.configure(this));
         if (AmayaConfig.INSTANCE.getDebug()) {
             String message = "Handler pipelines have been successfully configured\n" +
-                    "Input: " + input + "\n" +
-                    "Output: " + output + "\n";
+                    "Pipeline: " + pipeline + "\n";
             logger.debug(message);
         }
     }
@@ -58,6 +50,6 @@ public class BaseIOHandler implements IOHandler {
 
     @Override
     public PipelineResult process(Object data) {
-        return output.process(input.process(data));
+        return pipeline.process(data);
     }
 }

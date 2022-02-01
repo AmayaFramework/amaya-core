@@ -16,13 +16,13 @@ import static io.github.amayaframework.core.contexts.Responses.ok;
 
 public class ControllerTest extends Assertions {
     @Test
-    public void testCorrect() {
+    public void testCorrect() throws Exception {
         Correct correct = new Correct();
         MethodRouter router = correct.getRouter();
-        HttpResponse get = router.follow(HttpMethod.GET, "").getBody().apply(null);
-        HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").getBody().apply(null);
-        HttpResponse post = router.follow(HttpMethod.POST, "").getBody().apply(null);
-        HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").getBody().apply(null);
+        HttpResponse get = router.follow(HttpMethod.GET, "").getBody().execute(null);
+        HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").getBody().execute(null);
+        HttpResponse post = router.follow(HttpMethod.POST, "").getBody().execute(null);
+        HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").getBody().execute(null);
         assertAll(
                 () -> assertEquals(get.getBody(), "get"),
                 () -> assertEquals(getWithId.getBody(), "getWithId"),

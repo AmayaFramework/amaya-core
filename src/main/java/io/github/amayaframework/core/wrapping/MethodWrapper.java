@@ -1,14 +1,15 @@
 package io.github.amayaframework.core.wrapping;
 
+import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.filters.ContentFilter;
 import net.sf.cglib.reflect.FastMethod;
 
-import java.util.function.Function;
+import java.lang.reflect.InvocationTargetException;
 
-class MethodWrapper implements Function<HttpRequest, HttpResponse> {
+class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     private final Argument[] arguments;
     private final FastMethod method;
     private final Object instance;
@@ -33,12 +34,8 @@ class MethodWrapper implements Function<HttpRequest, HttpResponse> {
     }
 
     @Override
-    public HttpResponse apply(HttpRequest request) {
-        try {
-            return (HttpResponse) method.invoke(instance, makeParameters(request));
-        } catch (Exception e) {
-            return null;
-        }
+    public HttpResponse execute(HttpRequest request) throws InvocationTargetException {
+        return (HttpResponse) method.invoke(instance, makeParameters(request));
     }
 
     protected static class Argument {

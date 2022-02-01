@@ -7,14 +7,14 @@ import io.github.amayaframework.core.util.IOUtil;
 import java.io.InputStream;
 
 /**
- * <p>An input action which outputs information about the input pipeline result.</p>
+ * <p>Action which parse request body action.</p>
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */
 public class ParseRequestBodyAction extends PipelineAction<RequestData, RequestData> {
 
     @Override
-    public RequestData apply(RequestData requestData) {
+    public RequestData execute(RequestData requestData) {
         HttpRequest request = requestData.getRequest();
         InputStream bodyStream = requestData.getInputStream();
         String rawType = requestData.getContentType();

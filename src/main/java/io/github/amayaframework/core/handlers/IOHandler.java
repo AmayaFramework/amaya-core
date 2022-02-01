@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.structs.pipeline.Pipeline;
-import com.github.romanqed.jutils.structs.pipeline.PipelineResult;
+import com.github.romanqed.jutils.pipeline.Pipeline;
+import com.github.romanqed.jutils.pipeline.PipelineResult;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.controllers.Controller;
 
@@ -11,18 +11,11 @@ public interface IOHandler {
     PipelineResult process(Object data);
 
     /**
-     * Returns pipeline handles input
+     * Returns pipeline handles controller
      *
      * @return {@link Pipeline}
      */
-    Pipeline getInput();
-
-    /**
-     * Returns pipeline handles output
-     *
-     * @return {@link Pipeline}
-     */
-    Pipeline getOutput();
+    Pipeline getPipeline();
 
     /**
      * Returns the controller bound to the handler.
