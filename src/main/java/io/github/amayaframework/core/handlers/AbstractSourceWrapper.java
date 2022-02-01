@@ -44,17 +44,6 @@ public abstract class AbstractSourceWrapper<T> implements SourceWrapper<T> {
     }
 
     @Override
-    public void reject(T source, HttpResponse response) throws IOException {
-        String message;
-        if (response.getContentType().isString()) {
-            message = response.getBodyAsString();
-        } else {
-            message = response.getCode().getMessage();
-        }
-        reject(source, response.getCode(), message);
-    }
-
-    @Override
     public void process(T source, PipelineResult processResult) throws IOException {
         Exception exception = processResult.getException();
         if (exception != null) {
@@ -70,11 +59,6 @@ public abstract class AbstractSourceWrapper<T> implements SourceWrapper<T> {
         }
         if (response == null) {
             reject(source, HttpCode.INTERNAL_SERVER_ERROR, "Response is null");
-            return;
-        }
-        HttpCode code = response.getCode();
-        if (code.getCode() >= 400 && code.getCode() <= 511) {
-            reject(source, response);
             return;
         }
         ContentType type = response.getContentType();

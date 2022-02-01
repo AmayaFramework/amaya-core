@@ -15,7 +15,5 @@ public interface SourceWrapper<T> {
 
     void reject(T source, HttpCode code, String message) throws IOException;
 
-    void reject(T source, HttpResponse response) throws IOException;
-
     void process(T source, PipelineResult processResult) throws IOException;
 }
