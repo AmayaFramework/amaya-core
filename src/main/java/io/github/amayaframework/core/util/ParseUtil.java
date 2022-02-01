@@ -1,11 +1,14 @@
 package io.github.amayaframework.core.util;
 
+import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
 import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.StringFilter;
 
 import javax.servlet.http.Cookie;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -157,5 +160,22 @@ public class ParseUtil {
             path = path.substring(0, path.length() - 1);
         }
         return path;
+    }
+
+    public static String throwableToString(Throwable throwable) {
+        Objects.requireNonNull(throwable);
+        StringWriter ret = new StringWriter();
+        throwable.printStackTrace(new PrintWriter(ret));
+        return ret.toString();
+    }
+
+    public static String generateContentHeader(ContentType type, Charset charset) {
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(charset);
+        String ret = type.getHeader();
+        if (type.isString()) {
+            ret += "; " + CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
+        }
+        return ret;
     }
 }

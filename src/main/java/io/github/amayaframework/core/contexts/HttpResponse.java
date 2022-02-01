@@ -6,7 +6,10 @@ import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A class representing a http response. Inherited from {@link HttpTransaction}.
@@ -139,10 +142,6 @@ public class HttpResponse extends AbstractHttpTransaction {
     @Override
     public void setContentType(ContentType type) {
         super.setContentType(type);
-        String headerValue = type.getHeader();
-        if (type.isString()) {
-            headerValue += "; " + ParseUtil.CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
-        }
-        headers.set(ParseUtil.CONTENT_HEADER, headerValue);
+        headers.set(ParseUtil.CONTENT_HEADER, ParseUtil.generateContentHeader(type, charset));
     }
 }
