@@ -7,12 +7,26 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ParseUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Objects;
 
 public abstract class AbstractSourceWrapper<T> implements SourceWrapper<T> {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger;
+    private final Charset charset;
+
+    public AbstractSourceWrapper(Logger logger, Charset charset) {
+        this.logger = Objects.requireNonNull(logger);
+        this.charset = Objects.requireNonNull(charset);
+    }
+
+    protected BufferedWriter wrapOutputStream(OutputStream stream) {
+        return new BufferedWriter(new OutputStreamWriter(stream, charset));
+    }
 
     @Override
     public void reject(T source, Exception e) throws IOException {
