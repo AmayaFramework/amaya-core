@@ -24,7 +24,7 @@ public class ControllerTest extends Assertions {
         HttpResponse post = router.follow(HttpMethod.POST, "").getBody().execute(null);
         HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").getBody().execute(null);
         assertAll(
-                () -> assertEquals(get.getBody(), "view"),
+                () -> assertEquals(get.getBody(), "get"),
                 () -> assertEquals(getWithId.getBody(), "getWithId"),
                 () -> assertEquals(post.getBody(), "post"),
                 () -> assertEquals(postWithId.getBody(), "postWithId")
@@ -51,7 +51,7 @@ public class ControllerTest extends Assertions {
 class Correct extends AbstractController {
     @Get
     public HttpResponse get(HttpRequest request) {
-        return ok("view");
+        return ok("get");
     }
 
     @Get("/{id}")
