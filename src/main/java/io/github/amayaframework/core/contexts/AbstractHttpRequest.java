@@ -34,7 +34,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     }
 
     @Override
-    public Object get(String name) {
+    public Object view(String name) {
         return fields.get(name);
     }
 

@@ -1,5 +1,5 @@
 package io.github.amayaframework.core.wrapping;
 
 public interface Viewable {
-    Object get(String name);
+    Object view(String name);
 }

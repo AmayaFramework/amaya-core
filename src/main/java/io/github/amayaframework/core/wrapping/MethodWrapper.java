@@ -28,7 +28,7 @@ class MethodWrapper implements Action<HttpRequest, HttpResponse> {
         }
         for (int i = 0; i < arguments.length; ++i) {
             Argument argument = arguments[i];
-            ret[i + 1] = argument.filter.transform(request.get(argument.type), argument.name);
+            ret[i + 1] = argument.filter.transform(request.view(argument.type), argument.name);
         }
         return ret;
     }
