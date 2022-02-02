@@ -24,6 +24,7 @@ public enum ContentType {
     X_TEX("application", "x-tex"),
     APPLICATION_XML("application", "xml", true),
     DOC("application", "msword"),
+    FORM_URLENCODED("application", "x-www-form-urlencoded", true),
     // Audio
     BASIC("audio", "basic"),
     L24("audio", "L24"),
