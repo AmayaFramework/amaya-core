@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.contexts;
 
+import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
 
 /**
@@ -7,8 +8,20 @@ import com.github.romanqed.jutils.http.HttpCode;
  * <p>Methods that do not accept arguments will return a response with an empty body.</p>
  */
 public class Responses {
+    public static HttpResponse response(HttpCode code, HeaderMap headers) {
+        return new HttpResponseImpl(code, headers);
+    }
+
+    public static HttpResponse response(HttpCode code) {
+        return new HttpResponseImpl(code);
+    }
+
+    public static HttpResponse response() {
+        return new HttpResponseImpl();
+    }
+
     public static HttpResponse responseWithCode(HttpCode code, Object body) {
-        HttpResponse ret = new HttpResponse(code);
+        HttpResponse ret = new HttpResponseImpl(code);
         ret.setContentType(ContentType.PLAIN);
         ret.setBody(body);
         return ret;

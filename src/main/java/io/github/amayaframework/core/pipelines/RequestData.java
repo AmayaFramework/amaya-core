@@ -6,59 +6,31 @@ import io.github.amayaframework.core.routes.MethodRoute;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Objects;
 
 /**
  * A simple container created to transfer data between pipeline actions.
  * Common form.
  */
-public abstract class RequestData {
-    private MethodRoute route;
-    private String path;
-    private HttpMethod method;
-    private HttpRequest request;
+public interface RequestData {
+    MethodRoute getRoute();
 
-    protected RequestData(MethodRoute route, String path, HttpMethod method) {
-        this.route = route;
-        this.path = path;
-        this.method = method;
-    }
+    void setRoute(MethodRoute route);
 
-    public MethodRoute getRoute() {
-        return route;
-    }
+    String getPath();
 
-    public void setRoute(MethodRoute route) {
-        this.route = Objects.requireNonNull(route);
-    }
+    void setPath(String path);
 
-    public String getPath() {
-        return path;
-    }
+    HttpMethod getMethod();
 
-    public void setPath(String path) {
-        this.path = Objects.requireNonNull(path);
-    }
+    void setMethod(HttpMethod method);
 
-    public HttpMethod getMethod() {
-        return method;
-    }
+    HttpRequest getRequest();
 
-    public void setMethod(HttpMethod method) {
-        this.method = Objects.requireNonNull(method);
-    }
+    void setRequest(HttpRequest request);
 
-    public HttpRequest getRequest() {
-        return request;
-    }
+    InputStream getInputStream();
 
-    public void setRequest(HttpRequest request) {
-        this.request = Objects.requireNonNull(request);
-    }
+    String getContentType();
 
-    public abstract InputStream getInputStream();
-
-    public abstract String getContentType();
-
-    public abstract Charset getCharset();
+    Charset getCharset();
 }
