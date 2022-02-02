@@ -16,8 +16,8 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 public abstract class AbstractSourceWrapper<T> implements SourceWrapper<T> {
-    private final Logger logger;
-    private final Charset charset;
+    protected final Logger logger;
+    protected final Charset charset;
 
     public AbstractSourceWrapper(Logger logger, Charset charset) {
         this.logger = Objects.requireNonNull(logger);
