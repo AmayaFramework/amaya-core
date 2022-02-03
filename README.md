@@ -76,20 +76,16 @@ processing incoming requests in accordance with the declared functionality.
 
 There are 6 actions in total. All their names are described in the Stage enum.
 In this order they are executed:
-<p>Input actions:</p>
+<p>Actions:</p>
 
 * FindRouteAction (Not implemented)
 * ParseRequestAction (Not implemented)
 * ParseRequestBodyAction (receives: returns RequestData, returns RequestData)
 * ParseRequestCookiesAction (Not implemented)
 * InvokeControllerAction (receives: RequestData, returns HttpResponse)
-
-<p>Output actions:</p>
-
-* CheckResponseAction (receives: PipelineResult, returns HttpResponse)
 * ParseResponseCookiesAction (receives: HttpResponse, returns HttpResponse)
 
-Also included in the standard delivery are 4 additional debugging actions that will be automatically
+Also included in the standard delivery are 3 additional debugging actions that will be automatically
 added when the appropriate configuration is enabled in the config.
 
 <p>Input actions:</p>
@@ -97,10 +93,6 @@ added when the appropriate configuration is enabled in the config.
 * RouteDebugAction (receives: RequestData, returns RequestData)
 * RequestDebugAction (receives: RequestData, returns RequestData)
 * ResponseDebugAction (receives: HttpResponse, returns HttpResponse)
-
-<p>Output actions:</p>
-
-* InputResultDebugAction (receives: PipelineResult, returns PipelineResult)
 
 Thanks to this separation, almost any necessary functionality can be added by simply inserting
 the necessary actions between existing ones.
@@ -113,8 +105,7 @@ class MyConfigurator implements Configurator {
 
     @Override
     public void accept(IOHandler handler) {
-        Pipeline input = handler.getInput();
-        Pipeline output = handler.getOutput();
+        Pipeline pipeline = handler.getPipeline();
         // Do something
     }
 }
@@ -268,15 +259,14 @@ public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
 public class MyPipelineConfigurator implements Configurator {
     @Override
     public void accept(IOHandler handler) {
-        Pipeline input = handler.getInput();
-        Pipeline output = handler.getOutput();
-        input.insertAfter(
+        Pipeline pipeline = handler.getPipeline();
+        pipeline.insertAfter(
                 Stage.PARSE_REQUEST_BODY.name(),
                 MyStage.MY_STAGE_1.name(),
                 new MyStage1Action()
         );
-        output.insertAfter(
-                Stage.CHECK_RESPONSE.name(),
+        pipeline.insertAfter(
+                Stage.INVOKE_CONTROLLER.name(),
                 MyStage.MY_STAGE_2.name(),
                 new MyStage2Action()
         );
