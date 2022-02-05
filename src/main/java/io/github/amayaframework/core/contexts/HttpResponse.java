@@ -6,7 +6,7 @@ import com.github.romanqed.jutils.http.HttpCode;
 import java.util.List;
 
 /**
- * A class representing a http response. Inherited from {@link HttpTransaction}.
+ * An interface representing a http response. Inherited from {@link HttpTransaction}.
  */
 public interface HttpResponse extends HttpTransaction {
     /**
