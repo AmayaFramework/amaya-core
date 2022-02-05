@@ -7,6 +7,10 @@ import javax.servlet.http.Cookie;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An interface representing a http request. Inherited from {@link HttpTransaction}
+ * and service interface {@link Viewable}.
+ */
 public interface HttpRequest extends HttpTransaction, Viewable {
     /**
      * Returns the used http method.

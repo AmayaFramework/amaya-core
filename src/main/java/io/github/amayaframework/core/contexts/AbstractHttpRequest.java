@@ -2,7 +2,6 @@ package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Content;
-import io.github.amayaframework.core.wrapping.Viewable;
 
 import javax.servlet.http.Cookie;
 import java.util.HashMap;
@@ -10,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * A class representing a http request. Inherited from {@link HttpTransaction} and service interface {@link Viewable}.
- */
 public abstract class AbstractHttpRequest extends AbstractHttpTransaction implements HttpRequest {
     private final Map<String, Object> fields;
     private HttpMethod method;
