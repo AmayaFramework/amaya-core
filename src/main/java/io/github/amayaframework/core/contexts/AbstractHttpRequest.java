@@ -38,7 +38,9 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
         return fields.get(name);
     }
 
-    protected void put(String name, Object value) {
+    @Override
+    public void set(String name, Object value) {
+        Objects.requireNonNull(name);
         this.fields.put(name, value);
     }
 
@@ -50,7 +52,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setQuery(Map<String, List<String>> queryParameters) {
         this.queryParameters = Objects.requireNonNull(queryParameters);
-        put(Content.QUERY, queryParameters);
+        set(Content.QUERY, queryParameters);
     }
 
     @Override
@@ -75,7 +77,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setPathParameters(Map<String, Object> pathParameters) {
         this.pathParameters = Objects.requireNonNull(pathParameters);
-        put(Content.PATH, pathParameters);
+        set(Content.PATH, pathParameters);
     }
 
     @Override
@@ -91,12 +93,12 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setBody(Object body) {
         super.setBody(body);
-        put(Content.BODY, this.body);
+        set(Content.BODY, this.body);
     }
 
     @Override
     public void setCookies(Map<String, Cookie> cookies) {
         this.cookies = Objects.requireNonNull(cookies);
-        put(Content.COOKIE, cookies);
+        set(Content.COOKIE, cookies);
     }
 }
