@@ -1,5 +1,7 @@
 package io.github.amayaframework.core.wrapping;
 
+import io.github.amayaframework.core.scanners.AnnotationScanner;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Objects;
@@ -18,6 +20,9 @@ public class Content {
         addContent(Path.class, PATH);
         addContent(Body.class, BODY);
         addContent(Cookie.class, COOKIE);
+        AnnotationScanner scanner = new AnnotationScanner();
+        Map<String, Class<? extends Annotation>> found = scanner.safetyFind();
+        found.forEach((key, value) -> addContent(value, key));
     }
 
     private final Class<Annotation> annotationClass;

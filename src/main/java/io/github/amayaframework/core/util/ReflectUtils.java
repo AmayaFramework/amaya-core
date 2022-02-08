@@ -45,7 +45,7 @@ public class ReflectUtils {
         return ret;
     }
 
-    public static <V, T> Map<V, T> foundAnnotatedWithValue
+    public static <V, T> Map<V, T> findAnnotatedWithValue
             (Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType, String value)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Iterable<Class<?>> classes = ClassIndex.getAnnotated(annotation);
@@ -62,8 +62,8 @@ public class ReflectUtils {
     }
 
     public static <V, T> Map<V, T>
-    foundAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType)
+    findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType)
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        return foundAnnotatedWithValue(annotation, castType, valueType, "value");
+        return findAnnotatedWithValue(annotation, castType, valueType, "value");
     }
 }

@@ -91,12 +91,7 @@ public abstract class AbstractBuilder {
         if (annotation == null) {
             return;
         }
-        Set<Controller> controllers;
-        try {
-            controllers = new ControllerScanner(annotation).find();
-        } catch (Exception e) {
-            throw new IllegalStateException("Exception when scanning controllers!", e);
-        }
+        Set<Controller> controllers = new ControllerScanner(annotation).safetyFind();
         controllers.forEach(this::addController);
     }
 

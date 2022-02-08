@@ -7,7 +7,7 @@ public interface Scanner<E> {
         try {
             return find();
         } catch (Exception e) {
-            return null;
+            throw new IllegalStateException("Exception when scanning annotated", e);
         }
     }
 }

@@ -27,7 +27,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
     public Set<Controller> find()
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Map<String, Controller> found =
-                ReflectUtils.foundAnnotatedWithValue(annotationClass, Controller.class, String.class);
+                ReflectUtils.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
         for (Map.Entry<String, Controller> entry : found.entrySet()) {
             String path = entry.getKey();
             if (path.equals("/")) {

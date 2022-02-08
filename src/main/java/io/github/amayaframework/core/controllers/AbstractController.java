@@ -28,14 +28,7 @@ public abstract class AbstractController implements Controller {
     public AbstractController() {
         router = AmayaConfig.INSTANCE.getRouter();
         RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRoutePacker());
-        Map<HttpMethod, List<MethodRoute>> found;
-        try {
-            found = scanner.find();
-        } catch (Exception e) {
-            String error = "Exception when scanning routes at " + getClass().getSimpleName();
-            logger.error(error);
-            throw new IllegalStateException(error, e);
-        }
+        Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();
         found.forEach((method, routes) -> routes.forEach(route -> {
             try {
                 router.addRoute(method, route);

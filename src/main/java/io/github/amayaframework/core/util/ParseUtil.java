@@ -29,16 +29,8 @@ public class ParseUtil {
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
 
     static {
-        try {
-            STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).find());
-        } catch (Exception e) {
-            throw new IllegalStateException("Exception when scanning parameter filters!", e);
-        }
-        try {
-            CONTENT_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(ContentFilter.class).find());
-        } catch (Exception e) {
-            throw new IllegalStateException("Exception when scanning content filters!", e);
-        }
+        STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).safetyFind());
+        CONTENT_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(ContentFilter.class).safetyFind());
     }
 
     public static Variable<String, StringFilter> parseRouteParameter(String source) {
