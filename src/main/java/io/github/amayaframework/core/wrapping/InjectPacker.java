@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -32,7 +33,11 @@ public class InjectPacker extends AbstractPacker {
                 throw new IllegalStateException("Content annotation duplicate!");
             }
             found = content;
-            value = ReflectUtils.extractAnnotationValue(annotation, String.class);
+            try {
+                value = ReflectUtils.extractAnnotationValue(annotation, String.class);
+            } catch (NoSuchElementException e) {
+                value = "";
+            }
         }
         if (found == null) {
             throw new IllegalStateException("Not annotated parameter!");
