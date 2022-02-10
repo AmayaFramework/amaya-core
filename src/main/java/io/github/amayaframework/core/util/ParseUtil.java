@@ -24,7 +24,6 @@ public class ParseUtil {
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
     public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
-    private static final String URL_ENCODING = AmayaConfig.INSTANCE.getCharset().name();
     private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
 
@@ -67,7 +66,9 @@ public class ParseUtil {
         return ret;
     }
 
-    public static Map<String, List<String>> parseQueryString(String source) throws UnsupportedEncodingException {
+    public static Map<String, List<String>> parseQueryString(String source, Charset charset)
+            throws UnsupportedEncodingException {
+        Objects.requireNonNull(charset);
         Map<String, List<String>> ret = new HashMap<>();
         if (source == null || source.isEmpty()) {
             return ret;
@@ -76,8 +77,9 @@ public class ParseUtil {
             return ret;
         }
         Matcher matcher = QUERY.matcher(source);
+        String charsetName = charset.name();
         while (matcher.find()) {
-            String value = URLDecoder.decode(matcher.group(2), URL_ENCODING);
+            String value = URLDecoder.decode(matcher.group(2), charsetName);
             ret.computeIfAbsent(matcher.group(1), key -> new ArrayList<>()).add(value);
         }
         return ret;

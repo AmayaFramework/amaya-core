@@ -1,6 +1,8 @@
 package io.github.amayaframework.core.wrapping;
 
 import com.github.romanqed.jutils.util.Action;
+import com.thoughtworks.paranamer.BytecodeReadingParanamer;
+import com.thoughtworks.paranamer.Paranamer;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ReflectUtils;
@@ -10,17 +12,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A class describing the implementation of a packer
  * that supports injecting values into the marked route arguments.
  */
 public class InjectPacker extends AbstractPacker {
-    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter)
+    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, String name)
             throws InvocationTargetException, IllegalAccessException {
         Content found = null;
         String value = null;
@@ -36,7 +35,10 @@ public class InjectPacker extends AbstractPacker {
             try {
                 value = ReflectUtils.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchElementException e) {
-                value = "";
+                value = name;
+            }
+            if (value.isEmpty()) {
+                value = name;
             }
         }
         if (found == null) {
@@ -45,11 +47,11 @@ public class InjectPacker extends AbstractPacker {
         return new MethodWrapper.Argument(found.getFilter(), value);
     }
 
-    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters)
+    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, String[] names)
             throws InvocationTargetException, IllegalAccessException {
         List<MethodWrapper.Argument> ret = new ArrayList<>();
         for (int i = 1; i < parameters.length; ++i) {
-            ret.add(findParameterAnnotation(parameters[i]));
+            ret.add(findParameterAnnotation(parameters[i], names[i]));
         }
         return ret.toArray(new MethodWrapper.Argument[0]);
     }
@@ -62,7 +64,9 @@ public class InjectPacker extends AbstractPacker {
         method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
-        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters);
+        Paranamer paranamer = new BytecodeReadingParanamer();
+        String[] names = paranamer.lookupParameterNames(method);
+        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, names);
         FastClass fastClass = FastClass.create(instance.getClass());
         return new MethodWrapper(instance, fastClass.getMethod(method), arguments);
     }
