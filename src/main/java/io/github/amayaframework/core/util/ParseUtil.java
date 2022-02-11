@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class ParseUtil {
     public static final String CONTENT_HEADER = "Content-Type";
     public static final String COOKIE_HEADER = "Cookie";
+    public static final String SET_COOKIE_HEADER = "Set-Cookie";
     public static final String CONTENT_CHARSET = "charset=";
     public static final Map<String, StringFilter> STRING_FILTERS;
     public static final Map<String, ContentFilter> CONTENT_FILTERS;

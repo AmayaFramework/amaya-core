@@ -19,13 +19,13 @@ import java.util.Objects;
  * <p>Automatically creates an internal router and scans the methods.</p>
  * <p>All user controllers should inherit from it.</p>
  */
-public abstract class AbstractController implements Controller {
+public abstract class HttpController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final MethodRouter router;
     private String route;
 
-    public AbstractController() {
+    public HttpController() {
         router = AmayaConfig.INSTANCE.getRouter();
         RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRoutePacker());
         Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();

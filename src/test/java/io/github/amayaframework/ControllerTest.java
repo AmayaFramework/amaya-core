@@ -2,7 +2,7 @@ package io.github.amayaframework;
 
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.controllers.AbstractController;
+import io.github.amayaframework.core.controllers.HttpController;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.methods.Post;
@@ -48,7 +48,7 @@ public class ControllerTest extends Assertions {
     }
 }
 
-class Correct extends AbstractController {
+class Correct extends HttpController {
     @Get
     public HttpResponse get(HttpRequest request) {
         return ok("get");
@@ -70,7 +70,7 @@ class Correct extends AbstractController {
     }
 }
 
-class Duplicates extends AbstractController {
+class Duplicates extends HttpController {
     @Get
     @Post
     public HttpResponse get(HttpRequest request) {
@@ -83,7 +83,7 @@ class Duplicates extends AbstractController {
     }
 }
 
-class BrokenPath extends AbstractController {
+class BrokenPath extends HttpController {
     @Get("//")
     public HttpResponse get(HttpRequest request) {
         return ok();

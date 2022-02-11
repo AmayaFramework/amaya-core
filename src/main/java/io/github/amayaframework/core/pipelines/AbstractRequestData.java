@@ -7,39 +7,30 @@ import io.github.amayaframework.core.routes.MethodRoute;
 import java.util.Objects;
 
 public abstract class AbstractRequestData implements RequestData {
-    private MethodRoute route;
-    private String path;
-    private HttpMethod method;
+    private final MethodRoute route;
+    private final String path;
+    private final HttpMethod method;
     private HttpRequest request;
 
-    protected AbstractRequestData(MethodRoute route, String path, HttpMethod method) {
-        this.route = route;
-        this.path = path;
-        this.method = method;
+    protected AbstractRequestData(HttpMethod method, String path, MethodRoute route) {
+        this.route = Objects.requireNonNull(route);
+        this.path = Objects.requireNonNull(path);
+        this.method = Objects.requireNonNull(method);
     }
 
+    @Override
     public MethodRoute getRoute() {
         return route;
     }
 
-    public void setRoute(MethodRoute route) {
-        this.route = Objects.requireNonNull(route);
-    }
-
+    @Override
     public String getPath() {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = Objects.requireNonNull(path);
-    }
-
+    @Override
     public HttpMethod getMethod() {
         return method;
-    }
-
-    public void setMethod(HttpMethod method) {
-        this.method = Objects.requireNonNull(method);
     }
 
     public HttpRequest getRequest() {

@@ -14,15 +14,9 @@ import java.nio.charset.Charset;
 public interface RequestData {
     MethodRoute getRoute();
 
-    void setRoute(MethodRoute route);
-
     String getPath();
 
-    void setPath(String path);
-
     HttpMethod getMethod();
-
-    void setMethod(HttpMethod method);
 
     HttpRequest getRequest();
 

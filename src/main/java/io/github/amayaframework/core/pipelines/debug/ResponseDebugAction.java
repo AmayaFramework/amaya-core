@@ -20,7 +20,6 @@ public class ResponseDebugAction extends PipelineAction<HttpResponse, HttpRespon
         if (response != null) {
             message += "Code: " + response.getCode() + "\n" +
                     "Body: " + response.getBody() + "\n" +
-                    "Attachments: " + response.getAttachments() + "\n" +
                     "Headers: " + response.getHeaderMap() + "\n" +
                     "Cookies: " + response.getCookies() + "\n";
         }

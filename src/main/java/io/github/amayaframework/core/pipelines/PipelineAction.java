@@ -1,9 +1,7 @@
 package io.github.amayaframework.core.pipelines;
 
-import com.github.romanqed.jutils.http.HttpCode;
 import com.github.romanqed.jutils.pipeline.PipelineInterruptException;
 import com.github.romanqed.jutils.util.Action;
-import io.github.amayaframework.core.contexts.Responses;
 
 /**
  * <p>An abstract class containing supporting code for implementing an action.
@@ -22,17 +20,5 @@ public abstract class PipelineAction<T, R> implements Action<T, R> {
      */
     protected void interrupt(Object ret) {
         throw new PipelineInterruptException(null, ret);
-    }
-
-    /**
-     * <p>A method that allows you to interrupt the pipeline by returning an HttpResponse with the specified code.</p>
-     * <p>Note: Java does not recognize it as return or throw, so in some cases it is necessary to make an
-     * additional return after the call, but this code will never be executed, since execution will
-     * terminate immediately after calling this method.</p>
-     *
-     * @param code {@link HttpCode} code to be returned
-     */
-    protected void reject(HttpCode code) {
-        interrupt(Responses.responseWithCode(code, code.getMessage()));
     }
 }

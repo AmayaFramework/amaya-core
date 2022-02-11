@@ -1,21 +1,26 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.pipeline.Pipeline;
-import com.github.romanqed.jutils.pipeline.PipelineResult;
-import io.github.amayaframework.core.configurators.Configurator;
+import com.github.romanqed.jutils.util.Action;
 import io.github.amayaframework.core.controllers.Controller;
 
-import java.util.Collection;
+import java.io.IOException;
 
 public interface IOHandler {
-    PipelineResult process(Object data);
+    void handle(Session session) throws IOException;
 
     /**
-     * Returns pipeline handles controller
+     * Returns action handles input
      *
      * @return {@link Pipeline}
      */
-    Pipeline getPipeline();
+    Action<Object, Object> getInput();
+
+    /**
+     * Returns action handles output
+     * @return {@link Pipeline}
+     */
+    Action<Object, Object> getOutput();
 
     /**
      * Returns the controller bound to the handler.
@@ -23,6 +28,4 @@ public interface IOHandler {
      * @return {@link Controller}
      */
     Controller getController();
-
-    void configure(Collection<Configurator> configurators);
 }

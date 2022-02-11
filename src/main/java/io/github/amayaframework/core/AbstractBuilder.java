@@ -1,6 +1,7 @@
 package io.github.amayaframework.core;
 
-import io.github.amayaframework.core.configurators.Configurator;
+import io.github.amayaframework.core.configurators.AmayaConfigurator;
+import io.github.amayaframework.core.configurators.PipelineConfigurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Endpoint;
 import io.github.amayaframework.core.scanners.ControllerScanner;
@@ -13,18 +14,23 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractBuilder {
+public abstract class AbstractBuilder<T> {
+    private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.pipelines";
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected final Configurator defaultConfigurator;
+    protected final PipelineConfigurator defaultConfigurator;
     protected final Map<String, Controller> controllers;
-    protected final List<Configurator> configurators;
+    protected final List<PipelineConfigurator> configurators;
     protected Class<? extends Annotation> annotation;
 
-    public AbstractBuilder(Configurator defaultConfigurator) {
+    public AbstractBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
         configurators = new LinkedList<>();
-        this.defaultConfigurator = defaultConfigurator;
+        defaultConfigurator = new AmayaConfigurator(pipelinePrefix);
         resetValues();
+    }
+
+    public AbstractBuilder() {
+        this(DEFAULT_PREFIX);
     }
 
     protected void resetValues() {
@@ -34,7 +40,7 @@ public abstract class AbstractBuilder {
         controllers.clear();
     }
 
-    public AbstractBuilder pipelineConfigurators(Collection<Configurator> configurators) {
+    public AbstractBuilder<T> pipelineConfigurators(Collection<PipelineConfigurator> configurators) {
         Objects.requireNonNull(configurators);
         configurators.forEach(Objects::requireNonNull);
         this.configurators.clear();
@@ -46,7 +52,7 @@ public abstract class AbstractBuilder {
         return this;
     }
 
-    public AbstractBuilder addConfigurator(Configurator configurator) {
+    public AbstractBuilder<T> addConfigurator(PipelineConfigurator configurator) {
         Objects.requireNonNull(configurator);
         configurators.add(configurator);
         if (AmayaConfig.INSTANCE.getDebug()) {
@@ -55,7 +61,7 @@ public abstract class AbstractBuilder {
         return this;
     }
 
-    public AbstractBuilder addController(Controller controller) {
+    public AbstractBuilder<T> addController(Controller controller) {
         Objects.requireNonNull(controller);
         String path = controller.getPath();
         Objects.requireNonNull(path);
@@ -66,7 +72,7 @@ public abstract class AbstractBuilder {
         return this;
     }
 
-    public AbstractBuilder removeController(String path) {
+    public AbstractBuilder<T> removeController(String path) {
         Objects.requireNonNull(path);
         Controller controller = controllers.remove(path);
         if (AmayaConfig.INSTANCE.getDebug()) {
@@ -79,7 +85,7 @@ public abstract class AbstractBuilder {
         return this;
     }
 
-    public AbstractBuilder controllerAnnotation(Class<? extends Annotation> annotation) {
+    public AbstractBuilder<T> controllerAnnotation(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
         if (AmayaConfig.INSTANCE.getDebug()) {
             logger.debug("Set controller annotation to" + annotation.getSimpleName());
@@ -101,4 +107,6 @@ public abstract class AbstractBuilder {
         logger.info("We are glad to welcome you, senpai!");
         logger.info("\n" + IOUtil.readArt());
     }
+
+    public abstract T build() throws Exception;
 }

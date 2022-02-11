@@ -1,7 +1,5 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.util.Attachable;
-
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.Collection;
@@ -11,7 +9,7 @@ import java.util.List;
  * <p>An interface describing the general case of a http transaction.</p>
  * <p>It is basic for the {@link HttpRequest} and {@link HttpResponse} classes</p>
  */
-public interface HttpTransaction extends Attachable {
+public interface HttpTransaction {
     /**
      * Returns the transaction body unchanged
      *
