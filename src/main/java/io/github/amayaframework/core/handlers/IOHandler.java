@@ -18,6 +18,7 @@ public interface IOHandler {
 
     /**
      * Returns action handles output
+     *
      * @return {@link Pipeline}
      */
     Action<Object, Object> getOutput();

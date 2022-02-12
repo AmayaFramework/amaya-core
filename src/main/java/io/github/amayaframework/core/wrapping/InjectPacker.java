@@ -5,6 +5,7 @@ import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ReflectUtils;
 import net.sf.cglib.reflect.FastClass;
 
@@ -22,7 +23,7 @@ import java.util.Objects;
  * that supports injecting values into the marked route arguments.
  */
 public class InjectPacker extends AbstractPacker {
-    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, String name)
+    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, String nativeName)
             throws InvocationTargetException, IllegalAccessException {
         Content found = null;
         String value = null;
@@ -38,10 +39,10 @@ public class InjectPacker extends AbstractPacker {
             try {
                 value = ReflectUtils.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchElementException e) {
-                value = name;
+                value = nativeName;
             }
-            if (value.isEmpty()) {
-                value = name;
+            if (nativeName != null) {
+                value = nativeName;
             }
         }
         if (found == null) {
@@ -50,11 +51,15 @@ public class InjectPacker extends AbstractPacker {
         return new MethodWrapper.Argument(found.getFilter(), value);
     }
 
-    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, String[] names)
+    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, String[] nativeNames)
             throws InvocationTargetException, IllegalAccessException {
         List<MethodWrapper.Argument> ret = new ArrayList<>();
         for (int i = 1; i < parameters.length; ++i) {
-            ret.add(findParameterAnnotation(parameters[i], names[i]));
+            String nativeName = null;
+            if (nativeNames != null) {
+                nativeName = nativeNames[i];
+            }
+            ret.add(findParameterAnnotation(parameters[i], nativeName));
         }
         return ret.toArray(new MethodWrapper.Argument[0]);
     }
@@ -67,9 +72,12 @@ public class InjectPacker extends AbstractPacker {
         method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
-        Paranamer paranamer = new BytecodeReadingParanamer();
-        String[] names = paranamer.lookupParameterNames(method);
-        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, names);
+        String[] nativeNames = null;
+        if (AmayaConfig.INSTANCE.useNativeNames()) {
+            Paranamer paranamer = new BytecodeReadingParanamer();
+            nativeNames = paranamer.lookupParameterNames(method);
+        }
+        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, nativeNames);
         FastClass fastClass = FastClass.create(instance.getClass());
         return new MethodWrapper(instance, fastClass.getMethod(method), arguments);
     }

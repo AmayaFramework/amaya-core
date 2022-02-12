@@ -38,33 +38,35 @@ public class AmayaConfig {
         setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
         setBacklog(0);
+        setUseNativeNames(true);
     }
 
     public void setField(Field field, Object value) {
         Objects.requireNonNull(field);
+        Objects.requireNonNull(value);
         fields.put(field, value);
         if (getDebug()) {
             logger.debug("Field " + field + " set with value " + value);
         }
     }
 
-    public Object getField(Field field) {
+    @SuppressWarnings("unchecked")
+    public <T> T getField(Field field) {
         Objects.requireNonNull(field);
-        return fields.get(field);
+        return (T) fields.get(field);
     }
 
     public Packer getRoutePacker() {
-        return (Packer) fields.get(Field.ROUTE_PACKER);
+        return getField(Field.ROUTE_PACKER);
     }
 
     public void setRoutePacker(Packer packer) {
-        Objects.requireNonNull(packer);
-        fields.put(Field.ROUTE_PACKER, packer);
+        setField(Field.ROUTE_PACKER, packer);
     }
 
     public MethodRouter getRouter() {
         try {
-            Class<?> routerClass = (Class<?>) fields.get(Field.ROUTER);
+            Class<?> routerClass = getField(Field.ROUTER);
             return (MethodRouter) routerClass.newInstance();
         } catch (Exception e) {
             throw new IllegalStateException("Can not instantiate Router!", e);
@@ -72,33 +74,39 @@ public class AmayaConfig {
     }
 
     public void setRouter(Class<? extends MethodRouter> routerClass) {
-        Objects.requireNonNull(routerClass);
         this.setField(Field.ROUTER, routerClass);
     }
 
     public Charset getCharset() {
-        return (Charset) fields.get(Field.CHARSET);
+        return getField(Field.CHARSET);
     }
 
     public void setCharset(Charset charset) {
-        Objects.requireNonNull(charset);
-        this.setField(Field.CHARSET, charset);
+        setField(Field.CHARSET, charset);
     }
 
-    public Integer getBacklog() {
-        return (Integer) fields.get(Field.BACKLOG);
+    public int getBacklog() {
+        return getField(Field.BACKLOG);
     }
 
     public void setBacklog(int backlog) {
-        this.setField(Field.BACKLOG, backlog);
+        setField(Field.BACKLOG, backlog);
     }
 
-    public Boolean getDebug() {
-        return (Boolean) fields.get(Field.DEBUG);
+    public boolean getDebug() {
+        return getField(Field.DEBUG);
     }
 
     public void setDebug(boolean debug) {
-        this.setField(Field.DEBUG, debug);
+        setField(Field.DEBUG, debug);
+    }
+
+    public boolean useNativeNames() {
+        return getField(Field.USE_NATIVE_NAMES);
+    }
+
+    public void setUseNativeNames(boolean useNativeNames) {
+        setField(Field.USE_NATIVE_NAMES, useNativeNames);
     }
 
     public enum Field {
@@ -124,6 +132,10 @@ public class AmayaConfig {
         /**
          * Determines whether debugging mode will be enabled
          */
-        DEBUG
+        DEBUG,
+        /**
+         * Determines whether the native parameter names or those specified by the annotation will be used
+         */
+        USE_NATIVE_NAMES
     }
 }
