@@ -1,10 +1,11 @@
 package io.github.amayaframework.core.controllers;
 
+import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.scanners.RouteScanner;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.DuplicateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,9 @@ public abstract class HttpController implements Controller {
     private String route;
 
     public HttpController() {
-        router = AmayaConfig.INSTANCE.getRouter();
-        RouteScanner scanner = new RouteScanner(this, AmayaConfig.INSTANCE.getRoutePacker());
+        AmayaConfig config = ConfigProvider.getConfig();
+        router = config.getRouter();
+        RouteScanner scanner = new RouteScanner(this, config.getRoutePacker());
         Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();
         found.forEach((method, routes) -> routes.forEach(route -> {
             try {
@@ -38,7 +40,7 @@ public abstract class HttpController implements Controller {
                 throw new DuplicateException(error);
             }
         }));
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             debugLog(found);
         }
     }

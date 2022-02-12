@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.scanners;
 
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.ReflectUtils;
@@ -40,7 +40,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
             entry.getValue().setPath(path);
         }
         Set<Controller> ret = new HashSet<>(found.values());
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (ConfigProvider.getConfig().isDebug()) {
             debugPrint(ret);
         }
         return ret;

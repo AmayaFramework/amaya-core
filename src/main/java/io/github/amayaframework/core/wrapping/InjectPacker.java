@@ -3,9 +3,9 @@ package io.github.amayaframework.core.wrapping;
 import com.github.romanqed.jutils.util.Action;
 import com.thoughtworks.paranamer.BytecodeReadingParanamer;
 import com.thoughtworks.paranamer.Paranamer;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.ReflectUtils;
 import net.sf.cglib.reflect.FastClass;
 
@@ -73,7 +73,7 @@ public class InjectPacker extends AbstractPacker {
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
         String[] nativeNames = null;
-        if (AmayaConfig.INSTANCE.useNativeNames()) {
+        if (ConfigProvider.getConfig().useNativeNames()) {
             Paranamer paranamer = new BytecodeReadingParanamer();
             nativeNames = paranamer.lookupParameterNames(method);
         }

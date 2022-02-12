@@ -31,9 +31,6 @@ dependencies {
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     api group: 'com.github.romanqed', name: 'jutils', version: '1.4.0'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
-    // TODO Remove
-    implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
-    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.35'
 }
 
 test {

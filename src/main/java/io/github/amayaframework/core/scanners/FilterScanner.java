@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.scanners;
 
-import io.github.amayaframework.core.util.AmayaConfig;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.util.ReflectUtils;
 import io.github.amayaframework.filters.Filter;
 import io.github.amayaframework.filters.NamedFilter;
@@ -29,7 +29,7 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
                 single.put(filter.value(), value);
             }
         });
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (ConfigProvider.getConfig().isDebug()) {
             logger.debug("The scanner with the base class " +
                     clazz.getSimpleName() +
                     " found filters: \n" +

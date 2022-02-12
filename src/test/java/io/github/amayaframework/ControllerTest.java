@@ -6,9 +6,9 @@ import io.github.amayaframework.core.controllers.HttpController;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.methods.Post;
+import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
-import io.github.amayaframework.core.routers.MethodRouter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

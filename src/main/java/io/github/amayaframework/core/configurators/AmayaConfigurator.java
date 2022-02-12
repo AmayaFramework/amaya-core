@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.configurators;
 
 import com.github.romanqed.jutils.pipeline.Pipeline;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.pipelines.InputStage;
 import io.github.amayaframework.core.pipelines.OutputStage;
@@ -9,7 +10,6 @@ import io.github.amayaframework.core.pipelines.debug.DebugStage;
 import io.github.amayaframework.core.pipelines.debug.RequestDebugAction;
 import io.github.amayaframework.core.pipelines.debug.ResponseDebugAction;
 import io.github.amayaframework.core.pipelines.debug.RouteDebugAction;
-import io.github.amayaframework.core.util.AmayaConfig;
 
 public class AmayaConfigurator implements PipelineConfigurator {
     private final ActionFabric fabric;
@@ -32,7 +32,7 @@ public class AmayaConfigurator implements PipelineConfigurator {
         Pipeline output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (ConfigProvider.getConfig().isDebug()) {
             addInputDebugActions(input);
             addOutputDebugActions(output);
         }

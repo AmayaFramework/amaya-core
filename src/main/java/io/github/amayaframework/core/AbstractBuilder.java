@@ -1,11 +1,12 @@
 package io.github.amayaframework.core;
 
+import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.PipelineConfigurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Endpoint;
 import io.github.amayaframework.core.scanners.ControllerScanner;
-import io.github.amayaframework.core.util.AmayaConfig;
 import io.github.amayaframework.core.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.pipelines";
+    protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final PipelineConfigurator defaultConfigurator;
     protected final Map<String, Controller> controllers;
@@ -26,6 +28,7 @@ public abstract class AbstractBuilder<T> {
         controllers = new ConcurrentHashMap<>();
         configurators = new LinkedList<>();
         defaultConfigurator = new AmayaConfigurator(pipelinePrefix);
+        config = ConfigProvider.getConfig();
         resetValues();
     }
 
@@ -46,7 +49,7 @@ public abstract class AbstractBuilder<T> {
         this.configurators.clear();
         this.configurators.add(defaultConfigurator);
         this.configurators.addAll(configurators);
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             logger.debug("Set pipeline configurators: " + configurators);
         }
         return this;
@@ -55,7 +58,7 @@ public abstract class AbstractBuilder<T> {
     public AbstractBuilder<T> addConfigurator(PipelineConfigurator configurator) {
         Objects.requireNonNull(configurator);
         configurators.add(configurator);
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             logger.debug("Add pipeline configurator: " + configurator.getClass().getName());
         }
         return this;
@@ -66,7 +69,7 @@ public abstract class AbstractBuilder<T> {
         String path = controller.getPath();
         Objects.requireNonNull(path);
         controllers.put(path, controller);
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             logger.debug("Add controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
         }
         return this;
@@ -75,7 +78,7 @@ public abstract class AbstractBuilder<T> {
     public AbstractBuilder<T> removeController(String path) {
         Objects.requireNonNull(path);
         Controller controller = controllers.remove(path);
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             if (controller != null) {
                 logger.debug("Remove controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
             } else {
@@ -87,7 +90,7 @@ public abstract class AbstractBuilder<T> {
 
     public AbstractBuilder<T> controllerAnnotation(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
-        if (AmayaConfig.INSTANCE.isDebug()) {
+        if (config.isDebug()) {
             logger.debug("Set controller annotation to" + annotation.getSimpleName());
         }
         return this;
