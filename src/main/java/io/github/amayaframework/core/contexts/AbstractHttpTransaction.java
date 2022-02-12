@@ -5,9 +5,29 @@ import java.io.InputStream;
 import java.util.*;
 
 public abstract class AbstractHttpTransaction implements HttpTransaction {
+    private final Map<String, Object> attachments;
     protected Map<String, Cookie> cookies;
     protected Object body;
     protected ContentType type;
+
+    protected AbstractHttpTransaction() {
+        attachments = new HashMap<>();
+    }
+
+    @Override
+    public Map<String, Object> getAttachments() {
+        return attachments;
+    }
+
+    @Override
+    public Object getAttachment(String key) {
+        return attachments.get(key);
+    }
+
+    @Override
+    public void setAttachment(String key, Object value) {
+        attachments.put(key, value);
+    }
 
     @Override
     public Object getBody() {
