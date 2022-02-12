@@ -4,6 +4,7 @@ import com.github.romanqed.jutils.pipeline.Pipeline;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.pipelines.InputStage;
+import io.github.amayaframework.core.pipelines.InvokeControllerAction;
 import io.github.amayaframework.core.pipelines.OutputStage;
 import io.github.amayaframework.core.pipelines.ParseRequestBodyAction;
 import io.github.amayaframework.core.pipelines.debug.DebugStage;
@@ -29,6 +30,7 @@ public class AmayaConfigurator implements PipelineConfigurator {
         input.put(InputStage.PARSE_REQUEST, fabric.makeAction(InputStage.PARSE_REQUEST));
         input.put(InputStage.PARSE_REQUEST_BODY, new ParseRequestBodyAction());
         input.put(InputStage.PARSE_REQUEST_COOKIES, fabric.makeAction(InputStage.PARSE_REQUEST_COOKIES));
+        input.put(InputStage.INVOKE_CONTROLLER, new InvokeControllerAction());
         Pipeline output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));

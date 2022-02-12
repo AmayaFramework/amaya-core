@@ -28,7 +28,8 @@ public class PipelineHandler extends AbstractIOHandler {
         configurators.forEach(e -> e.accept(this));
         if (ConfigProvider.getConfig().isDebug()) {
             String message = "Handler pipelines have been successfully configured\n" +
-                    "Pipeline: " + input + "\n";
+                    "Input: " + input + "\n" +
+                    "Output: " + output + "\n";
             logger.debug(message);
         }
     }
