@@ -45,7 +45,7 @@ public class AmayaConfig {
         Objects.requireNonNull(field);
         Objects.requireNonNull(value);
         fields.put(field, value);
-        if (getDebug()) {
+        if (isDebug()) {
             logger.debug("Field " + field + " set with value " + value);
         }
     }
@@ -93,7 +93,7 @@ public class AmayaConfig {
         setField(Field.BACKLOG, backlog);
     }
 
-    public boolean getDebug() {
+    public boolean isDebug() {
         return getField(Field.DEBUG);
     }
 

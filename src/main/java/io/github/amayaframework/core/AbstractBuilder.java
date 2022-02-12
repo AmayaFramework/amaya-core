@@ -46,7 +46,7 @@ public abstract class AbstractBuilder<T> {
         this.configurators.clear();
         this.configurators.add(defaultConfigurator);
         this.configurators.addAll(configurators);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             logger.debug("Set pipeline configurators: " + configurators);
         }
         return this;
@@ -55,7 +55,7 @@ public abstract class AbstractBuilder<T> {
     public AbstractBuilder<T> addConfigurator(PipelineConfigurator configurator) {
         Objects.requireNonNull(configurator);
         configurators.add(configurator);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             logger.debug("Add pipeline configurator: " + configurator.getClass().getName());
         }
         return this;
@@ -66,7 +66,7 @@ public abstract class AbstractBuilder<T> {
         String path = controller.getPath();
         Objects.requireNonNull(path);
         controllers.put(path, controller);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             logger.debug("Add controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
         }
         return this;
@@ -75,7 +75,7 @@ public abstract class AbstractBuilder<T> {
     public AbstractBuilder<T> removeController(String path) {
         Objects.requireNonNull(path);
         Controller controller = controllers.remove(path);
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             if (controller != null) {
                 logger.debug("Remove controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
             } else {
@@ -87,7 +87,7 @@ public abstract class AbstractBuilder<T> {
 
     public AbstractBuilder<T> controllerAnnotation(Class<? extends Annotation> annotation) {
         this.annotation = annotation;
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             logger.debug("Set controller annotation to" + annotation.getSimpleName());
         }
         return this;

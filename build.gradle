@@ -33,6 +33,7 @@ dependencies {
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
     // TODO Remove
     implementation group: 'io.github.amayaframework', name: 'http-server', version: '1.0.5'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.35'
 }
 
 test {

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>An action which outputs information about the parsed request.</p>
+ * <p>An input action which outputs information about the parsed request.</p>
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */

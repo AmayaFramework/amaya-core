@@ -5,6 +5,11 @@ import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.pipelines.InputStage;
 import io.github.amayaframework.core.pipelines.OutputStage;
 import io.github.amayaframework.core.pipelines.ParseRequestBodyAction;
+import io.github.amayaframework.core.pipelines.debug.DebugStage;
+import io.github.amayaframework.core.pipelines.debug.RequestDebugAction;
+import io.github.amayaframework.core.pipelines.debug.ResponseDebugAction;
+import io.github.amayaframework.core.pipelines.debug.RouteDebugAction;
+import io.github.amayaframework.core.util.AmayaConfig;
 
 public class AmayaConfigurator implements PipelineConfigurator {
     private final ActionFabric fabric;
@@ -18,7 +23,6 @@ public class AmayaConfigurator implements PipelineConfigurator {
     }
 
     @Override
-    // TODO Add debug actions
     public void configure(PipelineHandler handler)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Pipeline input = handler.getInput();
@@ -28,5 +32,18 @@ public class AmayaConfigurator implements PipelineConfigurator {
         Pipeline output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));
+        if (AmayaConfig.INSTANCE.isDebug()) {
+            addInputDebugActions(input);
+            addOutputDebugActions(output);
+        }
+    }
+
+    protected void addInputDebugActions(Pipeline input) {
+        input.insertBefore(InputStage.PARSE_REQUEST, DebugStage.ROUTE_DEBUG, new RouteDebugAction());
+        input.insertAfter(InputStage.PARSE_REQUEST, DebugStage.REQUEST_DEBUG, new RequestDebugAction());
+    }
+
+    private void addOutputDebugActions(Pipeline output) {
+        output.insertBefore(OutputStage.PROCESS_HEADERS, DebugStage.RESPONSE_DEBUG, new ResponseDebugAction());
     }
 }

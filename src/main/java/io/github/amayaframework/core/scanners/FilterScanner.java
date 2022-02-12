@@ -29,7 +29,7 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
                 single.put(filter.value(), value);
             }
         });
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             logger.debug("The scanner with the base class " +
                     clazz.getSimpleName() +
                     " found filters: \n" +

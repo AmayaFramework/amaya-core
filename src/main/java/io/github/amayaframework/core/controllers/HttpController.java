@@ -38,7 +38,7 @@ public abstract class HttpController implements Controller {
                 throw new DuplicateException(error);
             }
         }));
-        if (AmayaConfig.INSTANCE.getDebug()) {
+        if (AmayaConfig.INSTANCE.isDebug()) {
             debugLog(found);
         }
     }

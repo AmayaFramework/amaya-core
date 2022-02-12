@@ -7,6 +7,12 @@ import io.github.amayaframework.core.controllers.Controller;
 import java.io.IOException;
 
 public interface IOHandler {
+    /**
+     * Handles received session
+     *
+     * @param session to handle
+     * @throws IOException which can be thrown away during processing
+     */
     void handle(Session session) throws IOException;
 
     /**

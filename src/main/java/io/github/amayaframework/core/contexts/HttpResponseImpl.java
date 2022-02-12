@@ -2,17 +2,13 @@ package io.github.amayaframework.core.contexts;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
-import io.github.amayaframework.core.util.AmayaConfig;
-import io.github.amayaframework.core.util.ParseUtil;
 
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
-    private final Charset charset = AmayaConfig.INSTANCE.getCharset();
     private final HeaderMap headers;
     private HttpCode code;
     private StreamHandler handler;
@@ -85,11 +81,5 @@ class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
             throw new IllegalStateException(message);
         }
         super.setBody(body);
-    }
-
-    @Override
-    public void setContentType(ContentType type) {
-        super.setContentType(type);
-        headers.set(ParseUtil.CONTENT_HEADER, ParseUtil.generateContentHeader(type, charset));
     }
 }

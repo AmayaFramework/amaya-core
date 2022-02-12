@@ -2,19 +2,21 @@ package io.github.amayaframework.core.pipelines.debug;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.pipelines.PipelineAction;
+import io.github.amayaframework.core.pipelines.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>An action which outputs information about the response received.</p>
+ * <p>An output action which outputs information about the response received.</p>
  * <p>Receives: {@link HttpResponse}</p>
  * <p>Returns: {@link HttpResponse}</p>
  */
-public class ResponseDebugAction extends PipelineAction<HttpResponse, HttpResponse> {
+public class ResponseDebugAction extends PipelineAction<ResponseData, ResponseData> {
     private static final Logger logger = LoggerFactory.getLogger(ResponseDebugAction.class);
 
     @Override
-    public HttpResponse execute(HttpResponse response) {
+    public ResponseData execute(ResponseData responseData) {
+        HttpResponse response = responseData.getResponse();
         String message = "HttpResponse was received successfully\n" +
                 "Implementation used: " + (response != null ? response.getClass().getSimpleName() : null) + "\n";
         if (response != null) {
@@ -24,6 +26,6 @@ public class ResponseDebugAction extends PipelineAction<HttpResponse, HttpRespon
                     "Cookies: " + response.getCookies() + "\n";
         }
         logger.debug(message);
-        return response;
+        return responseData;
     }
 }

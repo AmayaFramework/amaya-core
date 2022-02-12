@@ -7,7 +7,7 @@ import io.github.amayaframework.core.util.IOUtil;
 import java.io.InputStream;
 
 /**
- * <p>Action which parse request body action.</p>
+ * <p>Input action which parse request body action.</p>
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */
