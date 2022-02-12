@@ -6,6 +6,9 @@ import io.github.amayaframework.core.controllers.Controller;
 
 import java.io.IOException;
 
+/**
+ * Base interface describing i/o handler with 2 {@link Action} - for input and output.
+ */
 public interface IOHandler {
     /**
      * Handles received session

@@ -7,6 +7,9 @@ import io.github.amayaframework.core.pipelines.RequestData;
 
 import java.io.IOException;
 
+/**
+ * An interface representing session, which must be implemented for a specific server.
+ */
 public interface Session {
     RequestData handleInput(Action<Object, Object> handler) throws Exception;
 
