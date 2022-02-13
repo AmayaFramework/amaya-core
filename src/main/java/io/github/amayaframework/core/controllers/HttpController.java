@@ -10,9 +10,7 @@ import io.github.amayaframework.core.util.DuplicateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>An abstract class that describes some necessary implementations for the
@@ -24,6 +22,7 @@ public abstract class HttpController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final MethodRouter router;
+    private final List<MethodRoute> routes;
     private String route;
 
     public HttpController() {
@@ -31,6 +30,7 @@ public abstract class HttpController implements Controller {
         router = config.getRouter();
         RouteScanner scanner = new RouteScanner(this, config.getRoutePacker());
         Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();
+        routes = new LinkedList<>();
         found.forEach((method, routes) -> routes.forEach(route -> {
             try {
                 router.addRoute(method, route);
@@ -40,6 +40,7 @@ public abstract class HttpController implements Controller {
                 throw new DuplicateException(error);
             }
         }));
+        found.values().forEach(routes::addAll);
         if (config.isDebug()) {
             debugLog(found);
         }
@@ -77,5 +78,10 @@ public abstract class HttpController implements Controller {
     @Override
     public void setPath(String route) {
         this.route = Objects.requireNonNull(route);
+    }
+
+    @Override
+    public Collection<MethodRoute> getRoutes() {
+        return routes;
     }
 }

@@ -26,27 +26,27 @@ public class AmayaConfig {
      * support/not support injecting values into the marked arguments,
      * etc.
      */
-    public static final String ROUTE_PACKER = "ROUTE_PACKER";
+    public static final Field<Packer> ROUTE_PACKER = new Field<>("ROUTE_PACKER");
 
     /**
      * The router that will be used in the controllers.
      */
-    public static final String ROUTER = "ROUTER";
+    public static final Field<Class<? extends MethodRouter>> ROUTER = new Field<>("ROUTER");
 
     /**
      * The encoding that will be used when reading the request and sending the response.
      */
-    public static final String CHARSET = "CHARSET";
+    public static final Field<Charset> CHARSET = new Field<>("CHARSET");
 
     /**
      * Determines whether debugging mode will be enabled
      */
-    public static final String DEBUG = "DEBUG";
+    public static final Field<Boolean> DEBUG = new Field<>("DEBUG");
 
     /**
      * Determines whether the native parameter names or those specified by the annotation will be used
      */
-    public static final String USE_NATIVE_NAMES = "USE_NATIVE_NAMES";
+    public static final Field<Boolean> USE_NATIVE_NAMES = new Field<>("USE_NATIVE_NAMES");
 
     private final Logger logger;
     private final Map<String, Object> fields;
@@ -61,19 +61,19 @@ public class AmayaConfig {
         setUseNativeNames(true);
     }
 
-    public void setField(String field, Object value) {
+    public <T> void setField(Field<T> field, T value) {
         Objects.requireNonNull(field);
         Objects.requireNonNull(value);
-        fields.put(field, value);
+        fields.put(field.getName(), value);
         if (isDebug()) {
             logger.debug("Field " + field + " set with value " + value);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getField(String field) {
+    public <T> T getField(Field<T> field) {
         Objects.requireNonNull(field);
-        return (T) fields.get(field);
+        return (T) fields.get(field.getName());
     }
 
     public Packer getRoutePacker() {
@@ -86,8 +86,8 @@ public class AmayaConfig {
 
     public MethodRouter getRouter() {
         try {
-            Class<?> routerClass = getField(ROUTER);
-            return (MethodRouter) routerClass.newInstance();
+            Class<? extends MethodRouter> routerClass = getField(ROUTER);
+            return routerClass.newInstance();
         } catch (Exception e) {
             throw new IllegalStateException("Can not instantiate Router!", e);
         }
@@ -119,5 +119,10 @@ public class AmayaConfig {
 
     public void setUseNativeNames(boolean useNativeNames) {
         setField(USE_NATIVE_NAMES, useNativeNames);
+    }
+
+    @Override
+    public String toString() {
+        return fields.toString();
     }
 }
