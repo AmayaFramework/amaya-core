@@ -30,6 +30,11 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     }
 
     @Override
+    public Object removeAttachment(String key) {
+        return attachments.remove(key);
+    }
+
+    @Override
     public Object getBody() {
         return body;
     }

@@ -44,4 +44,9 @@ public class MethodRoute extends Route implements Attachable {
     public void setAttachment(String key, Object value) {
         attachments.put(key, value);
     }
+
+    @Override
+    public Object removeAttachment(String key) {
+        return attachments.remove(key);
+    }
 }

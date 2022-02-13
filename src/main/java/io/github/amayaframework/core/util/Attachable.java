@@ -20,12 +20,20 @@ public interface Attachable {
     Object getAttachment(String key);
 
     /**
-     * Puts the attachment in the attachment {@link Map}
+     * Puts the attachment in the attachment storage
      *
      * @param key   which is related to attachment
      * @param value which contains attachment
      */
     void setAttachment(String key, Object value);
+
+    /**
+     * Removes attachment from storage
+     *
+     * @param key which is related to attachment
+     * @return removed attachment object
+     */
+    Object removeAttachment(String key);
 
     @SuppressWarnings("unchecked")
     default <T> T get(String key) {
