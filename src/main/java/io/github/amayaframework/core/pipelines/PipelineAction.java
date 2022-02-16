@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.pipelines;
 
-import com.github.romanqed.jutils.pipeline.PipelineInterruptException;
+import com.github.romanqed.jutils.pipeline.InterruptException;
 import com.github.romanqed.jutils.util.Action;
 
 /**
@@ -19,6 +19,6 @@ public abstract class PipelineAction<T, R> implements Action<T, R> {
      * @param ret {@link Object} the object to be returned
      */
     protected void interrupt(Object ret) {
-        throw new PipelineInterruptException(null, ret);
+        throw new InterruptException(ret);
     }
 }

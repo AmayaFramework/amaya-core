@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.handlers;
 
+import com.github.romanqed.jutils.pipeline.ArrayPipeline;
 import com.github.romanqed.jutils.pipeline.Pipeline;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.PipelineConfigurator;
@@ -10,17 +11,17 @@ import java.util.Objects;
 
 public class PipelineHandler extends AbstractIOHandler {
     public PipelineHandler(Controller controller) {
-        super(new Pipeline(), new Pipeline(), controller);
+        super(new ArrayPipeline<>(), new ArrayPipeline<>(), controller);
     }
 
     @Override
-    public Pipeline getInput() {
-        return (Pipeline) input;
+    public Pipeline<String> getInput() {
+        return (Pipeline<String>) input;
     }
 
     @Override
-    public Pipeline getOutput() {
-        return (Pipeline) output;
+    public Pipeline<String> getOutput() {
+        return (Pipeline<String>) output;
     }
 
     public void configure(Collection<PipelineConfigurator> configurators) {
