@@ -1,7 +1,9 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.HttpRequest;
+import io.github.amayaframework.core.pipeline.PipelineAction;
+import io.github.amayaframework.core.pipeline.RequestData;
 import io.github.amayaframework.core.util.IOUtil;
 
 import java.io.InputStream;

@@ -1,7 +1,9 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.pipeline;
 
 import com.github.romanqed.jutils.pipeline.InterruptException;
 import com.github.romanqed.jutils.util.Action;
+
+import java.util.Objects;
 
 /**
  * <p>An abstract class containing supporting code for implementing an action.
@@ -10,6 +12,20 @@ import com.github.romanqed.jutils.util.Action;
  * <p>@param {@link R} type of parameter to be returned</p>
  */
 public abstract class PipelineAction<T, R> implements Action<T, R> {
+    private final String name;
+
+    public PipelineAction(String name) {
+        this.name = Objects.requireNonNull(name);
+    }
+
+    public PipelineAction() {
+        name = getClass().getName();
+    }
+
+    public String getName() {
+        return name;
+    }
+
     /**
      * <p>A method that allows you to break the pipeline with the given result.</p>
      * <p>Note: Java does not recognize it as return or throw, so in some cases it is necessary to make an
@@ -20,5 +36,15 @@ public abstract class PipelineAction<T, R> implements Action<T, R> {
      */
     protected void interrupt(Object ret) {
         throw new InterruptException(ret);
+    }
+
+    /**
+     * <p>A method that allows you to break the pipeline with the given result.</p>
+     * <p>Note: Java does not recognize it as return or throw, so in some cases it is necessary to make an
+     * additional return after the call, but this code will never be executed, since execution will
+     * terminate immediately after calling this method.</p>
+     */
+    protected void interrupt() {
+        throw new InterruptException();
     }
 }

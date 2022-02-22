@@ -1,6 +1,8 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.pipeline.InputAction;
+import io.github.amayaframework.core.pipeline.RequestData;
 
 /**
  * <p>Input action which calls found controller route</p>

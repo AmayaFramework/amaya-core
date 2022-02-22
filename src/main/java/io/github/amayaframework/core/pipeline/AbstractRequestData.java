@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.pipeline;
 
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;

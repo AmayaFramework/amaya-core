@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.actions;
 
 /**
  * Class with constants describing the list of default output processing stages.

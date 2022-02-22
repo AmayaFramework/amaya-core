@@ -2,36 +2,28 @@ package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.pipeline.ArrayPipeline;
 import com.github.romanqed.jutils.pipeline.Pipeline;
-import io.github.amayaframework.core.config.ConfigProvider;
-import io.github.amayaframework.core.configurators.PipelineConfigurator;
-import io.github.amayaframework.core.controllers.Controller;
-
-import java.util.Collection;
-import java.util.Objects;
 
 public class PipelineHandler extends AbstractIOHandler {
-    public PipelineHandler(Controller controller) {
-        super(new ArrayPipeline<>(), new ArrayPipeline<>(), controller);
+    private final Pipeline<String> input;
+    private final Pipeline<String> output;
+
+    public PipelineHandler() {
+        this(new ArrayPipeline<>(), new ArrayPipeline<>());
+    }
+
+    public PipelineHandler(Pipeline<String> input, Pipeline<String> output) {
+        super(input, output);
+        this.input = input;
+        this.output = output;
     }
 
     @Override
     public Pipeline<String> getInput() {
-        return (Pipeline<String>) input;
+        return input;
     }
 
     @Override
     public Pipeline<String> getOutput() {
-        return (Pipeline<String>) output;
-    }
-
-    public void configure(Collection<PipelineConfigurator> configurators) {
-        Objects.requireNonNull(configurators);
-        configurators.forEach(e -> e.accept(this));
-        if (ConfigProvider.getConfig().isDebug()) {
-            String message = "Handler pipelines have been successfully configured\n" +
-                    "Input: " + input + "\n" +
-                    "Output: " + output + "\n";
-            logger.debug(message);
-        }
+        return output;
     }
 }

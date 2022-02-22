@@ -1,8 +1,8 @@
-package io.github.amayaframework.core.pipelines.debug;
+package io.github.amayaframework.core.actions.debug;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.pipelines.PipelineAction;
-import io.github.amayaframework.core.pipelines.ResponseData;
+import io.github.amayaframework.core.pipeline.PipelineAction;
+import io.github.amayaframework.core.pipeline.ResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

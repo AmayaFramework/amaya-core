@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.pipelines;
+package io.github.amayaframework.core.pipeline;
 
 import com.github.romanqed.jutils.http.HttpCode;
 import io.github.amayaframework.core.contexts.Responses;
