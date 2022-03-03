@@ -1,20 +1,12 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.util.Action;
-
-import java.io.IOException;
+import io.github.amayaframework.core.util.Handler;
 
 /**
  * Base interface describing i/o handler with 2 {@link Action} - for input and output.
  */
-public interface IOHandler {
-    /**
-     * Handles received session
-     *
-     * @param session to handle
-     * @throws IOException which can be thrown away during processing
-     */
-    void handle(Session session) throws IOException;
+public interface IOHandler extends Handler<Session> {
 
     /**
      * Returns action handles input

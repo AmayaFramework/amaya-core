@@ -3,10 +3,11 @@ package io.github.amayaframework.core;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
-import io.github.amayaframework.core.configurators.PipelineConfigurator;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Endpoint;
+import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.scanners.ControllerScanner;
+import io.github.amayaframework.core.util.Handler;
 import io.github.amayaframework.core.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,17 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
+    private static final Handler<PipelineHandler> handler = new AmayaConfigurator();
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected final PipelineConfigurator defaultConfigurator;
     protected final Map<String, Controller> controllers;
-    //    protected final List<PipelineConfigurator> configurators;
     protected Class<? extends Annotation> annotation;
 
     public AbstractBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
-//        configurators = new LinkedList<>();
-        defaultConfigurator = new AmayaConfigurator(pipelinePrefix);
         config = ConfigProvider.getConfig();
         resetValues();
     }
@@ -40,31 +38,8 @@ public abstract class AbstractBuilder<T> {
 
     protected void resetValues() {
         annotation = Endpoint.class;
-//        configurators.clear();
-//        configurators.add(defaultConfigurator);
         controllers.clear();
     }
-
-//    public AbstractBuilder<T> pipelineConfigurators(Collection<PipelineConfigurator> configurators) {
-//        Objects.requireNonNull(configurators);
-//        configurators.forEach(Objects::requireNonNull);
-//        this.configurators.clear();
-//        this.configurators.add(defaultConfigurator);
-//        this.configurators.addAll(configurators);
-//        if (config.isDebug()) {
-//            logger.debug("Set pipeline configurators: " + configurators);
-//        }
-//        return this;
-//    }
-
-//    public AbstractBuilder<T> addConfigurator(PipelineConfigurator configurator) {
-//        Objects.requireNonNull(configurator);
-//        configurators.add(configurator);
-//        if (config.isDebug()) {
-//            logger.debug("Add pipeline configurator: " + configurator.getClass().getName());
-//        }
-//        return this;
-//    }
 
     public AbstractBuilder<T> addController(Controller controller) {
         Objects.requireNonNull(controller);

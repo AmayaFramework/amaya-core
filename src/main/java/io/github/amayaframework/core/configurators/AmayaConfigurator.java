@@ -11,8 +11,9 @@ import io.github.amayaframework.core.actions.debug.ResponseDebugAction;
 import io.github.amayaframework.core.actions.debug.RouteDebugAction;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.handlers.PipelineHandler;
+import io.github.amayaframework.core.util.Handler;
 
-public class AmayaConfigurator implements PipelineConfigurator {
+public class AmayaConfigurator implements Handler<PipelineHandler> {
     private final ActionFabric fabric;
 
     public AmayaConfigurator(String prefix) {
@@ -24,7 +25,7 @@ public class AmayaConfigurator implements PipelineConfigurator {
     }
 
     @Override
-    public void configure(PipelineHandler handler)
+    public void handle(PipelineHandler handler)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Pipeline<String> input = handler.getInput();
         input.put(InputStage.PARSE_REQUEST, fabric.makeAction(InputStage.PARSE_REQUEST));

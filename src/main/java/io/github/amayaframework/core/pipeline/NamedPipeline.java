@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.pipeline;
 
+import com.github.romanqed.jutils.pipeline.ArrayPipeline;
 import com.github.romanqed.jutils.pipeline.Pipeline;
 import com.github.romanqed.jutils.util.Action;
 import com.github.romanqed.jutils.util.Node;
@@ -12,6 +13,10 @@ public class NamedPipeline implements Pipeline<String> {
 
     public NamedPipeline(Pipeline<String> body) {
         this.body = Objects.requireNonNull(body);
+    }
+
+    public NamedPipeline() {
+        this.body = new ArrayPipeline<>();
     }
 
     @Override
@@ -79,5 +84,10 @@ public class NamedPipeline implements Pipeline<String> {
     @Override
     public Iterator<Node<String, Action<Object, Object>>> iterator() {
         return body.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return body.toString();
     }
 }
