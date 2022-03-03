@@ -29,8 +29,8 @@ public class AmayaConfigurator implements Handler<PipelineHandler> {
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Pipeline<String> input = handler.getInput();
         input.put(InputStage.PARSE_REQUEST, fabric.makeAction(InputStage.PARSE_REQUEST));
-        input.put(InputStage.PARSE_REQUEST_BODY, new ParseRequestBodyAction());
         input.put(InputStage.PARSE_REQUEST_COOKIES, fabric.makeAction(InputStage.PARSE_REQUEST_COOKIES));
+        input.put(InputStage.PARSE_REQUEST_BODY, new ParseRequestBodyAction());
         input.put(InputStage.INVOKE_CONTROLLER, new InvokeControllerAction());
         Pipeline<String> output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));

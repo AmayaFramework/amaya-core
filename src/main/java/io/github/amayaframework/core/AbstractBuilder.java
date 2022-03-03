@@ -20,15 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
-    private static final Handler<PipelineHandler> handler = new AmayaConfigurator();
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
     protected final List<ConfiguratorWrapper> configurators;
+    private final Handler<PipelineHandler> configurator;
     protected Class<? extends Annotation> annotation;
 
     public AbstractBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
+        configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
         config = ConfigProvider.getConfig();
         resetValues();
@@ -56,9 +57,14 @@ public abstract class AbstractBuilder<T> {
         return this;
     }
 
-    protected void configure(PipelineHandler handler, Controller controller) throws Exception {
-        for (ConfiguratorWrapper configurator : configurators) {
-            configurator.configure(handler, controller);
+    protected void configure(PipelineHandler handler, Controller controller) {
+        try {
+            configurator.handle(handler);
+            for (ConfiguratorWrapper configurator : configurators) {
+                configurator.configure(handler, controller);
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException("Exception when configure", e);
         }
     }
 
