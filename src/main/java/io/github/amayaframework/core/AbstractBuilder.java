@@ -3,6 +3,8 @@ package io.github.amayaframework.core;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
+import io.github.amayaframework.core.configurators.Configurator;
+import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Endpoint;
 import io.github.amayaframework.core.handlers.PipelineHandler;
@@ -13,9 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractBuilder<T> {
@@ -24,10 +24,12 @@ public abstract class AbstractBuilder<T> {
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
+    protected final List<ConfiguratorWrapper> configurators;
     protected Class<? extends Annotation> annotation;
 
     public AbstractBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
+        configurators = new LinkedList<>();
         config = ConfigProvider.getConfig();
         resetValues();
     }
@@ -39,6 +41,25 @@ public abstract class AbstractBuilder<T> {
     protected void resetValues() {
         annotation = Endpoint.class;
         controllers.clear();
+        configurators.clear();
+    }
+
+    public AbstractBuilder<T> addConfigurator(Configurator configurator) {
+        Objects.requireNonNull(configurator);
+        configurators.add(new ConfiguratorWrapper(configurator));
+        return this;
+    }
+
+    public AbstractBuilder<T> removeConfigurator(Class<? extends Configurator> clazz) {
+        Objects.requireNonNull(clazz);
+        configurators.removeIf(e -> e.getBody().getClass() == clazz);
+        return this;
+    }
+
+    protected void configure(PipelineHandler handler, Controller controller) throws Exception {
+        for (ConfiguratorWrapper configurator : configurators) {
+            configurator.configure(handler, controller);
+        }
     }
 
     public AbstractBuilder<T> addController(Controller controller) {

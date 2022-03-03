@@ -6,7 +6,7 @@ import io.github.amayaframework.core.pipeline.NamedPipeline;
 /**
  * Basic interface for framework configurators
  */
-public interface Configurable {
+public interface Configurator {
     /**
      * Configures each controller in current builder
      *

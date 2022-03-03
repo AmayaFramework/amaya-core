@@ -5,18 +5,18 @@ import io.github.amayaframework.core.pipeline.NamedPipeline;
 
 import java.util.Objects;
 
-public enum Strategy {
+public enum InsertPolicy {
     PACK(new PackStrategy()),
     PLAIN(new PlainStrategy()),
     UNCLOSE(new UncloseStrategy());
 
     private final Action<NamedPipeline, NamedPipeline> action;
 
-    Strategy(Action<NamedPipeline, NamedPipeline> action) {
+    InsertPolicy(Action<NamedPipeline, NamedPipeline> action) {
         this.action = Objects.requireNonNull(action);
     }
 
-    public Action<NamedPipeline, NamedPipeline> getAction() {
-        return action;
+    public NamedPipeline execute(NamedPipeline pipeline) throws Exception {
+        return action.execute(pipeline);
     }
 }

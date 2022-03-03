@@ -4,6 +4,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Access {
-    AccessPolicy value();
+public @interface Insert {
+    InsertPolicy value();
 }
