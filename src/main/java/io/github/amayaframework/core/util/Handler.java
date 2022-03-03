@@ -9,6 +9,7 @@ public interface Handler<T> {
      * Performs this operation on the given argument.
      *
      * @param t the input argument
+     * @throws Exception all exceptions that may occur in the process
      */
     void handle(T t) throws Exception;
 
