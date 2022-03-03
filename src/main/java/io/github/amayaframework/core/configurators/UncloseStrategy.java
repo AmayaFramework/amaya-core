@@ -6,7 +6,7 @@ import com.github.romanqed.jutils.util.Node;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 
 class UncloseStrategy implements Action<NamedPipeline, NamedPipeline> {
-    private static <T> void uncloseActions(Pipeline<?> source, Pipeline<String> destination) {
+    private static void uncloseActions(Pipeline<?> source, Pipeline<String> destination) {
         for (Node<?, Action<Object, Object>> node : source) {
             Action<?, ?> action = node.getValue();
             if (action instanceof Pipeline) {
