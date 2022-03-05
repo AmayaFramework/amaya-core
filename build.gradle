@@ -29,7 +29,7 @@ dependencies {
     implementation group: 'com.thoughtworks.paranamer', name: 'paranamer', version: '2.8'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    api group: 'com.github.romanqed', name: 'jutils', version: '2.0.1'
+    api group: 'com.github.romanqed', name: 'jutils', version: '3.0.2'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
 }
 

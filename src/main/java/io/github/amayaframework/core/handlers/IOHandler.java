@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.util.Action;
-import io.github.amayaframework.core.util.Handler;
+import com.github.romanqed.jutils.util.Handler;
 
 /**
  * Base interface describing i/o handler with 2 {@link Action} - for input and output.

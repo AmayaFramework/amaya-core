@@ -48,6 +48,11 @@ public class AmayaConfig {
      */
     public static final Field<Boolean> USE_NATIVE_NAMES = new Field<>("USE_NATIVE_NAMES");
 
+    /**
+     * Determines whether asynchronous calls will be used.
+     */
+    public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC");
+
     private final Logger logger;
     private final Map<String, Object> fields;
 
@@ -59,6 +64,7 @@ public class AmayaConfig {
         setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
         setUseNativeNames(true);
+        setUseAsync(true);
     }
 
     public <T> void setField(Field<T> field, T value) {
@@ -119,6 +125,14 @@ public class AmayaConfig {
 
     public void setUseNativeNames(boolean useNativeNames) {
         setField(USE_NATIVE_NAMES, useNativeNames);
+    }
+
+    public boolean useAsync() {
+        return getField(USE_ASYNC);
+    }
+
+    public void setUseAsync(boolean useAsync) {
+        setField(USE_ASYNC, useAsync);
     }
 
     @Override

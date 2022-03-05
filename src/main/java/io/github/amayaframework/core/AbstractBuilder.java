@@ -1,5 +1,6 @@
 package io.github.amayaframework.core;
 
+import com.github.romanqed.jutils.util.Handler;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
@@ -9,7 +10,6 @@ import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Endpoint;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.scanners.ControllerScanner;
-import io.github.amayaframework.core.util.Handler;
 import io.github.amayaframework.core.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

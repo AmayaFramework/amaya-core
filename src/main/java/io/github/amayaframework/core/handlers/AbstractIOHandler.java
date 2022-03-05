@@ -2,6 +2,7 @@ package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.http.HttpCode;
 import com.github.romanqed.jutils.util.Action;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,15 @@ public abstract class AbstractIOHandler implements IOHandler {
     protected final Action<Object, Object> output;
 
     public AbstractIOHandler(Action<Object, Object> input, Action<Object, Object> output) {
-        this.input = Objects.requireNonNull(input);
-        this.output = Objects.requireNonNull(output);
+        Objects.requireNonNull(input);
+        Objects.requireNonNull(output);
+        if (ConfigProvider.getConfig().useAsync()) {
+            this.input = e -> input.async(e).get();
+            this.output = e -> output.async(e).get();
+        } else {
+            this.input = input;
+            this.output = output;
+        }
     }
 
     @Override

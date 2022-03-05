@@ -7,6 +7,7 @@ import com.github.romanqed.jutils.util.Node;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class NamedPipeline implements Pipeline<String> {
     private final Pipeline<String> body;
@@ -79,6 +80,11 @@ public class NamedPipeline implements Pipeline<String> {
     @Override
     public Object execute(Object o) throws Exception {
         return body.execute(o);
+    }
+
+    @Override
+    public CompletableFuture<Object> async(Object o) {
+        return body.async(o);
     }
 
     @Override
