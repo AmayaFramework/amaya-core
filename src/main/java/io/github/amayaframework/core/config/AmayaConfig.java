@@ -26,32 +26,32 @@ public class AmayaConfig {
      * support/not support injecting values into the marked arguments,
      * etc.
      */
-    public static final Field<Packer> ROUTE_PACKER = new Field<>("ROUTE_PACKER");
+    public static final Field<Packer> ROUTE_PACKER = new Field<>("ROUTE_PACKER", Packer.class);
 
     /**
      * The router that will be used in the controllers.
      */
-    public static final Field<Class<? extends MethodRouter>> ROUTER = new Field<>("ROUTER");
+    public static final Field<Class<? extends MethodRouter>> ROUTER = new Field<>("ROUTER", Class.class);
 
     /**
      * The encoding that will be used when reading the request and sending the response.
      */
-    public static final Field<Charset> CHARSET = new Field<>("CHARSET");
+    public static final Field<Charset> CHARSET = new Field<>("CHARSET", Charset.class);
 
     /**
      * Determines whether debugging mode will be enabled
      */
-    public static final Field<Boolean> DEBUG = new Field<>("DEBUG");
+    public static final Field<Boolean> DEBUG = new Field<>("DEBUG", Boolean.class);
 
     /**
      * Determines whether the native parameter names or those specified by the annotation will be used
      */
-    public static final Field<Boolean> USE_NATIVE_NAMES = new Field<>("USE_NATIVE_NAMES");
+    public static final Field<Boolean> USE_NATIVE_NAMES = new Field<>("USE_NATIVE_NAMES", Boolean.class);
 
     /**
      * Determines whether asynchronous calls will be used.
      */
-    public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC");
+    public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC", Boolean.class);
 
     private final Logger logger;
     private final Map<String, Object> fields;
