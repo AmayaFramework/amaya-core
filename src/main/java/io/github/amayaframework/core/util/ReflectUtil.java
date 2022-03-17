@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class ReflectUtils {
+public class ReflectUtil {
     public static <T> T extractAnnotationValue(Annotation annotation, String value, Class<T> type)
             throws InvocationTargetException, IllegalAccessException {
         Objects.requireNonNull(annotation);

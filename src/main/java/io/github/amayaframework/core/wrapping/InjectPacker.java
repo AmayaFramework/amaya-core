@@ -6,7 +6,7 @@ import com.thoughtworks.paranamer.Paranamer;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.ReflectUtils;
+import io.github.amayaframework.core.util.ReflectUtil;
 import net.sf.cglib.reflect.FastClass;
 
 import java.lang.annotation.Annotation;
@@ -37,7 +37,7 @@ public class InjectPacker extends AbstractPacker {
             }
             found = content;
             try {
-                value = ReflectUtils.extractAnnotationValue(annotation, String.class);
+                value = ReflectUtil.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchElementException e) {
                 value = nativeName;
             }
