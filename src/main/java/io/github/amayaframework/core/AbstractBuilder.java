@@ -14,6 +14,7 @@ import io.github.amayaframework.core.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -108,7 +109,7 @@ public abstract class AbstractBuilder<T> {
         controllers.forEach(this::addController);
     }
 
-    protected void printLogMessage() {
+    protected void printLogMessage() throws IOException {
         logger.info("Amaya initialized successfully");
         logger.info("\n" + IOUtil.readLogo());
         logger.info("We are glad to welcome you, senpai!");
