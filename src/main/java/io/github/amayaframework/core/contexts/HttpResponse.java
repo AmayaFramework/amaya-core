@@ -2,6 +2,7 @@ package io.github.amayaframework.core.contexts;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
+import com.github.romanqed.jutils.util.Handler;
 
 import java.util.List;
 
@@ -57,14 +58,14 @@ public interface HttpResponse extends HttpTransaction {
     /**
      * Returns contained stream handler
      *
-     * @return {@link StreamHandler} instance
+     * @return {@link Handler} instance
      */
-    StreamHandler getOutputStreamHandler();
+    Handler<FixedOutputStream> getOutputStreamHandler();
 
     /**
      * Sets output stream handler
      *
-     * @param handler {@link StreamHandler} handler to be set
+     * @param handler {@link Handler} handler to be set
      */
-    void setOutputStreamHandler(StreamHandler handler);
+    void setOutputStreamHandler(Handler<FixedOutputStream> handler);
 }

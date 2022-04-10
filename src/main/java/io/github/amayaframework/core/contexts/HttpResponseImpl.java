@@ -2,6 +2,7 @@ package io.github.amayaframework.core.contexts;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
+import com.github.romanqed.jutils.util.Handler;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Objects;
 class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
     private final HeaderMap headers;
     private HttpCode code;
-    private StreamHandler handler;
+    private Handler<FixedOutputStream> handler;
 
     public HttpResponseImpl(HttpCode code, HeaderMap headers) {
         this.code = Objects.requireNonNull(code);
@@ -60,12 +61,12 @@ class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
     }
 
     @Override
-    public StreamHandler getOutputStreamHandler() {
+    public Handler<FixedOutputStream> getOutputStreamHandler() {
         return handler;
     }
 
     @Override
-    public void setOutputStreamHandler(StreamHandler handler) {
+    public void setOutputStreamHandler(Handler<FixedOutputStream> handler) {
         this.handler = Objects.requireNonNull(handler);
     }
 
