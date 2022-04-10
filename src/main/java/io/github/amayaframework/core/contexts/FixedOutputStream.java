@@ -11,7 +11,7 @@ public abstract class FixedOutputStream extends OutputStream {
         this.stream = Objects.requireNonNull(stream);
     }
 
-    public abstract void sendLength(long length);
+    public abstract void specifyLength(long length);
 
     @Override
     public void write(byte[] b) throws IOException {
