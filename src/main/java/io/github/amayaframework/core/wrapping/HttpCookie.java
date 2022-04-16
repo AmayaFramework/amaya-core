@@ -7,6 +7,6 @@ import java.lang.annotation.RetentionPolicy;
  * An annotation that is a marker for injecting the cookie value into the marked argument.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cookie {
+public @interface HttpCookie {
     String value() default "";
 }

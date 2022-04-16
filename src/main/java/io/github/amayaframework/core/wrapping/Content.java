@@ -19,7 +19,7 @@ public class Content {
         addContent(Query.class, QUERY);
         addContent(Path.class, PATH);
         addContent(Body.class, BODY);
-        addContent(Cookie.class, COOKIE);
+        addContent(HttpCookie.class, COOKIE);
         AnnotationScanner scanner = new AnnotationScanner();
         Map<String, Class<? extends Annotation>> found = scanner.safetyFind();
         found.forEach((key, value) -> addContent(value, key));
