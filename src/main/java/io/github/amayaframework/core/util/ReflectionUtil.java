@@ -124,6 +124,6 @@ public class ReflectionUtil {
             throws Throwable {
         method.setAccessible(true);
         MethodHandle handle = LOOKUP.unreflect(method).bindTo(bind).asSpreader(Object[].class, argumentNumber);
-        return arguments -> handle.invoke(handle);
+        return handle::invoke;
     }
 }

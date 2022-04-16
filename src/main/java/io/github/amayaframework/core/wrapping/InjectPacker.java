@@ -66,7 +66,7 @@ public class InjectPacker extends AbstractPacker {
         checkParameters(method.getReturnType(), parameters, true);
         boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
-        Action<Object[], Object> toWrap = ReflectionUtil.packAnyMethod(instance, method, arguments.length);
+        Action<Object[], Object> toWrap = ReflectionUtil.packAnyMethod(instance, method, arguments.length + 1);
         return new MethodWrapper(toWrap, arguments);
     }
 }

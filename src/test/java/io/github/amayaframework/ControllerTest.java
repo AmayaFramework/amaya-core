@@ -16,7 +16,7 @@ import static io.github.amayaframework.core.contexts.Responses.ok;
 
 public class ControllerTest extends Assertions {
     @Test
-    public void testCorrect() throws Exception {
+    public void testCorrect() throws Throwable {
         Correct correct = new Correct();
         MethodRouter router = correct.getRouter();
         HttpResponse get = router.follow(HttpMethod.GET, "").getBody().execute(null);
