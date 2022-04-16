@@ -9,7 +9,7 @@ public class InvalidFormatException extends IllegalArgumentException {
         super(s);
     }
 
-    public InvalidFormatException(String s, Exception cause) {
+    public InvalidFormatException(String s, Throwable cause) {
         super(s, cause);
     }
 }

@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * An interface describing the method packer used in the framework.
  */
 public interface Packer {
-    Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Exception;
+    Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Throwable;
 
     Action<HttpRequest, HttpResponse> checkedPack(Object instance, Method method);
 }

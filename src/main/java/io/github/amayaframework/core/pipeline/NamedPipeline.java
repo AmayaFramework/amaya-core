@@ -78,7 +78,7 @@ public class NamedPipeline implements Pipeline<String> {
     }
 
     @Override
-    public Object execute(Object o) throws Exception {
+    public Object execute(Object o) throws Throwable {
         return body.execute(o);
     }
 

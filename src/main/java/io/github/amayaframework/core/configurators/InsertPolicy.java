@@ -30,7 +30,7 @@ public enum InsertPolicy {
         this.action = Objects.requireNonNull(action);
     }
 
-    public NamedPipeline execute(NamedPipeline pipeline) throws Exception {
+    public NamedPipeline execute(NamedPipeline pipeline) throws Throwable {
         return action.execute(pipeline);
     }
 }

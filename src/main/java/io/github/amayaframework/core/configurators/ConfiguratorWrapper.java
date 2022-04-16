@@ -52,7 +52,7 @@ public class ConfiguratorWrapper {
         return insert.value();
     }
 
-    private void configureInput(Pipeline<String> pipeline) throws Exception {
+    private void configureInput(Pipeline<String> pipeline) throws Throwable {
         AccessPolicy access = extractAccess(INPUT_NAME);
         if (access == AccessPolicy.DIRECT) {
             body.configureInput(new NamedPipeline(pipeline));
@@ -64,7 +64,7 @@ public class ConfiguratorWrapper {
         pipeline.insertBefore(InputStage.INVOKE_CONTROLLER, insert.execute(toProcess));
     }
 
-    private void configureOutput(Pipeline<String> pipeline) throws Exception {
+    private void configureOutput(Pipeline<String> pipeline) throws Throwable {
         AccessPolicy access = extractAccess(OUTPUT_NAME);
         if (access == AccessPolicy.DIRECT) {
             body.configureOutput(new NamedPipeline(pipeline));
@@ -76,7 +76,7 @@ public class ConfiguratorWrapper {
         pipeline.insertAfter(OutputStage.PROCESS_HEADERS, insert.execute(toProcess));
     }
 
-    public void configure(PipelineHandler handler, Controller controller) throws Exception {
+    public void configure(PipelineHandler handler, Controller controller) throws Throwable {
         body.configureController(controller);
         configureInput(handler.getInput());
         configureOutput(handler.getOutput());

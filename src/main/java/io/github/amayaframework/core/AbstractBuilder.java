@@ -64,7 +64,7 @@ public abstract class AbstractBuilder<T> {
             for (ConfiguratorWrapper configurator : configurators) {
                 configurator.configure(handler, controller);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new IllegalStateException("Exception when configure", e);
         }
     }

@@ -5,18 +5,13 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.filters.ContentFilter;
-import net.sf.cglib.reflect.FastMethod;
-
-import java.lang.reflect.InvocationTargetException;
 
 class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     private final Argument[] arguments;
-    private final FastMethod method;
-    private final Object instance;
+    private final Action<Object[], Object> body;
 
-    MethodWrapper(Object instance, FastMethod method, Argument[] arguments) {
-        this.instance = instance;
-        this.method = method;
+    MethodWrapper(Action<Object[], Object> body, Argument[] arguments) {
+        this.body = body;
         this.arguments = arguments;
     }
 
@@ -34,8 +29,8 @@ class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     }
 
     @Override
-    public HttpResponse execute(HttpRequest request) throws InvocationTargetException {
-        return (HttpResponse) method.invoke(instance, makeParameters(request));
+    public HttpResponse execute(HttpRequest request) throws Throwable {
+        return (HttpResponse) body.execute(makeParameters(request));
     }
 
     protected static class Argument {

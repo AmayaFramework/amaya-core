@@ -1,13 +1,10 @@
 package io.github.amayaframework.core.wrapping;
 
 import com.github.romanqed.jutils.util.Action;
-import com.thoughtworks.paranamer.BytecodeReadingParanamer;
-import com.thoughtworks.paranamer.Paranamer;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.ReflectUtil;
-import net.sf.cglib.reflect.FastClass;
+import io.github.amayaframework.core.util.ReflectionUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +20,7 @@ import java.util.Objects;
  * that supports injecting values into the marked route arguments.
  */
 public class InjectPacker extends AbstractPacker {
-    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, String nativeName)
+    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, boolean useNativeName)
             throws InvocationTargetException, IllegalAccessException {
         Content found = null;
         String value = null;
@@ -37,12 +34,12 @@ public class InjectPacker extends AbstractPacker {
             }
             found = content;
             try {
-                value = ReflectUtil.extractAnnotationValue(annotation, String.class);
+                value = ReflectionUtil.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchElementException e) {
-                value = nativeName;
+                value = parameter.getName();
             }
-            if (nativeName != null) {
-                value = nativeName;
+            if (useNativeName) {
+                value = parameter.getName();
             }
         }
         if (found == null) {
@@ -51,34 +48,25 @@ public class InjectPacker extends AbstractPacker {
         return new MethodWrapper.Argument(found.getFilter(), value);
     }
 
-    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, String[] nativeNames)
+    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, boolean useNativeNames)
             throws InvocationTargetException, IllegalAccessException {
         List<MethodWrapper.Argument> ret = new ArrayList<>();
         for (int i = 1; i < parameters.length; ++i) {
-            String nativeName = null;
-            if (nativeNames != null) {
-                nativeName = nativeNames[i];
-            }
-            ret.add(findParameterAnnotation(parameters[i], nativeName));
+            ret.add(findParameterAnnotation(parameters[i], useNativeNames));
         }
         return ret.toArray(new MethodWrapper.Argument[0]);
     }
 
     @Override
-    public Action<HttpRequest, HttpResponse> pack(Object instance, Method method)
-            throws InvocationTargetException, IllegalAccessException {
+    public Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Throwable {
         Objects.requireNonNull(instance);
         Objects.requireNonNull(method);
         method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
-        String[] nativeNames = null;
-        if (ConfigProvider.getConfig().useNativeNames()) {
-            Paranamer paranamer = new BytecodeReadingParanamer();
-            nativeNames = paranamer.lookupParameterNames(method);
-        }
-        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, nativeNames);
-        FastClass fastClass = FastClass.create(instance.getClass());
-        return new MethodWrapper(instance, fastClass.getMethod(method), arguments);
+        boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
+        MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
+        Action<Object[], Object> toWrap = ReflectionUtil.packAnyMethod(instance, method, arguments.length);
+        return new MethodWrapper(toWrap, arguments);
     }
 }

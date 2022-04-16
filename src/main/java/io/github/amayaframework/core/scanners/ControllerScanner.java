@@ -4,7 +4,7 @@ import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;
-import io.github.amayaframework.core.util.ReflectUtil;
+import io.github.amayaframework.core.util.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
     public Set<Controller> find()
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Map<String, Controller> found =
-                ReflectUtil.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
+                ReflectionUtil.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
         for (Map.Entry<String, Controller> entry : found.entrySet()) {
             String path = entry.getKey();
             if (path.equals("/")) {

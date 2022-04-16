@@ -7,7 +7,7 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.util.ReflectUtil;
+import io.github.amayaframework.core.util.ReflectionUtil;
 import io.github.amayaframework.core.wrapping.Packer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +30,7 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         List<Pair<HttpMethod, String>> found;
         for (Method method : declaredMethods) {
-            found = ReflectUtil.extractMethodRoutes(method);
+            found = ReflectionUtil.extractMethodRoutes(method);
             if (!found.isEmpty()) {
                 parseRoutes(method, found).forEach((httpMethod, routes) ->
                         ret.computeIfAbsent(httpMethod, key -> new ArrayList<>()).addAll(routes));

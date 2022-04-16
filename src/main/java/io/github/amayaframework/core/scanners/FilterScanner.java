@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.scanners;
 
 import io.github.amayaframework.core.config.ConfigProvider;
-import io.github.amayaframework.core.util.ReflectUtil;
+import io.github.amayaframework.core.util.ReflectionUtil;
 import io.github.amayaframework.filters.Filter;
 import io.github.amayaframework.filters.NamedFilter;
 import io.github.amayaframework.filters.NamedFilters;
@@ -21,9 +21,9 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
 
     @Override
     public Map<String, T> find() throws Exception {
-        Map<NamedFilter[], T> multiple = ReflectUtil.
+        Map<NamedFilter[], T> multiple = ReflectionUtil.
                 findAnnotatedWithValue(NamedFilters.class, clazz, NamedFilter[].class);
-        Map<String, T> single = ReflectUtil.findAnnotatedWithValue(NamedFilter.class, clazz, String.class);
+        Map<String, T> single = ReflectionUtil.findAnnotatedWithValue(NamedFilter.class, clazz, String.class);
         multiple.forEach((key, value) -> {
             for (NamedFilter filter : key) {
                 single.put(filter.value(), value);

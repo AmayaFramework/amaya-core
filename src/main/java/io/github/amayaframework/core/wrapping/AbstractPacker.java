@@ -28,7 +28,7 @@ public abstract class AbstractPacker implements Packer {
     public Action<HttpRequest, HttpResponse> checkedPack(Object instance, Method method) {
         try {
             return pack(instance, method);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("Can not pack method due to " + e.getMessage());
             throw new InvalidFormatException("Invalid method with name \"" + method.getName() + "\" format", e);
         }
