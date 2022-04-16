@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Content;
 
 import javax.servlet.http.Cookie;
@@ -11,22 +10,11 @@ import java.util.Objects;
 
 public abstract class AbstractHttpRequest extends AbstractHttpTransaction implements HttpRequest {
     private final Map<String, Object> fields;
-    private HttpMethod method;
     private Map<String, List<String>> queryParameters;
     private Map<String, Object> pathParameters;
 
     public AbstractHttpRequest() {
         fields = new HashMap<>();
-    }
-
-    @Override
-    public HttpMethod getMethod() {
-        return method;
-    }
-
-    @Override
-    public void setMethod(HttpMethod method) {
-        this.method = Objects.requireNonNull(method);
     }
 
     @Override

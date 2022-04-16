@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.wrapping.Viewable;
 
 import javax.servlet.http.Cookie;
@@ -12,15 +11,6 @@ import java.util.Map;
  * and service interface {@link Viewable}.
  */
 public interface HttpRequest extends HttpTransaction, Viewable {
-    /**
-     * Returns the used http method.
-     *
-     * @return {@link HttpMethod}
-     */
-    HttpMethod getMethod();
-
-    void setMethod(HttpMethod method);
-
     /**
      * Returns all queried parameters extracted from the request URI.
      *

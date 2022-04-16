@@ -1,20 +1,28 @@
 package io.github.amayaframework;
 
-import io.github.amayaframework.core.contexts.HttpRequest;
+import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.controllers.HttpController;
-import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
-import io.github.amayaframework.core.methods.Post;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
+import io.github.amayaframework.core.wrapping.BasePacker;
+import io.github.amayaframework.entities.BrokenPath;
+import io.github.amayaframework.entities.Correct;
+import io.github.amayaframework.entities.Duplicates;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static io.github.amayaframework.core.contexts.Responses.ok;
+public class RouteTest extends Assertions {
+    @BeforeAll
+    public static void config() {
+        AmayaConfig config = ConfigProvider.getConfig();
+        config.setUseNativeNames(false);
+        config.setRoutePacker(new BasePacker());
+    }
 
-public class ControllerTest extends Assertions {
     @Test
     public void testCorrect() throws Throwable {
         Correct correct = new Correct();
@@ -45,47 +53,5 @@ public class ControllerTest extends Assertions {
             exceptionClass = e.getCause().getClass();
         }
         assertEquals(exceptionClass, InvalidRouteFormatException.class);
-    }
-}
-
-class Correct extends HttpController {
-    @Get
-    public HttpResponse get(HttpRequest request) {
-        return ok("get");
-    }
-
-    @Get("/{id}")
-    public HttpResponse getWithId(HttpRequest request) {
-        return ok("getWithId");
-    }
-
-    @Post
-    public HttpResponse post(HttpRequest request) {
-        return ok("post");
-    }
-
-    @Post("/{id}")
-    public HttpResponse postWithId(HttpRequest request) {
-        return ok("postWithId");
-    }
-}
-
-class Duplicates extends HttpController {
-    @Get
-    @Post
-    public HttpResponse get(HttpRequest request) {
-        return ok();
-    }
-
-    @Post
-    public HttpResponse post(HttpRequest request) {
-        return ok();
-    }
-}
-
-class BrokenPath extends HttpController {
-    @Get("//")
-    public HttpResponse get(HttpRequest request) {
-        return ok();
     }
 }
