@@ -19,16 +19,25 @@ public class ParseRequestBodyAction extends PipelineAction<RequestData, RequestD
     public RequestData execute(RequestData requestData) {
         HttpRequest request = requestData.getRequest();
         InputStream bodyStream = requestData.getInputStream();
+        // Skipping body processing if the request doesn't have one
+        if (!requestData.getMethod().isHasBody()) {
+            request.setBody(bodyStream);
+            return requestData;
+        }
+        // Process request body
         String rawType = requestData.getContentType();
+        // If there is no content type header, skip body processing
         if (rawType == null) {
             request.setBody(bodyStream);
             return requestData;
         }
         ContentType type = ContentType.fromHeader(rawType);
+        // If the content-header is unknown, skip body processing
         if (type == null) {
             request.setBody(bodyStream);
             return requestData;
-        } else if (!type.isString()) {
+        }
+        if (!type.isString()) {
             request.setBody(bodyStream);
             request.setContentType(type);
             return requestData;
