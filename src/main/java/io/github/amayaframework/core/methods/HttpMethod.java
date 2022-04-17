@@ -7,25 +7,31 @@ import java.util.*;
  * Enum describing the list of http methods supported by the framework.
  */
 public enum HttpMethod {
-    GET(Get.class),
-    HEAD(Head.class),
+    GET(Get.class, false),
+    HEAD(Head.class, false),
     POST(Post.class),
     PUT(Put.class),
     PATCH(Patch.class),
     DELETE(Delete.class),
-    OPTIONS(Options.class);
+    OPTIONS(Options.class, false);
 
     private static final Map<Class<Annotation>, HttpMethod> children = toMap();
     private static final Map<String, HttpMethod> stringChildren = toStringMap();
     private final Class<Annotation> annotationClass;
+    private final boolean hasBody;
 
     @SuppressWarnings("unchecked")
-    HttpMethod(Class<?> annotationClass) {
+    HttpMethod(Class<?> annotationClass, boolean hasBody) {
         Objects.requireNonNull(annotationClass);
         if (!annotationClass.isAnnotation()) {
             throw new IllegalArgumentException("The provided class is not an annotation");
         }
         this.annotationClass = (Class<Annotation>) annotationClass;
+        this.hasBody = hasBody;
+    }
+
+    HttpMethod(Class<?> annotationClass) {
+        this(annotationClass, true);
     }
 
     private static Map<Class<Annotation>, HttpMethod> toMap() {
@@ -62,5 +68,9 @@ public enum HttpMethod {
 
     public Class<Annotation> getAnnotationClass() {
         return annotationClass;
+    }
+
+    public boolean isHasBody() {
+        return hasBody;
     }
 }

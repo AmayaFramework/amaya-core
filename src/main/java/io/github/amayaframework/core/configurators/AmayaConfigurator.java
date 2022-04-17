@@ -20,10 +20,6 @@ public class AmayaConfigurator implements Handler<PipelineHandler> {
         this.fabric = new ActionFabric(prefix);
     }
 
-    public AmayaConfigurator() {
-        this.fabric = new ActionFabric();
-    }
-
     @Override
     public void handle(PipelineHandler handler)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {

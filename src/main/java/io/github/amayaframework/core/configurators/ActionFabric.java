@@ -13,10 +13,6 @@ public class ActionFabric {
         this.prefix = Objects.requireNonNull(prefix);
     }
 
-    public ActionFabric() {
-        this("");
-    }
-
     @SuppressWarnings("unchecked")
     public Action<?, ?> makeAction(String name)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
