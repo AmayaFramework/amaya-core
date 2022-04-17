@@ -33,7 +33,7 @@ public abstract class AbstractIOHandler implements IOHandler {
         HttpResponse response;
         try {
             response = session.handleInput(input);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("Error at input", e);
             session.reject(e);
             return;
@@ -45,7 +45,7 @@ public abstract class AbstractIOHandler implements IOHandler {
         }
         try {
             session.handleOutput(output, response);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logger.error("Error at output", e);
             session.reject(e);
         }

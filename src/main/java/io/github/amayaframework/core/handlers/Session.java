@@ -10,11 +10,11 @@ import java.io.IOException;
  * An interface representing session, which must be implemented for a specific server.
  */
 public interface Session {
-    HttpResponse handleInput(Action<Object, Object> handler) throws Exception;
+    HttpResponse handleInput(Action<Object, Object> handler) throws Throwable;
 
-    void handleOutput(Action<Object, Object> handler, HttpResponse response) throws Exception;
+    void handleOutput(Action<Object, Object> handler, HttpResponse response) throws Throwable;
 
-    void reject(Exception e) throws IOException;
+    void reject(Throwable e) throws IOException;
 
     void reject(HttpCode code, String message) throws IOException;
 }
