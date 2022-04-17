@@ -19,19 +19,19 @@ public class Inject extends HttpController {
     }
 
     @Get("/{a}")
-    public HttpResponse a(HttpRequest request, @Path("a") Integer a) {
+    public HttpResponse a(HttpRequest request, @Path("test_a") Integer a) {
         stream.println(a);
         return null;
     }
 
     @Get("/b")
-    public HttpResponse b(HttpRequest request, @Query("a") String a) {
+    public HttpResponse b(HttpRequest request, @Query("test_a") String a) {
         stream.println(a);
         return null;
     }
 
     @Get("/c")
-    public HttpResponse c(HttpRequest request, @HttpCookie("a") Cookie a) {
+    public HttpResponse c(HttpRequest request, @HttpCookie("test_a") Cookie a) {
         stream.println(a.getName());
         return null;
     }

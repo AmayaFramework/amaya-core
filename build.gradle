@@ -12,7 +12,7 @@ java {
     withSourcesJar()
 }
 
-compileJava {
+tasks.withType(JavaCompile).all {
     options.compilerArgs << '-parameters'
 }
 
