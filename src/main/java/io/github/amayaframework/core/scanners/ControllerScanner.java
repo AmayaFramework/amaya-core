@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ControllerScanner implements Scanner<Set<Controller>> {
-    private static final Logger logger = LoggerFactory.getLogger(ControllerScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerScanner.class);
     private final Class<? extends Annotation> annotationClass;
 
     public ControllerScanner(Class<? extends Annotation> annotationClass) {
@@ -34,7 +34,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
                 path = "";
             }
             if (!path.isEmpty() && !ParseUtil.ROUTE.matcher(path).matches()) {
-                logger.error("Invalid route format: " + path);
+                LOGGER.error("Invalid route format: " + path);
                 throw new InvalidRouteFormatException(path);
             }
             entry.getValue().setPath(path);
@@ -58,6 +58,6 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
         if (position > 0) {
             message.delete(position, position + 2);
         }
-        logger.debug(message.toString());
+        LOGGER.debug(message.toString());
     }
 }

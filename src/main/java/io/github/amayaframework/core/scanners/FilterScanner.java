@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> {
-    private static final Logger logger = LoggerFactory.getLogger(FilterScanner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilterScanner.class);
     private final Class<T> clazz;
 
     public FilterScanner(Class<T> clazz) {
@@ -30,7 +30,7 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
             }
         });
         if (ConfigProvider.getConfig().isDebug()) {
-            logger.debug("The scanner with the base class " +
+            LOGGER.debug("The scanner with the base class " +
                     clazz.getSimpleName() +
                     " found filters: \n" +
                     single
