@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * <p>Returns: {@link RequestData}</p>
  */
 public class RouteDebugAction extends PipelineAction<RequestData, RequestData> {
-    private static final Logger logger = LoggerFactory.getLogger(RouteDebugAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RouteDebugAction.class);
 
     @Override
     public RequestData execute(RequestData requestData) {
@@ -19,7 +19,7 @@ public class RouteDebugAction extends PipelineAction<RequestData, RequestData> {
                 "Method: " + requestData.getMethod() + '\n' +
                 "Route: " + requestData.getRoute().route() + '\n' +
                 "Path: " + requestData.getPath() + '\n';
-        logger.debug(message);
+        LOGGER.debug(message);
         return requestData;
     }
 }

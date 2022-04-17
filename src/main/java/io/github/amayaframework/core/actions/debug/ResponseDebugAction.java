@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * <p>Returns: {@link HttpResponse}</p>
  */
 public class ResponseDebugAction extends PipelineAction<ResponseData, ResponseData> {
-    private static final Logger logger = LoggerFactory.getLogger(ResponseDebugAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseDebugAction.class);
 
     @Override
     public ResponseData execute(ResponseData responseData) {
@@ -25,7 +25,7 @@ public class ResponseDebugAction extends PipelineAction<ResponseData, ResponseDa
                     "Headers: " + response.getHeaderMap() + "\n" +
                     "Cookies: " + response.getCookies() + "\n";
         }
-        logger.debug(message);
+        LOGGER.debug(message);
         return responseData;
     }
 }

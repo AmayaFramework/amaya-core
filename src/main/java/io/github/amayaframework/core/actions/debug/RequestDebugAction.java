@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * <p>Returns: {@link RequestData}</p>
  */
 public class RequestDebugAction extends PipelineAction<RequestData, RequestData> {
-    private static final Logger logger = LoggerFactory.getLogger(RequestDebugAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestDebugAction.class);
 
     @Override
     public RequestData execute(RequestData requestData) {
@@ -21,7 +21,7 @@ public class RequestDebugAction extends PipelineAction<RequestData, RequestData>
                 "Implementation used: " + request.getClass().getSimpleName() + "\n" +
                 "Parsed path parameters: " + request.getPathParameters() + "\n" +
                 "Parsed query parameters: " + request.getQuery() + "\n";
-        logger.debug(message);
+        LOGGER.debug(message);
         return requestData;
     }
 }
