@@ -31,8 +31,8 @@ dependencies {
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    api group: 'com.github.romanqed', name: 'jutils', version: '3.3.0'
-    implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
+    api group: 'com.github.romanqed', name: 'jutils', version: '3.4.0'
+    implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.8'
 }
 
 test {

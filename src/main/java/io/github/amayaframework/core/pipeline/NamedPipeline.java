@@ -63,6 +63,15 @@ public class NamedPipeline implements Pipeline<String> {
     }
 
     @Override
+    public void insertFirst(String key, Action<?, ?> value) {
+        body.insertFirst(key, value);
+    }
+
+    public void insertFirst(PipelineAction<?, ?> value) {
+        body.insertFirst(value.getName(), value);
+    }
+
+    @Override
     public void clear() {
         body.clear();
     }
