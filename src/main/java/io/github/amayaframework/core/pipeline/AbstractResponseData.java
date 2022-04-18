@@ -1,0 +1,23 @@
+package io.github.amayaframework.core.pipeline;
+
+import io.github.amayaframework.core.contexts.HttpResponse;
+
+import java.util.Objects;
+
+public abstract class AbstractResponseData implements ResponseData {
+    private HttpResponse response;
+
+    protected AbstractResponseData(HttpResponse response) {
+        this.response = Objects.requireNonNull(response);
+    }
+
+    @Override
+    public HttpResponse getResponse() {
+        return response;
+    }
+
+    @Override
+    public void setResponse(HttpResponse response) {
+        this.response = Objects.requireNonNull(response);
+    }
+}

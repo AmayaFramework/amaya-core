@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.util;
 
 import java.util.Map;
-import java.util.Objects;
 
 public interface Attachable {
     /**
@@ -37,9 +36,12 @@ public interface Attachable {
 
     @SuppressWarnings("unchecked")
     default <T> T get(String key) {
-        Objects.requireNonNull(key);
+        Object ret = getAttachment(key);
+        if (ret == null) {
+            return null;
+        }
         try {
-            return (T) getAttachment(key);
+            return (T) ret;
         } catch (Exception e) {
             return null;
         }
