@@ -2,12 +2,12 @@ package io.github.amayaframework.core.pipeline;
 
 interface CompletableData {
     /**
-     *
+     * Explicitly indicates that further data modification is not possible.
      */
     void complete();
 
     /**
-     * @return
+     * @return completion status: true if completed, false if not
      */
     boolean isCompleted();
 }

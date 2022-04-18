@@ -12,6 +12,12 @@ public abstract class AbstractResponseData extends Data implements ResponseData 
     }
 
     @Override
+    public void complete() {
+        this.response = new UnmodifiableResponse(response);
+        this.completed = true;
+    }
+
+    @Override
     public HttpResponse getResponse() {
         return response;
     }

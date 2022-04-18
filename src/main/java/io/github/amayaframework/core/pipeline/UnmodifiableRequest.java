@@ -10,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class UnmodifiableRequest implements HttpRequest {
+final class UnmodifiableRequest implements HttpRequest {
     private final HttpRequest body;
 
-    protected UnmodifiableRequest(HttpRequest body) {
+    UnmodifiableRequest(HttpRequest body) {
         this.body = body;
     }
 

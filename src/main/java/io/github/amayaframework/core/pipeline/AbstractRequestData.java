@@ -19,6 +19,12 @@ public abstract class AbstractRequestData extends Data implements RequestData {
     }
 
     @Override
+    public void complete() {
+        request = new UnmodifiableRequest(request);
+        completed = true;
+    }
+
+    @Override
     public MethodRoute getRoute() {
         return route;
     }

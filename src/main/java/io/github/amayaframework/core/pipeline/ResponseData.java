@@ -3,17 +3,18 @@ package io.github.amayaframework.core.pipeline;
 import io.github.amayaframework.core.contexts.HttpResponse;
 
 /**
- * A simple container created to transfer data between pipeline actions.
- * Common form.
+ * A container for transferring data between the actions of the output pipeline.
  */
 public interface ResponseData extends CompletableData {
     /**
-     * @return
+     * @return the http response instance sent by the user from the controller.
      */
     HttpResponse getResponse();
 
     /**
-     * @param response
+     * Sets a new http response instance.
+     *
+     * @param response to be set, must be not null
      */
     void setResponse(HttpResponse response);
 }

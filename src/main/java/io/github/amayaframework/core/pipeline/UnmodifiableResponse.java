@@ -13,10 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class UnmodifiableResponse implements HttpResponse {
+final class UnmodifiableResponse implements HttpResponse {
     private final HttpResponse body;
 
-    protected UnmodifiableResponse(HttpResponse body) {
+    UnmodifiableResponse(HttpResponse body) {
         this.body = body;
     }
 
