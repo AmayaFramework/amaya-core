@@ -4,7 +4,7 @@ import io.github.amayaframework.core.contexts.HttpResponse;
 
 import java.util.Objects;
 
-public abstract class AbstractResponseData implements ResponseData {
+public abstract class AbstractResponseData extends Data implements ResponseData {
     private HttpResponse response;
 
     protected AbstractResponseData(HttpResponse response) {
@@ -18,6 +18,7 @@ public abstract class AbstractResponseData implements ResponseData {
 
     @Override
     public void setResponse(HttpResponse response) {
+        checkFinalized();
         this.response = Objects.requireNonNull(response);
     }
 }

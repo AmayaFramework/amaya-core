@@ -3,7 +3,6 @@ package io.github.amayaframework.core.contexts;
 import io.github.amayaframework.core.util.Attachable;
 
 import javax.servlet.http.Cookie;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,20 +25,6 @@ public interface HttpTransaction extends Attachable {
      * @param body body object
      */
     void setBody(Object body);
-
-    /**
-     * Transform body into {@link String} and returns it.
-     *
-     * @return {@link String} body
-     */
-    String getBodyAsString();
-
-    /**
-     * Transform body into {@link InputStream} and returns it.
-     *
-     * @return {@link InputStream} body
-     */
-    InputStream getBodyAsInputStream();
 
     /**
      * Returns values of specified header

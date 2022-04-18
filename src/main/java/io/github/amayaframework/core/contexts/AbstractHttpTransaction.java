@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.contexts;
 
 import javax.servlet.http.Cookie;
-import java.io.InputStream;
 import java.util.*;
 
 public abstract class AbstractHttpTransaction implements HttpTransaction {
@@ -76,25 +75,5 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     @Override
     public void setContentType(ContentType type) {
         this.type = Objects.requireNonNull(type);
-    }
-
-    @Override
-    public String getBodyAsString() {
-        if (body == null || type == null || !type.isString()) {
-            return null;
-        }
-        return body.toString();
-    }
-
-    @Override
-    public InputStream getBodyAsInputStream() {
-        if (body == null || (type != null && type.isString())) {
-            return null;
-        }
-        try {
-            return (InputStream) body;
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

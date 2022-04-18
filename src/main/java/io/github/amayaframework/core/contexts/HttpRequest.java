@@ -3,6 +3,7 @@ package io.github.amayaframework.core.contexts;
 import io.github.amayaframework.core.wrapping.Viewable;
 
 import javax.servlet.http.Cookie;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -58,4 +59,18 @@ public interface HttpRequest extends HttpTransaction, Viewable {
     <T> T getPathParameter(String name);
 
     void setCookies(Map<String, Cookie> cookies);
+
+    /**
+     * Transform body into {@link String} and returns it.
+     *
+     * @return {@link String} body
+     */
+    String getBodyAsString();
+
+    /**
+     * Transform body into {@link InputStream} and returns it.
+     *
+     * @return {@link InputStream} body
+     */
+    InputStream getBodyAsInputStream();
 }

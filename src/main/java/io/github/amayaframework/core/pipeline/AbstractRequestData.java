@@ -6,7 +6,7 @@ import io.github.amayaframework.core.routes.MethodRoute;
 
 import java.util.Objects;
 
-public abstract class AbstractRequestData implements RequestData {
+public abstract class AbstractRequestData extends Data implements RequestData {
     private final MethodRoute route;
     private final String path;
     private final HttpMethod method;
@@ -38,6 +38,7 @@ public abstract class AbstractRequestData implements RequestData {
     }
 
     public void setRequest(HttpRequest request) {
+        checkFinalized();
         this.request = Objects.requireNonNull(request);
     }
 }
