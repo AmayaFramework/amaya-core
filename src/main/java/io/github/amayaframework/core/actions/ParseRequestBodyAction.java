@@ -13,7 +13,7 @@ import java.io.InputStream;
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */
-public class ParseRequestBodyAction extends PipelineAction<RequestData, RequestData> {
+public final class ParseRequestBodyAction extends PipelineAction<RequestData, RequestData> {
 
     @Override
     public RequestData execute(RequestData requestData) {

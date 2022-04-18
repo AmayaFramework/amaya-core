@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ConfiguratorWrapper {
+public final class ConfiguratorWrapper {
     private final static String INPUT_NAME = "configureInput";
     private final static String OUTPUT_NAME = "configureOutput";
 

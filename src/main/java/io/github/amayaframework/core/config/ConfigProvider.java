@@ -2,7 +2,7 @@ package io.github.amayaframework.core.config;
 
 import java.util.Objects;
 
-public class ConfigProvider {
+public final class ConfigProvider {
     private static AmayaConfig config = new AmayaConfig();
 
     public static AmayaConfig getConfig() {

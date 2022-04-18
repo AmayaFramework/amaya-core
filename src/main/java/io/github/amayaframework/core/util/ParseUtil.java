@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ParseUtil {
+public final class ParseUtil {
     public static final String CONTENT_HEADER = "Content-Type";
     public static final String COOKIE_HEADER = "Cookie";
     public static final String SET_COOKIE_HEADER = "Set-Cookie";

@@ -13,7 +13,7 @@ import io.github.amayaframework.core.actions.debug.RouteDebugAction;
 import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 
-public class AmayaConfigurator implements Handler<PipelineHandler> {
+public final class AmayaConfigurator implements Handler<PipelineHandler> {
     private final ActionFabric fabric;
 
     public AmayaConfigurator(String prefix) {
@@ -37,7 +37,7 @@ public class AmayaConfigurator implements Handler<PipelineHandler> {
         }
     }
 
-    protected void addInputDebugActions(Pipeline<String> input) {
+    private void addInputDebugActions(Pipeline<String> input) {
         input.insertBefore(InputStage.PARSE_REQUEST, DebugStage.ROUTE_DEBUG, new RouteDebugAction());
         input.insertAfter(InputStage.PARSE_REQUEST, DebugStage.REQUEST_DEBUG, new RequestDebugAction());
     }

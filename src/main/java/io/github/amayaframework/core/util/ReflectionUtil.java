@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class ReflectionUtil {
+public final class ReflectionUtil {
     private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
     private static final String HANDLE = "handle";
     private static final String ACTION = "execute";

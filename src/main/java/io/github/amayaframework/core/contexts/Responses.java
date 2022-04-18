@@ -7,7 +7,7 @@ import com.github.romanqed.jutils.http.HttpCode;
  * <p>A class designed to make easier the creation of responses with various codes.</p>
  * <p>Methods that do not accept arguments will return a response with an empty body.</p>
  */
-public class Responses {
+public final class Responses {
     public static HttpResponse response(HttpCode code, HeaderMap headers) {
         return new HttpResponseImpl(code, headers);
     }

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * <p>Receives: {@link HttpResponse}</p>
  * <p>Returns: {@link HttpResponse}</p>
  */
-public class ResponseDebugAction extends PipelineAction<ResponseData, ResponseData> {
+public final class ResponseDebugAction extends PipelineAction<ResponseData, ResponseData> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseDebugAction.class);
 
     @Override

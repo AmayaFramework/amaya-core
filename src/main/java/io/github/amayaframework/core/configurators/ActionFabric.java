@@ -4,7 +4,7 @@ import com.github.romanqed.jutils.util.Action;
 
 import java.util.Objects;
 
-public class ActionFabric {
+public final class ActionFabric {
     private final ClassLoader loader;
     private final String prefix;
 

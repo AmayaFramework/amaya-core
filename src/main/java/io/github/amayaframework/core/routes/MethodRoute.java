@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MethodRoute extends Route implements Attachable {
+public final class MethodRoute extends Route implements Attachable {
     private final Method method;
     private final Action<HttpRequest, HttpResponse> body;
     private final Map<String, Object> attachments;

@@ -9,7 +9,7 @@ import io.github.amayaframework.core.pipeline.RequestData;
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link HttpResponse}</p>
  */
-public class InvokeControllerAction extends InputAction<RequestData, HttpResponse> {
+public final class InvokeControllerAction extends InputAction<RequestData, HttpResponse> {
     @Override
     public HttpResponse execute(RequestData requestData) throws Throwable {
         return requestData.getRoute().getBody().execute(requestData.getRequest());
