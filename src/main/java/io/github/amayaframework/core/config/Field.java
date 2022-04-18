@@ -2,7 +2,7 @@ package io.github.amayaframework.core.config;
 
 import java.util.Objects;
 
-public final class Field<T> {
+public class Field<T> {
     private final String name;
     private final Class<?> type;
 
