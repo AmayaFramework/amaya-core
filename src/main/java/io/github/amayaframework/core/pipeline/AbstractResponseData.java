@@ -24,7 +24,7 @@ public abstract class AbstractResponseData extends Data implements ResponseData 
 
     @Override
     public void setResponse(HttpResponse response) {
-        checkFinalized();
+        checkCompleted();
         this.response = Objects.requireNonNull(response);
     }
 }

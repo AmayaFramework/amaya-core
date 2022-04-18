@@ -3,7 +3,7 @@ package io.github.amayaframework.core.pipeline;
 abstract class Data implements CompletableData {
     protected boolean completed = false;
 
-    protected void checkFinalized() {
+    protected void checkCompleted() {
         if (completed) {
             throw new IllegalStateException("The data has already been finalized");
         }

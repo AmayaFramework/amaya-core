@@ -44,7 +44,7 @@ public abstract class AbstractRequestData extends Data implements RequestData {
     }
 
     public void setRequest(HttpRequest request) {
-        checkFinalized();
+        checkCompleted();
         this.request = Objects.requireNonNull(request);
     }
 }
