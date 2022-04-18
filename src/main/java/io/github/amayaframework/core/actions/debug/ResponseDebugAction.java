@@ -15,8 +15,8 @@ public final class ResponseDebugAction extends PipelineAction<ResponseData, Resp
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseDebugAction.class);
 
     @Override
-    public ResponseData execute(ResponseData responseData) {
-        HttpResponse response = responseData.getResponse();
+    public ResponseData execute(ResponseData data) {
+        HttpResponse response = data.getResponse();
         String message = "HttpResponse was received successfully\n" +
                 "Implementation used: " + (response != null ? response.getClass().getSimpleName() : null) + "\n";
         if (response != null) {
@@ -26,6 +26,6 @@ public final class ResponseDebugAction extends PipelineAction<ResponseData, Resp
                     "Cookies: " + response.getCookies() + "\n";
         }
         LOGGER.debug(message);
-        return responseData;
+        return data;
     }
 }

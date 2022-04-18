@@ -14,12 +14,12 @@ public final class RouteDebugAction extends PipelineAction<RequestData, RequestD
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteDebugAction.class);
 
     @Override
-    public RequestData execute(RequestData requestData) {
+    public RequestData execute(RequestData data) {
         String message = "Route found successfully\n" +
-                "Method: " + requestData.getMethod() + '\n' +
-                "Route: " + requestData.getRoute().route() + '\n' +
-                "Path: " + requestData.getPath() + '\n';
+                "Method: " + data.getMethod() + '\n' +
+                "Route: " + data.getRoute().route() + '\n' +
+                "Path: " + data.getPath() + '\n';
         LOGGER.debug(message);
-        return requestData;
+        return data;
     }
 }

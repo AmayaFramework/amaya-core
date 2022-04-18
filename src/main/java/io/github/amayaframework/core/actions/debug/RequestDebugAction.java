@@ -15,13 +15,13 @@ public final class RequestDebugAction extends PipelineAction<RequestData, Reques
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestDebugAction.class);
 
     @Override
-    public RequestData execute(RequestData requestData) {
-        HttpRequest request = requestData.getRequest();
+    public RequestData execute(RequestData data) {
+        HttpRequest request = data.getRequest();
         String message = "The request was parsed successfully\n" +
                 "Implementation used: " + request.getClass().getSimpleName() + "\n" +
                 "Parsed path parameters: " + request.getPathParameters() + "\n" +
                 "Parsed query parameters: " + request.getQuery() + "\n";
         LOGGER.debug(message);
-        return requestData;
+        return data;
     }
 }
