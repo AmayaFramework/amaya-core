@@ -57,6 +57,7 @@ public final class ConfigProvider {
     }
 
     static void setAmayaConfig(AmayaConfig config) {
+        Objects.requireNonNull(config);
         INSTANCE.body.put(AMAYA_CLASS, config);
     }
 }
