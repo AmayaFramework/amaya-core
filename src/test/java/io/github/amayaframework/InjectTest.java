@@ -37,7 +37,7 @@ public class InjectTest extends Assertions {
 
     @BeforeAll
     public static void config() {
-        AmayaConfig config = ConfigProvider.getConfig();
+        AmayaConfig config = ConfigProvider.getAmayaConfig();
         config.setUseNativeNames(true);
         config.setRoutePacker(new InjectPacker());
     }

@@ -64,7 +64,7 @@ public class InjectPacker extends AbstractPacker {
         method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
-        boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
+        boolean useNativeNames = ConfigProvider.getAmayaConfig().useNativeNames();
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
         Action<Object[], Object> toWrap = ReflectionUtil.packAnyMethod(instance, method, arguments.length + 1);
         return new MethodWrapper(toWrap, arguments);

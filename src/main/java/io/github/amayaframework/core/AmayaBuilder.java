@@ -30,7 +30,7 @@ public abstract class AmayaBuilder<T> {
         controllers = new ConcurrentHashMap<>();
         configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
-        config = ConfigProvider.getConfig();
+        config = ConfigProvider.getAmayaConfig();
         resetValues();
     }
 
@@ -107,5 +107,12 @@ public abstract class AmayaBuilder<T> {
         controllers.forEach(this::addController);
     }
 
+    /**
+     * Builds and prepares the framework for launch.
+     * In order to avoid the race condition must be synchronized.
+     *
+     * @return an {@link Amaya} instance ready to run.
+     * @throws Exception if there are any exceptions during the build process.
+     */
     public abstract Amaya<T> build() throws Exception;
 }
