@@ -22,13 +22,14 @@ import java.util.*;
  */
 public abstract class HttpController implements Controller {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger;
     private final MethodRouter router;
     private final List<MethodRoute> routes;
     private String route;
 
     public HttpController() {
         Class<?> clazz = getClass();
+        logger = LoggerFactory.getLogger(clazz);
         AmayaConfig config = ConfigProvider.getConfig();
         router = config.getRouter();
         Packer packer = Checks.requireNonNullElse(Util.extractPacker(clazz), config.getRoutePacker());
