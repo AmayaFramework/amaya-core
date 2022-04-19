@@ -17,22 +17,26 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AmayaBuilder<T> {
-    private static final Object LOCK = new Object();
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
     protected final List<ConfiguratorWrapper> configurators;
     private final Handler<PipelineHandler> configurator;
+    private final Runnable unLock;
     protected Class<? extends Annotation> annotation;
 
     protected AmayaBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
         configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
-        synchronized (LOCK) {
-            config = ConfigProvider.getAmayaConfig();
+        synchronized (ConfigProvider.LOCK) {
+            config = ConfigProvider.getConfig();
             config.complete();
+        }
+        unLock = ConfigProvider.lockConfig();
+        if (config.isDebug()) {
+            logger.debug(config.toString());
         }
         resetValues();
     }
@@ -48,7 +52,8 @@ public abstract class AmayaBuilder<T> {
     }
 
     protected void resetConfig() {
-        ConfigProvider.setAmayaConfig(new AmayaConfig());
+        unLock.run();
+        ConfigProvider.setConfig(new AmayaConfig());
     }
 
     public AmayaBuilder<T> addConfigurator(Configurator configurator) {

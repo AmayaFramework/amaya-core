@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 public class RouteTest extends Assertions {
     @BeforeAll
     public static void config() {
-        AmayaConfig config = ConfigProvider.getAmayaConfig();
+        AmayaConfig config = ConfigProvider.getConfig();
         config.setUseNativeNames(false);
         config.setRoutePacker(new BasePacker());
     }

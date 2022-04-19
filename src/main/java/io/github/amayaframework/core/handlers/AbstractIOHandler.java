@@ -18,7 +18,7 @@ public abstract class AbstractIOHandler implements IOHandler {
     public AbstractIOHandler(Action<Object, Object> input, Action<Object, Object> output) {
         Objects.requireNonNull(input);
         Objects.requireNonNull(output);
-        if (ConfigProvider.getAmayaConfig().useAsync()) {
+        if (ConfigProvider.getConfig().useAsync()) {
             this.input = e -> input.async(e).get();
             this.output = e -> output.async(e).get();
         } else {

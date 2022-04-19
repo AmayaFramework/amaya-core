@@ -2,10 +2,7 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.config.Config;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import io.github.amayaframework.core.config.ConfigRepository;
 
 /**
  * Global repository of the framework configs.
@@ -15,49 +12,43 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>(if there were several initializations).</p>
  */
 public final class ConfigProvider {
+    public static final Object LOCK = new Object();
     private static final Class<?> AMAYA_CLASS = Amaya.class;
-    private static final ConfigProvider INSTANCE = new ConfigProvider();
+    private static final ConfigRepository INSTANCE;
 
-    private final Map<Class<?>, Config> body;
+    static {
+        INSTANCE = new ConfigRepository();
+        INSTANCE.put(AMAYA_CLASS, new AmayaConfig());
+    }
 
     private ConfigProvider() {
-        body = new ConcurrentHashMap<>();
-        body.put(AMAYA_CLASS, new AmayaConfig());
     }
 
-    /**
-     * Searches for the config associated with the class.
-     *
-     * @param clazz search class
-     * @return found config or null
-     */
     public static Config getConfig(Class<?> clazz) {
-        Objects.requireNonNull(clazz);
-        return INSTANCE.body.get(clazz);
+        return INSTANCE.get(clazz);
     }
 
-    /**
-     * Sets the config and binds it to the class.
-     *
-     * @param clazz  bind class
-     * @param config config to be bind
-     * @return config previously bound to this class, or null
-     */
     public static Config setConfig(Class<?> clazz, Config config) {
-        Objects.requireNonNull(clazz);
-        if (clazz == AMAYA_CLASS) {
-            throw new IllegalArgumentException("Can't modify config for Amaya!");
+        synchronized (LOCK) {
+            return INSTANCE.put(clazz, config);
         }
-        Objects.requireNonNull(config);
-        return INSTANCE.body.put(clazz, config);
     }
 
-    public static AmayaConfig getAmayaConfig() {
-        return (AmayaConfig) INSTANCE.body.get(AMAYA_CLASS);
+    public static Runnable lockConfig(Class<?> clazz) {
+        synchronized (LOCK) {
+            return INSTANCE.lock(clazz);
+        }
     }
 
-    static void setAmayaConfig(AmayaConfig config) {
-        Objects.requireNonNull(config);
-        INSTANCE.body.put(AMAYA_CLASS, config);
+    public static AmayaConfig getConfig() {
+        return (AmayaConfig) INSTANCE.get(AMAYA_CLASS);
+    }
+
+    static Runnable lockConfig() {
+        return lockConfig(AMAYA_CLASS);
+    }
+
+    static AmayaConfig setConfig(AmayaConfig config) {
+        return (AmayaConfig) setConfig(AMAYA_CLASS, config);
     }
 }

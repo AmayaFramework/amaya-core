@@ -31,7 +31,7 @@ public final class AmayaConfigurator implements Handler<PipelineHandler> {
         Pipeline<String> output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));
-        if (ConfigProvider.getAmayaConfig().isDebug()) {
+        if (ConfigProvider.getConfig().isDebug()) {
             addInputDebugActions(input);
             addOutputDebugActions(output);
         }

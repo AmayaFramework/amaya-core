@@ -26,7 +26,7 @@ public abstract class HttpController implements Controller {
     private String route;
 
     public HttpController() {
-        AmayaConfig config = ConfigProvider.getAmayaConfig();
+        AmayaConfig config = ConfigProvider.getConfig();
         router = config.getRouter();
         RouteScanner scanner = new RouteScanner(this, config.getRoutePacker());
         Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();

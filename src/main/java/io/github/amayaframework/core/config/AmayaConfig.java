@@ -47,7 +47,6 @@ public class AmayaConfig extends Config {
     private static final Logger LOGGER = LoggerFactory.getLogger(AmayaConfig.class);
 
     public AmayaConfig() {
-        super(LOGGER);
         setDebug(LOGGER.isDebugEnabled());
         setRoutePacker(new InjectPacker());
         setRouter(RegexpRouter.class);

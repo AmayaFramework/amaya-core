@@ -40,7 +40,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
             entry.getValue().setPath(path);
         }
         Set<Controller> ret = new HashSet<>(found.values());
-        if (ConfigProvider.getAmayaConfig().isDebug()) {
+        if (ConfigProvider.getConfig().isDebug()) {
             debugPrint(ret);
         }
         return ret;
