@@ -1,6 +1,7 @@
-package io.github.amayaframework.core.config;
+package io.github.amayaframework.core;
 
-import io.github.amayaframework.core.Amaya;
+import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.config.Config;
 
 import java.util.Map;
 import java.util.Objects;
@@ -8,17 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ConfigProvider {
     private static final Class<?> AMAYA_CLASS = Amaya.class;
-    private static final ConfigProvider INSTANCE;
-
-    static {
-        INSTANCE = new ConfigProvider();
-        INSTANCE.body.put(AMAYA_CLASS, new AmayaConfig());
-    }
+    private static final ConfigProvider INSTANCE = new ConfigProvider();
 
     private final Map<Class<?>, Config> body;
 
     private ConfigProvider() {
         body = new ConcurrentHashMap<>();
+        body.put(AMAYA_CLASS, new AmayaConfig());
     }
 
     /**
@@ -41,11 +38,18 @@ public final class ConfigProvider {
      */
     public static Config setConfig(Class<?> clazz, Config config) {
         Objects.requireNonNull(clazz);
+        if (clazz == AMAYA_CLASS) {
+            throw new IllegalArgumentException("Can't modify config for Amaya!");
+        }
         Objects.requireNonNull(config);
         return INSTANCE.body.put(clazz, config);
     }
 
     public static AmayaConfig getAmayaConfig() {
         return (AmayaConfig) INSTANCE.body.get(AMAYA_CLASS);
+    }
+
+    static void setAmayaConfig(AmayaConfig config) {
+        INSTANCE.body.put(AMAYA_CLASS, config);
     }
 }

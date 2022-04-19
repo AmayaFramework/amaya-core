@@ -1,10 +1,11 @@
 package io.github.amayaframework.core.pipeline;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.util.AbstractCompletableData;
 
 import java.util.Objects;
 
-public abstract class AbstractResponseData extends Data implements ResponseData {
+public abstract class AbstractResponseData extends AbstractCompletableData implements ResponseData {
     private HttpResponse response;
 
     protected AbstractResponseData(HttpResponse response) {

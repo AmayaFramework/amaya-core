@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.pipeline;
 
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.util.CompletableData;
 
 /**
  * A container for transferring data between the actions of the output pipeline.

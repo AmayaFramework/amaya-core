@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.scanners;
 
-import io.github.amayaframework.core.config.ConfigProvider;
+import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;

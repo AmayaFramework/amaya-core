@@ -3,10 +3,11 @@ package io.github.amayaframework.core.pipeline;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
+import io.github.amayaframework.core.util.AbstractCompletableData;
 
 import java.util.Objects;
 
-public abstract class AbstractRequestData extends Data implements RequestData {
+public abstract class AbstractRequestData extends AbstractCompletableData implements RequestData {
     private final MethodRoute route;
     private final String path;
     private final HttpMethod method;

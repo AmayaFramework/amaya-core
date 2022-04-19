@@ -2,7 +2,7 @@ package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.jutils.http.HttpCode;
 import com.github.romanqed.jutils.util.Action;
-import io.github.amayaframework.core.config.ConfigProvider;
+import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

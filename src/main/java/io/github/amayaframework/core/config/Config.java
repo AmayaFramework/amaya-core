@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.config;
 
+import io.github.amayaframework.core.util.AbstractCompletableData;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-public class Config implements Configurable {
+public class Config extends AbstractCompletableData implements Configurable {
     private final Logger logger;
     private final Map<String, Object> fields;
 
@@ -30,6 +31,7 @@ public class Config implements Configurable {
 
     @Override
     public <T> void setField(Field<T> field, T value) {
+        checkCompleted();
         Objects.requireNonNull(field);
         Objects.requireNonNull(value);
         fields.put(field.getName(), value);
@@ -43,6 +45,11 @@ public class Config implements Configurable {
     public <T> T getField(Field<T> field) {
         Objects.requireNonNull(field);
         return (T) fields.get(field.getName());
+    }
+
+    @Override
+    public void complete() {
+        this.completed = true;
     }
 
     @Override

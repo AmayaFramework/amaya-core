@@ -1,6 +1,6 @@
-package io.github.amayaframework.core.pipeline;
+package io.github.amayaframework.core.util;
 
-interface CompletableData {
+public interface CompletableData {
     /**
      * Explicitly indicates that further data modification is not possible.
      */

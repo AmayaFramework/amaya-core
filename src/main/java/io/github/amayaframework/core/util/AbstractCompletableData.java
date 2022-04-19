@@ -1,6 +1,6 @@
-package io.github.amayaframework.core.pipeline;
+package io.github.amayaframework.core.util;
 
-abstract class Data implements CompletableData {
+public abstract class AbstractCompletableData implements CompletableData {
     protected boolean completed = false;
 
     protected void checkCompleted() {

@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.wrapping;
 
 import com.github.romanqed.jutils.util.Action;
-import io.github.amayaframework.core.config.ConfigProvider;
+import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.util.ReflectionUtil;

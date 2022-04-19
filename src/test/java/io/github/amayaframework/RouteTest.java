@@ -1,7 +1,7 @@
 package io.github.amayaframework;
 
+import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.config.AmayaConfig;
-import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.MethodRouter;

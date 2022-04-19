@@ -2,7 +2,6 @@ package io.github.amayaframework.core;
 
 import com.github.romanqed.jutils.util.Handler;
 import io.github.amayaframework.core.config.AmayaConfig;
-import io.github.amayaframework.core.config.ConfigProvider;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
@@ -18,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AmayaBuilder<T> {
+    private static final Object LOCK = new Object();
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -26,11 +26,14 @@ public abstract class AmayaBuilder<T> {
     private final Handler<PipelineHandler> configurator;
     protected Class<? extends Annotation> annotation;
 
-    public AmayaBuilder(String pipelinePrefix) {
+    protected AmayaBuilder(String pipelinePrefix) {
         controllers = new ConcurrentHashMap<>();
         configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
-        config = ConfigProvider.getAmayaConfig();
+        synchronized (LOCK) {
+            config = ConfigProvider.getAmayaConfig();
+            config.complete();
+        }
         resetValues();
     }
 
@@ -42,6 +45,10 @@ public abstract class AmayaBuilder<T> {
         annotation = Endpoint.class;
         controllers.clear();
         configurators.clear();
+    }
+
+    protected void resetConfig() {
+        ConfigProvider.setAmayaConfig(new AmayaConfig());
     }
 
     public AmayaBuilder<T> addConfigurator(Configurator configurator) {
@@ -109,7 +116,6 @@ public abstract class AmayaBuilder<T> {
 
     /**
      * Builds and prepares the framework for launch.
-     * In order to avoid the race condition must be synchronized.
      *
      * @return an {@link Amaya} instance ready to run.
      * @throws Exception if there are any exceptions during the build process.
