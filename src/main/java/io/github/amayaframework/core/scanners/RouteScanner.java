@@ -1,10 +1,12 @@
 package io.github.amayaframework.core.scanners;
 
 import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.util.Checks;
 import com.github.romanqed.jutils.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.controllers.Util;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.ReflectionUtil;
@@ -25,7 +27,8 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
         this.packer = Objects.requireNonNull(packer);
     }
 
-    public Map<HttpMethod, List<MethodRoute>> find() throws InvocationTargetException, IllegalAccessException {
+    public Map<HttpMethod, List<MethodRoute>> find() throws
+            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method[] declaredMethods = clazz.getDeclaredMethods();
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         List<Pair<HttpMethod, String>> found;
@@ -40,6 +43,7 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
     }
 
     private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
+        Packer packer = Checks.requireNonNullElse(Util.extractPacker(method), this.packer);
         Action<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         for (Pair<HttpMethod, String> route : source) {

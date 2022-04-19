@@ -24,8 +24,8 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
     }
 
     @Override
-    public Set<Controller> find()
-            throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Set<Controller> find() throws
+            InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         Map<String, Controller> found =
                 ReflectionUtil.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
         for (Map.Entry<String, Controller> entry : found.entrySet()) {

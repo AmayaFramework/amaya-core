@@ -19,30 +19,26 @@ public final class ReflectionUtil {
     private static final MethodType HANDLER_TYPE = MethodType.methodType(void.class, Object.class);
     private static final MethodType ACTION_TYPE = MethodType.methodType(Object.class, Object.class);
 
-    public static <T> T extractAnnotationValue(Annotation annotation, String value, Class<T> type)
-            throws InvocationTargetException, IllegalAccessException {
+    public static <T> T extractAnnotationValue(Annotation annotation, String value, Class<T> type) throws
+            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Objects.requireNonNull(annotation);
         Objects.requireNonNull(value);
         Objects.requireNonNull(type);
         Class<? extends Annotation> annotationType = annotation.annotationType();
-        Method found = Arrays.
-                stream(annotationType.getDeclaredMethods()).
-                filter(method -> method.getName().equals(value)).
-                findFirst().
-                orElse(null);
-        if (found == null) {
-            throw new NoSuchElementException();
+        Method found = annotationType.getDeclaredMethod(value);
+        if (found.getReturnType() != type) {
+            throw new NoSuchMethodException();
         }
         return type.cast(found.invoke(annotation));
     }
 
-    public static <T> T extractAnnotationValue(Annotation annotation, Class<T> type)
-            throws InvocationTargetException, IllegalAccessException {
+    public static <T> T extractAnnotationValue(Annotation annotation, Class<T> type) throws
+            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         return extractAnnotationValue(annotation, "value", type);
     }
 
-    public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method)
-            throws InvocationTargetException, IllegalAccessException {
+    public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws
+            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Objects.requireNonNull(method);
         List<Pair<HttpMethod, String>> ret = new LinkedList<>();
         for (Annotation annotation : method.getDeclaredAnnotations()) {
@@ -54,9 +50,9 @@ public final class ReflectionUtil {
         return ret;
     }
 
-    public static <V, T> Map<V, T> findAnnotatedWithValue
-            (Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType, String value)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType,
+                                                          Class<V> valueType, String value) throws
+            InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Iterable<Class<?>> classes = ClassIndex.getAnnotated(annotation);
         Map<V, T> ret = new HashMap<>();
         for (Class<?> clazz : classes) {
@@ -70,15 +66,14 @@ public final class ReflectionUtil {
         return ret;
     }
 
-    public static <V, T> Map<V, T>
-    findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType, Class<V> valueType)
-            throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation,
+                                                          Class<T> castType, Class<V> valueType) throws
+            InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         return findAnnotatedWithValue(annotation, castType, valueType, "value");
     }
 
     public static MethodType extractType(Method method) throws IllegalAccessException {
         Objects.requireNonNull(method);
-        method.setAccessible(true);
         MethodHandle handle = LOOKUP.unreflect(method);
         return handle.type();
     }

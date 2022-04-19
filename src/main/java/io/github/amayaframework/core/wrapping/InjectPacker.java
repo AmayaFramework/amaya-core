@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -35,7 +34,7 @@ public class InjectPacker extends AbstractPacker {
             found = content;
             try {
                 value = ReflectionUtil.extractAnnotationValue(annotation, String.class);
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchMethodException e) {
                 value = parameter.getName();
             }
             if (useNativeName) {
