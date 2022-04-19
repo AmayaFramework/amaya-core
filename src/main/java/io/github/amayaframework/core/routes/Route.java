@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.routes;
 
 import io.github.amayaframework.core.util.DuplicateParameterException;
-import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.Variable;
 import io.github.amayaframework.filters.StringFilter;
@@ -23,12 +22,8 @@ public class Route {
 
     public Route(String route) {
         Objects.requireNonNull(route);
-        if (route.equals("/")) {
-            route = "";
-        }
-        if (!route.isEmpty() && !ParseUtil.ROUTE.matcher(route).matches()) {
-            throw new InvalidRouteFormatException(route);
-        }
+        route = ParseUtil.normalizeRoute(route);
+        ParseUtil.validateRoute(route);
         Matcher brackets = BRACKETS.matcher(route);
         boolean found = brackets.find();
         regexp = found;

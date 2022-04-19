@@ -20,7 +20,7 @@ public final class ParseUtil {
     public static final String SET_COOKIE_HEADER = "Set-Cookie";
     public static final Map<String, StringFilter> STRING_FILTERS;
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
-    public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
+    private static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
     private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
@@ -30,6 +30,22 @@ public final class ParseUtil {
     static {
         STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).safetyFind());
         CONTENT_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(ContentFilter.class).safetyFind());
+    }
+
+    public static void validateRoute(String route) {
+        if (!route.isEmpty() && !ParseUtil.ROUTE.matcher(route).matches()) {
+            throw new InvalidRouteFormatException(route);
+        }
+    }
+
+    public static String normalizeRoute(String route) {
+        if (route.equals("/")) {
+            route = "";
+        }
+        if (route.endsWith("/")) {
+            route = route.substring(0, route.length() - 1);
+        }
+        return route;
     }
 
     public static Variable<String, StringFilter> parseRouteParameter(String source) {
@@ -118,16 +134,6 @@ public final class ParseUtil {
         } catch (Exception e) {
             return defaultCharset;
         }
-    }
-
-    public static String normalizePath(String path) {
-        if (path.equals("/")) {
-            path = "";
-        }
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
-        return path;
     }
 
     public static String escapeHtml(String string) {

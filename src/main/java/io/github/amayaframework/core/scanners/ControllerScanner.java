@@ -2,8 +2,6 @@ package io.github.amayaframework.core.scanners;
 
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.util.InvalidRouteFormatException;
-import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,15 +27,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
         Map<String, Controller> found =
                 ReflectionUtil.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
         for (Map.Entry<String, Controller> entry : found.entrySet()) {
-            String path = entry.getKey();
-            if (path.equals("/")) {
-                path = "";
-            }
-            if (!path.isEmpty() && !ParseUtil.ROUTE.matcher(path).matches()) {
-                LOGGER.error("Invalid route format: " + path);
-                throw new InvalidRouteFormatException(path);
-            }
-            entry.getValue().setPath(path);
+            entry.getValue().setRoute(entry.getKey());
         }
         Set<Controller> ret = new HashSet<>(found.values());
         if (ConfigProvider.getConfig().isDebug()) {
@@ -49,7 +39,7 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
     private void debugPrint(Set<Controller> controllers) {
         StringBuilder message = new StringBuilder("The scanner found controllers: \n");
         controllers.forEach(e -> message.append('"').
-                append(e.getPath()).
+                append(e.getRoute()).
                 append('"').
                 append('=').
                 append(e.getClass().getSimpleName()).

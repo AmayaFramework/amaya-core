@@ -81,11 +81,11 @@ public abstract class AmayaBuilder<T> {
 
     public AmayaBuilder<T> addController(Controller controller) {
         Objects.requireNonNull(controller);
-        String path = controller.getPath();
+        String path = controller.getRoute();
         Objects.requireNonNull(path);
         controllers.put(path, controller);
         if (config.isDebug()) {
-            logger.debug("Add controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
+            logger.debug("Add controller \"" + controller.getRoute() + "\"=" + controller.getClass().getSimpleName());
         }
         return this;
     }
@@ -95,7 +95,7 @@ public abstract class AmayaBuilder<T> {
         Controller controller = controllers.remove(path);
         if (config.isDebug()) {
             if (controller != null) {
-                logger.debug("Remove controller \"" + controller.getPath() + "\"=" + controller.getClass().getSimpleName());
+                logger.debug("Remove controller \"" + controller.getRoute() + "\"=" + controller.getClass().getSimpleName());
             } else {
                 logger.debug("Nothing has been deleted");
             }

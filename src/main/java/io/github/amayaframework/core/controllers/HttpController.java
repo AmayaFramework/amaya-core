@@ -8,6 +8,7 @@ import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.scanners.RouteScanner;
 import io.github.amayaframework.core.util.DuplicateException;
+import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.wrapping.Packer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,13 +77,16 @@ public abstract class HttpController implements Controller {
     }
 
     @Override
-    public String getPath() {
+    public String getRoute() {
         return route;
     }
 
     @Override
-    public void setPath(String route) {
-        this.route = Objects.requireNonNull(route);
+    public void setRoute(String route) {
+        Objects.requireNonNull(route);
+        route = ParseUtil.normalizeRoute(route);
+        ParseUtil.validateRoute(route);
+        this.route = route;
     }
 
     @Override
