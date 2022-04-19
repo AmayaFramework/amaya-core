@@ -4,8 +4,6 @@ import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.wrapping.InjectPacker;
 import io.github.amayaframework.core.wrapping.Packer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -44,10 +42,9 @@ public class AmayaConfig extends Config {
      * Determines whether asynchronous calls will be used.
      */
     public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC", Boolean.class);
-    private static final Logger LOGGER = LoggerFactory.getLogger(AmayaConfig.class);
 
     public AmayaConfig() {
-        setDebug(LOGGER.isDebugEnabled());
+        setDebug(false);
         setRoutePacker(new InjectPacker());
         setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
