@@ -40,8 +40,8 @@ public class ConfigRepository implements Repository<Config, Class<?>> {
     @Override
     public Runnable lock(Class<?> key) {
         Objects.requireNonNull(key);
-        if (!body.containsKey(key)) {
-            throw new IllegalArgumentException("Repository don't contains this key: " + key);
+        if (!body.containsKey(key) || locks.contains(key)) {
+            throw new IllegalArgumentException("Can't create lock for this key: " + key);
         }
         locks.add(key);
         return () -> locks.remove(key);
