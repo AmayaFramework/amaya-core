@@ -1,14 +1,12 @@
 package io.github.amayaframework.core.util;
 
-import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
 import io.github.amayaframework.filters.ContentFilter;
 import io.github.amayaframework.filters.StringFilter;
+import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.http.Cookie;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -20,13 +18,14 @@ public final class ParseUtil {
     public static final String CONTENT_HEADER = "Content-Type";
     public static final String COOKIE_HEADER = "Cookie";
     public static final String SET_COOKIE_HEADER = "Set-Cookie";
-    public static final String CONTENT_CHARSET = "charset=";
     public static final Map<String, StringFilter> STRING_FILTERS;
     public static final Map<String, ContentFilter> CONTENT_FILTERS;
     public static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
     private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
+    private static final String NEW_LINE = "<br>";
+    private static final String SPACE = "&nbsp;";
 
     static {
         STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).safetyFind());
@@ -102,32 +101,6 @@ public final class ParseUtil {
         return ret;
     }
 
-    public static String cookieToHeader(Cookie cookie) {
-        StringBuilder ret = new StringBuilder();
-        ret.append(cookie.getName());
-        ret.append('=');
-        ret.append(cookie.getValue());
-        if (cookie.getMaxAge() != -1) {
-            ret.append("; Max-Age=");
-            ret.append(cookie.getMaxAge());
-        }
-        if (cookie.getDomain() != null) {
-            ret.append("; Domain=");
-            ret.append(cookie.getDomain());
-        }
-        if (cookie.getPath() != null) {
-            ret.append("; Path=");
-            ret.append(cookie.getPath());
-        }
-        if (cookie.getSecure()) {
-            ret.append("; Secure");
-        }
-        if (cookie.isHttpOnly()) {
-            ret.append("; HttpOnly");
-        }
-        return ret.toString();
-    }
-
     public static Charset parseCharsetHeader(String header, Charset defaultCharset) {
         if (header == null) {
             return defaultCharset;
@@ -157,20 +130,8 @@ public final class ParseUtil {
         return path;
     }
 
-    public static String throwableToString(Throwable throwable) {
-        Objects.requireNonNull(throwable);
-        StringWriter ret = new StringWriter();
-        throwable.printStackTrace(new PrintWriter(ret));
-        return ret.toString();
-    }
-
-    public static String generateContentHeader(ContentType type, Charset charset) {
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(charset);
-        String ret = type.getHeader();
-        if (type.isString()) {
-            ret += "; " + CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
-        }
-        return ret;
+    public static String escapeHtml(String string) {
+        String ret = StringEscapeUtils.escapeHtml4(string);
+        return ret.replace("\\n", NEW_LINE).replaceAll("\\s", SPACE);
     }
 }

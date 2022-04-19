@@ -3,11 +3,16 @@ package io.github.amayaframework.core.contexts;
 import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
 
+import java.net.URL;
+import java.util.Objects;
+
 /**
  * <p>A class designed to make easier the creation of responses with various codes.</p>
  * <p>Methods that do not accept arguments will return a response with an empty body.</p>
  */
 public final class Responses {
+    private static final String LOCATION = "Location";
+
     public static HttpResponse response(HttpCode code, HeaderMap headers) {
         return new HttpResponseImpl(code, headers);
     }
@@ -97,5 +102,36 @@ public final class Responses {
 
     public static HttpResponse badGateway() {
         return responseWithCode(HttpCode.BAD_GATEWAY, null);
+    }
+
+    private static HttpResponse redirect(HttpCode code, URL url) {
+        Objects.requireNonNull(url);
+        HttpResponse ret = responseWithCode(code, null);
+        ret.setHeader(LOCATION, url.toString());
+        return ret;
+    }
+
+    public static HttpResponse movedPermanently(URL url) {
+        return redirect(HttpCode.MOVED_PERMANENTLY, url);
+    }
+
+    public static HttpResponse found(URL url) {
+        return redirect(HttpCode.FOUND, url);
+    }
+
+    public static HttpResponse seeOther(URL url) {
+        return redirect(HttpCode.SEE_OTHER, url);
+    }
+
+    public static HttpResponse useProxy(URL url) {
+        return redirect(HttpCode.USE_PROXY, url);
+    }
+
+    public static HttpResponse temporaryRedirect(URL url) {
+        return redirect(HttpCode.TEMPORARY_REDIRECT, url);
+    }
+
+    public static HttpResponse permanentRedirect(URL url) {
+        return redirect(HttpCode.PERMANENT_REDIRECT, url);
     }
 }
