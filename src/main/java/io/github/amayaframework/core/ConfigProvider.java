@@ -7,6 +7,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Global repository of the framework configs.
+ * <h3>Important!</h3>
+ * <p>Do not load configs at any stage other than initialization,
+ * <p>this may cause the config of another initialization of the framework to load</p>
+ * <p>(if there were several initializations).</p>
+ */
 public final class ConfigProvider {
     private static final Class<?> AMAYA_CLASS = Amaya.class;
     private static final ConfigProvider INSTANCE = new ConfigProvider();

@@ -15,8 +15,6 @@ import java.nio.charset.StandardCharsets;
  * <p>All values are set by default, so if the user expects standard behavior, he should not change anything.</p>
  * <p>To learn more about the config values,
  * see the documentation in the project repository or javadoc in {@link AmayaConfig}</p>
- * <h3>Important!</h3>
- * <p>Do not access the values at a stage other than the framework build process.</p>
  */
 public class AmayaConfig extends Config {
     /**
