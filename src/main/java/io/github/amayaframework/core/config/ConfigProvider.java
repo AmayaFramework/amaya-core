@@ -17,7 +17,7 @@ public final class ConfigProvider {
 
     private final Map<Class<?>, Config> body;
 
-    public ConfigProvider() {
+    private ConfigProvider() {
         body = new ConcurrentHashMap<>();
     }
 
