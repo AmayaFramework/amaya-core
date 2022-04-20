@@ -3,11 +3,10 @@ package io.github.amayaframework.core.pipeline;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.util.AbstractCompletableData;
 
 import java.util.Objects;
 
-public abstract class AbstractRequestData extends AbstractCompletableData implements RequestData {
+public abstract class AbstractRequestData implements RequestData {
     private final MethodRoute route;
     private final String path;
     private final HttpMethod method;
@@ -17,12 +16,6 @@ public abstract class AbstractRequestData extends AbstractCompletableData implem
         this.route = Objects.requireNonNull(route);
         this.path = Objects.requireNonNull(path);
         this.method = Objects.requireNonNull(method);
-    }
-
-    @Override
-    public void complete() {
-        request = new UnmodifiableRequest(request);
-        completed = true;
     }
 
     @Override
@@ -45,7 +38,6 @@ public abstract class AbstractRequestData extends AbstractCompletableData implem
     }
 
     public void setRequest(HttpRequest request) {
-        checkCompleted();
         this.request = Objects.requireNonNull(request);
     }
 }
