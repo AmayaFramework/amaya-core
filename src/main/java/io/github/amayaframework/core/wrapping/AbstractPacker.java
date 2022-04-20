@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.wrapping;
 
-import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.lambdas.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.HttpTransaction;

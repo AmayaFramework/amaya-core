@@ -2,7 +2,7 @@ package io.github.amayaframework.core.pipeline;
 
 import com.github.romanqed.jutils.http.HeaderMap;
 import com.github.romanqed.jutils.http.HttpCode;
-import com.github.romanqed.jutils.util.Handler;
+import com.github.romanqed.jutils.lambdas.Handler;
 import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;

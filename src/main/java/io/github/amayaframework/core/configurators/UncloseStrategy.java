@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.configurators;
 
+import com.github.romanqed.jutils.lambdas.Action;
 import com.github.romanqed.jutils.pipeline.Pipeline;
-import com.github.romanqed.jutils.util.Action;
 import com.github.romanqed.jutils.util.Node;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 

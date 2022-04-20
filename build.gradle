@@ -22,6 +22,9 @@ version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/comgithubromanqed-1057"
+    }
 }
 
 dependencies {
@@ -32,7 +35,7 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    api group: 'com.github.romanqed', name: 'jutils', version: '3.4.0'
+    api group: 'com.github.romanqed', name: 'jutils', version: '4.0.0'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.8'
 }
 

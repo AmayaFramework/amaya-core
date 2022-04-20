@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.wrapping;
 
-import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.jutils.lambdas.MetaLambdas;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
@@ -65,7 +66,7 @@ public class InjectPacker extends AbstractPacker {
         checkParameters(method.getReturnType(), parameters, true);
         boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
-        Action<Object[], Object> toWrap = ReflectionUtil.packAnyMethod(instance, method, arguments.length + 1);
+        Action<Object[], Object> toWrap = MetaLambdas.packAnyMethod(method, instance, arguments.length + 1);
         return new MethodWrapper(toWrap, arguments);
     }
 }

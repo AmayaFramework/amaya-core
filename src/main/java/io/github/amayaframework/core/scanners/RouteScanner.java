@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.scanners;
 
-import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.lambdas.Action;
 import com.github.romanqed.jutils.util.Checks;
 import com.github.romanqed.jutils.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;

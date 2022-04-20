@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.wrapping;
 
-import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.jutils.lambdas.MetaLambdas;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.ReflectionUtil;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -19,6 +19,6 @@ public class BasePacker extends AbstractPacker {
         Objects.requireNonNull(method);
         method.setAccessible(true);
         checkParameters(method.getReturnType(), method.getParameters(), false);
-        return ReflectionUtil.packReturnMethod(instance, method);
+        return MetaLambdas.packAction(method, instance);
     }
 }

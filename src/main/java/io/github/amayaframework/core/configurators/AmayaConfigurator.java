@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.configurators;
 
+import com.github.romanqed.jutils.lambdas.Handler;
 import com.github.romanqed.jutils.pipeline.Pipeline;
-import com.github.romanqed.jutils.util.Handler;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.actions.InputStage;
 import io.github.amayaframework.core.actions.InvokeControllerAction;

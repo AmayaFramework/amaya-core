@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.util.Action;
+import com.github.romanqed.jutils.lambdas.Action;
 
 import java.util.Objects;
 
