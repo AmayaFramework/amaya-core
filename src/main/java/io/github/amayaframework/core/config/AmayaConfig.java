@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.config;
 
+import com.github.romanqed.jutils.lambdas.MetaLambdas;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.wrapping.InjectPacker;
@@ -7,6 +8,7 @@ import io.github.amayaframework.core.wrapping.Packer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
 
 /**
  * <p>A class representing the framework config.</p>
@@ -25,7 +27,7 @@ public class AmayaConfig extends Config {
     /**
      * The router that will be used in the controllers.
      */
-    public static final Field<Class<? extends MethodRouter>> ROUTER = new Field<>("ROUTER", Class.class);
+    public static final Field<Callable<? extends MethodRouter>> ROUTER = new Field<>("ROUTER", Callable.class);
     /**
      * The encoding that will be used when reading the request and sending the response.
      */
@@ -46,10 +48,14 @@ public class AmayaConfig extends Config {
     public AmayaConfig() {
         setDebug(false);
         setRoutePacker(new InjectPacker());
-        setRouter(RegexpRouter.class);
         setCharset(StandardCharsets.UTF_8);
         setUseNativeNames(true);
         setUseAsync(true);
+        try {
+            setRouter(RegexpRouter.class);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     public Packer getRoutePacker() {
@@ -62,15 +68,15 @@ public class AmayaConfig extends Config {
 
     public MethodRouter getRouter() {
         try {
-            Class<? extends MethodRouter> routerClass = getField(ROUTER);
-            return routerClass.newInstance();
+            return getField(ROUTER).call();
         } catch (Exception e) {
             throw new IllegalStateException("Can not instantiate Router!", e);
         }
     }
 
-    public void setRouter(Class<? extends MethodRouter> routerClass) {
-        this.setField(ROUTER, routerClass);
+    public void setRouter(Class<? extends MethodRouter> clazz) throws Throwable {
+        Callable<? extends MethodRouter> toSet = MetaLambdas.packConstructor(clazz);
+        this.setField(ROUTER, toSet);
     }
 
     public Charset getCharset() {
