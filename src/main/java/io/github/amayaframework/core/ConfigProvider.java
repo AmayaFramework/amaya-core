@@ -12,7 +12,7 @@ import io.github.amayaframework.core.config.ConfigRepository;
  * <p>(if there were several initializations).</p>
  */
 public final class ConfigProvider {
-    public static final Object LOCK = new Object();
+    private static final Object LOCK = new Object();
     private static final Class<?> AMAYA_CLASS = Amaya.class;
     private static final ConfigRepository INSTANCE;
 

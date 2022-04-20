@@ -30,10 +30,8 @@ public abstract class AmayaBuilder<T> {
         controllers = new ConcurrentHashMap<>();
         configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
-        synchronized (ConfigProvider.LOCK) {
-            config = ConfigProvider.getConfig();
-            config.complete();
-        }
+        config = ConfigProvider.getConfig();
+        config.complete();
         unLock = ConfigProvider.lockConfig();
         if (config.isDebug()) {
             logger.debug(config.toString());
