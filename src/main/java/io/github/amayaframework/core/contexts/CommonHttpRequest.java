@@ -49,11 +49,6 @@ public class CommonHttpRequest implements HttpRequest {
     }
 
     @Override
-    public void setCookies(Map<String, Cookie> cookies) {
-        body.setCookies(cookies);
-    }
-
-    @Override
     public String getBodyAsString() {
         return body.getBodyAsString();
     }
@@ -86,6 +81,11 @@ public class CommonHttpRequest implements HttpRequest {
     @Override
     public Collection<Cookie> getCookies() {
         return body.getCookies();
+    }
+
+    @Override
+    public void setCookies(Map<String, Cookie> cookies) {
+        body.setCookies(cookies);
     }
 
     @Override
