@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class RequestScanner implements Scanner<Class<? extends HttpRequest>> {
+public class RequestScanner implements Scanner<Class<HttpRequest>> {
     private static final Class<CommonHttpRequest> HTTP_REQUEST_CLASS = CommonHttpRequest.class;
 
     @Override

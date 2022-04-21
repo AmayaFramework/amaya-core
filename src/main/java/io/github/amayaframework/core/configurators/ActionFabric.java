@@ -4,6 +4,7 @@ import com.github.romanqed.jutils.lambdas.Action;
 
 import java.util.Objects;
 
+// TODO Add action constructors proxy
 public final class ActionFabric {
     private final ClassLoader loader;
     private final String prefix;
