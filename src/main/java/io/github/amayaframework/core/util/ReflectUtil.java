@@ -1,35 +1,23 @@
 package io.github.amayaframework.core.util;
 
+import com.github.romanqed.jeflect.lambdas.LambdaClass;
+import com.github.romanqed.util.Action;
 import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.methods.HttpMethod;
 import org.atteo.classindex.ClassIndex;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public final class ReflectionUtil {
-    public static <T> T extractAnnotationValue(Annotation annotation, String value, Class<T> type) throws
-            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        Objects.requireNonNull(annotation);
-        Objects.requireNonNull(value);
-        Objects.requireNonNull(type);
-        Class<? extends Annotation> annotationType = annotation.annotationType();
-        Method found = annotationType.getDeclaredMethod(value);
-        if (found.getReturnType() != type) {
-            throw new NoSuchMethodException();
-        }
-        return type.cast(found.invoke(annotation));
-    }
+import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
+import static com.github.romanqed.jeflect.ReflectUtil.packLambdaMethod;
 
-    public static <T> T extractAnnotationValue(Annotation annotation, Class<T> type) throws
-            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        return extractAnnotationValue(annotation, "value", type);
-    }
+public final class ReflectUtil {
+    @SuppressWarnings("rawtypes")
+    private static final LambdaClass<Action> ACTION = LambdaClass.fromClass(Action.class);
 
-    public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws
-            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws NoSuchMethodException {
         Objects.requireNonNull(method);
         List<Pair<HttpMethod, String>> ret = new LinkedList<>();
         for (Annotation annotation : method.getDeclaredAnnotations()) {
@@ -43,7 +31,7 @@ public final class ReflectionUtil {
 
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType,
                                                           Class<V> valueType, String value) throws
-            InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+            InstantiationException, IllegalAccessException, NoSuchMethodException {
         Iterable<Class<?>> classes = ClassIndex.getAnnotated(annotation);
         Map<V, T> ret = new HashMap<>();
         for (Class<?> clazz : classes) {
@@ -59,7 +47,12 @@ public final class ReflectionUtil {
 
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation,
                                                           Class<T> castType, Class<V> valueType) throws
-            InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+            InstantiationException, IllegalAccessException, NoSuchMethodException {
         return findAnnotatedWithValue(annotation, castType, valueType, "value");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, R> Action<T, R> packAction(Method method, Object bind) throws Throwable {
+        return packLambdaMethod(ACTION, method, bind);
     }
 }

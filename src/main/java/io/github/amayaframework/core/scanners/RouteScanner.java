@@ -9,10 +9,9 @@ import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.controllers.Util;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.util.ReflectionUtil;
+import io.github.amayaframework.core.util.ReflectUtil;
 import io.github.amayaframework.core.wrapping.Packer;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -27,13 +26,12 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
         this.packer = Objects.requireNonNull(packer);
     }
 
-    public Map<HttpMethod, List<MethodRoute>> find() throws
-            InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public Map<HttpMethod, List<MethodRoute>> find() throws NoSuchMethodException {
         Method[] declaredMethods = clazz.getDeclaredMethods();
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         List<Pair<HttpMethod, String>> found;
         for (Method method : declaredMethods) {
-            found = ReflectionUtil.extractMethodRoutes(method);
+            found = ReflectUtil.extractMethodRoutes(method);
             if (!found.isEmpty()) {
                 parseRoutes(method, found).forEach((httpMethod, routes) ->
                         ret.computeIfAbsent(httpMethod, key -> new ArrayList<>()).addAll(routes));

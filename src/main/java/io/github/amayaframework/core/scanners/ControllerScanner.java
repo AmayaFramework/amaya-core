@@ -2,12 +2,11 @@ package io.github.amayaframework.core.scanners;
 
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.util.ReflectionUtil;
+import io.github.amayaframework.core.util.ReflectUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -22,10 +21,10 @@ public class ControllerScanner implements Scanner<Set<Controller>> {
     }
 
     @Override
-    public Set<Controller> find() throws
-            InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
-        Map<String, Controller> found =
-                ReflectionUtil.findAnnotatedWithValue(annotationClass, Controller.class, String.class);
+    public Set<Controller> find() throws InstantiationException, IllegalAccessException, NoSuchMethodException {
+        Map<String, Controller> found = ReflectUtil.findAnnotatedWithValue(
+                annotationClass, Controller.class, String.class
+        );
         for (Map.Entry<String, Controller> entry : found.entrySet()) {
             entry.getValue().setRoute(entry.getKey());
         }

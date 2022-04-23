@@ -3,6 +3,7 @@ package io.github.amayaframework.core.wrapping;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.util.ReflectUtil;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -18,8 +19,6 @@ public class BasePacker extends AbstractPacker {
         Objects.requireNonNull(method);
         method.setAccessible(true);
         checkParameters(method.getReturnType(), method.getParameters(), false);
-        // FIXME
-//        return ReflectUtil.packAction(method, instance);
-        return null;
+        return ReflectUtil.packAction(method, instance);
     }
 }

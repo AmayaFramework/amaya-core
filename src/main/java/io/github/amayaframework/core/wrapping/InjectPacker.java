@@ -1,13 +1,13 @@
 package io.github.amayaframework.core.wrapping;
 
+import com.github.romanqed.jeflect.Lambda;
+import com.github.romanqed.jeflect.ReflectUtil;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.ReflectionUtil;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -20,8 +20,7 @@ import java.util.Objects;
  */
 public class InjectPacker extends AbstractPacker {
 
-    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, boolean useNativeName)
-            throws InvocationTargetException, IllegalAccessException {
+    private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, boolean useNativeName) {
         Content found = null;
         String value = null;
         for (Annotation annotation : parameter.getDeclaredAnnotations()) {
@@ -34,7 +33,7 @@ public class InjectPacker extends AbstractPacker {
             }
             found = content;
             try {
-                value = ReflectionUtil.extractAnnotationValue(annotation, String.class);
+                value = ReflectUtil.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchMethodException e) {
                 value = parameter.getName();
             }
@@ -48,8 +47,7 @@ public class InjectPacker extends AbstractPacker {
         return new MethodWrapper.Argument(found.getFilter(), value);
     }
 
-    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, boolean useNativeNames)
-            throws InvocationTargetException, IllegalAccessException {
+    private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, boolean useNativeNames) {
         List<MethodWrapper.Argument> ret = new ArrayList<>();
         for (int i = 1; i < parameters.length; ++i) {
             ret.add(findParameterAnnotation(parameters[i], useNativeNames));
@@ -66,9 +64,7 @@ public class InjectPacker extends AbstractPacker {
         checkParameters(method.getReturnType(), parameters, true);
         boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
-//        Action<Object[], Object> toWrap = MetaLambdas.packAnyMethod(method, instance, arguments.length + 1);
-//        return new MethodWrapper(toWrap, arguments);
-        // FIXME
-        return null;
+        Lambda toWrap = ReflectUtil.packMethod(method, instance);
+        return new MethodWrapper(toWrap, arguments);
     }
 }

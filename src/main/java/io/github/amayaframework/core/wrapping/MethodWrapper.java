@@ -1,5 +1,6 @@
 package io.github.amayaframework.core.wrapping;
 
+import com.github.romanqed.jeflect.Lambda;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
@@ -8,9 +9,9 @@ import io.github.amayaframework.filters.ContentFilter;
 
 class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     private final Argument[] arguments;
-    private final Action<Object[], Object> body;
+    private final Lambda body;
 
-    MethodWrapper(Action<Object[], Object> body, Argument[] arguments) {
+    MethodWrapper(Lambda body, Argument[] arguments) {
         this.body = body;
         this.arguments = arguments;
     }
@@ -30,7 +31,7 @@ class MethodWrapper implements Action<HttpRequest, HttpResponse> {
 
     @Override
     public HttpResponse execute(HttpRequest request) throws Throwable {
-        return (HttpResponse) body.execute(makeParameters(request));
+        return (HttpResponse) body.call(makeParameters(request));
     }
 
     protected static class Argument {
