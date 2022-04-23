@@ -1,6 +1,6 @@
 package io.github.amayaframework.core;
 
-import com.github.romanqed.jutils.lambdas.Handler;
+import com.github.romanqed.util.Handler;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;

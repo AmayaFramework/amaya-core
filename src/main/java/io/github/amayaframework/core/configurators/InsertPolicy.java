@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 
 import java.util.Objects;

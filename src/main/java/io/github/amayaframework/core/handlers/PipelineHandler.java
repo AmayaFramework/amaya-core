@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.pipeline.ArrayPipeline;
-import com.github.romanqed.jutils.pipeline.Pipeline;
+import com.github.romanqed.util.pipeline.ArrayPipeline;
+import com.github.romanqed.util.pipeline.Pipeline;
 
 public class PipelineHandler extends AbstractIOHandler {
     private final Pipeline<String> input;

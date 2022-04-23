@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.config;
 
-import com.github.romanqed.jutils.lambdas.MetaLambdas;
+import com.github.romanqed.jeflect.ReflectUtil;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.wrapping.InjectPacker;
@@ -75,7 +75,7 @@ public class AmayaConfig extends Config {
     }
 
     public void setRouter(Class<? extends MethodRouter> clazz) throws Throwable {
-        Callable<? extends MethodRouter> toSet = MetaLambdas.packConstructor(clazz);
+        Callable<? extends MethodRouter> toSet = ReflectUtil.packConstructor(clazz);
         this.setField(ROUTER, toSet);
     }
 

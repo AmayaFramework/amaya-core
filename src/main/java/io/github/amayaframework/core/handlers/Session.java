@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.handlers;
 
-import com.github.romanqed.jutils.http.HttpCode;
-import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.contexts.HttpResponse;
 
 import java.io.IOException;

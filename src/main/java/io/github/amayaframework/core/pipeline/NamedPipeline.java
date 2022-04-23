@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.pipeline;
 
-import com.github.romanqed.jutils.lambdas.Action;
-import com.github.romanqed.jutils.pipeline.ArrayPipeline;
-import com.github.romanqed.jutils.pipeline.Pipeline;
-import com.github.romanqed.jutils.util.Node;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.Node;
+import com.github.romanqed.util.pipeline.ArrayPipeline;
+import com.github.romanqed.util.pipeline.Pipeline;
 
 import java.util.Iterator;
 import java.util.Objects;

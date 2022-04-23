@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.util;
 
-import com.github.romanqed.jutils.util.Pair;
+import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.methods.HttpMethod;
 import org.atteo.classindex.ClassIndex;
 

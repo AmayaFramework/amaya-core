@@ -1,15 +1,14 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.lambdas.Action;
+import com.github.romanqed.util.Action;
 
 import java.util.Objects;
 
-// TODO Add action constructors proxy
-public final class ActionFabric {
+public final class ActionFactory {
     private final ClassLoader loader;
     private final String prefix;
 
-    public ActionFabric(String prefix) {
+    public ActionFactory(String prefix) {
         loader = ClassLoader.getSystemClassLoader();
         this.prefix = Objects.requireNonNull(prefix);
     }

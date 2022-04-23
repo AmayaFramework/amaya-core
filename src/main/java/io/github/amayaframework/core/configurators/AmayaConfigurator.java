@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.lambdas.Handler;
-import com.github.romanqed.jutils.pipeline.Pipeline;
+import com.github.romanqed.util.Handler;
+import com.github.romanqed.util.pipeline.Pipeline;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.actions.InputStage;
 import io.github.amayaframework.core.actions.InvokeControllerAction;
@@ -14,10 +14,10 @@ import io.github.amayaframework.core.actions.debug.RouteDebugAction;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 
 public final class AmayaConfigurator implements Handler<PipelineHandler> {
-    private final ActionFabric fabric;
+    private final ActionFactory fabric;
 
     public AmayaConfigurator(String prefix) {
-        this.fabric = new ActionFabric(prefix);
+        this.fabric = new ActionFactory(prefix);
     }
 
     @Override

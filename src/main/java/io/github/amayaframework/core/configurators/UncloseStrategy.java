@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.lambdas.Action;
-import com.github.romanqed.jutils.pipeline.Pipeline;
-import com.github.romanqed.jutils.util.Node;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.Node;
+import com.github.romanqed.util.pipeline.Pipeline;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 
 class UncloseStrategy implements Action<NamedPipeline, NamedPipeline> {

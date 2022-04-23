@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.pipeline;
 
-import com.github.romanqed.jutils.lambdas.Action;
-import com.github.romanqed.jutils.pipeline.InterruptException;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.pipeline.InterruptException;
 
 import java.util.Objects;
 

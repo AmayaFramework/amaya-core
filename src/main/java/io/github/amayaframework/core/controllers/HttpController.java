@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.controllers;
 
-import com.github.romanqed.jutils.util.Checks;
+import com.github.romanqed.util.Checks;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.methods.HttpMethod;

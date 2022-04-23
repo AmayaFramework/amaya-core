@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.scanners;
 
-import com.github.romanqed.jutils.lambdas.Action;
-import com.github.romanqed.jutils.util.Checks;
-import com.github.romanqed.jutils.util.Pair;
+import com.github.romanqed.util.Action;
+import com.github.romanqed.util.Checks;
+import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;

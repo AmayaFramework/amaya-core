@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
-import com.github.romanqed.jutils.http.HeaderMap;
-import com.github.romanqed.jutils.http.HttpCode;
+import com.github.romanqed.util.http.HeaderMap;
+import com.github.romanqed.util.http.HttpCode;
 
 import java.net.URL;
 import java.util.Objects;

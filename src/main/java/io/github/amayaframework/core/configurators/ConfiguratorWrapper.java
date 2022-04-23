@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.configurators;
 
-import com.github.romanqed.jutils.pipeline.Pipeline;
+import com.github.romanqed.util.pipeline.Pipeline;
 import io.github.amayaframework.core.actions.InputStage;
 import io.github.amayaframework.core.actions.OutputStage;
 import io.github.amayaframework.core.controllers.Controller;
