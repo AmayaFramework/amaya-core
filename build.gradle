@@ -65,7 +65,7 @@ publishing {
             from components.java
             // Configure pom
             pom {
-                name.set('core-api')
+                name.set(archivesBaseName)
                 description.set('The basis of the amaya framework is the one on which various implementations can be built.')
                 url.set('https://github.com/AmayaFramework/amaya-core-api')
 
