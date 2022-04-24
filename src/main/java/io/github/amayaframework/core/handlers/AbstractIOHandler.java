@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.util.Action;
-import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.http.HttpCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

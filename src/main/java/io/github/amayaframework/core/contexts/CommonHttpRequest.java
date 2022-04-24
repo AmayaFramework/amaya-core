@@ -1,5 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.http.ContentType;
+
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.Collection;

@@ -1,6 +1,7 @@
 package io.github.amayaframework.core.contexts;
 
 import io.github.amayaframework.core.util.Attachable;
+import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
 import java.util.Collection;

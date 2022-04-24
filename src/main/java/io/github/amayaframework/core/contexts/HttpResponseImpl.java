@@ -1,8 +1,9 @@
 package io.github.amayaframework.core.contexts;
 
 import com.github.romanqed.util.Handler;
-import com.github.romanqed.util.http.HeaderMap;
-import com.github.romanqed.util.http.HttpCode;
+import io.github.amayaframework.http.HeaderMap;
+import io.github.amayaframework.http.HttpCode;
+import io.github.amayaframework.http.HttpHeaderMap;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,11 +22,11 @@ class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
     }
 
     public HttpResponseImpl(HttpCode code) {
-        this(code, new HeaderMap());
+        this(code, new HttpHeaderMap());
     }
 
     public HttpResponseImpl() {
-        this(HttpCode.OK, new HeaderMap());
+        this(HttpCode.OK, new HttpHeaderMap());
     }
 
     @Override

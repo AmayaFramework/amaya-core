@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.pipeline;
 
-import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.contexts.Responses;
+import io.github.amayaframework.http.HttpCode;
 
 public abstract class InputAction<T, R> extends PipelineAction<T, R> {
     /**

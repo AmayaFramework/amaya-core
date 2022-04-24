@@ -1,11 +1,12 @@
 package io.github.amayaframework.core.pipeline;
 
 import com.github.romanqed.util.Handler;
-import com.github.romanqed.util.http.HeaderMap;
-import com.github.romanqed.util.http.HttpCode;
-import io.github.amayaframework.core.contexts.ContentType;
 import io.github.amayaframework.core.contexts.FixedOutputStream;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.http.ContentType;
+import io.github.amayaframework.http.HeaderMap;
+import io.github.amayaframework.http.HttpCode;
+import io.github.amayaframework.http.HttpUtil;
 
 import javax.servlet.http.Cookie;
 import java.util.Collection;
@@ -47,7 +48,7 @@ final class UnmodifiableResponse implements HttpResponse {
 
     @Override
     public HeaderMap getHeaderMap() {
-        return HeaderMap.unmodifiableHeaderMap(body.getHeaderMap());
+        return HttpUtil.unmodifiableHeaderMap(body.getHeaderMap());
     }
 
     @Override

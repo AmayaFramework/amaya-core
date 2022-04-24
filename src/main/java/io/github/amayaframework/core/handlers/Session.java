@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.util.Action;
-import com.github.romanqed.util.http.HttpCode;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.http.HttpCode;
 
 import java.io.IOException;
 

@@ -1,17 +1,12 @@
 package io.github.amayaframework.core.util;
 
-import io.github.amayaframework.core.contexts.ContentType;
-
 import javax.servlet.http.Cookie;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Objects;
 
 public final class IOUtil {
-    public static final String CONTENT_CHARSET = "charset=";
-
     public static String readResourceFile(String name) throws IOException {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         InputStream stream = classLoader.getResourceAsStream(name);
@@ -33,16 +28,6 @@ public final class IOUtil {
         StringWriter ret = new StringWriter();
         throwable.printStackTrace(new PrintWriter(ret));
         return ret.toString();
-    }
-
-    public static String generateContentHeader(ContentType type, Charset charset) {
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(charset);
-        String ret = type.getHeader();
-        if (type.isString()) {
-            ret += "; " + CONTENT_CHARSET + charset.name().toLowerCase(Locale.ROOT);
-        }
-        return ret;
     }
 
     public static String cookieToHeader(Cookie cookie) {
