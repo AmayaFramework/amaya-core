@@ -35,7 +35,7 @@ dependencies {
     // IO
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     // Util
     api group: 'io.github.amayaframework', name: 'http-utils', version: '1.0.1'
     implementation group: 'com.github.romanqed', name: 'java-utils', version: '1.1.0'

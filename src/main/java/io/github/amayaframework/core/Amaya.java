@@ -5,6 +5,7 @@ package io.github.amayaframework.core;
  *
  * @param <T> server class type
  */
+// TODO Add events
 public interface Amaya<T> extends AutoCloseable {
     /**
      * @return the ip address to which the server was bound

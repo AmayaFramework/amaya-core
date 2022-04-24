@@ -18,12 +18,9 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    implementation group: 'com.github.romanqed', name: 'jutils', version: '1.2.7'
-    implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.7'
-    implementation group: 'io.github.amayaframework', name: 'core-api', version: 'LATEST'
+   implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+   annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+   implementation group: 'io.github.amayaframework', name: 'core-api', version: '5-DEV'
 }
 ```
 
