@@ -4,19 +4,16 @@ import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.http.HttpCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public abstract class AbstractIOHandler implements IOHandler {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+public abstract class AbstractHandler implements IOHandler {
     protected final EventManager manager;
     protected final Action<Object, Object> input;
     protected final Action<Object, Object> output;
 
-    public AbstractIOHandler(EventManager manager, Action<Object, Object> input, Action<Object, Object> output) {
+    public AbstractHandler(EventManager manager, Action<Object, Object> input, Action<Object, Object> output) {
         Objects.requireNonNull(input);
         Objects.requireNonNull(output);
         Objects.requireNonNull(manager);
@@ -37,13 +34,11 @@ public abstract class AbstractIOHandler implements IOHandler {
         try {
             response = session.handleInput(input);
         } catch (Throwable e) {
-            logger.error("Error at input", e);
             session.reject(e);
             manager.callEvent(Event.INPUT_ERROR, e);
             return;
         }
         if (response == null) {
-            logger.error("Response is null");
             session.reject(HttpCode.INTERNAL_SERVER_ERROR, "Response is null");
             manager.callEvent(Event.INPUT_ERROR, null);
             return;
@@ -51,7 +46,6 @@ public abstract class AbstractIOHandler implements IOHandler {
         try {
             session.handleOutput(output, response);
         } catch (Throwable e) {
-            logger.error("Error at output", e);
             session.reject(e);
             manager.callEvent(Event.OUTPUT_ERROR, e);
         }

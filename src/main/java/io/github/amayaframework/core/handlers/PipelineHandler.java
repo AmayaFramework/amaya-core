@@ -3,7 +3,7 @@ package io.github.amayaframework.core.handlers;
 import com.github.romanqed.util.pipeline.ArrayPipeline;
 import com.github.romanqed.util.pipeline.Pipeline;
 
-public class PipelineHandler extends AbstractIOHandler {
+public class PipelineHandler extends AbstractHandler {
     private final Pipeline<String> input;
     private final Pipeline<String> output;
 
