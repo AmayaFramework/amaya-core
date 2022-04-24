@@ -2,7 +2,6 @@ package io.github.amayaframework.core.configurators;
 
 import com.github.romanqed.util.pipeline.Pipeline;
 import io.github.amayaframework.core.actions.InputStage;
-import io.github.amayaframework.core.actions.OutputStage;
 import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
@@ -73,7 +72,7 @@ public final class ConfiguratorWrapper {
         NamedPipeline toProcess = new NamedPipeline();
         body.configureOutput(toProcess);
         InsertPolicy insert = extractInsert(OUTPUT_NAME);
-        pipeline.insertAfter(OutputStage.PROCESS_HEADERS, insert.execute(toProcess));
+        pipeline.insertFirst(insert.execute(toProcess));
     }
 
     public void configure(PipelineHandler handler, Controller controller) throws Throwable {
