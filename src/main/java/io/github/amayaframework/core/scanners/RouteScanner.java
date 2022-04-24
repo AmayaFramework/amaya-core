@@ -6,7 +6,6 @@ import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.Util;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.ReflectUtil;
@@ -41,7 +40,7 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
     }
 
     private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
-        Packer packer = Checks.requireNonNullElse(Util.extractPacker(method), this.packer);
+        Packer packer = Checks.requireNonNullElse(ReflectUtil.extractPacker(method), this.packer);
         Action<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         for (Pair<HttpMethod, String> route : source) {

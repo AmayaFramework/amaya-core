@@ -11,16 +11,6 @@ import java.util.Objects;
 
 public final class IOUtil {
     public static final String CONTENT_CHARSET = "charset=";
-    private static final String LOGO_NAME = "logo.txt";
-    private static final String ART_NAME = "art.txt";
-
-    public static String readLogo() throws IOException {
-        return readResourceFile(LOGO_NAME);
-    }
-
-    public static String readArt() throws IOException {
-        return readResourceFile(ART_NAME);
-    }
 
     public static String readResourceFile(String name) throws IOException {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();

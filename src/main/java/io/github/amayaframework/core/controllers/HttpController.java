@@ -9,6 +9,7 @@ import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.scanners.RouteScanner;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.ParseUtil;
+import io.github.amayaframework.core.util.ReflectUtil;
 import io.github.amayaframework.core.wrapping.Packer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public abstract class HttpController implements Controller {
         logger = LoggerFactory.getLogger(clazz);
         AmayaConfig config = ConfigProvider.getConfig();
         router = config.getRouter();
-        Packer packer = Checks.requireNonNullElse(Util.extractPacker(clazz), config.getRoutePacker());
+        Packer packer = Checks.requireNonNullElse(ReflectUtil.extractPacker(clazz), config.getRoutePacker());
         RouteScanner scanner = new RouteScanner(this, packer);
         Map<HttpMethod, List<MethodRoute>> found = scanner.safetyFind();
         routes = new LinkedList<>();

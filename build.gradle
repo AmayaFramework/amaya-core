@@ -31,13 +31,13 @@ dependencies {
     // Reflection
     implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
     annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'com.github.romanqed', name: 'jeflect', version: '1.0.0'
+    implementation group: 'com.github.romanqed', name: 'jeflect', version: '1.1.0'
     // IO
     implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
-    api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     // Util
-    api group: 'com.github.romanqed', name: 'java-utils', version: '1.0.0'
+    implementation group: 'com.github.romanqed', name: 'java-utils', version: '1.0.0'
     implementation group: 'io.github.amayaframework', name: 'filters', version: '1.0.8'
 }
 
