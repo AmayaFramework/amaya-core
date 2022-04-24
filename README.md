@@ -20,7 +20,7 @@ To install it, you will need:
 dependencies {
    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-   implementation group: 'io.github.amayaframework', name: 'core-api', version: '5-DEV'
+   implementation group: 'io.github.amayaframework', name: 'core-api', version: 'LATEST'
 }
 ```
 
@@ -30,24 +30,6 @@ dependencies {
     <groupId>org.atteo.classindex</groupId>
     <artifactId>classindex</artifactId>
     <version>3.4</version>
-</dependency>
-
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-</dependency>
-
-<dependency>
-    <groupId>com.github.romanqed</groupId>
-    <artifactId>jutils</artifactId>
-    <version>1.2.7</version>
-</dependency>
-
-<dependency>
-    <groupId>io.github.amayaframework</groupId>
-    <artifactId>filters</artifactId>
-    <version>1.0.7</version>
 </dependency>
 
 <dependency>
@@ -73,14 +55,15 @@ processing incoming requests in accordance with the declared functionality.
 
 There are 6 actions in total. All their names are described in the Stage enum.
 In this order they are executed:
-<p>Actions:</p>
-
-* FindRouteAction (Not implemented)
+<p>Input actions:</p>
 * ParseRequestAction (Not implemented)
 * ParseRequestBodyAction (receives: returns RequestData, returns RequestData)
 * ParseRequestCookiesAction (Not implemented)
 * InvokeControllerAction (receives: RequestData, returns HttpResponse)
-* ParseResponseCookiesAction (receives: HttpResponse, returns HttpResponse)
+
+<p>Output actions:</p>
+* ProcessHeadersAction (Not implemented)
+* ProcessBodyAction (Not implemented)
 
 Also included in the standard delivery are 3 additional debugging actions that will be automatically
 added when the appropriate configuration is enabled in the config.
@@ -98,13 +81,22 @@ For the configuration of pipelines, and in particular, the interface containing 
 it is necessary to create an inherited class (or just a lambda) from the Configurator interface.
 
 ```Java
-class MyConfigurator implements Configurator {
+public class MyConfigurator implements Configurator {
 
-    @Override
-    public void accept(IOHandler handler) {
-        Pipeline pipeline = handler.getPipeline();
-        // Do something
-    }
+   @Override
+   public void configureController(Controller controller) throws Exception {
+       // Do something...
+   }
+
+   @Override
+   public void configureInput(NamedPipeline input) throws Exception {
+       // Do something...
+   }
+
+   @Override
+   public void configureOutput(NamedPipeline output) throws Exception {
+       // Do something...
+   }
 }
 ```
 
@@ -214,16 +206,7 @@ dependencies {
     implementation group: 'io.github.amayaframework', name: 'core-api', version: 'LATEST'
 }
 ```
-2) Create a stage enum that lists all your actions and in the future will help other
-   plugin authors easily find the names of your actions
-
-```Java
-public enum MyStage {
-    MY_STAGE_1,
-    MY_STAGE_2
-}
-```
-3) Create the necessary pipeline actions
+2) Create the necessary pipeline actions
 <p>For example, so:</p>
 
 ```Java
@@ -231,19 +214,18 @@ public class MyStage1Action extends PipelineAction<RequestData, RequestData> {
     
     @Override
     public RequestData apply(RequestData requestData) {
-        HttpRequest request = requestData.getRequest();
-        request.setBody(new MyBeautifulDataFormat(request.getBody()));
+        // Do something
         return requestData;
     }
 }
 ```
 
 ```Java
-public class MyStage2Action extends PipelineAction<HttpResponse, HttpResponse> {
+public class MyStage2Action extends PipelineAction<ReponseData, ResponseData> {
 
     @Override
-    public HttpResponse apply(HttpResponse response) {
-        response.setBody(((MyBeautifulDataFormat) response.getBody()).makeString());
+    public ReponseData apply(ResponseData responseData) {
+       // Do something
         return response;
     }
 }
@@ -268,6 +250,23 @@ public class MyPipelineConfigurator implements Configurator {
                 new MyStage2Action()
         );
     }
+}
+public class MyConfigurator implements Configurator {
+
+   @Override
+   public void configureController(Controller controller) throws Exception {
+      // Do something...
+   }
+
+   @Override
+   public void configureInput(NamedPipeline input) throws Exception {
+       input.put(new MyStage1Action());
+   }
+
+   @Override
+   public void configureOutput(NamedPipeline output) throws Exception {
+       output.put(new MyStage2Action());
+   }
 }
 ```
 
@@ -325,7 +324,7 @@ the author might have forgotten to invent or implement some things, so he is wai
 
 * [Gradle](https://gradle.org) - Dependency management
 * [classindex](https://github.com/atteo/classindex) - Annotation scanning
-* [cglib](https://github.com/cglib/cglib) - Method wrapping
+* [jeflect](https://github.com/RomanQed/jeflect) - Method wrapping
 * [slf4j](https://www.slf4j.org) - Logging facade
 * [javax.servet](https://docs.oracle.com/javaee/7/api/javax/servlet/Servlet.html) - Servlets
 * [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
