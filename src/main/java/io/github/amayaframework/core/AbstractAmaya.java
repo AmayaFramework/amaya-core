@@ -18,12 +18,12 @@ public abstract class AbstractAmaya<T> implements Amaya<T> {
     }
 
     @Override
-    public void start() {
+    public void start() throws Throwable {
         manager.callEvent(Event.SERVER_STARTING, getServer());
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         manager.callEvent(Event.SERVER_CLOSING, getServer());
         manager.close();
     }
