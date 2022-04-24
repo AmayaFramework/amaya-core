@@ -37,19 +37,14 @@ public class AmayaConfig extends Config {
      */
     public static final Field<Boolean> DEBUG = new Field<>("DEBUG", Boolean.class);
     /**
-     * Determines whether the native parameter names or those specified by the annotation will be used
-     */
-    public static final Field<Boolean> USE_NATIVE_NAMES = new Field<>("USE_NATIVE_NAMES", Boolean.class);
-    /**
      * Determines whether asynchronous calls will be used.
      */
     public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC", Boolean.class);
 
     public AmayaConfig() {
         setDebug(false);
-        setRoutePacker(new InjectPacker());
+        setRoutePacker(new InjectPacker(true));
         setCharset(StandardCharsets.UTF_8);
-        setUseNativeNames(true);
         setUseAsync(true);
         try {
             setRouter(RegexpRouter.class);
@@ -66,12 +61,8 @@ public class AmayaConfig extends Config {
         setField(ROUTE_PACKER, packer);
     }
 
-    public MethodRouter getRouter() {
-        try {
-            return getField(ROUTER).call();
-        } catch (Exception e) {
-            throw new IllegalStateException("Can not instantiate Router!", e);
-        }
+    public Callable<? extends MethodRouter> getRouter() {
+        return getField(ROUTER);
     }
 
     public void setRouter(Class<? extends MethodRouter> clazz) throws Throwable {
@@ -93,14 +84,6 @@ public class AmayaConfig extends Config {
 
     public void setDebug(boolean debug) {
         setField(DEBUG, debug);
-    }
-
-    public boolean useNativeNames() {
-        return getField(USE_NATIVE_NAMES);
-    }
-
-    public void setUseNativeNames(boolean useNativeNames) {
-        setField(USE_NATIVE_NAMES, useNativeNames);
     }
 
     public boolean useAsync() {

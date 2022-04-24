@@ -1,11 +1,9 @@
 package io.github.amayaframework.core.config;
 
-import io.github.amayaframework.core.util.CompletableData;
-
 /**
  * Interface describing a configurable entity.
  */
-public interface Configurable extends CompletableData {
+public interface Configurable {
     /**
      * Sets the field according to the transmitted data.
      *

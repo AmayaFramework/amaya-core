@@ -5,7 +5,6 @@ import com.github.romanqed.util.Checks;
 import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.controllers.Controller;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
 import io.github.amayaframework.core.util.ReflectUtil;
@@ -15,12 +14,12 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>> {
-    private final Controller instance;
-    private final Class<? extends Controller> clazz;
+    private final Object instance;
+    private final Class<?> clazz;
     private final Packer packer;
 
-    public RouteScanner(Controller controller, Packer packer) {
-        this.instance = Objects.requireNonNull(controller);
+    public RouteScanner(Object instance, Packer packer) {
+        this.instance = Objects.requireNonNull(instance);
         this.clazz = instance.getClass();
         this.packer = Objects.requireNonNull(packer);
     }

@@ -13,6 +13,10 @@ import java.util.Objects;
  * that does not support injecting values into the marked route arguments.
  */
 public class BasePacker extends AbstractPacker {
+    public BasePacker() {
+        super(false);
+    }
+
     @Override
     public Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Throwable {
         Objects.requireNonNull(instance);

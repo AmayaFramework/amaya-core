@@ -2,7 +2,6 @@ package io.github.amayaframework.core.configurators;
 
 import com.github.romanqed.util.Handler;
 import com.github.romanqed.util.pipeline.Pipeline;
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.actions.InputStage;
 import io.github.amayaframework.core.actions.InvokeControllerAction;
 import io.github.amayaframework.core.actions.OutputStage;
@@ -15,9 +14,11 @@ import io.github.amayaframework.core.handlers.PipelineHandler;
 
 public final class AmayaConfigurator implements Handler<PipelineHandler> {
     private final ActionFactory fabric;
+    private final boolean isDebug;
 
-    public AmayaConfigurator(String prefix) {
+    public AmayaConfigurator(String prefix, boolean isDebug) {
         this.fabric = new ActionFactory(prefix);
+        this.isDebug = isDebug;
     }
 
     @Override
@@ -31,7 +32,7 @@ public final class AmayaConfigurator implements Handler<PipelineHandler> {
         Pipeline<String> output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));
-        if (ConfigProvider.getConfig().isDebug()) {
+        if (isDebug) {
             addInputDebugActions(input);
             addOutputDebugActions(output);
         }

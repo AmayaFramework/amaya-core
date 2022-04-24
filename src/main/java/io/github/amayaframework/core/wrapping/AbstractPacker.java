@@ -24,6 +24,12 @@ public abstract class AbstractPacker implements Packer {
         ALLOWED_RETURN_TYPES = Collections.unmodifiableSet(new HashSet<>(returnTypes));
     }
 
+    protected final boolean useNativeNames;
+
+    protected AbstractPacker(boolean useNativeNames) {
+        this.useNativeNames = useNativeNames;
+    }
+
     @Override
     public Action<HttpRequest, HttpResponse> checkedPack(Object instance, Method method) {
         try {

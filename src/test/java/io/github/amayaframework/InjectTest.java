@@ -1,13 +1,17 @@
 package io.github.amayaframework;
 
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.AbstractHttpRequest;
 import io.github.amayaframework.core.contexts.HttpRequest;
+import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.controllers.ControllerFactory;
+import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.MethodRouter;
-import io.github.amayaframework.core.wrapping.InjectPacker;
-import io.github.amayaframework.entities.Inject;
+import io.github.amayaframework.core.wrapping.HttpCookie;
+import io.github.amayaframework.core.wrapping.Path;
+import io.github.amayaframework.core.wrapping.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,11 +22,13 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class InjectTest extends Assertions {
-    private static final Map<String, List<String>> LIST_MAP;
-    private static final Map<String, Object> PATH_PARAMETERS;
-    private static final Map<String, Cookie> COOKIE_MAP;
+    private static ControllerFactory FACTORY;
+    private static Map<String, List<String>> LIST_MAP;
+    private static Map<String, Object> PATH_PARAMETERS;
+    private static Map<String, Cookie> COOKIE_MAP;
 
-    static {
+    @BeforeAll
+    public static void config() {
         List<String> a = Arrays.asList("a_a", "b_b", "c_c");
         Map<String, List<String>> listMap = new HashMap<>();
         listMap.put("a", a);
@@ -33,13 +39,8 @@ public class InjectTest extends Assertions {
         Map<String, Cookie> cookieMap = new HashMap<>();
         cookieMap.put("a", new Cookie("a", "a_1"));
         COOKIE_MAP = Collections.unmodifiableMap(cookieMap);
-    }
-
-    @BeforeAll
-    public static void config() {
-        AmayaConfig config = ConfigProvider.getConfig();
-        config.setUseNativeNames(true);
-        config.setRoutePacker(new InjectPacker());
+        AmayaConfig config = new AmayaConfig();
+        FACTORY = new ControllerFactory(config.getRouter(), config.getRoutePacker());
     }
 
     public HttpRequest makeRequest() {
@@ -59,7 +60,7 @@ public class InjectTest extends Assertions {
     public void testCorrect() throws Throwable {
         ByteArrayOutputStream outSpy = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(outSpy);
-        Inject inject = new Inject(stream);
+        Controller inject = FACTORY.createController("", new Inject(stream));
         MethodRouter router = inject.getRouter();
         HttpRequest request = makeRequest();
         router.follow(HttpMethod.GET, "/a").getBody().execute(request);
@@ -67,5 +68,32 @@ public class InjectTest extends Assertions {
         router.follow(HttpMethod.GET, "/c").getBody().execute(request);
         String check = outSpy.toString().replace("\r", "");
         assertEquals(check, "1\na_a\na\n");
+        assertEquals("", "");
+    }
+
+    public static class Inject {
+        private final PrintStream stream;
+
+        public Inject(PrintStream stream) {
+            this.stream = stream;
+        }
+
+        @Get("/{a}")
+        public HttpResponse a(HttpRequest request, @Path("test_a") Integer a) {
+            stream.println(a);
+            return null;
+        }
+
+        @Get("/b")
+        public HttpResponse b(HttpRequest request, @Query("test_a") String a) {
+            stream.println(a);
+            return null;
+        }
+
+        @Get("/c")
+        public HttpResponse c(HttpRequest request, @HttpCookie("test_a") Cookie a) {
+            stream.println(a.getName());
+            return null;
+        }
     }
 }

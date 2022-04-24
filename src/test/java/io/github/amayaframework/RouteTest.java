@@ -1,31 +1,33 @@
 package io.github.amayaframework;
 
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.config.AmayaConfig;
+import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.controllers.ControllerFactory;
+import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.methods.Post;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
-import io.github.amayaframework.core.wrapping.BasePacker;
-import io.github.amayaframework.entities.BrokenPath;
-import io.github.amayaframework.entities.Correct;
-import io.github.amayaframework.entities.Duplicates;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static io.github.amayaframework.core.contexts.Responses.ok;
+
 public class RouteTest extends Assertions {
+    private static ControllerFactory FACTORY;
     @BeforeAll
     public static void config() {
-        AmayaConfig config = ConfigProvider.getConfig();
-        config.setUseNativeNames(false);
-        config.setRoutePacker(new BasePacker());
+        AmayaConfig config = new AmayaConfig();
+        FACTORY = new ControllerFactory(config.getRouter(), config.getRoutePacker());
     }
 
     @Test
     public void testCorrect() throws Throwable {
-        Correct correct = new Correct();
+        Controller correct = FACTORY.createController("", new Correct());
         MethodRouter router = correct.getRouter();
         HttpResponse get = router.follow(HttpMethod.GET, "").getBody().execute(null);
         HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").getBody().execute(null);
@@ -41,17 +43,59 @@ public class RouteTest extends Assertions {
 
     @Test
     public void testDuplicates() {
-        assertThrows(DuplicateException.class, Duplicates::new);
+        assertThrows(DuplicateException.class, () -> FACTORY.createController("", new Duplicates()));
     }
 
     @Test
     public void testBrokenPath() {
         Class<?> exceptionClass = Exception.class;
         try {
-            new BrokenPath();
-        } catch (IllegalStateException e) {
-            exceptionClass = e.getCause().getClass();
+            FACTORY.createController("", new BrokenPath());
+        } catch (Exception e) {
+            exceptionClass = e.getClass();
         }
         assertEquals(exceptionClass, InvalidRouteFormatException.class);
+    }
+
+    public static class BrokenPath {
+        @Get("//")
+        public HttpResponse get(HttpRequest request) {
+            return ok();
+        }
+    }
+
+    public static class Correct {
+        @Get
+        public HttpResponse get(HttpRequest request) {
+            return ok("get");
+        }
+
+        @Get("/{id}")
+        public HttpResponse getWithId(HttpRequest request) {
+            return ok("getWithId");
+        }
+
+        @Post
+        public HttpResponse post(HttpRequest request) {
+            return ok("post");
+        }
+
+        @Post("/{id}")
+        public HttpResponse postWithId(HttpRequest request) {
+            return ok("postWithId");
+        }
+    }
+
+    public static class Duplicates {
+        @Get
+        @Post
+        public HttpResponse get(HttpRequest request) {
+            return ok();
+        }
+
+        @Post
+        public HttpResponse post(HttpRequest request) {
+            return ok();
+        }
     }
 }

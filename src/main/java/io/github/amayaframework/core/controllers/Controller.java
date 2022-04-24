@@ -31,11 +31,4 @@ public interface Controller {
      * @return {@link String}
      */
     String getRoute();
-
-    /**
-     * Set the path to which the controller will bind
-     *
-     * @param route {@link String} route which must be not null
-     */
-    void setRoute(String route);
 }

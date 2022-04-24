@@ -3,7 +3,6 @@ package io.github.amayaframework.core.wrapping;
 import com.github.romanqed.jeflect.Lambda;
 import com.github.romanqed.jeflect.ReflectUtil;
 import com.github.romanqed.util.Action;
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 
@@ -19,6 +18,14 @@ import java.util.Objects;
  * that supports injecting values into the marked route arguments.
  */
 public class InjectPacker extends AbstractPacker {
+
+    public InjectPacker(boolean useNativeNames) {
+        super(useNativeNames);
+    }
+
+    public InjectPacker() {
+        super(true);
+    }
 
     private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, boolean useNativeName) {
         Content found = null;
@@ -62,7 +69,6 @@ public class InjectPacker extends AbstractPacker {
         method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
-        boolean useNativeNames = ConfigProvider.getConfig().useNativeNames();
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);
         Lambda toWrap = ReflectUtil.packMethod(method, instance);
         return new MethodWrapper(toWrap, arguments);

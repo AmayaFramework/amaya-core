@@ -4,26 +4,28 @@ import com.github.romanqed.util.pipeline.ArrayPipeline;
 import com.github.romanqed.util.pipeline.Pipeline;
 
 public class PipelineHandler extends AbstractHandler {
-    private final Pipeline<String> input;
-    private final Pipeline<String> output;
-
-    public PipelineHandler(EventManager manager) {
-        this(manager, new ArrayPipeline<>(), new ArrayPipeline<>());
+    public PipelineHandler(boolean isAsync, EventManager manager) {
+        this(isAsync, manager, new ArrayPipeline<>(), new ArrayPipeline<>());
     }
 
-    public PipelineHandler(EventManager manager, Pipeline<String> input, Pipeline<String> output) {
-        super(manager, input, output);
-        this.input = input;
-        this.output = output;
+    public PipelineHandler(boolean isAsync, EventManager manager, Pipeline<String> input, Pipeline<String> output) {
+        super(manager);
+        if (isAsync) {
+            this.input = e -> input.async(e).get();
+            this.output = e -> output.async(e).get();
+        } else {
+            this.input = input;
+            this.output = output;
+        }
     }
 
     @Override
     public Pipeline<String> getInput() {
-        return input;
+        return (Pipeline<String>) input;
     }
 
     @Override
     public Pipeline<String> getOutput() {
-        return output;
+        return (Pipeline<String>) output;
     }
 }

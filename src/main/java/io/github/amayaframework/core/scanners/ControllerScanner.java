@@ -1,52 +1,31 @@
 package io.github.amayaframework.core.scanners;
 
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.controllers.ControllerFactory;
 import io.github.amayaframework.core.util.ReflectUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-public class ControllerScanner implements Scanner<Set<Controller>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerScanner.class);
+public class ControllerScanner implements Scanner<Map<String, Controller>> {
     private final Class<? extends Annotation> annotationClass;
+    private final ControllerFactory factory;
 
-    public ControllerScanner(Class<? extends Annotation> annotationClass) {
+    public ControllerScanner(Class<? extends Annotation> annotationClass, ControllerFactory factory) {
         this.annotationClass = Objects.requireNonNull(annotationClass);
+        this.factory = Objects.requireNonNull(factory);
     }
 
     @Override
-    public Set<Controller> find() throws InstantiationException, IllegalAccessException, NoSuchMethodException {
-        Map<String, Controller> found = ReflectUtil.findAnnotatedWithValue(
-                annotationClass, Controller.class, String.class
-        );
-        for (Map.Entry<String, Controller> entry : found.entrySet()) {
-            entry.getValue().setRoute(entry.getKey());
-        }
-        Set<Controller> ret = new HashSet<>(found.values());
-        if (ConfigProvider.getConfig().isDebug()) {
-            debugPrint(ret);
+    public Map<String, Controller> find() throws Throwable {
+        Map<String, Object> found = ReflectUtil.findAnnotatedWithValue(annotationClass, Object.class, String.class);
+        Map<String, Controller> ret = new HashMap<>();
+        for (Map.Entry<String, Object> entry : found.entrySet()) {
+            String route = entry.getKey();
+            ret.put(route, factory.createController(route, entry.getValue()));
         }
         return ret;
-    }
-
-    private void debugPrint(Set<Controller> controllers) {
-        StringBuilder message = new StringBuilder("The scanner found controllers: \n");
-        controllers.forEach(e -> message.append('"').
-                append(e.getRoute()).
-                append('"').
-                append('=').
-                append(e.getClass().getSimpleName()).
-                append(", "));
-        int position = message.lastIndexOf(", ");
-        if (position > 0) {
-            message.delete(position, position + 2);
-        }
-        LOGGER.debug(message.toString());
     }
 }

@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.handlers;
 
 import com.github.romanqed.util.Action;
-import io.github.amayaframework.core.ConfigProvider;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.http.HttpCode;
 
@@ -10,21 +9,12 @@ import java.util.Objects;
 
 public abstract class AbstractHandler implements IOHandler {
     protected final EventManager manager;
-    protected final Action<Object, Object> input;
-    protected final Action<Object, Object> output;
+    protected Action<Object, Object> input;
+    protected Action<Object, Object> output;
 
-    public AbstractHandler(EventManager manager, Action<Object, Object> input, Action<Object, Object> output) {
-        Objects.requireNonNull(input);
-        Objects.requireNonNull(output);
+    public AbstractHandler(EventManager manager) {
         Objects.requireNonNull(manager);
         this.manager = manager;
-        if (ConfigProvider.getConfig().useAsync()) {
-            this.input = e -> input.async(e).get();
-            this.output = e -> output.async(e).get();
-        } else {
-            this.input = input;
-            this.output = output;
-        }
     }
 
     @Override

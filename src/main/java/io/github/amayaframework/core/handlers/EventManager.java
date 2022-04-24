@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.handlers;
 
-import io.github.amayaframework.core.ConfigProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +17,14 @@ public class EventManager implements Closeable {
     private final ExecutorService executor;
     private final boolean isDebug;
 
-    public EventManager(ExecutorService executor) {
+    public EventManager(ExecutorService executor, boolean isDebug) {
         this.executor = Objects.requireNonNull(executor);
         this.events = new ConcurrentHashMap<>();
-        this.isDebug = ConfigProvider.getConfig().isDebug();
+        this.isDebug = isDebug;
     }
 
     public EventManager() {
-        this(Executors.newWorkStealingPool());
+        this(Executors.newWorkStealingPool(), false);
     }
 
     public void callEvent(Event event, Object body) {

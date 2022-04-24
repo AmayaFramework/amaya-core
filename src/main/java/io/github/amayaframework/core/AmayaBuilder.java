@@ -6,14 +6,19 @@ import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
 import io.github.amayaframework.core.controllers.Controller;
+import io.github.amayaframework.core.controllers.ControllerFactory;
 import io.github.amayaframework.core.controllers.Endpoint;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.scanners.ControllerScanner;
+import io.github.amayaframework.core.scanners.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AmayaBuilder<T> {
@@ -22,36 +27,34 @@ public abstract class AmayaBuilder<T> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
     protected final List<ConfiguratorWrapper> configurators;
+    protected final ControllerFactory factory;
     private final Handler<PipelineHandler> configurator;
-    private final Runnable unLock;
     protected Class<? extends Annotation> annotation;
 
-    protected AmayaBuilder(String pipelinePrefix) {
+    protected AmayaBuilder(AmayaConfig config, String pipelinePrefix) {
+        this.config = Objects.requireNonNull(config);
+        this.factory = new ControllerFactory(config.getRouter(), config.getRoutePacker());
+        configurator = new AmayaConfigurator(pipelinePrefix, config.isDebug());
         controllers = new ConcurrentHashMap<>();
-        configurator = new AmayaConfigurator(pipelinePrefix);
         configurators = new LinkedList<>();
-        config = ConfigProvider.getConfig();
-        config.complete();
-        unLock = ConfigProvider.lockConfig();
         if (config.isDebug()) {
             logger.debug(config.toString());
         }
         resetValues();
     }
 
+    public AmayaBuilder(AmayaConfig config) {
+        this(config, DEFAULT_PREFIX);
+    }
+
     public AmayaBuilder() {
-        this(DEFAULT_PREFIX);
+        this(new AmayaConfig(), DEFAULT_PREFIX);
     }
 
     protected void resetValues() {
         annotation = Endpoint.class;
         controllers.clear();
         configurators.clear();
-    }
-
-    protected void resetConfig() {
-        unLock.run();
-        ConfigProvider.setConfig(new AmayaConfig());
     }
 
     public AmayaBuilder<T> addConfigurator(Configurator configurator) {
@@ -77,13 +80,11 @@ public abstract class AmayaBuilder<T> {
         }
     }
 
-    public AmayaBuilder<T> addController(Controller controller) {
-        Objects.requireNonNull(controller);
-        String path = controller.getRoute();
-        Objects.requireNonNull(path);
-        controllers.put(path, controller);
+    public AmayaBuilder<T> addController(String route, Object object) throws Exception {
+        Controller toPut = factory.createController(route, object);
+        controllers.put(route, toPut);
         if (config.isDebug()) {
-            logger.debug("Add controller \"" + controller.getRoute() + "\"=" + controller.getClass().getSimpleName());
+            logger.debug("Add controller \"" + toPut.getRoute() + "\"=" + toPut.getClass().getSimpleName());
         }
         return this;
     }
@@ -109,12 +110,12 @@ public abstract class AmayaBuilder<T> {
         return this;
     }
 
-    protected void findControllers() {
+    protected void findControllers() throws Throwable {
         if (annotation == null) {
             return;
         }
-        Set<Controller> controllers = new ControllerScanner(annotation).safetyFind();
-        controllers.forEach(this::addController);
+        Scanner<Map<String, Controller>> scanner = new ControllerScanner(annotation, factory);
+        this.controllers.putAll(scanner.find());
     }
 
     /**
