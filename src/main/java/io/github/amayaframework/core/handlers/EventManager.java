@@ -41,12 +41,16 @@ public class EventManager implements Closeable {
         });
     }
 
-    public void addEvent(Event event, Consumer<Object> body) {
+    @SuppressWarnings("unchecked")
+    public <T> void addEvent(Event event, Consumer<?> body) {
         Consumer<Object> found = events.get(event);
+        Consumer<Object> toPut;
         if (found != null) {
-            body = found.andThen(body);
+            toPut = found.andThen((Consumer<Object>) body);
+        } else {
+            toPut = (Consumer<Object>) body;
         }
-        events.put(event, body);
+        events.put(event, toPut);
     }
 
     public void removeEvent(Event event) {
