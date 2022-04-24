@@ -7,12 +7,12 @@ public class PipelineHandler extends AbstractIOHandler {
     private final Pipeline<String> input;
     private final Pipeline<String> output;
 
-    public PipelineHandler() {
-        this(new ArrayPipeline<>(), new ArrayPipeline<>());
+    public PipelineHandler(EventManager manager) {
+        this(manager, new ArrayPipeline<>(), new ArrayPipeline<>());
     }
 
-    public PipelineHandler(Pipeline<String> input, Pipeline<String> output) {
-        super(input, output);
+    public PipelineHandler(EventManager manager, Pipeline<String> input, Pipeline<String> output) {
+        super(manager, input, output);
         this.input = input;
         this.output = output;
     }

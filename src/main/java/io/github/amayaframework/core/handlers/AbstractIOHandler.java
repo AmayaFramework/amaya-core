@@ -12,12 +12,15 @@ import java.util.Objects;
 
 public abstract class AbstractIOHandler implements IOHandler {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final EventManager manager;
     protected final Action<Object, Object> input;
     protected final Action<Object, Object> output;
 
-    public AbstractIOHandler(Action<Object, Object> input, Action<Object, Object> output) {
+    public AbstractIOHandler(EventManager manager, Action<Object, Object> input, Action<Object, Object> output) {
         Objects.requireNonNull(input);
         Objects.requireNonNull(output);
+        Objects.requireNonNull(manager);
+        this.manager = manager;
         if (ConfigProvider.getConfig().useAsync()) {
             this.input = e -> input.async(e).get();
             this.output = e -> output.async(e).get();
@@ -36,11 +39,13 @@ public abstract class AbstractIOHandler implements IOHandler {
         } catch (Throwable e) {
             logger.error("Error at input", e);
             session.reject(e);
+            manager.callEvent(Event.INPUT_ERROR, e);
             return;
         }
         if (response == null) {
             logger.error("Response is null");
             session.reject(HttpCode.INTERNAL_SERVER_ERROR, "Response is null");
+            manager.callEvent(Event.INPUT_ERROR, null);
             return;
         }
         try {
@@ -48,6 +53,7 @@ public abstract class AbstractIOHandler implements IOHandler {
         } catch (Throwable e) {
             logger.error("Error at output", e);
             session.reject(e);
+            manager.callEvent(Event.OUTPUT_ERROR, e);
         }
     }
 }
