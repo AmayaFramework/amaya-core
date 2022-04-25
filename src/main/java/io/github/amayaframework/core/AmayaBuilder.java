@@ -20,14 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
 
 public abstract class AmayaBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
     // Protected
+    protected ExecutorService executor;
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Map<String, Controller> controllers;
     // Private
-    private final Map<String, Controller> controllers;
     private final List<ConfiguratorWrapper> configurators;
     private final HttpControllerFactory factory;
     private final Handler<PipelineHandler> configurator;
@@ -57,6 +60,7 @@ public abstract class AmayaBuilder<T> {
         annotation = Endpoint.class;
         controllers.clear();
         configurators.clear();
+        executor = ForkJoinPool.commonPool();
     }
 
     public AmayaBuilder<T> addConfigurator(Configurator configurator) {
@@ -112,6 +116,14 @@ public abstract class AmayaBuilder<T> {
         return this;
     }
 
+    public AmayaBuilder<T> executor(ExecutorService executor) {
+        this.executor = Objects.requireNonNull(executor);
+        if (config.isDebug()) {
+            logger.debug("Set Executor to " + executor.getClass().getSimpleName());
+        }
+        return this;
+    }
+
     protected void findControllers() throws Throwable {
         if (annotation == null) {
             return;
@@ -126,5 +138,5 @@ public abstract class AmayaBuilder<T> {
      * @return an {@link Amaya} instance ready to run.
      * @throws Exception if there are any exceptions during the build process.
      */
-    public abstract Amaya<T> build() throws Exception;
+    public abstract Amaya<T> build() throws Throwable;
 }
