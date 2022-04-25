@@ -5,6 +5,9 @@ import com.github.romanqed.util.Action;
 import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.controllers.Pack;
 import io.github.amayaframework.core.methods.HttpMethod;
+import io.github.amayaframework.core.routers.BaseRouter;
+import io.github.amayaframework.core.routers.MethodRouter;
+import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.wrapping.BasePacker;
 import io.github.amayaframework.core.wrapping.InjectPacker;
 import io.github.amayaframework.core.wrapping.Packer;
@@ -20,16 +23,23 @@ import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
 import static com.github.romanqed.jeflect.ReflectUtil.packLambdaMethod;
 
 public final class ReflectUtil {
-    private static final Map<Class<?>, Callable<? extends Packer>> DEFAULTS;
+    private static final Map<Class<?>, Callable<? extends Packer>> DEFAULT_PACKERS = getDefaultPackers();
+    private static final Map<Class<?>, Callable<? extends MethodRouter>> DEFAULT_ROUTERS = getDefaultRouters();
     @SuppressWarnings("rawtypes")
     private static final LambdaClass<Action> ACTION = LambdaClass.fromClass(Action.class);
 
-    static {
-        try {
-            DEFAULTS = packDefaults();
-        } catch (Throwable e) {
-            throw new IllegalStateException("Can't cache constructors for default packers", e);
-        }
+    private static Map<Class<?>, Callable<? extends Packer>> getDefaultPackers() {
+        Map<Class<?>, Callable<? extends Packer>> ret = new HashMap<>();
+        ret.put(BasePacker.class, BasePacker::new);
+        ret.put(InjectPacker.class, InjectPacker::new);
+        return Collections.unmodifiableMap(ret);
+    }
+
+    private static Map<Class<?>, Callable<? extends MethodRouter>> getDefaultRouters() {
+        Map<Class<?>, Callable<? extends MethodRouter>> ret = new HashMap<>();
+        ret.put(BaseRouter.class, BaseRouter::new);
+        ret.put(RegexpRouter.class, RegexpRouter::new);
+        return Collections.unmodifiableMap(ret);
     }
 
     public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws NoSuchMethodException {
@@ -71,24 +81,21 @@ public final class ReflectUtil {
         return packLambdaMethod(ACTION, method, bind);
     }
 
-    private static Map<Class<?>, Callable<? extends Packer>> packDefaults() throws Throwable {
-        Map<Class<?>, Callable<? extends Packer>> ret = new HashMap<>();
-        ret.put(BasePacker.class, com.github.romanqed.jeflect.ReflectUtil.packConstructor(BasePacker.class));
-        ret.put(InjectPacker.class, com.github.romanqed.jeflect.ReflectUtil.packConstructor(InjectPacker.class));
-        return Collections.unmodifiableMap(ret);
-    }
-
     public static Packer extractPacker(AnnotatedElement annotated) {
         Pack pack = annotated.getAnnotation(Pack.class);
         if (pack == null) {
             return null;
         }
         Class<? extends Packer> type = pack.value();
-        Callable<? extends Packer> ret = DEFAULTS.getOrDefault(type, type::newInstance);
+        Callable<? extends Packer> ret = DEFAULT_PACKERS.getOrDefault(type, type::newInstance);
         try {
             return ret.call();
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static Callable<? extends MethodRouter> findMethodRouter(Class<? extends MethodRouter> clazz) {
+        return DEFAULT_ROUTERS.getOrDefault(clazz, clazz::newInstance);
     }
 }

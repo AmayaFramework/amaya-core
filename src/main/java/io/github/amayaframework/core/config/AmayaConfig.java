@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.config;
 
-import com.github.romanqed.jeflect.ReflectUtil;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
+import io.github.amayaframework.core.util.ReflectUtil;
 import io.github.amayaframework.core.wrapping.InjectPacker;
 import io.github.amayaframework.core.wrapping.Packer;
 
@@ -67,7 +67,7 @@ public class AmayaConfig extends Config {
 
     public void setRouter(Class<? extends MethodRouter> clazz) {
         try {
-            Callable<? extends MethodRouter> toSet = ReflectUtil.packConstructor(clazz);
+            Callable<? extends MethodRouter> toSet = ReflectUtil.findMethodRouter(clazz);
             setField(ROUTER, toSet);
         } catch (Throwable e) {
             throw new IllegalStateException("Can't instantiate this router", e);

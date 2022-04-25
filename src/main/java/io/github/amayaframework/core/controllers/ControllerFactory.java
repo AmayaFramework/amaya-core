@@ -12,5 +12,5 @@ public interface ControllerFactory {
      * @return {@link Controller} instance
      * @throws Exception if there was any exception during the packaging process.
      */
-    Controller create(String route, Object source) throws Exception;
+    Controller create(String route, Object source) throws Throwable;
 }

@@ -51,7 +51,7 @@ public class RouteTest extends Assertions {
         Class<?> exceptionClass = Exception.class;
         try {
             FACTORY.create("", new BrokenPath());
-        } catch (Exception e) {
+        } catch (Throwable e) {
             exceptionClass = e.getClass();
         }
         assertEquals(exceptionClass, InvalidRouteFormatException.class);

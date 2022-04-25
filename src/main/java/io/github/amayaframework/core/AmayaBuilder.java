@@ -82,7 +82,7 @@ public abstract class AmayaBuilder<T> {
         }
     }
 
-    public AmayaBuilder<T> addController(String route, Object object) throws Exception {
+    public AmayaBuilder<T> addController(String route, Object object) throws Throwable {
         Controller toPut = factory.create(route, object);
         controllers.put(route, toPut);
         if (config.isDebug()) {

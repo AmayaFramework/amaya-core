@@ -36,14 +36,27 @@ public class HttpControllerFactory implements ControllerFactory {
         return route;
     }
 
-    public HttpController create(String route, Object source) throws Exception {
+    private MethodRouter extractRouter(Class<?> clazz) throws Exception {
+        Router route = clazz.getAnnotation(Router.class);
+        if (route == null) {
+            return router.call();
+        }
+        Class<? extends MethodRouter> type = route.value();
+        Callable<? extends MethodRouter> ret = ReflectUtil.findMethodRouter(type);
+        return ret.call();
+    }
+
+    public HttpController create(String route, Object source) throws Throwable {
         Objects.requireNonNull(source);
+        // Prepare data
         route = normalizeRoute(route);
         Class<?> clazz = source.getClass();
         Packer packer = Checks.requireNonNullElse(ReflectUtil.extractPacker(clazz), this.packer);
+        // Scan routes
         RouteScanner scanner = new RouteScanner(source, packer);
         Map<HttpMethod, List<MethodRoute>> found = scanner.find();
-        MethodRouter router = this.router.call();
+        // Create controller instance
+        MethodRouter router = extractRouter(clazz);
         List<MethodRoute> toPut = new LinkedList<>();
         found.forEach((method, routes) -> routes.forEach(value -> {
             try {

@@ -24,27 +24,31 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
         this.packer = Objects.requireNonNull(packer);
     }
 
-    public Map<HttpMethod, List<MethodRoute>> find() throws NoSuchMethodException {
-        Method[] declaredMethods = clazz.getDeclaredMethods();
+    public Map<HttpMethod, List<MethodRoute>> find() throws Throwable {
+        Method[] methods = clazz.getDeclaredMethods();
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         List<Pair<HttpMethod, String>> found;
-        for (Method method : declaredMethods) {
+        for (Method method : methods) {
             found = ReflectUtil.extractMethodRoutes(method);
-            if (!found.isEmpty()) {
-                parseRoutes(method, found).forEach((httpMethod, routes) ->
-                        ret.computeIfAbsent(httpMethod, key -> new ArrayList<>()).addAll(routes));
+            if (found.isEmpty()) {
+                continue;
+            }
+            Map<HttpMethod, List<MethodRoute>> routes = parseRoutes(method, found);
+            for (Map.Entry<HttpMethod, List<MethodRoute>> entry : routes.entrySet()) {
+                ret.computeIfAbsent(entry.getKey(), key -> new ArrayList<>()).addAll(entry.getValue());
             }
         }
         return ret;
     }
 
-    private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source) {
+    private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source)
+            throws Throwable {
         Packer packer = Checks.requireNonNullElse(ReflectUtil.extractPacker(method), this.packer);
-        Action<HttpRequest, HttpResponse> body = packer.checkedPack(instance, method);
+        Action<HttpRequest, HttpResponse> body = packer.pack(instance, method);
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
         for (Pair<HttpMethod, String> route : source) {
-            ret.computeIfAbsent(route.getKey(), key -> new ArrayList<>()).
-                    add(new MethodRoute(route.getValue(), method, body));
+            MethodRoute methodRoute = new MethodRoute(route.getValue(), method, body);
+            ret.computeIfAbsent(route.getKey(), key -> new ArrayList<>()).add(methodRoute);
         }
         return ret;
     }
