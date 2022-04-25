@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A class describing the implementation of a packer
@@ -64,9 +63,6 @@ public class InjectPacker extends AbstractPacker {
 
     @Override
     public Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Throwable {
-        Objects.requireNonNull(instance);
-        Objects.requireNonNull(method);
-        method.setAccessible(true);
         Parameter[] parameters = method.getParameters();
         checkParameters(method.getReturnType(), parameters, true);
         MethodWrapper.Argument[] arguments = findAnnotatedParameters(parameters, useNativeNames);

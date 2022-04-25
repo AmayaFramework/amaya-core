@@ -4,7 +4,6 @@ import javax.servlet.http.Cookie;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 public final class IOUtil {
     public static String readResourceFile(String name) throws IOException {
@@ -24,7 +23,6 @@ public final class IOUtil {
     }
 
     public static String throwableToString(Throwable throwable) {
-        Objects.requireNonNull(throwable);
         StringWriter ret = new StringWriter();
         throwable.printStackTrace(new PrintWriter(ret));
         return ret.toString();

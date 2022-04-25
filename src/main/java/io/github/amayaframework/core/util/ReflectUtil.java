@@ -43,7 +43,6 @@ public final class ReflectUtil {
     }
 
     public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws NoSuchMethodException {
-        Objects.requireNonNull(method);
         List<Pair<HttpMethod, String>> ret = new LinkedList<>();
         for (Annotation annotation : method.getDeclaredAnnotations()) {
             HttpMethod httpMethod = HttpMethod.fromAnnotation(annotation);

@@ -2,13 +2,12 @@ package io.github.amayaframework.core.contexts;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Objects;
 
 public abstract class FixedOutputStream extends OutputStream {
     private final OutputStream stream;
 
     public FixedOutputStream(OutputStream stream) {
-        this.stream = Objects.requireNonNull(stream);
+        this.stream = stream;
     }
 
     public abstract void specifyLength(long length) throws IOException;

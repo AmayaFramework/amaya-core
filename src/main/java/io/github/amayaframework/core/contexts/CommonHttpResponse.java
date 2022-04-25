@@ -10,22 +10,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-class HttpResponseImpl extends AbstractHttpTransaction implements HttpResponse {
+public class CommonHttpResponse extends AbstractHttpTransaction implements HttpResponse {
     private final HeaderMap headers;
     private HttpCode code;
     private Handler<FixedOutputStream> handler;
 
-    public HttpResponseImpl(HttpCode code, HeaderMap headers) {
+    protected CommonHttpResponse(HttpCode code, HeaderMap headers) {
         this.code = Objects.requireNonNull(code);
         this.headers = Objects.requireNonNull(headers);
         this.cookies = new HashMap<>();
     }
 
-    public HttpResponseImpl(HttpCode code) {
+    public CommonHttpResponse(HttpCode code) {
         this(code, new HttpHeaderMap());
     }
 
-    public HttpResponseImpl() {
+    public CommonHttpResponse() {
         this(HttpCode.OK, new HttpHeaderMap());
     }
 

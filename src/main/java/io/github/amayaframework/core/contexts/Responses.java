@@ -15,19 +15,19 @@ public final class Responses {
     private static final String LOCATION = "Location";
 
     public static HttpResponse response(HttpCode code, HeaderMap headers) {
-        return new HttpResponseImpl(code, headers);
+        return new CommonHttpResponse(code, headers);
     }
 
     public static HttpResponse response(HttpCode code) {
-        return new HttpResponseImpl(code);
+        return new CommonHttpResponse(code);
     }
 
     public static HttpResponse response() {
-        return new HttpResponseImpl();
+        return new CommonHttpResponse();
     }
 
     public static HttpResponse responseWithCode(HttpCode code, Object body) {
-        HttpResponse ret = new HttpResponseImpl(code);
+        HttpResponse ret = new CommonHttpResponse(code);
         ret.setContentType(ContentType.PLAIN);
         ret.setBody(body);
         return ret;

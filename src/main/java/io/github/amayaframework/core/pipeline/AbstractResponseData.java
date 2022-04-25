@@ -9,7 +9,7 @@ public abstract class AbstractResponseData extends AbstractCompletableData imple
     private HttpResponse response;
 
     protected AbstractResponseData(HttpResponse response) {
-        this.response = Objects.requireNonNull(response);
+        this.response = response;
     }
 
     @Override

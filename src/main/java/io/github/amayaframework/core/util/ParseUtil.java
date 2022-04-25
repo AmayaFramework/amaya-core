@@ -49,7 +49,6 @@ public final class ParseUtil {
     }
 
     public static Variable<String, StringFilter> parseRouteParameter(String source) {
-        Objects.requireNonNull(source);
         String[] split = source.split(PARAM_DELIMITER);
         if (split.length < 1 || split.length > 2) {
             throw new InvalidFormatException("Invalid parameter \"" + source + "\"");
@@ -84,7 +83,6 @@ public final class ParseUtil {
 
     public static Map<String, List<String>> parseQueryString(String source, Charset charset)
             throws UnsupportedEncodingException {
-        Objects.requireNonNull(charset);
         Map<String, List<String>> ret = new HashMap<>();
         if (source == null || source.isEmpty()) {
             return ret;
@@ -102,7 +100,6 @@ public final class ParseUtil {
     }
 
     public static Map<String, Cookie> parseCookieHeader(String header) {
-        Objects.requireNonNull(header);
         String[] split = header.split("; ");
         Map<String, Cookie> ret = new HashMap<>();
         for (String rawCookie : split) {

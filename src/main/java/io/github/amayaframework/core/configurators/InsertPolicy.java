@@ -3,8 +3,6 @@ package io.github.amayaframework.core.configurators;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 
-import java.util.Objects;
-
 /**
  * An enumeration containing the available insert policies
  */
@@ -27,7 +25,7 @@ public enum InsertPolicy {
     private final Action<NamedPipeline, NamedPipeline> action;
 
     InsertPolicy(Action<NamedPipeline, NamedPipeline> action) {
-        this.action = Objects.requireNonNull(action);
+        this.action = action;
     }
 
     public NamedPipeline execute(NamedPipeline pipeline) throws Throwable {
