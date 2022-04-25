@@ -10,20 +10,20 @@ import io.github.amayaframework.core.actions.debug.DebugStage;
 import io.github.amayaframework.core.actions.debug.RequestDebugAction;
 import io.github.amayaframework.core.actions.debug.ResponseDebugAction;
 import io.github.amayaframework.core.actions.debug.RouteDebugAction;
+import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 
 public final class AmayaConfigurator implements Handler<PipelineHandler> {
     private final ActionFactory fabric;
     private final boolean isDebug;
 
-    public AmayaConfigurator(String prefix, boolean isDebug) {
-        this.fabric = new ActionFactory(prefix);
-        this.isDebug = isDebug;
+    public AmayaConfigurator(String prefix, AmayaConfig config) {
+        this.fabric = new ActionFactory(prefix, config);
+        this.isDebug = config.isDebug();
     }
 
     @Override
-    public void handle(PipelineHandler handler)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void handle(PipelineHandler handler) throws Throwable {
         Pipeline<String> input = handler.getInput();
         input.put(InputStage.PARSE_REQUEST, fabric.makeAction(InputStage.PARSE_REQUEST));
         input.put(InputStage.PARSE_REQUEST_COOKIES, fabric.makeAction(InputStage.PARSE_REQUEST_COOKIES));

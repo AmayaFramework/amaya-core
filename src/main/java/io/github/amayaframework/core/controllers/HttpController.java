@@ -7,10 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * <p>An abstract class that describes some necessary implementations for the
- * correct functioning of user controllers.</p>
- * <p>Automatically creates an internal router and scans the methods.</p>
- * <p>All user controllers should inherit from it.</p>
+ * A class describing a standard http controller.
  */
 class HttpController implements Controller {
     private final MethodRouter router;

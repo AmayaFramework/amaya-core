@@ -5,7 +5,7 @@ import io.github.amayaframework.core.contexts.AbstractHttpRequest;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.ControllerFactory;
+import io.github.amayaframework.core.controllers.HttpControllerFactory;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.MethodRouter;
@@ -22,7 +22,7 @@ import java.io.PrintStream;
 import java.util.*;
 
 public class InjectTest extends Assertions {
-    private static ControllerFactory FACTORY;
+    private static HttpControllerFactory FACTORY;
     private static Map<String, List<String>> LIST_MAP;
     private static Map<String, Object> PATH_PARAMETERS;
     private static Map<String, Cookie> COOKIE_MAP;
@@ -40,7 +40,7 @@ public class InjectTest extends Assertions {
         cookieMap.put("a", new Cookie("a", "a_1"));
         COOKIE_MAP = Collections.unmodifiableMap(cookieMap);
         AmayaConfig config = new AmayaConfig();
-        FACTORY = new ControllerFactory(config.getRouter(), config.getRoutePacker());
+        FACTORY = new HttpControllerFactory(config.getRouter(), config.getRoutePacker());
     }
 
     public HttpRequest makeRequest() {
@@ -60,7 +60,7 @@ public class InjectTest extends Assertions {
     public void testCorrect() throws Throwable {
         ByteArrayOutputStream outSpy = new ByteArrayOutputStream();
         PrintStream stream = new PrintStream(outSpy);
-        Controller inject = FACTORY.createController("", new Inject(stream));
+        Controller inject = FACTORY.create("", new Inject(stream));
         MethodRouter router = inject.getRouter();
         HttpRequest request = makeRequest();
         router.follow(HttpMethod.GET, "/a").getBody().execute(request);

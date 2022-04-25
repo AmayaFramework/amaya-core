@@ -6,8 +6,8 @@ import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.ControllerFactory;
 import io.github.amayaframework.core.controllers.Endpoint;
+import io.github.amayaframework.core.controllers.HttpControllerFactory;
 import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.scanners.ControllerScanner;
 import io.github.amayaframework.core.scanners.Scanner;
@@ -23,18 +23,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AmayaBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
+    // Protected
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected final Map<String, Controller> controllers;
-    protected final List<ConfiguratorWrapper> configurators;
-    protected final ControllerFactory factory;
+    // Private
+    private final Map<String, Controller> controllers;
+    private final List<ConfiguratorWrapper> configurators;
+    private final HttpControllerFactory factory;
     private final Handler<PipelineHandler> configurator;
-    protected Class<? extends Annotation> annotation;
+    private Class<? extends Annotation> annotation;
 
     protected AmayaBuilder(AmayaConfig config, String pipelinePrefix) {
         this.config = Objects.requireNonNull(config);
-        this.factory = new ControllerFactory(config.getRouter(), config.getRoutePacker());
-        configurator = new AmayaConfigurator(pipelinePrefix, config.isDebug());
+        this.factory = new HttpControllerFactory(config.getRouter(), config.getRoutePacker());
+        configurator = new AmayaConfigurator(pipelinePrefix, config);
         controllers = new ConcurrentHashMap<>();
         configurators = new LinkedList<>();
         if (config.isDebug()) {
@@ -81,7 +83,7 @@ public abstract class AmayaBuilder<T> {
     }
 
     public AmayaBuilder<T> addController(String route, Object object) throws Exception {
-        Controller toPut = factory.createController(route, object);
+        Controller toPut = factory.create(route, object);
         controllers.put(route, toPut);
         if (config.isDebug()) {
             logger.debug("Add controller \"" + toPut.getRoute() + "\"=" + toPut.getClass().getSimpleName());

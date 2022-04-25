@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public abstract class AbstractHandler implements IOHandler {
     protected final EventManager manager;
-    protected Action<Object, Object> input;
-    protected Action<Object, Object> output;
+    protected Action<Object, Object> inputAction;
+    protected Action<Object, Object> outputAction;
 
     public AbstractHandler(EventManager manager) {
         Objects.requireNonNull(manager);
@@ -22,7 +22,7 @@ public abstract class AbstractHandler implements IOHandler {
         Objects.requireNonNull(session);
         HttpResponse response;
         try {
-            response = session.handleInput(input);
+            response = session.handleInput(inputAction);
         } catch (Throwable e) {
             session.reject(e);
             manager.callEvent(Event.INPUT_ERROR, e);
@@ -34,7 +34,7 @@ public abstract class AbstractHandler implements IOHandler {
             return;
         }
         try {
-            session.handleOutput(output, response);
+            session.handleOutput(outputAction, response);
         } catch (Throwable e) {
             session.reject(e);
             manager.callEvent(Event.OUTPUT_ERROR, e);

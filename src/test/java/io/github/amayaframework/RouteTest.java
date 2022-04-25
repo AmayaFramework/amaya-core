@@ -4,7 +4,7 @@ import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.ControllerFactory;
+import io.github.amayaframework.core.controllers.HttpControllerFactory;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.methods.Post;
@@ -18,16 +18,16 @@ import org.junit.jupiter.api.Test;
 import static io.github.amayaframework.core.contexts.Responses.ok;
 
 public class RouteTest extends Assertions {
-    private static ControllerFactory FACTORY;
+    private static HttpControllerFactory FACTORY;
     @BeforeAll
     public static void config() {
         AmayaConfig config = new AmayaConfig();
-        FACTORY = new ControllerFactory(config.getRouter(), config.getRoutePacker());
+        FACTORY = new HttpControllerFactory(config.getRouter(), config.getRoutePacker());
     }
 
     @Test
     public void testCorrect() throws Throwable {
-        Controller correct = FACTORY.createController("", new Correct());
+        Controller correct = FACTORY.create("", new Correct());
         MethodRouter router = correct.getRouter();
         HttpResponse get = router.follow(HttpMethod.GET, "").getBody().execute(null);
         HttpResponse getWithId = router.follow(HttpMethod.GET, "/5").getBody().execute(null);
@@ -43,14 +43,14 @@ public class RouteTest extends Assertions {
 
     @Test
     public void testDuplicates() {
-        assertThrows(DuplicateException.class, () -> FACTORY.createController("", new Duplicates()));
+        assertThrows(DuplicateException.class, () -> FACTORY.create("", new Duplicates()));
     }
 
     @Test
     public void testBrokenPath() {
         Class<?> exceptionClass = Exception.class;
         try {
-            FACTORY.createController("", new BrokenPath());
+            FACTORY.create("", new BrokenPath());
         } catch (Exception e) {
             exceptionClass = e.getClass();
         }
