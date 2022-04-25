@@ -46,11 +46,7 @@ public class AmayaConfig extends Config {
         setRoutePacker(new InjectPacker(true));
         setCharset(StandardCharsets.UTF_8);
         setUseAsync(true);
-        try {
-            setRouter(RegexpRouter.class);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        setRouter(RegexpRouter::new);
     }
 
     public Packer getRoutePacker() {
@@ -65,9 +61,17 @@ public class AmayaConfig extends Config {
         return getField(ROUTER);
     }
 
-    public void setRouter(Class<? extends MethodRouter> clazz) throws Throwable {
-        Callable<? extends MethodRouter> toSet = ReflectUtil.packConstructor(clazz);
-        this.setField(ROUTER, toSet);
+    public void setRouter(Callable<? extends MethodRouter> router) {
+        setField(ROUTER, router);
+    }
+
+    public void setRouter(Class<? extends MethodRouter> clazz) {
+        try {
+            Callable<? extends MethodRouter> toSet = ReflectUtil.packConstructor(clazz);
+            setField(ROUTER, toSet);
+        } catch (Throwable e) {
+            throw new IllegalStateException("Can't instantiate this router", e);
+        }
     }
 
     public Charset getCharset() {
