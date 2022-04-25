@@ -3,7 +3,7 @@ package io.github.amayaframework.core.util;
 import com.github.romanqed.jeflect.lambdas.LambdaClass;
 import com.github.romanqed.util.Action;
 import com.github.romanqed.util.Pair;
-import io.github.amayaframework.core.controllers.Pack;
+import io.github.amayaframework.core.controllers.UsePacker;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
@@ -23,13 +23,13 @@ import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
 import static com.github.romanqed.jeflect.ReflectUtil.packLambdaMethod;
 
 public final class ReflectUtil {
-    private static final Map<Class<?>, Callable<? extends Packer>> DEFAULT_PACKERS = getDefaultPackers();
+    private static final Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> DEFAULT_PACKERS = getDefaultPackers();
     private static final Map<Class<?>, Callable<? extends MethodRouter>> DEFAULT_ROUTERS = getDefaultRouters();
     @SuppressWarnings("rawtypes")
     private static final LambdaClass<Action> ACTION = LambdaClass.fromClass(Action.class);
 
-    private static Map<Class<?>, Callable<? extends Packer>> getDefaultPackers() {
-        Map<Class<?>, Callable<? extends Packer>> ret = new HashMap<>();
+    private static Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> getDefaultPackers() {
+        Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> ret = new HashMap<>();
         ret.put(BasePacker.class, BasePacker::new);
         ret.put(InjectPacker.class, InjectPacker::new);
         return Collections.unmodifiableMap(ret);
@@ -81,12 +81,12 @@ public final class ReflectUtil {
         return packLambdaMethod(ACTION, method, bind);
     }
 
-    public static Packer extractPacker(AnnotatedElement annotated) {
-        Pack pack = annotated.getAnnotation(Pack.class);
-        if (pack == null) {
+    public static io.github.amayaframework.core.wrapping.Packer extractPacker(AnnotatedElement annotated) {
+        UsePacker packer = annotated.getAnnotation(UsePacker.class);
+        if (packer == null) {
             return null;
         }
-        Class<? extends Packer> type = pack.value();
+        Class<? extends Packer> type = packer.value();
         Callable<? extends Packer> ret = DEFAULT_PACKERS.getOrDefault(type, type::newInstance);
         try {
             return ret.call();

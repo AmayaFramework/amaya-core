@@ -45,7 +45,7 @@ public interface RequestData {
     InputStream getInputStream();
 
     /**
-     * <p>Important!</p>
+     * <h3>Important!</h3>
      * <p>If the http request has already been processed,
      * it is strongly recommended to get this information from it.</p>
      *
@@ -54,8 +54,8 @@ public interface RequestData {
     String getContentType();
 
     /**
-     * <p>Important!</p>
-     * <p>Each time it will parse the raw content of the header!</p>
+     * <h3>Important!</h3>
+     * <h3>Each time it will parse the raw content of the header!</h3>
      * <p>If the http request has already been processed,
      * it is strongly recommended to get this information from it.</p>
      *

@@ -37,11 +37,11 @@ public class HttpControllerFactory implements ControllerFactory {
     }
 
     private MethodRouter extractRouter(Class<?> clazz) throws Exception {
-        Router route = clazz.getAnnotation(Router.class);
-        if (route == null) {
-            return router.call();
+        UseRouter router = clazz.getAnnotation(UseRouter.class);
+        if (router == null) {
+            return this.router.call();
         }
-        Class<? extends MethodRouter> type = route.value();
+        Class<? extends MethodRouter> type = router.value();
         Callable<? extends MethodRouter> ret = ReflectUtil.findMethodRouter(type);
         return ret.call();
     }
