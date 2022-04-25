@@ -25,15 +25,13 @@ import java.util.concurrent.ForkJoinPool;
 
 public abstract class AmayaBuilder<T> {
     private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
-    // Protected
-    protected ExecutorService executor;
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
-    // Private
     private final List<ConfiguratorWrapper> configurators;
     private final HttpControllerFactory factory;
     private final Handler<PipelineHandler> configurator;
+    protected ExecutorService executor;
     private Class<? extends Annotation> annotation;
 
     protected AmayaBuilder(AmayaConfig config, String pipelinePrefix) {

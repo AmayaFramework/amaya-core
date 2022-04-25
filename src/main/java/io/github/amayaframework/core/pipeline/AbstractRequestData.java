@@ -7,30 +7,26 @@ import io.github.amayaframework.core.routes.MethodRoute;
 import java.util.Objects;
 
 public abstract class AbstractRequestData implements RequestData {
-    private final MethodRoute route;
-    private final String path;
-    private final HttpMethod method;
+    private final RouteData data;
     private HttpRequest request;
 
-    protected AbstractRequestData(HttpMethod method, String path, MethodRoute route) {
-        this.route = Objects.requireNonNull(route);
-        this.path = Objects.requireNonNull(path);
-        this.method = Objects.requireNonNull(method);
+    protected AbstractRequestData(RouteData data) {
+        this.data = data;
     }
 
     @Override
     public MethodRoute getRoute() {
-        return route;
+        return data.route;
     }
 
     @Override
     public String getPath() {
-        return path;
+        return data.path;
     }
 
     @Override
     public HttpMethod getMethod() {
-        return method;
+        return data.method;
     }
 
     public HttpRequest getRequest() {
@@ -39,5 +35,17 @@ public abstract class AbstractRequestData implements RequestData {
 
     public void setRequest(HttpRequest request) {
         this.request = Objects.requireNonNull(request);
+    }
+
+    public static class RouteData {
+        private final MethodRoute route;
+        private final String path;
+        private final HttpMethod method;
+
+        public RouteData(HttpMethod method, String path, MethodRoute route) {
+            this.route = route;
+            this.path = path;
+            this.method = method;
+        }
     }
 }
