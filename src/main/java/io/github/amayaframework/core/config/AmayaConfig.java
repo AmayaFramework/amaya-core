@@ -18,8 +18,8 @@ import java.util.concurrent.Callable;
  */
 public class AmayaConfig extends Config {
     /**
-     * The packer that will be used for each route found inside the controllers.
-     * They may differ in the way the route method is called,
+     * The packer that will be used for each getRoute found inside the controllers.
+     * They may differ in the way the getRoute method is called,
      * support/not support injecting values into the marked arguments,
      * etc.
      */

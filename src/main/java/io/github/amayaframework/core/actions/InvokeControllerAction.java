@@ -5,7 +5,7 @@ import io.github.amayaframework.core.pipeline.InputAction;
 import io.github.amayaframework.core.pipeline.RequestData;
 
 /**
- * <p>Input action which calls found controller route</p>
+ * <p>Input action which calls found controller getRoute</p>
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link HttpResponse}</p>
  */

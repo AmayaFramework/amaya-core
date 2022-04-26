@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
  */
 public interface RequestData {
     /**
-     * @return the current route containing information about the bound method and path template.
+     * @return the current getRoute containing information about the bound method and path template.
      */
     MethodRoute getRoute();
 

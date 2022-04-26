@@ -19,7 +19,7 @@ public abstract class MethodRouter implements Router<MethodRoute> {
     public void addRoute(HttpMethod method, MethodRoute route) {
         Objects.requireNonNull(method);
         Objects.requireNonNull(route);
-        String key = route.route();
+        String key = route.getRoute();
         Map<String, MethodRoute> methodRoutes = routes.get(method);
         if (methodRoutes == null) {
             methodRoutes = new ConcurrentHashMap<>();

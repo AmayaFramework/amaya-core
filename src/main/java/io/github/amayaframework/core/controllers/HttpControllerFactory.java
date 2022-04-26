@@ -62,7 +62,7 @@ public class HttpControllerFactory implements ControllerFactory {
             try {
                 router.addRoute(method, value);
             } catch (DuplicateException e) {
-                String error = String.format(DUPLICATE_PATTERN, method, value.route(), clazz.getSimpleName());
+                String error = String.format(DUPLICATE_PATTERN, method, value.getRoute(), clazz.getSimpleName());
                 throw new DuplicateException(error);
             }
         }));

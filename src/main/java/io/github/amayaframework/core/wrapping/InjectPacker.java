@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * A class describing the implementation of a packer
- * that supports injecting values into the marked route arguments.
+ * that supports injecting values into the marked getRoute arguments.
  */
 public class InjectPacker extends AbstractPacker {
 
@@ -27,17 +27,17 @@ public class InjectPacker extends AbstractPacker {
     }
 
     private MethodWrapper.Argument findParameterAnnotation(Parameter parameter, boolean useNativeName) {
-        Content found = null;
+        String found = null;
         String value = null;
         for (Annotation annotation : parameter.getDeclaredAnnotations()) {
-            Content content = Content.fromAnnotation(annotation);
-            if (content == null) {
+            String filter = Content.fromAnnotation(annotation);
+            if (filter == null) {
                 continue;
             }
             if (found != null) {
                 throw new IllegalStateException("Content annotation duplicate!");
             }
-            found = content;
+            found = filter;
             try {
                 value = ReflectUtil.extractAnnotationValue(annotation, String.class);
             } catch (NoSuchMethodException e) {
@@ -50,7 +50,7 @@ public class InjectPacker extends AbstractPacker {
         if (found == null) {
             throw new IllegalStateException("Not annotated parameter!");
         }
-        return new MethodWrapper.Argument(found.getFilter(), value);
+        return new MethodWrapper.Argument(found, value);
     }
 
     private MethodWrapper.Argument[] findAnnotatedParameters(Parameter[] parameters, boolean useNativeNames) {

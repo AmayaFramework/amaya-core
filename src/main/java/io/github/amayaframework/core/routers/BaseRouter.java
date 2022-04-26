@@ -6,7 +6,7 @@ import io.github.amayaframework.core.routes.MethodRoute;
 import java.util.Map;
 
 /**
- * A class describing the implementation of the router that does not support the processing of paths with parameters.
+ * A class describing the implementation of the router that does not support the processing of paths with getParameters.
  */
 public class BaseRouter extends MethodRouter {
     @Override

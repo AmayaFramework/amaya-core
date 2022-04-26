@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>An input action which outputs information about the found route.</p>
+ * <p>An input action which outputs information about the found getRoute.</p>
  * <p>Receives: {@link RequestData}</p>
  * <p>Returns: {@link RequestData}</p>
  */
@@ -17,7 +17,7 @@ public final class RouteDebugAction extends PipelineAction<RequestData, RequestD
     public RequestData execute(RequestData data) {
         String message = "Route found successfully\n" +
                 "Method: " + data.getMethod() + '\n' +
-                "Route: " + data.getRoute().route() + '\n' +
+                "Route: " + data.getRoute().getRoute() + '\n' +
                 "Path: " + data.getPath() + '\n';
         LOGGER.debug(message);
         return data;

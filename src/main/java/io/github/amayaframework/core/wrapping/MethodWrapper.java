@@ -4,8 +4,8 @@ import com.github.romanqed.jeflect.Lambda;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.filters.ContentFilter;
 import io.github.amayaframework.core.util.ParseUtil;
-import io.github.amayaframework.filters.ContentFilter;
 
 class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     private final Argument[] arguments;

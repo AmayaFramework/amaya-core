@@ -42,12 +42,12 @@ public abstract class AbstractPacker implements Packer {
 
     protected void checkParameters(Class<?> returnType, Parameter[] parameters, boolean requireInject) {
         if (parameters.length < 1) {
-            LOGGER.error("Method has too low parameters: " + Arrays.toString(parameters));
-            throw new IllegalStateException("Too low parameters!");
+            LOGGER.error("Method has too low getParameters: " + Arrays.toString(parameters));
+            throw new IllegalStateException("Too low getParameters!");
         }
         if (!requireInject && parameters.length > 1) {
-            LOGGER.error("Method has too many parameters: " + Arrays.toString(parameters));
-            throw new IllegalStateException("Too many parameters!");
+            LOGGER.error("Method has too many getParameters: " + Arrays.toString(parameters));
+            throw new IllegalStateException("Too many getParameters!");
         }
         if (!HttpResponse.class.isAssignableFrom(returnType) && !ALLOWED_RETURN_TYPES.contains(returnType)) {
             LOGGER.error("Invalid return type: " + returnType.getName());

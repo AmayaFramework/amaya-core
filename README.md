@@ -1,6 +1,6 @@
-# amaya-core-api [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core-api?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-api/)
+# amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/core-api?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/core-api/)
 
-The core of the Amaya framework is the one on which various implementations can be built.
+The basis of the amaya framework, which provides basic functionality.
 It includes basic implementations of routes, filters, controllers, http transactions and everything related to them, 
 method packaging, as well as assistive utilities.
 

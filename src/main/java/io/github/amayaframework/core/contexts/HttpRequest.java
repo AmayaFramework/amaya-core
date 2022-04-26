@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface HttpRequest extends HttpTransaction, Viewable {
     /**
-     * Returns all queried parameters extracted from the request URI.
+     * Returns all queried getParameters extracted from the request URI.
      *
      * @return {@link Map}
      */
@@ -38,7 +38,7 @@ public interface HttpRequest extends HttpTransaction, Viewable {
     String getQuery(String name);
 
     /**
-     * Returns a map of path parameters that were extracted
+     * Returns a map of path getParameters that were extracted
      * from the request URI in accordance with the specification
      * described in the controller.
      *

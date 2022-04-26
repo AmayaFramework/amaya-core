@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.routes;
 
+import io.github.amayaframework.core.filters.StringFilter;
 import io.github.amayaframework.core.util.DuplicateParameterException;
 import io.github.amayaframework.core.util.ParseUtil;
 import io.github.amayaframework.core.util.Variable;
-import io.github.amayaframework.filters.StringFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,15 +44,15 @@ public class Route {
         this.route = route;
     }
 
-    public Pattern pattern() {
+    public Pattern getPattern() {
         return pattern;
     }
 
-    public String route() {
+    public String getRoute() {
         return route;
     }
 
-    public List<Variable<String, StringFilter>> parameters() {
+    public List<Variable<String, StringFilter>> getParameters() {
         return parameters;
     }
 

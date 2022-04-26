@@ -3,54 +3,34 @@ package io.github.amayaframework.core.wrapping;
 import io.github.amayaframework.core.scanners.AnnotationScanner;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class Content {
+public final class Content {
     public static final String QUERY = "query";
     public static final String PATH = "path";
     public static final String BODY = "body";
     public static final String COOKIE = "cookie";
 
-    private static final Map<Class<Annotation>, Content> children = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Annotation>, String> children = getContentMap();
 
-    static {
-        addContent(Query.class, QUERY);
-        addContent(Path.class, PATH);
-        addContent(Body.class, BODY);
-        addContent(HttpCookie.class, COOKIE);
+    private static Map<Class<? extends Annotation>, String> getContentMap() {
+        Map<Class<? extends Annotation>, String> ret = new HashMap<>();
+        ret.put(Query.class, QUERY);
+        ret.put(Path.class, PATH);
+        ret.put(Body.class, BODY);
+        ret.put(HttpCookie.class, COOKIE);
         AnnotationScanner scanner = new AnnotationScanner();
         Map<String, Class<? extends Annotation>> found = scanner.safetyFind();
-        found.forEach((key, value) -> addContent(value, key));
+        found.forEach((key, value) -> ret.put(value, key));
+        return Collections.unmodifiableMap(ret);
     }
 
-    private final Class<Annotation> annotationClass;
-    private final String filter;
-
-    @SuppressWarnings("unchecked")
-    private Content(Class<? extends Annotation> annotationClass, String filter) {
-        Objects.requireNonNull(annotationClass);
-        if (!annotationClass.isAnnotation()) {
-            throw new IllegalArgumentException("The provided class is not an annotation");
-        }
-        this.annotationClass = (Class<Annotation>) annotationClass;
-        this.filter = Objects.requireNonNull(filter);
-    }
-
-    public static void addContent(Class<? extends Annotation> annotationClass, String filter) {
-        Content toAdd = new Content(annotationClass, filter);
-        children.put(toAdd.annotationClass, toAdd);
-    }
-
-    public static Content fromAnnotation(Annotation annotation) {
+    public static String fromAnnotation(Annotation annotation) {
         if (annotation == null) {
             return null;
         }
         return children.get(annotation.annotationType());
-    }
-
-    public String getFilter() {
-        return filter;
     }
 }

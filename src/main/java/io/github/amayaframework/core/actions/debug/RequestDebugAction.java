@@ -19,8 +19,8 @@ public final class RequestDebugAction extends PipelineAction<RequestData, Reques
         HttpRequest request = data.getRequest();
         String message = "The request was parsed successfully\n" +
                 "Implementation used: " + request.getClass().getSimpleName() + "\n" +
-                "Parsed path parameters: " + request.getPathParameters() + "\n" +
-                "Parsed query parameters: " + request.getQuery() + "\n";
+                "Parsed path getParameters: " + request.getPathParameters() + "\n" +
+                "Parsed query getParameters: " + request.getQuery() + "\n";
         LOGGER.debug(message);
         return data;
     }

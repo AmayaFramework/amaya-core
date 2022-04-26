@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.util;
 
+import io.github.amayaframework.core.filters.*;
 import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
-import io.github.amayaframework.filters.ContentFilter;
-import io.github.amayaframework.filters.StringFilter;
+import io.github.amayaframework.core.wrapping.Content;
 import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.http.Cookie;
@@ -18,8 +18,8 @@ public final class ParseUtil {
     public static final String CONTENT_HEADER = "Content-Type";
     public static final String COOKIE_HEADER = "Cookie";
     public static final String SET_COOKIE_HEADER = "Set-Cookie";
-    public static final Map<String, StringFilter> STRING_FILTERS;
-    public static final Map<String, ContentFilter> CONTENT_FILTERS;
+    public static final Map<String, StringFilter> STRING_FILTERS = getStringFilters();
+    public static final Map<String, ContentFilter> CONTENT_FILTERS = getContentFilters();
     private static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
     private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
@@ -27,9 +27,23 @@ public final class ParseUtil {
     private static final String NEW_LINE = "<br>";
     private static final String SPACE = "&nbsp;";
 
-    static {
-        STRING_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(StringFilter.class).safetyFind());
-        CONTENT_FILTERS = Collections.unmodifiableMap(new FilterScanner<>(ContentFilter.class).safetyFind());
+    private static Map<String, StringFilter> getStringFilters() {
+        FilterScanner<StringFilter> scanner = new FilterScanner<>(StringFilter.class);
+        Map<String, StringFilter> ret = scanner.safetyFind();
+        ret.put("bigint", new BigIntegerFilter());
+        ret.put("bool", new BooleanFilter());
+        ret.put("double", new DoubleFilter());
+        ret.put("int", new IntegerFilter());
+        return Collections.unmodifiableMap(ret);
+    }
+
+    private static Map<String, ContentFilter> getContentFilters() {
+        FilterScanner<ContentFilter> scanner = new FilterScanner<>(ContentFilter.class);
+        Map<String, ContentFilter> ret = scanner.safetyFind();
+        ret.put(Content.PATH, new PathFilter());
+        ret.put(Content.QUERY, new MapListFilter());
+        ret.put(Content.COOKIE, new CookieFilter());
+        return Collections.unmodifiableMap(ret);
     }
 
     public static void validateRoute(String route) {
@@ -64,8 +78,8 @@ public final class ParseUtil {
         if (!route.isRegexp()) {
             return ret;
         }
-        Matcher finder = route.pattern().matcher(source);
-        Iterator<Variable<String, StringFilter>> parameters = route.parameters().iterator();
+        Matcher finder = route.getPattern().matcher(source);
+        Iterator<Variable<String, StringFilter>> parameters = route.getParameters().iterator();
         if (!finder.find()) {
             return null;
         }
