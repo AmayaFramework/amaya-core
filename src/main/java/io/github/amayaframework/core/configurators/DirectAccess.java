@@ -6,10 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation that specializes access policy
+ * Annotation that specializes direct access.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Access {
-    AccessPolicy value();
+public @interface DirectAccess {
 }

@@ -51,7 +51,7 @@ public interface Attachable {
         return get(key);
     }
 
-    default boolean getBoolean(String key) {
+    default boolean getBool(String key) {
         Boolean ret = get(key);
         if (ret == null) {
             return false;
@@ -59,7 +59,7 @@ public interface Attachable {
         return ret;
     }
 
-    default int getInteger(String key) {
+    default int getInt(String key) {
         Integer ret = get(key);
         if (ret == null) {
             return 0;
@@ -75,7 +75,7 @@ public interface Attachable {
         return ret;
     }
 
-    default char getCharacter(String key) {
+    default char getChar(String key) {
         Character ret = get(key);
         if (ret == null) {
             return 0;

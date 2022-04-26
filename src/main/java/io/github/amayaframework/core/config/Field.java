@@ -26,7 +26,6 @@ public class Field<T> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -34,12 +33,7 @@ public class Field<T> {
         if (!(obj instanceof Field)) {
             return false;
         }
-        Field<T> field;
-        try {
-            field = (Field<T>) obj;
-        } catch (Exception e) {
-            return false;
-        }
-        return name.equals(field.name) && type == field.type;
+        Field<?> field = (Field<?>) obj;
+        return field.name.equals(name) && field.type == type;
     }
 }

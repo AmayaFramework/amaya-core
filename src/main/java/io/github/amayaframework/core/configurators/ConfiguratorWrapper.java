@@ -7,13 +7,9 @@ import io.github.amayaframework.core.handlers.PipelineHandler;
 import io.github.amayaframework.core.pipeline.NamedPipeline;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Objects;
 
 public final class ConfiguratorWrapper {
-    private final static String INPUT_NAME = "configureInput";
-    private final static String OUTPUT_NAME = "configureOutput";
-
     private final Configurator body;
 
     public ConfiguratorWrapper(Configurator body) {
@@ -24,26 +20,12 @@ public final class ConfiguratorWrapper {
         return body;
     }
 
-    private Method findMethod(String name) throws NoSuchMethodException {
-        Method[] methods = body.getClass().getDeclaredMethods();
-        Method found = Arrays.stream(methods).filter(e -> e.getName().equals(name)).findFirst().orElse(null);
-        if (found == null) {
-            throw new NoSuchMethodException();
-        }
-        return found;
+    private boolean isDirect(Method method) {
+        DirectAccess access = method.getAnnotation(DirectAccess.class);
+        return access != null;
     }
 
-    private AccessPolicy extractAccess(String name) throws NoSuchMethodException {
-        Method method = findMethod(name);
-        Access access = method.getAnnotation(Access.class);
-        if (access == null) {
-            return AccessPolicy.INDIRECT;
-        }
-        return access.value();
-    }
-
-    private InsertPolicy extractInsert(String name) throws NoSuchMethodException {
-        Method method = findMethod(name);
+    private InsertPolicy extractInsert(Method method) {
         Insert insert = method.getAnnotation(Insert.class);
         if (insert == null) {
             return InsertPolicy.PLAIN;
@@ -52,26 +34,28 @@ public final class ConfiguratorWrapper {
     }
 
     private void configureInput(Pipeline<String> pipeline) throws Throwable {
-        AccessPolicy access = extractAccess(INPUT_NAME);
-        if (access == AccessPolicy.DIRECT) {
+        Method method = body.getClass().getDeclaredMethod("configureInput", NamedPipeline.class);
+        boolean isDirect = isDirect(method);
+        if (isDirect) {
             body.configureInput(new NamedPipeline(pipeline));
             return;
         }
         NamedPipeline toProcess = new NamedPipeline();
         body.configureInput(toProcess);
-        InsertPolicy insert = extractInsert(INPUT_NAME);
+        InsertPolicy insert = extractInsert(method);
         pipeline.insertBefore(InputStage.INVOKE_CONTROLLER, insert.execute(toProcess));
     }
 
     private void configureOutput(Pipeline<String> pipeline) throws Throwable {
-        AccessPolicy access = extractAccess(OUTPUT_NAME);
-        if (access == AccessPolicy.DIRECT) {
+        Method method = body.getClass().getDeclaredMethod("configureOutput", NamedPipeline.class);
+        boolean isDirect = isDirect(method);
+        if (isDirect) {
             body.configureOutput(new NamedPipeline(pipeline));
             return;
         }
         NamedPipeline toProcess = new NamedPipeline();
         body.configureOutput(toProcess);
-        InsertPolicy insert = extractInsert(OUTPUT_NAME);
+        InsertPolicy insert = extractInsert(method);
         pipeline.insertFirst(insert.execute(toProcess));
     }
 

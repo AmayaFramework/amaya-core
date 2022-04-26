@@ -1,38 +1,18 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.util.AbstractAttachable;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
 import java.util.*;
 
-public abstract class AbstractHttpTransaction implements HttpTransaction {
-    private final Map<String, Object> attachments;
+public abstract class AbstractHttpTransaction extends AbstractAttachable implements HttpTransaction {
     protected Map<String, Cookie> cookies;
     protected Object body;
     protected ContentType type;
 
     protected AbstractHttpTransaction() {
-        attachments = new HashMap<>();
-    }
-
-    @Override
-    public Map<String, Object> getAttachments() {
-        return attachments;
-    }
-
-    @Override
-    public Object getAttachment(String key) {
-        return attachments.get(key);
-    }
-
-    @Override
-    public void setAttachment(String key, Object value) {
-        attachments.put(key, value);
-    }
-
-    @Override
-    public Object removeAttachment(String key) {
-        return attachments.remove(key);
+        super(new HashMap<>());
     }
 
     @Override

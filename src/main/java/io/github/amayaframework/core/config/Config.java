@@ -6,10 +6,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class Config implements Configurable {
-    private final Map<String, Object> fields;
+    private final Map<Field<?>, Object> fields;
 
-    public Config(Supplier<Map<String, Object>> supplier) {
-        this.fields = supplier.get();
+    public Config(Supplier<Map<Field<?>, Object>> supplier) {
+        Objects.requireNonNull(supplier);
+        this.fields = Objects.requireNonNull(supplier.get());
     }
 
     public Config() {
@@ -20,14 +21,14 @@ public class Config implements Configurable {
     public <T> void setField(Field<T> field, T value) {
         Objects.requireNonNull(field);
         Objects.requireNonNull(value);
-        fields.put(field.getName(), value);
+        fields.put(field, value);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getField(Field<T> field) {
         Objects.requireNonNull(field);
-        return (T) fields.get(field.getName());
+        return (T) fields.get(field);
     }
 
     @Override

@@ -3,50 +3,68 @@ package io.github.amayaframework.core.routes;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
-import io.github.amayaframework.core.util.Attachable;
+import io.github.amayaframework.core.util.AbstractAttachable;
 
 import java.lang.reflect.Method;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
-public final class MethodRoute extends Route implements Attachable {
+public final class MethodRoute extends AbstractAttachable implements Route, Action<HttpRequest, HttpResponse> {
+    private final HttpRoute route;
     private final Method method;
     private final Action<HttpRequest, HttpResponse> body;
-    private final Map<String, Object> attachments;
 
     public MethodRoute(String route, Method method, Action<HttpRequest, HttpResponse> body) {
-        super(route);
+        super(new HashMap<>());
+        this.route = HttpRoute.compile(route);
         this.method = Objects.requireNonNull(method);
         this.body = Objects.requireNonNull(body);
-        this.attachments = new ConcurrentHashMap<>();
     }
 
     public Method getMethod() {
         return method;
     }
 
-    public Action<HttpRequest, HttpResponse> getBody() {
-        return body;
+    @Override
+    public HttpResponse execute(HttpRequest request) throws Throwable {
+        return body.execute(request);
     }
 
     @Override
-    public Map<String, Object> getAttachments() {
-        return attachments;
+    public int hashCode() {
+        return route.hashCode();
     }
 
     @Override
-    public Object getAttachment(String key) {
-        return attachments.get(key);
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof MethodRoute)) {
+            return false;
+        }
+        MethodRoute methodRoute = (MethodRoute) obj;
+        return route.equals(methodRoute.route);
     }
 
     @Override
-    public void setAttachment(String key, Object value) {
-        attachments.put(key, value);
+    public Pattern getPattern() {
+        return route.getPattern();
     }
 
     @Override
-    public Object removeAttachment(String key) {
-        return attachments.remove(key);
+    public String getRoute() {
+        return route.getRoute();
+    }
+
+    @Override
+    public boolean isRegexp() {
+        return route.isRegexp();
+    }
+
+    @Override
+    public boolean matches(String route) {
+        return this.route.matches(route);
     }
 }
