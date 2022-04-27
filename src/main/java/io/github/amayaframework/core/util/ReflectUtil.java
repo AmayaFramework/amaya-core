@@ -2,9 +2,7 @@ package io.github.amayaframework.core.util;
 
 import com.github.romanqed.jeflect.lambdas.LambdaClass;
 import com.github.romanqed.util.Action;
-import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.controllers.UsePacker;
-import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
@@ -16,7 +14,9 @@ import org.atteo.classindex.ClassIndex;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
@@ -40,17 +40,6 @@ public final class ReflectUtil {
         ret.put(BaseRouter.class, BaseRouter::new);
         ret.put(RegexpRouter.class, RegexpRouter::new);
         return Collections.unmodifiableMap(ret);
-    }
-
-    public static List<Pair<HttpMethod, String>> extractMethodRoutes(Method method) throws NoSuchMethodException {
-        List<Pair<HttpMethod, String>> ret = new LinkedList<>();
-        for (Annotation annotation : method.getDeclaredAnnotations()) {
-            HttpMethod httpMethod = HttpMethod.fromAnnotation(annotation);
-            if (httpMethod != null) {
-                ret.add(new Pair<>(httpMethod, extractAnnotationValue(annotation, String.class)));
-            }
-        }
-        return ret;
     }
 
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType,
@@ -80,7 +69,7 @@ public final class ReflectUtil {
         return packLambdaMethod(ACTION, method, bind);
     }
 
-    public static io.github.amayaframework.core.wrapping.Packer extractPacker(AnnotatedElement annotated) {
+    public static Packer extractPacker(AnnotatedElement annotated) {
         UsePacker packer = annotated.getAnnotation(UsePacker.class);
         if (packer == null) {
             return null;

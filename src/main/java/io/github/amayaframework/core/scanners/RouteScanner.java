@@ -2,16 +2,18 @@ package io.github.amayaframework.core.scanners;
 
 import com.github.romanqed.util.Action;
 import com.github.romanqed.util.Checks;
-import com.github.romanqed.util.Pair;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.util.ReflectUtil;
 import io.github.amayaframework.core.wrapping.Packer;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
+
+import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
+import static io.github.amayaframework.core.util.ReflectUtil.extractPacker;
 
 public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>> {
     private final Object instance;
@@ -25,31 +27,33 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
     }
 
     public Map<HttpMethod, List<MethodRoute>> find() throws Throwable {
-        Method[] methods = clazz.getDeclaredMethods();
         Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
-        List<Pair<HttpMethod, String>> found;
+        Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
-            found = ReflectUtil.extractMethodRoutes(method);
-            if (found.isEmpty()) {
-                continue;
-            }
-            Map<HttpMethod, List<MethodRoute>> routes = parseRoutes(method, found);
-            for (Map.Entry<HttpMethod, List<MethodRoute>> entry : routes.entrySet()) {
-                ret.computeIfAbsent(entry.getKey(), key -> new ArrayList<>()).addAll(entry.getValue());
-            }
+            processMethod(method, ret);
         }
         return ret;
     }
 
-    private Map<HttpMethod, List<MethodRoute>> parseRoutes(Method method, List<Pair<HttpMethod, String>> source)
-            throws Throwable {
-        Packer packer = Checks.requireNonNullElse(ReflectUtil.extractPacker(method), this.packer);
-        Action<HttpRequest, HttpResponse> body = packer.pack(instance, method);
-        Map<HttpMethod, List<MethodRoute>> ret = new HashMap<>();
-        for (Pair<HttpMethod, String> route : source) {
-            MethodRoute methodRoute = new MethodRoute(route.getValue(), method, body);
-            ret.computeIfAbsent(route.getKey(), key -> new ArrayList<>()).add(methodRoute);
+    private void processMethod(Method method, Map<HttpMethod, List<MethodRoute>> map) throws Throwable {
+        Annotation[] annotations = method.getDeclaredAnnotations();
+        Action<HttpRequest, HttpResponse> packed = null;
+        for (Annotation annotation : annotations) {
+            HttpMethod httpMethod = HttpMethod.fromAnnotation(annotation);
+            if (httpMethod == null) {
+                continue;
+            }
+            String route = extractAnnotationValue(annotation, String.class);
+            if (packed == null) {
+                packed = packMethod(method);
+            }
+            MethodRoute toPut = new MethodRoute(route, method, packed);
+            map.computeIfAbsent(httpMethod, key -> new LinkedList<>()).add(toPut);
         }
-        return ret;
+    }
+
+    private Action<HttpRequest, HttpResponse> packMethod(Method method) throws Throwable {
+        Packer packer = Checks.requireNonNullElse(extractPacker(method), this.packer);
+        return packer.pack(instance, method);
     }
 }
