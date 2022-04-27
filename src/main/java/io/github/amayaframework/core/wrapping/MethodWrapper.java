@@ -5,7 +5,8 @@ import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.filters.ContentFilter;
-import io.github.amayaframework.core.util.ParseUtil;
+
+import static io.github.amayaframework.core.util.FilterUtil.CONTENT_FILTERS;
 
 class MethodWrapper implements Action<HttpRequest, HttpResponse> {
     private final Argument[] arguments;
@@ -42,7 +43,7 @@ class MethodWrapper implements Action<HttpRequest, HttpResponse> {
         public Argument(String type, String name) {
             this.type = type;
             this.name = name;
-            this.filter = ParseUtil.CONTENT_FILTERS.get(type);
+            this.filter = CONTENT_FILTERS.get(type);
         }
     }
 }
