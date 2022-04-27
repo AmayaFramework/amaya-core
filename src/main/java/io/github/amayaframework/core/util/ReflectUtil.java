@@ -23,13 +23,13 @@ import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
 import static com.github.romanqed.jeflect.ReflectUtil.packLambdaMethod;
 
 public final class ReflectUtil {
-    private static final Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> DEFAULT_PACKERS = getDefaultPackers();
+    private static final Map<Class<?>, Callable<? extends Packer>> DEFAULT_PACKERS = getDefaultPackers();
     private static final Map<Class<?>, Callable<? extends MethodRouter>> DEFAULT_ROUTERS = getDefaultRouters();
     @SuppressWarnings("rawtypes")
     private static final LambdaClass<Action> ACTION = LambdaClass.fromClass(Action.class);
 
-    private static Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> getDefaultPackers() {
-        Map<Class<?>, Callable<? extends io.github.amayaframework.core.wrapping.Packer>> ret = new HashMap<>();
+    private static Map<Class<?>, Callable<? extends Packer>> getDefaultPackers() {
+        Map<Class<?>, Callable<? extends Packer>> ret = new HashMap<>();
         ret.put(BasePacker.class, BasePacker::new);
         ret.put(InjectPacker.class, InjectPacker::new);
         return Collections.unmodifiableMap(ret);
