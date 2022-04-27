@@ -12,6 +12,7 @@ public final class Content {
     public static final String PATH = "path";
     public static final String BODY = "body";
     public static final String COOKIE = "cookie";
+    public static final String HEADER = "header";
 
     private static final Map<Class<? extends Annotation>, String> children = getContentMap();
 
@@ -19,6 +20,7 @@ public final class Content {
         Map<Class<? extends Annotation>, String> ret = new HashMap<>();
         ret.put(Query.class, QUERY);
         ret.put(Path.class, PATH);
+        ret.put(Header.class, HEADER);
         ret.put(Body.class, BODY);
         ret.put(HttpCookie.class, COOKIE);
         AnnotationScanner scanner = new AnnotationScanner();

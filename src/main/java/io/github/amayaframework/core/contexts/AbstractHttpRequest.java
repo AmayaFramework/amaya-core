@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 public abstract class AbstractHttpRequest extends AbstractHttpTransaction implements HttpRequest {
     private final Map<String, Object> fields;
@@ -16,6 +17,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
 
     public AbstractHttpRequest() {
         fields = new HashMap<>();
+        fields.put(Content.HEADER, (Function<String, String>) this::getHeader);
     }
 
     @Override
@@ -25,7 +27,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
 
     @Override
     public void set(String name, Object value) {
-        Objects.requireNonNull(name);
         this.fields.put(name, value);
     }
 
@@ -37,7 +38,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setQuery(Map<String, List<String>> queryParameters) {
         this.queryParameters = Objects.requireNonNull(queryParameters);
-        set(Content.QUERY, queryParameters);
+        fields.put(Content.QUERY, queryParameters);
     }
 
     @Override
@@ -62,7 +63,7 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setPathParameters(Map<String, Object> pathParameters) {
         this.pathParameters = Objects.requireNonNull(pathParameters);
-        set(Content.PATH, pathParameters);
+        fields.put(Content.PATH, pathParameters);
     }
 
     @Override
@@ -78,13 +79,13 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     @Override
     public void setBody(Object body) {
         super.setBody(body);
-        set(Content.BODY, this.body);
+        fields.put(Content.BODY, this.body);
     }
 
     @Override
     public void setCookies(Map<String, Cookie> cookies) {
         this.cookies = Objects.requireNonNull(cookies);
-        set(Content.COOKIE, cookies);
+        fields.put(Content.COOKIE, cookies);
     }
 
     @Override
