@@ -16,17 +16,12 @@ import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
-import io.github.amayaframework.core.wrapping.BasePacker;
-import io.github.amayaframework.core.wrapping.HttpCookie;
-import io.github.amayaframework.core.wrapping.Path;
-import io.github.amayaframework.core.wrapping.Query;
+import io.github.amayaframework.core.wrapping.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.Cookie;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
 import static io.github.amayaframework.core.contexts.Responses.ok;
@@ -68,16 +63,19 @@ public class ControllerTest extends Assertions {
 
     @Test
     public void testInject() throws Throwable {
-        ByteArrayOutputStream outSpy = new ByteArrayOutputStream();
-        PrintStream stream = new PrintStream(outSpy);
-        Controller inject = FACTORY.create("", new Inject(stream));
+        Controller inject = FACTORY.create("", new Inject());
         MethodRouter router = inject.getRouter();
         HttpRequest request = makeRequest();
-        router.follow(HttpMethod.GET, "/a").execute(request);
-        router.follow(HttpMethod.GET, "/b").execute(request);
-        router.follow(HttpMethod.GET, "/c").execute(request);
-        String check = outSpy.toString().replace("\r", "");
-        assertEquals("1\na_a\na\n", check);
+        HttpResponse a = router.follow(HttpMethod.GET, "/a").execute(request);
+        HttpResponse b = router.follow(HttpMethod.GET, "/b").execute(request);
+        HttpResponse c = router.follow(HttpMethod.GET, "/c").execute(request);
+        HttpResponse d = router.follow(HttpMethod.GET, "/d").execute(request);
+        assertAll(
+                () -> assertEquals(1, a.getBody()),
+                () -> assertEquals("a_a", b.getBody()),
+                () -> assertEquals("a", c.getBody()),
+                () -> assertEquals("a_a", d.getBody())
+        );
     }
 
     @Test
@@ -138,28 +136,24 @@ public class ControllerTest extends Assertions {
     }
 
     public static class Inject {
-        private final PrintStream stream;
-
-        public Inject(PrintStream stream) {
-            this.stream = stream;
-        }
-
         @Get("/{a}")
         public HttpResponse a(HttpRequest request, @Path("test_a") Integer a) {
-            stream.println(a);
-            return null;
+            return Responses.ok(a);
         }
 
         @Get("/b")
         public HttpResponse b(HttpRequest request, @Query("test_a") String a) {
-            stream.println(a);
-            return null;
+            return Responses.ok(a);
         }
 
         @Get("/c")
         public HttpResponse c(HttpRequest request, @HttpCookie("test_a") Cookie a) {
-            stream.println(a.getName());
-            return null;
+            return Responses.ok(a.getName());
+        }
+
+        @Get("/d")
+        public HttpResponse d(HttpRequest request, @Header String a) {
+            return Responses.ok(a);
         }
     }
 

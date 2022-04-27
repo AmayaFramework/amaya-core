@@ -27,6 +27,7 @@ public final class FilterUtil {
         ret.put(Content.PATH, new PathFilter());
         ret.put(Content.QUERY, new MapListFilter());
         ret.put(Content.COOKIE, new CookieFilter());
+        ret.put(Content.HEADER, new HeaderFilter());
         return Collections.unmodifiableMap(ret);
     }
 }
