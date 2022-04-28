@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.util;
 
-import com.github.romanqed.jeflect.lambdas.LambdaClass;
+import com.github.romanqed.jeflect.meta.LambdaClass;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.controllers.UsePacker;
 import io.github.amayaframework.core.routers.BaseRouter;
