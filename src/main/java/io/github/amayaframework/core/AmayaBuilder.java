@@ -1,8 +1,8 @@
 package io.github.amayaframework.core;
 
 import com.github.romanqed.util.Handler;
+import io.github.amayaframework.core.actions.AmayaConfigurator;
 import io.github.amayaframework.core.config.AmayaConfig;
-import io.github.amayaframework.core.configurators.AmayaConfigurator;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
 import io.github.amayaframework.core.controllers.Controller;

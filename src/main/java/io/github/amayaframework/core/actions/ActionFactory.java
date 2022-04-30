@@ -1,6 +1,7 @@
-package io.github.amayaframework.core.configurators;
+package io.github.amayaframework.core.actions;
 
 import com.github.romanqed.util.Action;
+import io.github.amayaframework.core.WithConfig;
 import io.github.amayaframework.core.config.AmayaConfig;
 
 import java.util.Objects;
@@ -23,6 +24,9 @@ public final class ActionFactory {
             path = prefix + "." + path;
         }
         Class<? extends Action<?, ?>> clazz = (Class<? extends Action<?, ?>>) loader.loadClass(path);
-        return clazz.getDeclaredConstructor(AmayaConfig.class).newInstance(config);
+        if (clazz.isAnnotationPresent(WithConfig.class)) {
+            return clazz.getDeclaredConstructor(AmayaConfig.class).newInstance(config);
+        }
+        return clazz.getDeclaredConstructor().newInstance();
     }
 }

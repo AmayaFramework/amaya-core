@@ -1,11 +1,7 @@
-package io.github.amayaframework.core.configurators;
+package io.github.amayaframework.core.actions;
 
 import com.github.romanqed.util.Handler;
 import com.github.romanqed.util.pipeline.Pipeline;
-import io.github.amayaframework.core.actions.InputStage;
-import io.github.amayaframework.core.actions.InvokeControllerAction;
-import io.github.amayaframework.core.actions.OutputStage;
-import io.github.amayaframework.core.actions.ParseRequestBodyAction;
 import io.github.amayaframework.core.actions.debug.DebugStage;
 import io.github.amayaframework.core.actions.debug.RequestDebugAction;
 import io.github.amayaframework.core.actions.debug.ResponseDebugAction;
