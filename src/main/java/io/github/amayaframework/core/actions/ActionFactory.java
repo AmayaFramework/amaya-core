@@ -1,7 +1,6 @@
 package io.github.amayaframework.core.actions;
 
 import com.github.romanqed.util.Action;
-import io.github.amayaframework.core.WithConfig;
 import io.github.amayaframework.core.config.AmayaConfig;
 
 import java.util.Objects;

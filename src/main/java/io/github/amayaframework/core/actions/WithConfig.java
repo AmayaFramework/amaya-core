@@ -1,4 +1,4 @@
-package io.github.amayaframework.core;
+package io.github.amayaframework.core.actions;
 
 import java.lang.annotation.*;
 
