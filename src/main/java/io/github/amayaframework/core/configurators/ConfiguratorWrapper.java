@@ -20,11 +20,6 @@ public final class ConfiguratorWrapper {
         return body;
     }
 
-    private boolean isDirect(Method method) {
-        DirectAccess access = method.getAnnotation(DirectAccess.class);
-        return access != null;
-    }
-
     private InsertPolicy extractInsert(Method method) {
         Insert insert = method.getAnnotation(Insert.class);
         if (insert == null) {
@@ -35,8 +30,7 @@ public final class ConfiguratorWrapper {
 
     private void configureInput(Pipeline<String> pipeline) throws Throwable {
         Method method = body.getClass().getDeclaredMethod("configureInput", NamedPipeline.class);
-        boolean isDirect = isDirect(method);
-        if (isDirect) {
+        if (method.isAnnotationPresent(DirectAccess.class)) {
             body.configureInput(new NamedPipeline(pipeline));
             return;
         }
@@ -48,8 +42,7 @@ public final class ConfiguratorWrapper {
 
     private void configureOutput(Pipeline<String> pipeline) throws Throwable {
         Method method = body.getClass().getDeclaredMethod("configureOutput", NamedPipeline.class);
-        boolean isDirect = isDirect(method);
-        if (isDirect) {
+        if (method.isAnnotationPresent(DirectAccess.class)) {
             body.configureOutput(new NamedPipeline(pipeline));
             return;
         }

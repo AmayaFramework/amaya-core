@@ -1,19 +1,15 @@
 package io.github.amayaframework.core.filters;
 
 /**
- * An interface representing a universal filter, which is the base for all
- * future implementations and is used to inherit child interfaces from it.
+ * An interface representing a filter for string conversion.
  */
 public interface Filter {
-
     /**
-     * Performs some operations on the object and returns its converted version/copy.
-     * By default, it simply returns the passed object unchanged.
+     * Performs some operations with a string and returns an
+     * object created based on it, or a directly modified string.
      *
-     * @param source the object to be transformed
-     * @return transformed object
+     * @param source the string to be transformed
+     * @return the object obtained as a result of string transformation
      */
-    default Object transform(Object source) {
-        return source;
-    }
+    Object transform(String source);
 }

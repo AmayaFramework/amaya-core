@@ -1,7 +1,8 @@
 package io.github.amayaframework.core.util;
 
-import io.github.amayaframework.core.filters.StringFilter;
+import io.github.amayaframework.core.filters.*;
 import io.github.amayaframework.core.routes.HttpRoute;
+import io.github.amayaframework.core.scanners.FilterScanner;
 import org.apache.commons.text.StringEscapeUtils;
 
 import javax.servlet.http.Cookie;
@@ -12,9 +13,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static io.github.amayaframework.core.util.FilterUtil.STRING_FILTERS;
-
 public final class ParseUtil {
+    public static final Map<String, Filter> STRING_FILTERS = getStringFilters();
     public static final String CONTENT_HEADER = "Content-Type";
     public static final String COOKIE_HEADER = "Cookie";
     public static final String SET_COOKIE_HEADER = "Set-Cookie";
@@ -24,6 +24,16 @@ public final class ParseUtil {
     private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
     private static final String NEW_LINE = "<br>";
     private static final String SPACE = "&nbsp;";
+
+    private static Map<String, Filter> getStringFilters() {
+        FilterScanner<Filter> scanner = new FilterScanner<>(Filter.class);
+        Map<String, Filter> ret = scanner.safetyFind();
+        ret.put("bigint", new BigIntegerFilter());
+        ret.put("bool", new BooleanFilter());
+        ret.put("double", new DoubleFilter());
+        ret.put("int", new IntegerFilter());
+        return Collections.unmodifiableMap(ret);
+    }
 
     public static void validateRoute(String route) {
         if (!route.isEmpty() && !ParseUtil.ROUTE.matcher(route).matches()) {
@@ -41,7 +51,7 @@ public final class ParseUtil {
         return route;
     }
 
-    public static Variable<String, StringFilter> parseRouteParameter(String source) {
+    public static Variable<String, Filter> parseRouteParameter(String source) {
         String[] split = source.split(PARAM_DELIMITER);
         if (split.length < 1 || split.length > 2) {
             throw new InvalidFormatException("Invalid parameter \"" + source + "\"");
@@ -58,11 +68,11 @@ public final class ParseUtil {
             return ret;
         }
         Matcher finder = route.getPattern().matcher(source);
-        Iterator<Variable<String, StringFilter>> parameters = route.getParameters().iterator();
+        Iterator<Variable<String, Filter>> parameters = route.getParameters().iterator();
         if (!finder.find()) {
             return null;
         }
-        Variable<String, StringFilter> next;
+        Variable<String, Filter> next;
         for (int i = 1; i <= finder.groupCount(); ++i) {
             next = parameters.next();
             if (next.getValue() != null) {

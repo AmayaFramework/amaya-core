@@ -1,10 +1,10 @@
 package io.github.amayaframework.core.config;
 
+import io.github.amayaframework.core.controllers.Packer;
+import io.github.amayaframework.core.inject.InjectPacker;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
 import io.github.amayaframework.core.util.ReflectUtil;
-import io.github.amayaframework.core.wrapping.InjectPacker;
-import io.github.amayaframework.core.wrapping.Packer;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +43,7 @@ public class AmayaConfig extends Config {
 
     public AmayaConfig() {
         setDebug(false);
-        setRoutePacker(new InjectPacker(true));
+        setRoutePacker(new InjectPacker());
         setCharset(StandardCharsets.UTF_8);
         setUseAsync(true);
         setRouter(RegexpRouter::new);

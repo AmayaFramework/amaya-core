@@ -1,17 +1,14 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.wrapping.Viewable;
-
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 /**
- * An interface representing a http request. Inherited from {@link HttpTransaction}
- * and service interface {@link Viewable}.
+ * An interface representing a http request. Inherited from {@link HttpTransaction}.
  */
-public interface HttpRequest extends HttpTransaction, Viewable {
+public interface HttpRequest extends HttpTransaction {
     /**
      * Returns all queried getParameters extracted from the request URI.
      *

@@ -1,5 +1,6 @@
-package io.github.amayaframework.core.wrapping;
+package io.github.amayaframework.core.inject;
 
+import io.github.amayaframework.core.contexts.HttpRequest;
 import org.atteo.classindex.IndexAnnotated;
 
 import java.lang.annotation.ElementType;
@@ -8,8 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
+@Target(ElementType.TYPE)
 @IndexAnnotated
-public @interface NamedAnnotation {
-    String value() default "";
+public @interface SourceRequest {
+    Class<? extends HttpRequest> value();
 }

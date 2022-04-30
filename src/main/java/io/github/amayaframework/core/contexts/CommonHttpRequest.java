@@ -129,14 +129,4 @@ public class CommonHttpRequest implements HttpRequest {
     public Object removeAttachment(String key) {
         return body.removeAttachment(key);
     }
-
-    @Override
-    public Object view(String name) {
-        return body.view(name);
-    }
-
-    @Override
-    public void set(String name, Object value) {
-        body.set(name, value);
-    }
 }

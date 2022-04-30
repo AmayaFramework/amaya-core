@@ -4,9 +4,9 @@ import com.github.romanqed.util.Action;
 import com.github.romanqed.util.Checks;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.controllers.Packer;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
-import io.github.amayaframework.core.wrapping.Packer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -43,7 +43,7 @@ public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>>
             if (httpMethod == null) {
                 continue;
             }
-            String route = extractAnnotationValue(annotation, String.class);
+            String route = extractAnnotationValue(annotation);
             if (packed == null) {
                 packed = packMethod(method);
             }

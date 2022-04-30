@@ -17,11 +17,8 @@ public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> 
 
     @Override
     public Map<String, T> find() throws Exception {
-        Map<NamedFilter[], T> multiple = ReflectUtil.findAnnotatedWithValue(
-                NamedFilters.class,
-                clazz,
-                NamedFilter[].class);
-        Map<String, T> single = ReflectUtil.findAnnotatedWithValue(NamedFilter.class, clazz, String.class);
+        Map<NamedFilter[], T> multiple = ReflectUtil.findAnnotatedWithValue(NamedFilters.class, clazz);
+        Map<String, T> single = ReflectUtil.findAnnotatedWithValue(NamedFilter.class, clazz);
         multiple.forEach((key, value) -> {
             for (NamedFilter filter : key) {
                 single.put(filter.value(), value);

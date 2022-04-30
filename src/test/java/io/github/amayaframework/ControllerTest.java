@@ -5,10 +5,11 @@ import io.github.amayaframework.core.contexts.AbstractHttpRequest;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.contexts.Responses;
-import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.HttpControllerFactory;
-import io.github.amayaframework.core.controllers.UsePacker;
-import io.github.amayaframework.core.controllers.UseRouter;
+import io.github.amayaframework.core.controllers.*;
+import io.github.amayaframework.core.inject.Header;
+import io.github.amayaframework.core.inject.HttpCookie;
+import io.github.amayaframework.core.inject.Path;
+import io.github.amayaframework.core.inject.Query;
 import io.github.amayaframework.core.methods.Get;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.methods.Post;
@@ -16,7 +17,6 @@ import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
-import io.github.amayaframework.core.wrapping.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -137,17 +137,17 @@ public class ControllerTest extends Assertions {
 
     public static class Inject {
         @Get("/{a}")
-        public HttpResponse a(HttpRequest request, @Path("test_a") Integer a) {
+        public HttpResponse a(HttpRequest request, @Path Integer a) {
             return Responses.ok(a);
         }
 
         @Get("/b")
-        public HttpResponse b(HttpRequest request, @Query("test_a") String a) {
+        public HttpResponse b(HttpRequest request, @Query String a) {
             return Responses.ok(a);
         }
 
         @Get("/c")
-        public HttpResponse c(HttpRequest request, @HttpCookie("test_a") Cookie a) {
+        public HttpResponse c(HttpRequest request, @HttpCookie Cookie a) {
             return Responses.ok(a.getName());
         }
 

@@ -2,13 +2,13 @@ package io.github.amayaframework.core.util;
 
 import com.github.romanqed.jeflect.meta.LambdaClass;
 import com.github.romanqed.util.Action;
+import io.github.amayaframework.core.controllers.BasePacker;
+import io.github.amayaframework.core.controllers.Packer;
 import io.github.amayaframework.core.controllers.UsePacker;
+import io.github.amayaframework.core.inject.InjectPacker;
 import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.routers.RegexpRouter;
-import io.github.amayaframework.core.wrapping.BasePacker;
-import io.github.amayaframework.core.wrapping.InjectPacker;
-import io.github.amayaframework.core.wrapping.Packer;
 import org.atteo.classindex.ClassIndex;
 
 import java.lang.annotation.Annotation;
@@ -43,7 +43,7 @@ public final class ReflectUtil {
     }
 
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation, Class<T> castType,
-                                                          Class<V> valueType, String value) throws
+                                                          String value) throws
             InstantiationException, IllegalAccessException, NoSuchMethodException {
         Iterable<Class<?>> classes = ClassIndex.getAnnotated(annotation);
         Map<V, T> ret = new HashMap<>();
@@ -51,7 +51,7 @@ public final class ReflectUtil {
             if (!castType.isAssignableFrom(clazz)) {
                 continue;
             }
-            V key = extractAnnotationValue(clazz.getAnnotation(annotation), value, valueType);
+            V key = extractAnnotationValue(clazz.getAnnotation(annotation), value);
             T instance = castType.cast(clazz.newInstance());
             ret.put(key, instance);
         }
@@ -59,9 +59,9 @@ public final class ReflectUtil {
     }
 
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation,
-                                                          Class<T> castType, Class<V> valueType) throws
+                                                          Class<T> castType) throws
             InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return findAnnotatedWithValue(annotation, castType, valueType, "value");
+        return findAnnotatedWithValue(annotation, castType, "value");
     }
 
     @SuppressWarnings("unchecked")

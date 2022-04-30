@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.wrapping;
+package io.github.amayaframework.core.controllers;
 
 
 import com.github.romanqed.util.Action;
@@ -12,6 +12,4 @@ import java.lang.reflect.Method;
  */
 public interface Packer {
     Action<HttpRequest, HttpResponse> pack(Object instance, Method method) throws Throwable;
-
-    Action<HttpRequest, HttpResponse> checkedPack(Object instance, Method method);
 }

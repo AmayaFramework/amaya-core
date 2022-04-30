@@ -1,5 +1,9 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.inject.Body;
+import io.github.amayaframework.core.inject.Header;
+import io.github.amayaframework.core.inject.HttpCookie;
+import io.github.amayaframework.core.inject.Provider;
 import io.github.amayaframework.core.util.AbstractAttachable;
 import io.github.amayaframework.http.ContentType;
 
@@ -16,6 +20,7 @@ public abstract class AbstractHttpTransaction extends AbstractAttachable impleme
     }
 
     @Override
+    @Provider(Body.class)
     public Object getBody() {
         return body;
     }
@@ -25,6 +30,7 @@ public abstract class AbstractHttpTransaction extends AbstractAttachable impleme
     }
 
     @Override
+    @Provider(Header.class)
     public String getHeader(String key) {
         List<String> header = getHeaders(key);
         if (header != null && !header.isEmpty()) {
@@ -45,6 +51,7 @@ public abstract class AbstractHttpTransaction extends AbstractAttachable impleme
     }
 
     @Override
+    @Provider(HttpCookie.class)
     public Cookie getCookie(String name) {
         return cookies.get(name);
     }

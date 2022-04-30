@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.controllers;
+package io.github.amayaframework.core.inject;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface UsePacker {
-    Class<? extends Packer> value();
+@Target(ElementType.METHOD)
+public @interface Position {
+    int value() default 0;
 }

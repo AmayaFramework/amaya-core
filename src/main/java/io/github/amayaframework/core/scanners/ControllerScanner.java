@@ -20,7 +20,7 @@ public class ControllerScanner implements Scanner<Map<String, Controller>> {
 
     @Override
     public Map<String, Controller> find() throws Throwable {
-        Map<String, Object> found = ReflectUtil.findAnnotatedWithValue(annotationClass, Object.class, String.class);
+        Map<String, Object> found = ReflectUtil.findAnnotatedWithValue(annotationClass, Object.class);
         Map<String, Controller> ret = new HashMap<>();
         for (Map.Entry<String, Object> entry : found.entrySet()) {
             String route = entry.getKey();

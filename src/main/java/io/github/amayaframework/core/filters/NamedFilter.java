@@ -2,7 +2,10 @@ package io.github.amayaframework.core.filters;
 
 import org.atteo.classindex.IndexAnnotated;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
@@ -12,7 +15,6 @@ import java.lang.annotation.*;
  * As the default value has an empty string.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(NamedFilters.class)
 @Target(ElementType.TYPE)
 @IndexAnnotated
 public @interface NamedFilter {
