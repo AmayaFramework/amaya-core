@@ -1,9 +1,9 @@
 package io.github.amayaframework.core.actions;
 
+import com.github.romanqed.util.IOUtil;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.pipeline.PipelineAction;
 import io.github.amayaframework.core.pipeline.RequestData;
-import io.github.amayaframework.core.util.IOUtil;
 import io.github.amayaframework.http.ContentType;
 
 import java.io.InputStream;

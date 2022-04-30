@@ -112,17 +112,17 @@ final class UnmodifiableResponse implements HttpResponse {
     }
 
     @Override
-    public Object getAttachment(String key) {
-        return body.getAttachment(key);
+    public Object get(String key) {
+        return body.get(key);
     }
 
     @Override
-    public void setAttachment(String key, Object value) {
+    public void set(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object removeAttachment(String key) {
+    public Object remove(String key) {
         throw new UnsupportedOperationException();
     }
 }

@@ -88,7 +88,7 @@ public class ControllerTest extends Assertions {
         HttpResponse post = router.follow(HttpMethod.POST, "").execute(null);
         HttpResponse postWithId = router.follow(HttpMethod.POST, "/5").execute(null);
         assertAll(
-                () -> assertEquals("get", get.getBody()),
+                () -> assertEquals("getCast", get.getBody()),
                 () -> assertEquals("getWithId", getWithId.getBody()),
                 () -> assertEquals("post", post.getBody()),
                 () -> assertEquals("postWithId", postWithId.getBody())
@@ -117,7 +117,7 @@ public class ControllerTest extends Assertions {
         HttpResponse get = controller.getRouter().follow(HttpMethod.GET, "/{a}").execute(null);
         HttpResponse packer = controller.getRouter().follow(HttpMethod.GET, "").execute(null);
         assertAll(
-                () -> assertEquals("get", get.getBody()),
+                () -> assertEquals("getCast", get.getBody()),
                 () -> assertEquals("packer", packer.getBody())
         );
     }
@@ -132,7 +132,7 @@ public class ControllerTest extends Assertions {
     public static class Custom {
         @Get("/{a}")
         public HttpResponse customGet(HttpRequest request) {
-            return Responses.ok("get");
+            return Responses.ok("getCast");
         }
 
         @Get
@@ -174,7 +174,7 @@ public class ControllerTest extends Assertions {
     public static class Correct {
         @Get
         public HttpResponse get(HttpRequest request) {
-            return ok("get");
+            return ok("getCast");
         }
 
         @Get("/{id}")

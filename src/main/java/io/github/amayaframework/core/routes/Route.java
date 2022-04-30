@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.routes;
 
+import com.github.romanqed.util.Record;
 import io.github.amayaframework.core.filters.Filter;
-import io.github.amayaframework.core.util.Variable;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,5 +36,5 @@ public interface Route {
     /**
      * @return returns all parameters contained in the route.
      */
-    List<Variable<String, Filter>> getParameters();
+    List<Record<String, Filter>> getParameters();
 }

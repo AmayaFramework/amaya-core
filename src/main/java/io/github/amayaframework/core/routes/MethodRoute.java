@@ -1,11 +1,11 @@
 package io.github.amayaframework.core.routes;
 
 import com.github.romanqed.util.Action;
+import com.github.romanqed.util.Record;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.filters.Filter;
 import io.github.amayaframework.core.util.AbstractAttachable;
-import io.github.amayaframework.core.util.Variable;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public final class MethodRoute extends AbstractAttachable implements Route, Acti
     }
 
     @Override
-    public List<Variable<String, Filter>> getParameters() {
+    public List<Record<String, Filter>> getParameters() {
         return route.getParameters();
     }
 }

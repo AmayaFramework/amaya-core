@@ -116,17 +116,17 @@ public class CommonHttpRequest implements HttpRequest {
     }
 
     @Override
-    public Object getAttachment(String key) {
-        return body.getAttachment(key);
+    public Object get(String key) {
+        return body.get(key);
     }
 
     @Override
-    public void setAttachment(String key, Object value) {
-        body.setAttachment(key, value);
+    public void set(String key, Object value) {
+        body.set(key, value);
     }
 
     @Override
-    public Object removeAttachment(String key) {
-        return body.removeAttachment(key);
+    public Object remove(String key) {
+        return body.remove(key);
     }
 }

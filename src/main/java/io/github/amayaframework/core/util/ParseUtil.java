@@ -1,29 +1,21 @@
 package io.github.amayaframework.core.util;
 
+import com.github.romanqed.util.Record;
 import io.github.amayaframework.core.filters.*;
 import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
-import org.apache.commons.text.StringEscapeUtils;
 
-import javax.servlet.http.Cookie;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class ParseUtil {
     public static final Map<String, Filter> STRING_FILTERS = getStringFilters();
-    public static final String CONTENT_HEADER = "Content-Type";
-    public static final String COOKIE_HEADER = "Cookie";
-    public static final String SET_COOKIE_HEADER = "Set-Cookie";
     private static final Pattern ROUTE = Pattern.compile("(?:/[^\\s/]+)+");
     private static final String PARAM_DELIMITER = ":";
-    private static final Pattern QUERY_VALIDATOR = Pattern.compile("^(?:[^&]+=[^&]+(?:&|$))+$");
-    private static final Pattern QUERY = Pattern.compile("([^&]+)=([^&]+)");
-    private static final String NEW_LINE = "<br>";
-    private static final String SPACE = "&nbsp;";
 
     private static Map<String, Filter> getStringFilters() {
         FilterScanner<Filter> scanner = new FilterScanner<>(Filter.class);
@@ -51,15 +43,15 @@ public final class ParseUtil {
         return route;
     }
 
-    public static Variable<String, Filter> parseRouteParameter(String source) {
+    public static Record<String, Filter> parseRouteParameter(String source) {
         String[] split = source.split(PARAM_DELIMITER);
         if (split.length < 1 || split.length > 2) {
             throw new InvalidFormatException("Invalid parameter \"" + source + "\"");
         }
         if (split.length == 1) {
-            return new Variable<>(split[0], null);
+            return new Record<>(split[0], null);
         }
-        return new Variable<>(split[0], STRING_FILTERS.get(split[1]));
+        return new Record<>(split[0], STRING_FILTERS.get(split[1]));
     }
 
     public static Map<String, Object> extractRouteParameters(Route route, String source) {
@@ -68,11 +60,11 @@ public final class ParseUtil {
             return ret;
         }
         Matcher finder = route.getPattern().matcher(source);
-        Iterator<Variable<String, Filter>> parameters = route.getParameters().iterator();
+        Iterator<Record<String, Filter>> parameters = route.getParameters().iterator();
         if (!finder.find()) {
             return null;
         }
-        Variable<String, Filter> next;
+        Record<String, Filter> next;
         for (int i = 1; i <= finder.groupCount(); ++i) {
             next = parameters.next();
             if (next.getValue() != null) {
@@ -82,62 +74,5 @@ public final class ParseUtil {
             }
         }
         return ret;
-    }
-
-    public static Map<String, List<String>> parseQueryString(String source, Charset charset)
-            throws UnsupportedEncodingException {
-        Map<String, List<String>> ret = new HashMap<>();
-        if (source == null || source.isEmpty()) {
-            return ret;
-        }
-        if (!QUERY_VALIDATOR.matcher(source).matches()) {
-            return ret;
-        }
-        Matcher matcher = QUERY.matcher(source);
-        String charsetName = charset.name();
-        while (matcher.find()) {
-            String value = URLDecoder.decode(matcher.group(2), charsetName);
-            ret.computeIfAbsent(matcher.group(1), key -> new ArrayList<>()).add(value);
-        }
-        return ret;
-    }
-
-    public static Map<String, Cookie> parseCookieHeader(String header) {
-        String[] split = header.split("; ");
-        Map<String, Cookie> ret = new HashMap<>();
-        for (String rawCookie : split) {
-            int delimIndex = rawCookie.indexOf('=');
-            if (delimIndex < 0) {
-                return ret;
-            }
-            String name = rawCookie.substring(0, delimIndex);
-            String value = rawCookie.substring(delimIndex + 1);
-            ret.put(name, new Cookie(name, value));
-        }
-        return ret;
-    }
-
-    public static Charset parseCharsetHeader(String header, Charset defaultCharset) {
-        if (header == null) {
-            return defaultCharset;
-        }
-        header = header.trim();
-        if (!header.startsWith("charset")) {
-            return defaultCharset;
-        }
-        int position = header.indexOf('=');
-        if (position < 0) {
-            return defaultCharset;
-        }
-        try {
-            return Charset.forName(header.substring(position + 1));
-        } catch (Exception e) {
-            return defaultCharset;
-        }
-    }
-
-    public static String escapeHtml(String string) {
-        String ret = StringEscapeUtils.escapeHtml4(string);
-        return ret.replace("\\n", NEW_LINE).replaceAll("\\s", SPACE);
     }
 }

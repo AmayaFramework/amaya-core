@@ -15,17 +15,17 @@ public abstract class AbstractAttachable implements Attachable {
     }
 
     @Override
-    public Object getAttachment(String key) {
+    public Object get(String key) {
         return body.get(key);
     }
 
     @Override
-    public void setAttachment(String key, Object value) {
+    public void set(String key, Object value) {
         body.put(key, value);
     }
 
     @Override
-    public Object removeAttachment(String key) {
+    public Object remove(String key) {
         return body.remove(key);
     }
 }

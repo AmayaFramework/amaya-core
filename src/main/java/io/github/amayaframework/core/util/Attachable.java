@@ -2,6 +2,9 @@ package io.github.amayaframework.core.util;
 
 import java.util.Map;
 
+/**
+ * An interface describing a universal object that can have mutable attachments.
+ */
 public interface Attachable {
     /**
      * Returns all stored attachments that could have been changed during the transaction processing transaction.
@@ -16,7 +19,7 @@ public interface Attachable {
      * @param key which is related to attachment
      * @return {@link Object}
      */
-    Object getAttachment(String key);
+    Object get(String key);
 
     /**
      * Puts the attachment in the attachment storage
@@ -24,7 +27,7 @@ public interface Attachable {
      * @param key   which is related to attachment
      * @param value which contains attachment
      */
-    void setAttachment(String key, Object value);
+    void set(String key, Object value);
 
     /**
      * Removes attachment from storage
@@ -32,11 +35,11 @@ public interface Attachable {
      * @param key which is related to attachment
      * @return removed attachment object
      */
-    Object removeAttachment(String key);
+    Object remove(String key);
 
     @SuppressWarnings("unchecked")
-    default <T> T get(String key) {
-        Object ret = getAttachment(key);
+    default <T> T getCast(String key) {
+        Object ret = get(key);
         if (ret == null) {
             return null;
         }
@@ -48,11 +51,11 @@ public interface Attachable {
     }
 
     default String getString(String key) {
-        return get(key);
+        return getCast(key);
     }
 
     default boolean getBool(String key) {
-        Boolean ret = get(key);
+        Boolean ret = getCast(key);
         if (ret == null) {
             return false;
         }
@@ -60,7 +63,7 @@ public interface Attachable {
     }
 
     default int getInt(String key) {
-        Integer ret = get(key);
+        Integer ret = getCast(key);
         if (ret == null) {
             return 0;
         }
@@ -68,7 +71,7 @@ public interface Attachable {
     }
 
     default double getDouble(String key) {
-        Double ret = get(key);
+        Double ret = getCast(key);
         if (ret == null) {
             return 0;
         }
@@ -76,7 +79,7 @@ public interface Attachable {
     }
 
     default char getChar(String key) {
-        Character ret = get(key);
+        Character ret = getCast(key);
         if (ret == null) {
             return 0;
         }
