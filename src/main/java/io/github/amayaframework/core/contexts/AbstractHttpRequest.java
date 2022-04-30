@@ -3,7 +3,6 @@ package io.github.amayaframework.core.contexts;
 import io.github.amayaframework.core.inject.Path;
 import io.github.amayaframework.core.inject.Provider;
 import io.github.amayaframework.core.inject.Query;
-import io.github.amayaframework.core.inject.SourceRequest;
 
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@SourceRequest(HttpRequest.class)
 public abstract class AbstractHttpRequest extends AbstractHttpTransaction implements HttpRequest {
     private Map<String, List<String>> queryParameters;
     private Map<String, Object> pathParameters;
