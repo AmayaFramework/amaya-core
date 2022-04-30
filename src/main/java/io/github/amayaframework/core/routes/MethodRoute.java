@@ -3,10 +3,13 @@ package io.github.amayaframework.core.routes;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
+import io.github.amayaframework.core.filters.Filter;
 import io.github.amayaframework.core.util.AbstractAttachable;
+import io.github.amayaframework.core.util.Variable;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -64,7 +67,12 @@ public final class MethodRoute extends AbstractAttachable implements Route, Acti
     }
 
     @Override
-    public boolean matches(String route) {
-        return this.route.matches(route);
+    public boolean matches(String path) {
+        return this.route.matches(path);
+    }
+
+    @Override
+    public List<Variable<String, Filter>> getParameters() {
+        return route.getParameters();
     }
 }

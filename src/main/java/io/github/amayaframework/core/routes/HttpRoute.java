@@ -49,22 +49,27 @@ public class HttpRoute implements Route {
         return new HttpRoute(route, isRegexp, Pattern.compile(pattern), parameters);
     }
 
+    @Override
     public Pattern getPattern() {
         return pattern;
     }
 
+    @Override
     public String getRoute() {
         return route;
     }
 
+    @Override
     public List<Variable<String, Filter>> getParameters() {
         return parameters;
     }
 
-    public boolean matches(String route) {
-        return this.route.equals(route) || pattern.matcher(route).matches();
+    @Override
+    public boolean matches(String path) {
+        return this.route.equals(path) || (regexp && pattern.matcher(path).matches());
     }
 
+    @Override
     public boolean isRegexp() {
         return regexp;
     }

@@ -1,7 +1,7 @@
 package io.github.amayaframework.core.util;
 
 import io.github.amayaframework.core.filters.*;
-import io.github.amayaframework.core.routes.HttpRoute;
+import io.github.amayaframework.core.routes.Route;
 import io.github.amayaframework.core.scanners.FilterScanner;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -62,7 +62,7 @@ public final class ParseUtil {
         return new Variable<>(split[0], STRING_FILTERS.get(split[1]));
     }
 
-    public static Map<String, Object> extractRouteParameters(HttpRoute route, String source) {
+    public static Map<String, Object> extractRouteParameters(Route route, String source) {
         Map<String, Object> ret = new HashMap<>();
         if (!route.isRegexp()) {
             return ret;
