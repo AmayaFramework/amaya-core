@@ -16,6 +16,7 @@ import io.github.amayaframework.core.methods.Post;
 import io.github.amayaframework.core.routers.BaseRouter;
 import io.github.amayaframework.core.routers.MethodRouter;
 import io.github.amayaframework.core.util.DuplicateException;
+import io.github.amayaframework.core.util.InvalidFormatException;
 import io.github.amayaframework.core.util.InvalidRouteFormatException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -121,6 +122,11 @@ public class ControllerTest extends Assertions {
         );
     }
 
+    @Test
+    public void testBrokenMethods() {
+        assertThrows(InvalidFormatException.class, () -> FACTORY.create("", new BrokenRouteMethod()));
+    }
+
     @UseRouter(BaseRouter.class)
     public static class Custom {
         @Get("/{a}")
@@ -196,6 +202,18 @@ public class ControllerTest extends Assertions {
         @Post
         public HttpResponse post(HttpRequest request) {
             return ok();
+        }
+    }
+
+    public static class BrokenRouteMethod {
+        @Get
+        public String broken(Object request) {
+            return null;
+        }
+
+        @Get
+        public HttpResponse brokenInject(HttpRequest req, @Query Integer a, @HttpCookie String cookie) {
+            return Responses.ok();
         }
     }
 }
