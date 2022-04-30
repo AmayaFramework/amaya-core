@@ -17,6 +17,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class InjectPacker implements Packer {
     private static final Class<HttpRequest> REQUEST = HttpRequest.class;
     private static final Class<HttpResponse> RESPONSE = HttpResponse.class;

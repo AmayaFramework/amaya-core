@@ -125,6 +125,7 @@ public class ControllerTest extends Assertions {
     @Test
     public void testBrokenMethods() {
         assertThrows(InvalidFormatException.class, () -> FACTORY.create("", new BrokenRouteMethod()));
+        assertThrows(IllegalStateException.class, () -> FACTORY.create("", new BrokenInject()));
     }
 
     @UseRouter(BaseRouter.class)
@@ -205,15 +206,17 @@ public class ControllerTest extends Assertions {
         }
     }
 
+    public static class BrokenInject {
+        @Get
+        public HttpResponse broken(HttpRequest req, @Query Integer a, @HttpCookie String cookie) {
+            return Responses.ok();
+        }
+    }
+
     public static class BrokenRouteMethod {
         @Get
         public String broken(Object request) {
             return null;
-        }
-
-        @Get
-        public HttpResponse brokenInject(HttpRequest req, @Query Integer a, @HttpCookie String cookie) {
-            return Responses.ok();
         }
     }
 }

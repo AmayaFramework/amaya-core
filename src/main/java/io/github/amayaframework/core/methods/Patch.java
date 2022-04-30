@@ -1,9 +1,6 @@
 package io.github.amayaframework.core.methods;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * <p>An annotation that is a marker for the http method PATCH. It has an empty string as the default value.</p>
@@ -11,6 +8,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+@Documented
 public @interface Patch {
     String value() default "";
 }
