@@ -11,11 +11,11 @@ import io.github.amayaframework.core.handlers.PipelineHandler;
 
 public final class AmayaConfigurator implements Handler<PipelineHandler> {
     private final ActionFactory fabric;
-    private final boolean isDebug;
+    private final AmayaConfig config;
 
     public AmayaConfigurator(String prefix, AmayaConfig config) {
         this.fabric = new ActionFactory(prefix, config);
-        this.isDebug = config.isDebug();
+        this.config = config;
     }
 
     @Override
@@ -28,9 +28,14 @@ public final class AmayaConfigurator implements Handler<PipelineHandler> {
         Pipeline<String> output = handler.getOutput();
         output.put(OutputStage.PROCESS_HEADERS, fabric.makeAction(OutputStage.PROCESS_HEADERS));
         output.put(OutputStage.PROCESS_BODY, fabric.makeAction(OutputStage.PROCESS_BODY));
-        if (isDebug) {
-            addInputDebugActions(input);
-            addOutputDebugActions(output);
+        if (!config.isDebug()) {
+            return;
+        }
+        if (config.needPrintRequest()) {
+            addInputDebugActions(handler.getInput());
+        }
+        if (config.needPrintResponse()) {
+            addOutputDebugActions(handler.getOutput());
         }
     }
 

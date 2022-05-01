@@ -37,12 +37,22 @@ public class AmayaConfig extends Config {
      */
     public static final Field<Boolean> DEBUG = new Field<>("DEBUG", Boolean.class);
     /**
+     * Determines whether debugging information about the received request will be output.
+     */
+    public static final Field<Boolean> PRINT_REQUEST = new Field<>("PRINT_REQUEST", Boolean.class);
+    /**
+     * Determines whether debugging information about the received response will be output.
+     */
+    public static final Field<Boolean> PRINT_RESPONSE = new Field<>("PRINT_RESPONSE", Boolean.class);
+    /**
      * Determines whether asynchronous calls will be used.
      */
     public static final Field<Boolean> USE_ASYNC = new Field<>("USE_ASYNC", Boolean.class);
 
     public AmayaConfig() {
         setDebug(false);
+        setPrintRequest(false);
+        setPrintResponse(false);
         setRoutePacker(new InjectPacker());
         setCharset(StandardCharsets.UTF_8);
         setUseAsync(true);
@@ -96,5 +106,21 @@ public class AmayaConfig extends Config {
 
     public void setUseAsync(boolean useAsync) {
         setField(USE_ASYNC, useAsync);
+    }
+
+    public void setPrintRequest(boolean printRequest) {
+        setField(PRINT_REQUEST, printRequest);
+    }
+
+    public void setPrintResponse(boolean printResponse) {
+        setField(PRINT_RESPONSE, printResponse);
+    }
+
+    public boolean needPrintRequest() {
+        return getField(PRINT_REQUEST);
+    }
+
+    public boolean needPrintResponse() {
+        return getField(PRINT_RESPONSE);
     }
 }
