@@ -5,7 +5,6 @@ import com.github.romanqed.util.Record;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.filters.Filter;
-import io.github.amayaframework.core.util.AbstractAttachable;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

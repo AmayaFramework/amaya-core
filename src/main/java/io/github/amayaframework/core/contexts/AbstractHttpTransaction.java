@@ -4,20 +4,18 @@ import io.github.amayaframework.core.inject.Body;
 import io.github.amayaframework.core.inject.Header;
 import io.github.amayaframework.core.inject.HttpCookie;
 import io.github.amayaframework.core.inject.Provider;
-import io.github.amayaframework.core.util.AbstractAttachable;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-public abstract class AbstractHttpTransaction extends AbstractAttachable implements HttpTransaction {
+public abstract class AbstractHttpTransaction implements HttpTransaction {
     protected Map<String, Cookie> cookies;
     protected Object body;
     protected ContentType type;
-
-    protected AbstractHttpTransaction() {
-        super(new HashMap<>());
-    }
 
     @Override
     @Provider(Body.class)
