@@ -98,7 +98,9 @@ public abstract class AmayaBuilder<T> {
         Controller controller = controllers.remove(path);
         if (config.isDebug()) {
             if (controller != null) {
-                logger.debug("Remove controller \"" + controller.getRoute() + "\"=" + controller.getClass().getSimpleName());
+                logger.debug("Remove controller \"" +
+                        controller.getRoute() + "\"=" +
+                        controller.getClass().getSimpleName());
             } else {
                 logger.debug("Nothing has been deleted");
             }

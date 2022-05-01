@@ -1,5 +1,9 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.inject.Path;
+import io.github.amayaframework.core.inject.Provider;
+import io.github.amayaframework.core.inject.Query;
+
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.List;
@@ -32,6 +36,7 @@ public interface HttpRequest extends HttpTransaction {
      * @param name of specific query parameter
      * @return {@link String}
      */
+    @Provider(Query.class)
     String getQuery(String name);
 
     /**
@@ -53,6 +58,7 @@ public interface HttpRequest extends HttpTransaction {
      * @param <T>  the type to which the path parameter will be cast
      * @return parameter, cast to {@link T}
      */
+    @Provider(Path.class)
     <T> T getPathParameter(String name);
 
     void setCookies(Map<String, Cookie> cookies);

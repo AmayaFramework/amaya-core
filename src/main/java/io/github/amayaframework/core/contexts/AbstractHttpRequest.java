@@ -1,9 +1,5 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.inject.Path;
-import io.github.amayaframework.core.inject.Provider;
-import io.github.amayaframework.core.inject.Query;
-
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
 import java.util.List;
@@ -30,7 +26,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
     }
 
     @Override
-    @Provider(Query.class)
     public String getQuery(String name) {
         List<String> parameter = queryParameters.get(name);
         if (parameter == null || parameter.isEmpty()) {
@@ -51,7 +46,6 @@ public abstract class AbstractHttpRequest extends AbstractHttpTransaction implem
 
     @Override
     @SuppressWarnings("unchecked")
-    @Provider(Path.class)
     public <T> T getPathParameter(String name) {
         try {
             return (T) pathParameters.get(name);

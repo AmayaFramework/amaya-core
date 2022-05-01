@@ -4,7 +4,6 @@ import com.github.romanqed.jeflect.Lambda;
 import com.github.romanqed.jeflect.LambdaMethod;
 import com.github.romanqed.jeflect.ReflectUtil;
 import com.github.romanqed.util.Action;
-import io.github.amayaframework.core.contexts.AbstractHttpRequest;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Packer;
@@ -30,7 +29,7 @@ public class InjectPacker implements Packer {
     private static Map<Class<?>, SourceClass> findRequests() {
         Iterable<Class<?>> found = ClassIndex.getAnnotated(SourceRequest.class);
         Map<Class<?>, SourceClass> ret = new HashMap<>();
-        ret.put(HttpRequest.class, SourceClass.create(AbstractHttpRequest.class));
+        ret.put(HttpRequest.class, SourceClass.create(HttpRequest.class));
         for (Class<?> clazz : found) {
             if (!REQUEST.isAssignableFrom(clazz)) {
                 throw new IllegalStateException("The found class is not an HttpRequest implementation");

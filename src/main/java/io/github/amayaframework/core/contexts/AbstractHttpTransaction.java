@@ -1,9 +1,5 @@
 package io.github.amayaframework.core.contexts;
 
-import io.github.amayaframework.core.inject.Body;
-import io.github.amayaframework.core.inject.Header;
-import io.github.amayaframework.core.inject.HttpCookie;
-import io.github.amayaframework.core.inject.Provider;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
@@ -18,7 +14,6 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     protected ContentType type;
 
     @Override
-    @Provider(Body.class)
     public Object getBody() {
         return body;
     }
@@ -28,7 +23,6 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     }
 
     @Override
-    @Provider(Header.class)
     public String getHeader(String key) {
         List<String> header = getHeaders(key);
         if (header != null && !header.isEmpty()) {
@@ -49,7 +43,6 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     }
 
     @Override
-    @Provider(HttpCookie.class)
     public Cookie getCookie(String name) {
         return cookies.get(name);
     }

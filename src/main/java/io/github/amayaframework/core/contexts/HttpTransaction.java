@@ -1,5 +1,9 @@
 package io.github.amayaframework.core.contexts;
 
+import io.github.amayaframework.core.inject.Body;
+import io.github.amayaframework.core.inject.Header;
+import io.github.amayaframework.core.inject.HttpCookie;
+import io.github.amayaframework.core.inject.Provider;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
@@ -16,6 +20,7 @@ public interface HttpTransaction {
      *
      * @return {@link Object}
      */
+    @Provider(Body.class)
     Object getBody();
 
     /**
@@ -40,6 +45,7 @@ public interface HttpTransaction {
      * @param key header key
      * @return first value of header
      */
+    @Provider(Header.class)
     String getHeader(String key);
 
     /**
@@ -62,6 +68,7 @@ public interface HttpTransaction {
      * @param name the name that will be searched for. Must be not null.
      * @return found {@link Cookie} or null
      */
+    @Provider(HttpCookie.class)
     Cookie getCookie(String name);
 
     /**
