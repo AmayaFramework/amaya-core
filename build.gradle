@@ -37,7 +37,7 @@ dependencies {
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     // Util
     api group: 'io.github.amayaframework', name: 'http-utils', version: '1.1.0'
-    implementation group: 'com.github.romanqed', name: 'java-utils', version: '1.2.0'
+    api group: 'com.github.romanqed', name: 'java-utils', version: '1.2.0'
 }
 
 test {
