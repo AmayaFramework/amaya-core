@@ -10,11 +10,13 @@ import java.util.List;
  * A class describing a standard http controller.
  */
 public class HttpController implements Controller {
+    private final Class<?> clazz;
     private final MethodRouter router;
     private final List<MethodRoute> routes;
     private final String route;
 
-    HttpController(String route, MethodRouter router, List<MethodRoute> routes) {
+    HttpController(Class<?> clazz, String route, MethodRouter router, List<MethodRoute> routes) {
+        this.clazz = clazz;
         this.route = route;
         this.router = router;
         this.routes = routes;
@@ -33,5 +35,10 @@ public class HttpController implements Controller {
     @Override
     public Collection<MethodRoute> getRoutes() {
         return routes;
+    }
+
+    @Override
+    public Class<?> getControllerClass() {
+        return clazz;
     }
 }

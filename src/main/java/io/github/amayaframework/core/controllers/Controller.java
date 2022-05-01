@@ -31,4 +31,9 @@ public interface Controller {
      * @return {@link String}
      */
     String getRoute();
+
+    /**
+     * @return the controller class
+     */
+    Class<?> getControllerClass();
 }

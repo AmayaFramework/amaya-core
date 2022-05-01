@@ -66,6 +66,6 @@ public class HttpControllerFactory implements ControllerFactory {
             }
         }));
         found.values().forEach(toPut::addAll);
-        return new HttpController(route, router, toPut);
+        return new HttpController(source.getClass(), route, router, toPut);
     }
 }
