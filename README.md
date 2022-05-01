@@ -52,7 +52,7 @@ The core provides ample opportunities for customization of the framework functio
 * creating a custom router (a mechanism that finds the necessary method according to the received path)
 * creating custom classes that implement standard HttpRequest and HttpResponse
   
-<h3>Important</h3>
+<h4>Important</h4>
 <p>The kernel does NOT contain implementations for any particular http-server/java-servlets 
 to increase the versatility and customization of the framework.</p>
 
@@ -159,8 +159,8 @@ public @interface MyAnnot {
 ```
 
 ### Controller Method Packers
-In general, the task of the packager is to turn a pair from an instance of your controller and a method (from java-reflect) into a ready-to-call
-Action<HttpRequest, HttpResponse>.
+In general, the task of the packager is to turn a pair from an instance of your controller and 
+a method (from java-reflect) into a ready-to-call Action<HttpRequest, HttpResponse>.
 
 <p>Example of dummy implementation using java reflection</p>
 
@@ -234,7 +234,7 @@ public class MyResp extends CommonHttpResponse {
 * **RomanQed** - *Main work* - [RomanQed](https://github.com/RomanQed)
 * **max0000402** - *Technical advices and ideas for features* - [max0000402](https://github.com/max0000402)
 
-See also the list of [contributors](https://github.com/AmayaFramework/amaya-core-api/contributors) who participated 
+See also the list of [contributors](https://github.com/AmayaFramework/amaya-core/contributors) who participated 
 in this project.
 
 ## License
