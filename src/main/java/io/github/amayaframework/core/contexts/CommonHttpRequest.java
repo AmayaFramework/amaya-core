@@ -109,24 +109,4 @@ public class CommonHttpRequest implements HttpRequest {
     public void setContentType(ContentType type) {
         body.setContentType(type);
     }
-
-    @Override
-    public Map<String, Object> getAttachments() {
-        return body.getAttachments();
-    }
-
-    @Override
-    public Object get(String key) {
-        return body.get(key);
-    }
-
-    @Override
-    public void set(String key, Object value) {
-        body.set(key, value);
-    }
-
-    @Override
-    public Object remove(String key) {
-        return body.remove(key);
-    }
 }

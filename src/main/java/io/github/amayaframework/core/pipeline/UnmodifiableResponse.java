@@ -12,7 +12,6 @@ import javax.servlet.http.Cookie;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 final class UnmodifiableResponse implements HttpResponse {
     private final HttpResponse body;
@@ -103,26 +102,6 @@ final class UnmodifiableResponse implements HttpResponse {
 
     @Override
     public void setContentType(ContentType type) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Map<String, Object> getAttachments() {
-        return Collections.unmodifiableMap(body.getAttachments());
-    }
-
-    @Override
-    public Object get(String key) {
-        return body.get(key);
-    }
-
-    @Override
-    public void set(String key, Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Object remove(String key) {
         throw new UnsupportedOperationException();
     }
 }
