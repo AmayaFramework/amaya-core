@@ -31,10 +31,10 @@ public final class AmayaConfigurator implements Handler<PipelineHandler> {
         if (!config.isDebug()) {
             return;
         }
-        if (config.needPrintRequest()) {
+        if (config.needDebugPrintRequest()) {
             addInputDebugActions(handler.getInput());
         }
-        if (config.needPrintResponse()) {
+        if (config.needDebugPrintResponse()) {
             addOutputDebugActions(handler.getOutput());
         }
     }
