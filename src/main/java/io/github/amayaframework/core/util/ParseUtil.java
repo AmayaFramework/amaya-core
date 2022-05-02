@@ -61,9 +61,6 @@ public final class ParseUtil {
         }
         Matcher finder = route.getPattern().matcher(source);
         Iterator<Record<String, Filter>> parameters = route.getParameters().iterator();
-        if (!finder.find()) {
-            return null;
-        }
         Record<String, Filter> next;
         for (int i = 1; i <= finder.groupCount(); ++i) {
             next = parameters.next();
