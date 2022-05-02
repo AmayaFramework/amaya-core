@@ -36,16 +36,4 @@ public abstract class AbstractRequestData implements RequestData {
     public void setRequest(HttpRequest request) {
         this.request = Objects.requireNonNull(request);
     }
-
-    public static class RouteData {
-        private final MethodRoute route;
-        private final String path;
-        private final HttpMethod method;
-
-        public RouteData(HttpMethod method, String path, MethodRoute route) {
-            this.route = route;
-            this.path = path;
-            this.method = method;
-        }
-    }
 }
