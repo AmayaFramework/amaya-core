@@ -29,11 +29,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     // Reflection
-    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-    implementation group: 'com.github.romanqed', name: 'jeflect', version: '1.2.2'
+    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
+    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
+    implementation group: 'com.github.romanqed', name: 'jeflect', version: '1.2.3'
     // IO
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.35'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
     // Util
     api group: 'io.github.amayaframework', name: 'http-utils', version: '1.1.0'
