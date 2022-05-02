@@ -4,7 +4,6 @@ import io.github.amayaframework.core.util.DuplicateException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,23 +64,5 @@ class SourceClass {
     @Override
     public String toString() {
         return methods.toString();
-    }
-}
-
-class SourceMethod {
-    final Method method;
-    final String[] parameters;
-
-    SourceMethod(Method method, String[] parameters) {
-        this.method = method;
-        this.parameters = parameters;
-    }
-
-    @Override
-    public String toString() {
-        return "SourceMethod{" +
-                "method=" + method +
-                ", parameters=" + Arrays.toString(parameters) +
-                '}';
     }
 }
