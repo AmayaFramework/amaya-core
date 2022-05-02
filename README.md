@@ -18,8 +18,8 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-   implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
-   annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.4'
+   implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
+   annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: 'LATEST'
 }
 ```
@@ -29,7 +29,7 @@ dependencies {
 <dependency>
     <groupId>org.atteo.classindex</groupId>
     <artifactId>classindex</artifactId>
-    <version>3.4</version>
+    <version>3.11</version>
 </dependency>
 
 <dependency>
