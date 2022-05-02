@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A class describing a standard http controller.
  */
-public class HttpController implements Controller {
+class HttpController implements Controller {
     private final Class<?> clazz;
     private final MethodRouter router;
     private final List<MethodRoute> routes;
