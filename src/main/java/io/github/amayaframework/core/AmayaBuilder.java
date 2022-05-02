@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
 public abstract class AmayaBuilder<T> {
-    private static final String DEFAULT_PREFIX = "io.github.amayaframework.core.actions";
     protected final AmayaConfig config;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
@@ -44,14 +43,6 @@ public abstract class AmayaBuilder<T> {
             logger.debug(config.toString());
         }
         resetValues();
-    }
-
-    public AmayaBuilder(AmayaConfig config) {
-        this(config, DEFAULT_PREFIX);
-    }
-
-    public AmayaBuilder() {
-        this(new AmayaConfig(), DEFAULT_PREFIX);
     }
 
     protected void resetValues() {
