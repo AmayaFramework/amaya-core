@@ -11,6 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * A class describing a standard event manager.
+ */
 public class EventManager implements Closeable {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventManager.class);
     private final Map<Event, Consumer<Object>> events;

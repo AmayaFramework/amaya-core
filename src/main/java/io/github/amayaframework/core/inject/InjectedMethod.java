@@ -14,20 +14,16 @@ class InjectedMethod implements Action<HttpRequest, HttpResponse> {
         this.getters = getters;
     }
 
-    private Object[] makeParameters(HttpRequest request) throws Throwable {
+    @Override
+    public HttpResponse execute(HttpRequest request) throws Throwable {
         Object[] ret = new Object[getters.length + 1];
         ret[0] = request;
         if (request == null || ret.length == 1) {
-            return ret;
+            return (HttpResponse) body.call(ret);
         }
         for (int i = 0; i < getters.length; ++i) {
             ret[i + 1] = getters[i].get(request);
         }
-        return ret;
-    }
-
-    @Override
-    public HttpResponse execute(HttpRequest request) throws Throwable {
-        return (HttpResponse) body.call(makeParameters(request));
+        return (HttpResponse) body.call(ret);
     }
 }
