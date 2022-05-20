@@ -1,8 +1,7 @@
 package io.github.amayaframework.core.inject;
 
-import com.github.romanqed.jeflect.Lambda;
-import com.github.romanqed.jeflect.LambdaMethod;
 import com.github.romanqed.jeflect.ReflectUtil;
+import com.github.romanqed.jeflect.lambdas.Lambda;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
@@ -52,7 +51,7 @@ public class InjectPacker implements Packer {
     }
 
     private static Getter makeGetter(Parameter parameter, Annotation annotation, SourceMethod method) throws Throwable {
-        LambdaMethod packed = ReflectUtil.packLambdaMethod(method.method);
+        Lambda packed = ReflectUtil.packMethod(method.method);
         String[] parameters = method.parameters;
         if (parameters.length == 0) {
             return packed::call;

@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.inject;
 
-import com.github.romanqed.jeflect.Lambda;
+import com.github.romanqed.jeflect.lambdas.Lambda;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;

@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.util;
 
-import com.github.romanqed.jeflect.meta.LambdaClass;
+import com.github.romanqed.jeflect.meta.LambdaType;
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.controllers.BasePacker;
 import io.github.amayaframework.core.controllers.Packer;
@@ -26,7 +26,7 @@ public final class ReflectUtil {
     private static final Map<Class<?>, Callable<? extends Packer>> DEFAULT_PACKERS = getDefaultPackers();
     private static final Map<Class<?>, Callable<? extends MethodRouter>> DEFAULT_ROUTERS = getDefaultRouters();
     @SuppressWarnings("rawtypes")
-    private static final LambdaClass<Action> ACTION = LambdaClass.fromClass(Action.class);
+    private static final LambdaType<Action> ACTION = LambdaType.fromClass(Action.class);
 
     private static Map<Class<?>, Callable<? extends Packer>> getDefaultPackers() {
         Map<Class<?>, Callable<? extends Packer>> ret = new HashMap<>();
