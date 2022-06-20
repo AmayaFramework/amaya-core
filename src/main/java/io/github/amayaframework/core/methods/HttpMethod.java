@@ -1,7 +1,10 @@
 package io.github.amayaframework.core.methods;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Enum describing the list of http methods supported by the framework.
@@ -48,10 +51,6 @@ public enum HttpMethod {
             ret.put(method.name(), method);
         }
         return Collections.unmodifiableMap(ret);
-    }
-
-    public static Set<Class<Annotation>> annotationTypes() {
-        return children.keySet();
     }
 
     public static HttpMethod fromAnnotation(Annotation annotation) {
