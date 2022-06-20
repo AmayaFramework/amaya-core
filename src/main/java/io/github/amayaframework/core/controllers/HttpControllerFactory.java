@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
 /**
  * A factory that creates http controllers.
  */
-public class HttpControllerFactory implements ControllerFactory {
+public final class HttpControllerFactory implements ControllerFactory {
     private static final String DUPLICATE_PATTERN = "Method %s with path \"%s\" at controller %s";
     private final Callable<? extends MethodRouter> router;
     private final Packer packer;

@@ -1,9 +1,10 @@
 package io.github.amayaframework.core.util;
 
 import com.github.romanqed.util.Record;
-import io.github.amayaframework.core.filters.*;
+import io.github.amayaframework.core.filters.Filter;
 import io.github.amayaframework.core.routes.Route;
-import io.github.amayaframework.core.scanners.FilterScanner;
+import io.github.amayaframework.core.scanners.Scanner;
+import io.github.amayaframework.core.spi.ServiceRepository;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,13 +19,8 @@ public final class ParseUtil {
     private static final String PARAM_DELIMITER = ":";
 
     private static Map<String, Filter> getStringFilters() {
-        FilterScanner<Filter> scanner = new FilterScanner<>(Filter.class);
-        Map<String, Filter> ret = scanner.safetyFind();
-        ret.put("bigint", new BigIntegerFilter());
-        ret.put("bool", new BooleanFilter());
-        ret.put("double", new DoubleFilter());
-        ret.put("int", new IntegerFilter());
-        return Collections.unmodifiableMap(ret);
+        Scanner<String, Filter> scanner = ServiceRepository.getFilterScanner();
+        return Collections.unmodifiableMap(scanner.safetyFind());
     }
 
     public static void validateRoute(String route) {

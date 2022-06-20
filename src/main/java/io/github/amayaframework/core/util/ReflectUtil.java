@@ -23,6 +23,7 @@ import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
 import static com.github.romanqed.jeflect.ReflectUtil.packLambdaMethod;
 
 public final class ReflectUtil {
+    private static final String DEFAULT_VALUE_NAME = "value";
     private static final Map<Class<?>, Callable<? extends Packer>> DEFAULT_PACKERS = getDefaultPackers();
     private static final Map<Class<?>, Callable<? extends MethodRouter>> DEFAULT_ROUTERS = getDefaultRouters();
     @SuppressWarnings("rawtypes")
@@ -61,7 +62,7 @@ public final class ReflectUtil {
     public static <V, T> Map<V, T> findAnnotatedWithValue(Class<? extends Annotation> annotation,
                                                           Class<T> castType) throws
             InstantiationException, IllegalAccessException, NoSuchMethodException {
-        return findAnnotatedWithValue(annotation, castType, "value");
+        return findAnnotatedWithValue(annotation, castType, DEFAULT_VALUE_NAME);
     }
 
     @SuppressWarnings("unchecked")

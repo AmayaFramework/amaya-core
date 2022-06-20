@@ -6,15 +6,13 @@ import io.github.amayaframework.core.config.AmayaConfig;
 import io.github.amayaframework.core.configurators.Configurator;
 import io.github.amayaframework.core.configurators.ConfiguratorWrapper;
 import io.github.amayaframework.core.controllers.Controller;
-import io.github.amayaframework.core.controllers.Endpoint;
-import io.github.amayaframework.core.controllers.HttpControllerFactory;
+import io.github.amayaframework.core.controllers.ControllerFactory;
 import io.github.amayaframework.core.handlers.PipelineHandler;
-import io.github.amayaframework.core.scanners.ControllerScanner;
 import io.github.amayaframework.core.scanners.Scanner;
+import io.github.amayaframework.core.spi.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,14 +26,13 @@ public abstract class AmayaBuilder<T> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Map<String, Controller> controllers;
     private final List<ConfiguratorWrapper> configurators;
-    private final HttpControllerFactory factory;
+    private final ControllerFactory factory;
     private final Handler<PipelineHandler> configurator;
     protected ExecutorService executor;
-    private Class<? extends Annotation> annotation;
 
     protected AmayaBuilder(AmayaConfig config, String pipelinePrefix) {
         this.config = Objects.requireNonNull(config);
-        this.factory = new HttpControllerFactory(config.getRouter(), config.getRoutePacker());
+        this.factory = ServiceRepository.getControllerFactory(config.getRouter(), config.getRoutePacker());
         configurator = new AmayaConfigurator(pipelinePrefix, config);
         controllers = new ConcurrentHashMap<>();
         configurators = new LinkedList<>();
@@ -46,7 +43,6 @@ public abstract class AmayaBuilder<T> {
     }
 
     protected void resetValues() {
-        annotation = Endpoint.class;
         controllers.clear();
         configurators.clear();
         executor = ForkJoinPool.commonPool();
@@ -99,14 +95,6 @@ public abstract class AmayaBuilder<T> {
         return this;
     }
 
-    public AmayaBuilder<T> controllerAnnotation(Class<? extends Annotation> annotation) {
-        this.annotation = annotation;
-        if (config.isDebug()) {
-            logger.debug("Set controller annotation to" + annotation.getSimpleName());
-        }
-        return this;
-    }
-
     public AmayaBuilder<T> executor(ExecutorService executor) {
         this.executor = Objects.requireNonNull(executor);
         if (config.isDebug()) {
@@ -116,10 +104,7 @@ public abstract class AmayaBuilder<T> {
     }
 
     protected void findControllers() throws Throwable {
-        if (annotation == null) {
-            return;
-        }
-        Scanner<Map<String, Controller>> scanner = new ControllerScanner(annotation, factory);
+        Scanner<String, Controller> scanner = ServiceRepository.getControllerScanner(factory);
         this.controllers.putAll(scanner.find());
     }
 

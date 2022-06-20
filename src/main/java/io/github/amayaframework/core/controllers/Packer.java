@@ -1,6 +1,5 @@
 package io.github.amayaframework.core.controllers;
 
-
 import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;

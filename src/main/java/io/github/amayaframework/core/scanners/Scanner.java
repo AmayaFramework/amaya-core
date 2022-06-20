@@ -1,9 +1,11 @@
 package io.github.amayaframework.core.scanners;
 
-public interface Scanner<E> {
-    E find() throws Throwable;
+import java.util.Map;
 
-    default E safetyFind() {
+public interface Scanner<K, V> {
+    Map<K, V> find() throws Throwable;
+
+    default Map<K, V> safetyFind() {
         try {
             return find();
         } catch (Throwable e) {

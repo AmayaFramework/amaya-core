@@ -15,7 +15,7 @@ import java.util.*;
 import static com.github.romanqed.jeflect.ReflectUtil.extractAnnotationValue;
 import static io.github.amayaframework.core.util.ReflectUtil.extractPacker;
 
-public class RouteScanner implements Scanner<Map<HttpMethod, List<MethodRoute>>> {
+public class RouteScanner implements Scanner<HttpMethod, List<MethodRoute>> {
     private final Object instance;
     private final Class<?> clazz;
     private final Packer packer;

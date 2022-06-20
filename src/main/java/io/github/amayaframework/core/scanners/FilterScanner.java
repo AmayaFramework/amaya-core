@@ -1,29 +1,30 @@
 package io.github.amayaframework.core.scanners;
 
-import io.github.amayaframework.core.filters.Filter;
-import io.github.amayaframework.core.filters.NamedFilter;
-import io.github.amayaframework.core.filters.NamedFilters;
+import io.github.amayaframework.core.filters.*;
 import io.github.amayaframework.core.util.ReflectUtil;
 
 import java.util.Map;
-import java.util.Objects;
 
-public class FilterScanner<T extends Filter> implements Scanner<Map<String, T>> {
-    private final Class<T> clazz;
-
-    public FilterScanner(Class<T> clazz) {
-        this.clazz = Objects.requireNonNull(clazz);
-    }
+public class FilterScanner implements Scanner<String, Filter> {
+    private static final Class<Filter> FILTER_CLASS = Filter.class;
+    private static final Filter BIG_INTEGER_FILTER = new BigIntegerFilter();
+    private static final Filter BOOLEAN_FILTER = new BooleanFilter();
+    private static final Filter DOUBLE_FILTER = new DoubleFilter();
+    private static final Filter INTEGER_FILTER = new IntegerFilter();
 
     @Override
-    public Map<String, T> find() throws Exception {
-        Map<NamedFilter[], T> multiple = ReflectUtil.findAnnotatedWithValue(NamedFilters.class, clazz);
-        Map<String, T> single = ReflectUtil.findAnnotatedWithValue(NamedFilter.class, clazz);
+    public Map<String, Filter> find() throws Exception {
+        Map<NamedFilter[], Filter> multiple = ReflectUtil.findAnnotatedWithValue(NamedFilters.class, FILTER_CLASS);
+        Map<String, Filter> single = ReflectUtil.findAnnotatedWithValue(NamedFilter.class, FILTER_CLASS);
         multiple.forEach((key, value) -> {
             for (NamedFilter filter : key) {
                 single.put(filter.value(), value);
             }
         });
+        single.put("bigint", BIG_INTEGER_FILTER);
+        single.put("bool", BOOLEAN_FILTER);
+        single.put("double", DOUBLE_FILTER);
+        single.put("int", INTEGER_FILTER);
         return single;
     }
 }
