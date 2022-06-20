@@ -22,7 +22,7 @@ public class Field<T> {
 
     @Override
     public int hashCode() {
-        return name.hashCode() * 13 + type.hashCode();
+        return Objects.hash(name, type);
     }
 
     @Override
