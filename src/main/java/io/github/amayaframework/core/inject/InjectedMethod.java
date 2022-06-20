@@ -5,7 +5,7 @@ import com.github.romanqed.util.Action;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 
-class InjectedMethod implements Action<HttpRequest, HttpResponse> {
+final class InjectedMethod implements Action<HttpRequest, HttpResponse> {
     private final Getter[] getters;
     private final Lambda body;
 
