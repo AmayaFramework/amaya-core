@@ -9,6 +9,10 @@ import io.github.amayaframework.core.scanners.Scanner;
 
 import java.util.concurrent.Callable;
 
+/**
+ * The supplier that creates the main factories of the framework.
+ * Can be inherited and specified using the {@link Provider} annotation.
+ */
 public interface ServiceProvider {
     Scanner<String, Controller> getControllerScanner(ControllerFactory factory);
 
