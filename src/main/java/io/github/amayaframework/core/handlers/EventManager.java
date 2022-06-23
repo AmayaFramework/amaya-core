@@ -37,7 +37,7 @@ public class EventManager implements Closeable {
         }
         executor.submit(() -> {
             if (isDebug) {
-                LOGGER.debug("Event " + event + "is called");
+                LOGGER.debug("Event " + event + " is called");
             }
             found.accept(body);
         });
