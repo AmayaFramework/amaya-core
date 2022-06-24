@@ -23,7 +23,7 @@ public final class ResponseDebugAction extends PipelineAction<ResponseData, Resp
             message += "Code: " + response.getCode() + "\n" +
                     "Body: " + response.getBody() + "\n" +
                     "Headers: " + response.getHeaderMap() + "\n" +
-                    "Cookies: " + response.getCookies() + "\n";
+                    "Cookies: " + response.getCookies();
         }
         LOGGER.debug(message);
         return data;

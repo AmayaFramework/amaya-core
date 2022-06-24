@@ -18,7 +18,7 @@ public final class RouteDebugAction extends PipelineAction<RequestData, RequestD
         String message = "Route found successfully\n" +
                 "Method: " + data.getMethod() + '\n' +
                 "Route: " + data.getRoute().getRoute() + '\n' +
-                "Path: " + data.getPath() + '\n';
+                "Path: " + data.getPath();
         LOGGER.debug(message);
         return data;
     }
