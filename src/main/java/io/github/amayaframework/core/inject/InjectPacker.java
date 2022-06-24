@@ -36,7 +36,7 @@ public final class InjectPacker implements Packer {
         return ret;
     }
 
-    private int foundStart(Parameter[] parameters) {
+    private int findStart(Parameter[] parameters) {
         if (parameters.length == 0) {
             return -1;
         }
@@ -52,7 +52,7 @@ public final class InjectPacker implements Packer {
             throw new InvalidFormatException(MESSAGE + method);
         }
         Parameter[] parameters = method.getParameters();
-        int start = foundStart(parameters);
+        int start = findStart(parameters);
         // No parameters
         if (start < 0) {
             Lambda packed = ReflectUtil.packMethod(method, instance);
