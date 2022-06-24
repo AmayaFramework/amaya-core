@@ -9,6 +9,7 @@ import io.github.amayaframework.http.HttpCode;
 import io.github.amayaframework.http.HttpUtil;
 
 import javax.servlet.http.Cookie;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -102,6 +103,16 @@ final class UnmodifiableResponse implements HttpResponse {
 
     @Override
     public void setContentType(ContentType type) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Charset getCharset() {
+        return body.getCharset();
+    }
+
+    @Override
+    public void setCharset(Charset charset) {
         throw new UnsupportedOperationException();
     }
 }

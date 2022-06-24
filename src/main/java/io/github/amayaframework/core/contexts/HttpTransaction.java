@@ -96,7 +96,7 @@ public interface HttpTransaction {
     /**
      * Specifies the charset to be used when sending/receiving data.
      *
-     * @param charset required encoding, must be non-null
+     * @param charset required encoding
      */
     void setCharset(Charset charset);
 }

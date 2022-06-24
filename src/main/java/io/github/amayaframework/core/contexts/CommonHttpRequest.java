@@ -4,6 +4,7 @@ import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -108,5 +109,15 @@ public class CommonHttpRequest implements HttpRequest {
     @Override
     public void setContentType(ContentType type) {
         body.setContentType(type);
+    }
+
+    @Override
+    public Charset getCharset() {
+        return body.getCharset();
+    }
+
+    @Override
+    public void setCharset(Charset charset) {
+        body.setCharset(charset);
     }
 }

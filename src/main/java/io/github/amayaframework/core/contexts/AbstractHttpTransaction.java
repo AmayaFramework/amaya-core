@@ -3,6 +3,7 @@ package io.github.amayaframework.core.contexts;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     protected Map<String, Cookie> cookies;
     protected Object body;
     protected ContentType type;
+    protected Charset charset;
 
     @Override
     public Object getBody() {
@@ -55,5 +57,15 @@ public abstract class AbstractHttpTransaction implements HttpTransaction {
     @Override
     public void setContentType(ContentType type) {
         this.type = Objects.requireNonNull(type);
+    }
+
+    @Override
+    public Charset getCharset() {
+        return charset;
+    }
+
+    @Override
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 }
