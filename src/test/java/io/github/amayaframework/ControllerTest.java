@@ -128,6 +128,40 @@ public class ControllerTest extends Assertions {
         assertThrows(IllegalStateException.class, () -> FACTORY.create("", new BrokenInject()));
     }
 
+    @Test
+    public void testNoRequestInject() throws Throwable {
+        Controller inject = FACTORY.create("", new NoRequestInject());
+        MethodRouter router = inject.getRouter();
+        HttpRequest request = makeRequest();
+        HttpResponse a = router.follow(HttpMethod.GET, "/a").execute(request);
+        HttpResponse b = router.follow(HttpMethod.GET, "/b").execute(request);
+        HttpResponse c = router.follow(HttpMethod.GET, "/c").execute(request);
+        HttpResponse d = router.follow(HttpMethod.GET, "/d").execute(request);
+        assertAll(
+                () -> assertEquals(1, a.getBody()),
+                () -> assertEquals("a_a", b.getBody()),
+                () -> assertEquals("a", c.getBody()),
+                () -> assertEquals("a_a", d.getBody())
+        );
+    }
+
+    @Test
+    public void testEmptyParameters() throws Throwable {
+        Controller inject = FACTORY.create("", new EmptyParameters());
+        MethodRouter router = inject.getRouter();
+        HttpRequest request = makeRequest();
+        HttpResponse a = router.follow(HttpMethod.GET, "/a").execute(request);
+        HttpResponse b = router.follow(HttpMethod.GET, "/b").execute(request);
+        HttpResponse c = router.follow(HttpMethod.GET, "/c").execute(request);
+        HttpResponse d = router.follow(HttpMethod.GET, "/d").execute(request);
+        assertAll(
+                () -> assertEquals("a", a.getBody()),
+                () -> assertEquals("b", b.getBody()),
+                () -> assertEquals("c", c.getBody()),
+                () -> assertEquals("d", d.getBody())
+        );
+    }
+
     @UseRouter(BaseRouter.class)
     public static class Custom {
         @Get("/{a}")
@@ -161,6 +195,50 @@ public class ControllerTest extends Assertions {
         @Get("/d")
         public HttpResponse d(HttpRequest request, @Header String a) {
             return Responses.ok(a);
+        }
+    }
+
+    public static class NoRequestInject {
+        @Get("/{a}")
+        public HttpResponse a(@Path Integer a) {
+            return Responses.ok(a);
+        }
+
+        @Get("/b")
+        public HttpResponse b(@Query String a) {
+            return Responses.ok(a);
+        }
+
+        @Get("/c")
+        public HttpResponse c(@HttpCookie Cookie a) {
+            return Responses.ok(a.getName());
+        }
+
+        @Get("/d")
+        public HttpResponse d(@Header String a) {
+            return Responses.ok(a);
+        }
+    }
+
+    public static class EmptyParameters {
+        @Get("/{a}")
+        public HttpResponse a() {
+            return Responses.ok("a");
+        }
+
+        @Get("/b")
+        public HttpResponse b() {
+            return Responses.ok("b");
+        }
+
+        @Get("/c")
+        public HttpResponse c() {
+            return Responses.ok("c");
+        }
+
+        @Get("/d")
+        public HttpResponse d() {
+            return Responses.ok("d");
         }
     }
 

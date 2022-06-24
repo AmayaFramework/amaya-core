@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * A class describing the implementation of a packer
  * that does not support injecting values into the marked getRoute arguments.
  */
-public class BasePacker implements Packer {
+public final class BasePacker implements Packer {
     private static final Class<HttpRequest> REQUEST = HttpRequest.class;
     private static final Class<HttpResponse> RESPONSE = HttpResponse.class;
 

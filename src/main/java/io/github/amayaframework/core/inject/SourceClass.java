@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-class SourceClass {
+final class SourceClass {
     final Class<?> clazz;
     final Map<Class<?>, SourceMethod> methods;
 

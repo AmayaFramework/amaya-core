@@ -11,7 +11,7 @@ import io.github.amayaframework.core.pipeline.RequestData;
  */
 public final class InvokeControllerAction extends InputAction<RequestData, HttpResponse> {
     @Override
-    public HttpResponse execute(RequestData requestData) throws Throwable {
-        return requestData.getRoute().execute(requestData.getRequest());
+    public HttpResponse execute(RequestData data) throws Throwable {
+        return data.getRoute().execute(data.getRequest());
     }
 }

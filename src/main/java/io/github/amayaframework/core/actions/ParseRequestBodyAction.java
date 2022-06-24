@@ -16,34 +16,34 @@ import java.io.InputStream;
 public final class ParseRequestBodyAction extends PipelineAction<RequestData, RequestData> {
 
     @Override
-    public RequestData execute(RequestData requestData) {
-        HttpRequest request = requestData.getRequest();
-        InputStream bodyStream = requestData.getInputStream();
+    public RequestData execute(RequestData data) {
+        HttpRequest request = data.getRequest();
+        InputStream bodyStream = data.getInputStream();
         // Skipping body processing if the request doesn't have one
-        if (!requestData.getMethod().isHasBody()) {
+        if (!data.getMethod().isHasBody()) {
             request.setBody(bodyStream);
-            return requestData;
+            return data;
         }
         // Process request body
-        String rawType = requestData.getContentType();
+        String rawType = data.getContentType();
         // If there is no content type header, skip body processing
         if (rawType == null) {
             request.setBody(bodyStream);
-            return requestData;
+            return data;
         }
         ContentType type = ContentType.fromHeader(rawType);
         // If the content-header is unknown, skip body processing
         if (type == null) {
             request.setBody(bodyStream);
-            return requestData;
+            return data;
         }
         if (!type.isString()) {
             request.setBody(bodyStream);
             request.setContentType(type);
-            return requestData;
+            return data;
         }
         request.setContentType(type);
-        request.setBody(IOUtil.readInputStream(bodyStream, requestData.getCharset()));
-        return requestData;
+        request.setBody(IOUtil.readInputStream(bodyStream, data.getCharset()));
+        return data;
     }
 }

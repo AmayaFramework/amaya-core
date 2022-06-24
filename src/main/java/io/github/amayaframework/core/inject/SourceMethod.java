@@ -3,7 +3,7 @@ package io.github.amayaframework.core.inject;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-class SourceMethod {
+final class SourceMethod {
     final Method method;
     final String[] parameters;
 

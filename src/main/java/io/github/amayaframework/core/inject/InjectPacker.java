@@ -7,64 +7,43 @@ import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.controllers.Packer;
 import io.github.amayaframework.core.util.InvalidFormatException;
-import org.atteo.classindex.ClassIndex;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.github.amayaframework.core.inject.Util.*;
 
 /**
  * A class describing a packager that supports injection into method arguments.
  */
-public class InjectPacker implements Packer {
-    private static final Class<HttpRequest> REQUEST = HttpRequest.class;
+public final class InjectPacker implements Packer {
     private static final Class<HttpResponse> RESPONSE = HttpResponse.class;
     private static final String MESSAGE = "Invalid route method: ";
-    private static final Map<Class<?>, SourceClass> REQUESTS = findRequests();
+    private static final Map<Class<?>, SourceClass> REQUESTS = REQUEST_SCANNER.safetyFind();
+    private final Map<Class<?>, Class<? extends HttpRequest>> requests = new HashMap<>();
 
-    private static Map<Class<?>, SourceClass> findRequests() {
-        Iterable<Class<?>> found = ClassIndex.getAnnotated(SourceRequest.class);
-        Map<Class<?>, SourceClass> ret = new HashMap<>();
-        ret.put(HttpRequest.class, SourceClass.create(HttpRequest.class));
-        for (Class<?> clazz : found) {
-            if (!REQUEST.isAssignableFrom(clazz)) {
-                throw new IllegalStateException("The found class is not an HttpRequest implementation");
-            }
-            SourceRequest annotation = clazz.getAnnotation(SourceRequest.class);
-            ret.put(annotation.value(), SourceClass.create(clazz));
+    private Class<? extends HttpRequest> extractRequestClass(Class<?> controller, Method method) {
+        Class<? extends HttpRequest> ret = requests.computeIfAbsent(
+                controller, value -> Util.extractRequestClass(controller)
+        );
+        if (ret == null) {
+            Class<? extends HttpRequest> found = Util.extractRequestClass(method);
+            return found == null ? REQUEST : found;
         }
-        return Collections.unmodifiableMap(ret);
+        return ret;
     }
 
-    private static Annotation extractAnnotation(Parameter parameter) {
-        Annotation[] annotations = parameter.getDeclaredAnnotations();
-        if (annotations.length == 0) {
-            throw new IllegalStateException("No annotations found");
-        }
-        if (annotations.length > 1) {
-            throw new IllegalStateException("More than one annotation is specified");
-        }
-        return annotations[0];
-    }
-
-    private static Getter makeGetter(Parameter parameter, Annotation annotation, SourceMethod method) throws Throwable {
-        Lambda packed = ReflectUtil.packMethod(method.method);
-        String[] parameters = method.parameters;
+    private int foundStart(Parameter[] parameters) {
         if (parameters.length == 0) {
-            return packed::call;
+            return -1;
         }
-        Object[] arguments = new Object[parameters.length];
-        for (int i = 0; i < arguments.length; ++i) {
-            Object argument = ReflectUtil.extractAnnotationValue(annotation, parameters[i]);
-            if (argument instanceof String && ((String) argument).isEmpty() && parameter.isNamePresent()) {
-                argument = parameter.getName();
-            }
-            arguments[i] = argument;
+        if (REQUEST.isAssignableFrom(parameters[0].getType())) {
+            return 1;
         }
-        return source -> packed.call(source, arguments);
+        return 0;
     }
 
     @Override
@@ -73,18 +52,27 @@ public class InjectPacker implements Packer {
             throw new InvalidFormatException(MESSAGE + method);
         }
         Parameter[] parameters = method.getParameters();
-        Class<?> requestType = parameters[0].getType();
-        if (!REQUEST.isAssignableFrom(requestType)) {
-            throw new InvalidFormatException(MESSAGE + method);
+        int start = foundStart(parameters);
+        // No parameters
+        if (start < 0) {
+            Lambda packed = ReflectUtil.packMethod(method, instance);
+            return request -> (HttpResponse) packed.call();
+        }
+        // Extract request type
+        Class<?> requestType;
+        if (start == 1) {
+            requestType = parameters[0].getType();
+        } else {
+            requestType = extractRequestClass(instance.getClass(), method);
         }
         SourceClass source = REQUESTS.get(requestType);
         if (source == null) {
             throw new IllegalStateException("The specified HttpRequest implementation is not supported");
         }
-        Getter[] getters = new Getter[parameters.length - 1];
-        for (int i = 1; i < parameters.length; ++i) {
+        Getter[] getters = new Getter[parameters.length - start];
+        for (int i = start; i < parameters.length; ++i) {
             Parameter parameter = parameters[i];
-            Annotation annotation = extractAnnotation(parameter);
+            Annotation annotation = extractParameterAnnotation(parameter);
             SourceMethod sourceMethod = source.methods.get(annotation.annotationType());
             if (sourceMethod == null) {
                 throw new IllegalStateException("The specified annotation was not found");
@@ -92,9 +80,12 @@ public class InjectPacker implements Packer {
             if (!sourceMethod.method.getReturnType().isAssignableFrom(parameter.getType())) {
                 throw new IllegalStateException("The type of the argument != the type of the value for inject");
             }
-            getters[i - 1] = makeGetter(parameter, annotation, sourceMethod);
+            getters[i - start] = makeGetter(parameter, annotation, sourceMethod);
         }
         Lambda packed = ReflectUtil.packMethod(method, instance);
-        return new InjectedMethod(packed, getters);
+        if (start == 0) {
+            return new NoRequestMethod(packed, getters);
+        }
+        return new RequestMethod(packed, getters);
     }
 }
