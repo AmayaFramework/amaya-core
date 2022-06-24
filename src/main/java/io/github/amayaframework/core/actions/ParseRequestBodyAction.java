@@ -43,7 +43,7 @@ public final class ParseRequestBodyAction extends PipelineAction<RequestData, Re
             return data;
         }
         request.setContentType(type);
-        request.setBody(IOUtil.readInputStream(bodyStream, data.getCharset()));
+        request.setBody(IOUtil.readInputStream(bodyStream, request.getCharset()));
         return data;
     }
 }
