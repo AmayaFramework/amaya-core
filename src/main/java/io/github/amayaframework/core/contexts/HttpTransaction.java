@@ -7,6 +7,7 @@ import io.github.amayaframework.core.inject.Provider;
 import io.github.amayaframework.http.ContentType;
 
 import javax.servlet.http.Cookie;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 
@@ -84,4 +85,18 @@ public interface HttpTransaction {
      * @param type {@link ContentType} enum
      */
     void setContentType(ContentType type);
+
+    /**
+     * Returns the charset used (or null if it is missing)
+     *
+     * @return {@link Charset} instance
+     */
+    Charset getCharset();
+
+    /**
+     * Specifies the charset to be used when sending/receiving data.
+     *
+     * @param charset required encoding, must be non-null
+     */
+    void setCharset(Charset charset);
 }

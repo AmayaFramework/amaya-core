@@ -47,7 +47,7 @@ public interface RequestData {
     /**
      * <h3>Important!</h3>
      * <p>If the http request has already been processed,
-     * it is strongly recommended to getCast this information from it.</p>
+     * it is strongly recommended to get this information from it.</p>
      *
      * @return raw content of the content type header
      */
@@ -57,7 +57,7 @@ public interface RequestData {
      * <h3>Important!</h3>
      * <h3>Each time it will parse the raw content of the header!</h3>
      * <p>If the http request has already been processed,
-     * it is strongly recommended to getCast this information from it.</p>
+     * it is strongly recommended to get this information from it.</p>
      *
      * @return the encoding passed in the request or used by default
      */

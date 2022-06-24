@@ -16,7 +16,7 @@ public interface Configurable {
     /**
      * Gets the field content.
      *
-     * @param field field name and type to getCast
+     * @param field field name and type to get
      * @param <T>   type of value
      * @return entity that field contains
      */
