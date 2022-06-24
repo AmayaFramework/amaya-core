@@ -66,6 +66,10 @@ public abstract class AmayaBuilder<T> {
             for (ConfiguratorWrapper configurator : configurators) {
                 configurator.configure(handler, controller);
             }
+            if (config.isDebug()) {
+                logger.debug("Input configured: " + handler.getInput());
+                logger.debug("Output configured: " + handler.getOutput());
+            }
         } catch (Throwable e) {
             throw new IllegalStateException("Exception when configure", e);
         }
