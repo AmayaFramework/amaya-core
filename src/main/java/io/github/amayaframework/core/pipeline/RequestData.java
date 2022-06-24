@@ -3,6 +3,8 @@ package io.github.amayaframework.core.pipeline;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
+import io.github.amayaframework.core.util.Attachable;
+import io.github.amayaframework.core.util.CompletableData;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -10,7 +12,7 @@ import java.nio.charset.Charset;
 /**
  * A container for transferring data between the actions of the input pipeline.
  */
-public interface RequestData {
+public interface RequestData extends Attachable, CompletableData {
     /**
      * @return the current getRoute containing information about the bound method and path template.
      */

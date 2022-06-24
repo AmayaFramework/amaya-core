@@ -5,6 +5,7 @@ import com.github.romanqed.util.Record;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.contexts.HttpResponse;
 import io.github.amayaframework.core.filters.Filter;
+import io.github.amayaframework.core.util.CompletableAttachable;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public final class MethodRoute extends AbstractAttachable implements Route, Action<HttpRequest, HttpResponse> {
+public final class MethodRoute extends CompletableAttachable implements Route, Action<HttpRequest, HttpResponse> {
     private final HttpRoute route;
     private final Method method;
     private final Action<HttpRequest, HttpResponse> body;

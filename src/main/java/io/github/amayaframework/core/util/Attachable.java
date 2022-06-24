@@ -1,4 +1,4 @@
-package io.github.amayaframework.core.routes;
+package io.github.amayaframework.core.util;
 
 import java.util.Map;
 

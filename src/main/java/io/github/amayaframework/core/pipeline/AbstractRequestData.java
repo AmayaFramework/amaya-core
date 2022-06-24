@@ -3,14 +3,17 @@ package io.github.amayaframework.core.pipeline;
 import io.github.amayaframework.core.contexts.HttpRequest;
 import io.github.amayaframework.core.methods.HttpMethod;
 import io.github.amayaframework.core.routes.MethodRoute;
+import io.github.amayaframework.core.util.CompletableAttachable;
 
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractRequestData implements RequestData {
+public abstract class AbstractRequestData extends CompletableAttachable implements RequestData {
     private final RouteData data;
     private HttpRequest request;
 
     protected AbstractRequestData(RouteData data) {
+        super(new ConcurrentHashMap<>());
         this.data = data;
     }
 
