@@ -3,9 +3,10 @@ package io.github.amayaframework.core.contexts;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public abstract class FixedOutputStream extends OutputStream {
+public class FixedOutputStream extends OutputStream {
     private final OutputStream stream;
-    protected long length = -1;
+    private final Object lock = new Object();
+    protected volatile long length = -1;
 
     public FixedOutputStream(OutputStream stream) {
         this.stream = stream;
@@ -24,20 +25,31 @@ public abstract class FixedOutputStream extends OutputStream {
         }
     }
 
-    public abstract void specifyLength(long length) throws IOException;
+    public void specifyLength(long length) throws IOException {
+        if (length < 0) {
+            throw new IllegalArgumentException("The length of the stream cannot be negative");
+        }
+        synchronized (lock) {
+            this.length = length;
+        }
+    }
 
     @Override
     public void write(byte[] b) throws IOException {
         checkLength(b.length);
         stream.write(b);
-        length -= b.length;
+        synchronized (lock) {
+            length -= b.length;
+        }
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         checkLength(len);
         stream.write(b, off, len);
-        length -= len;
+        synchronized (lock) {
+            length -= len;
+        }
     }
 
     @Override
@@ -54,6 +66,8 @@ public abstract class FixedOutputStream extends OutputStream {
     public void write(int b) throws IOException {
         checkLength(1);
         stream.write(b);
-        --length;
+        synchronized (lock) {
+            --length;
+        }
     }
 }
