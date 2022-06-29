@@ -24,7 +24,7 @@ public class FixedOutputStream extends OutputStream {
             throw new IllegalStateException("Unable to write to stream, available length <= 0");
         }
         if (checked > length) {
-            throw new IllegalStateException("Unable to write to stream, data too long");
+            throw new IllegalStateException("Unable to write to stream, the data is too long");
         }
     }
 
