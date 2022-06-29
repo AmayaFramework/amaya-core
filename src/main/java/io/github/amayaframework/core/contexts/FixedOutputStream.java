@@ -6,17 +6,20 @@ import java.io.OutputStream;
 public class FixedOutputStream extends OutputStream {
     private final OutputStream stream;
     private final Object lock = new Object();
-    private volatile Long length = -1L;
+    private volatile Long length;
 
     public FixedOutputStream(OutputStream stream) {
         this.stream = stream;
     }
 
     public long getLength() {
-        return length;
+        return length == null ? -1 : length;
     }
 
     private void checkLength(long checked) {
+        if (length == null) {
+            throw new IllegalStateException("Unable to write to stream, the length is not specified");
+        }
         if (length <= 0) {
             throw new IllegalStateException("Unable to write to stream, available length <= 0");
         }
@@ -27,7 +30,7 @@ public class FixedOutputStream extends OutputStream {
 
     public void specifyLength(long length) throws IOException {
         if (this.length != null) {
-            throw new IllegalStateException("You cannot specify the length again");
+            throw new IllegalStateException("Unable specify the length again");
         }
         if (length < 0) {
             throw new IllegalArgumentException("The length of the stream cannot be negative");
