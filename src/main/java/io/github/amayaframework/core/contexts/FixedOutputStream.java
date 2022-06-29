@@ -3,6 +3,9 @@ package io.github.amayaframework.core.contexts;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * A class representing a thread used by the framework with a pre-known size.
+ */
 public class FixedOutputStream extends OutputStream {
     private final OutputStream stream;
     private final Object lock = new Object();
@@ -12,7 +15,10 @@ public class FixedOutputStream extends OutputStream {
         this.stream = stream;
     }
 
-    public long getLength() {
+    /**
+     * @return the length of an unwritten data chunk, if the length is not specified yet, -1
+     */
+    public long getRemainingLength() {
         return length == null ? -1 : length;
     }
 
@@ -28,6 +34,12 @@ public class FixedOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * Specifies the length of the data that is supposed to be written to the stream.
+     *
+     * @param length the set length, must be >= 0.
+     * @throws IOException if an error occurred when specifying the length
+     */
     public void specifyLength(long length) throws IOException {
         if (this.length != null) {
             throw new IllegalStateException("Unable specify the length again");
