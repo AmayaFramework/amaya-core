@@ -3,7 +3,7 @@ package io.github.amayaframework.core.util;
 import java.util.Collections;
 import java.util.Map;
 
-public class CompletableAttachable extends AbstractCompletableData implements Attachable {
+public class CompletableAttachable extends AbstractCompletable implements Attachable {
     private Map<String, Object> body;
 
     protected CompletableAttachable(Map<String, Object> body) {

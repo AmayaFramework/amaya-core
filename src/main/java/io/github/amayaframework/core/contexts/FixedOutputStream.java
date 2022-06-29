@@ -37,7 +37,7 @@ public class FixedOutputStream extends OutputStream {
     /**
      * Specifies the length of the data that is supposed to be written to the stream.
      *
-     * @param length the set length, must be >= 0.
+     * @param length the set length, must be {@literal >}= 0.
      * @throws IOException if an error occurred when specifying the length
      */
     public void specifyLength(long length) throws IOException {

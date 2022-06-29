@@ -28,6 +28,9 @@ public abstract class AbstractHandler implements IOHandler {
             manager.callEvent(Event.INPUT_ERROR, e);
             return;
         }
+        if (session.isCompleted()) {
+            return;
+        }
         if (response == null) {
             session.reject(HttpCode.INTERNAL_SERVER_ERROR, "Response is null");
             manager.callEvent(Event.INPUT_ERROR, null);
