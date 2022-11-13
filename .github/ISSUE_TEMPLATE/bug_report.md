@@ -12,6 +12,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Create a '...'
 2. Configure the '....'
 3. Invoke the '....'
@@ -25,9 +26,10 @@ A clear and concise description of what you expected to happen.
 If applicable, add stack traces to help explain your problem.
 
 **Desktop (please complete the following information):**
- - OS
- - JRE/JDK build&version
- - Version
+
+- OS
+- JRE/JDK build&version
+- Version
 
 **Additional context**
 Add any other context about the problem here.

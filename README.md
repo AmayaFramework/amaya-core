@@ -1,12 +1,13 @@
 # amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-core/)
 
 The basis of the amaya framework, which provides basic functionality.
-It includes basic implementations of routes, filters, controllers, http transactions and everything related to them, 
+It includes basic implementations of routes, filters, controllers, http transactions and everything related to them,
 method packaging, as well as assistive utilities.
 
 ## Getting Started
 
 To install it, you will need:
+
 * java 8+
 * [classindex](https://github.com/atteo/classindex)
 * some implementation of slf4j
@@ -25,6 +26,7 @@ dependencies {
 ```
 
 ### Maven dependency
+
 ```
 <dependency>
     <groupId>org.atteo.classindex</groupId>
@@ -40,23 +42,27 @@ dependencies {
 ```
 
 ## Usage example
+
 ### A quick overview
-The core of the framework is its mandatory part, the main one, the functionality of which 
+
+The core of the framework is its mandatory part, the main one, the functionality of which
 will somehow be used by the rest of the parts.
 
 The core provides ample opportunities for customization of the framework functionality:
+
 * implementation of user code in the process of interaction between the controller and the network code
 * creating custom filters for path parameters
 * creation of additional annotations for injecting values into the arguments of the route method
 * creating custom packers for controller methods
 * creating a custom router (a mechanism that finds the necessary method according to the received path)
 * creating custom classes that implement standard HttpRequest and HttpResponse
-  
+
 <h4>Important</h4>
 <p>The kernel does NOT contain implementations for any particular http-server/java-servlets 
 to increase the versatility and customization of the framework.</p>
 
 ### Pipelines
+
 To communicate the controller with the http server, the framework uses a mechanism called "pipeline".
 In fact, it is a changeable chain of named functions that are executed sequentially/asynchronously.
 Thus, you can create your own actions for their subsequent implementation.
@@ -97,6 +103,7 @@ public class MyConfigurator implements Configurator {
 ```
 
 ### Filters for path parameters
+
 The route may contain any parameters (for example, "/a/{b:int}")
 To check whether the sent parameter matches the expected type (b must be of type int), filters (filter) are used,
 which in this case
@@ -116,15 +123,16 @@ public class IntegerFilter implements Filter {
 ```
 
 ### Annotations for injecting route method arguments
-The injection of values into method arguments in the framework is implemented by redirecting the return value of 
+
+The injection of values into method arguments in the framework is implemented by redirecting the return value of
 the HttpRequest getter method.
 Thus, any inject annotation is, in fact, a repository of arguments that should be passed to the getter.
-For example, in the case of @Path("param") (annotation to get the path parameter), 
-the method will be called HttpRequest::getpathparameters with the argument "param", 
+For example, in the case of @Path("param") (annotation to get the path parameter),
+the method will be called HttpRequest::getpathparameters with the argument "param",
 and the value it returns will be in the annotated argument.
 
 By default, there are 5 such annotations (Header, Http Cookie, Path, Query, Body) and custom ones can be added.
-To do this, you will need to create your own annotation (if it has parameters, explicitly specify their position) 
+To do this, you will need to create your own annotation (if it has parameters, explicitly specify their position)
 and link it to the getter in your HttpRequest implementation.
 
 <p>Implementation</p>
@@ -159,7 +167,8 @@ public @interface MyAnnot {
 ```
 
 ### Controller Method Packers
-In general, the task of the packager is to turn a pair from an instance of your controller and 
+
+In general, the task of the packager is to turn a pair from an instance of your controller and
 a method (from java-reflect) into a ready-to-call Action<HttpRequest, HttpResponse>.
 
 <p>Example of dummy implementation using java reflection</p>
@@ -175,6 +184,7 @@ public static class MyPacker implements Packer {
 ```
 
 ### Routers
+
 The router processes the path that came from the user and directs it to the appropriate route.
 For example, "/index/5" will be routed to "/index/{i:int}".
 Although the kernel provides the necessary minimum of routers by default, if you lack their functionality,
@@ -196,7 +206,8 @@ public class BaseRouter extends MethodRouter {
 ```
 
 ### Custom HttpRequest and HttpResponse
-If you need to create custom entities that implement a http transaction, 
+
+If you need to create custom entities that implement a http transaction,
 you just need to inherit from ready-made existing classes.
 
 <p>Custom http request</p>
@@ -231,10 +242,11 @@ public class MyResp extends CommonHttpResponse {
 * [java-utils](https://github.com/RomanQed/java-utils) - Pipelines and other stuff
 
 ## Authors
+
 * **RomanQed** - *Main work* - [RomanQed](https://github.com/RomanQed)
 * **max0000402** - *Technical advices and ideas for features* - [max0000402](https://github.com/max0000402)
 
-See also the list of [contributors](https://github.com/AmayaFramework/amaya-core/contributors) who participated 
+See also the list of [contributors](https://github.com/AmayaFramework/amaya-core/contributors) who participated
 in this project.
 
 ## License
