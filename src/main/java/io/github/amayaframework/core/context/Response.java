@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 public interface Response extends Transaction {
+
     OutputStream getOutputStream();
 
     void setContentLength(long length);

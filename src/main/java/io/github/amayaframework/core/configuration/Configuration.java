@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.configuration;
 
-import java.util.Map;
+import io.github.amayaframework.core.Mappable;
 
-public interface Configuration {
+public interface Configuration extends Mappable<Entry<?>, Object> {
 
     <T> T get(Entry<T> entry);
 
@@ -11,6 +11,4 @@ public interface Configuration {
     boolean contains(Entry<?> entry);
 
     <T> T remove(Entry<T> entry);
-
-    Map<Entry<?>, Object> asMap();
 }

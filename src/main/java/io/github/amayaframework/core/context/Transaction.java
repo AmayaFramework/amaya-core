@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 
 public interface Transaction {
+
     Charset getCharset();
 
     void setCharset(Charset charset);

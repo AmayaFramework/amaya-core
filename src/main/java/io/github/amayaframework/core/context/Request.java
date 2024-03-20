@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 
 public interface Request extends Transaction {
+
     InputStream getInputStream();
 
     InetSocketAddress getLocalAddress();

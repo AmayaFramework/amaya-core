@@ -1,6 +1,8 @@
 package io.github.amayaframework.core.service;
 
-public interface ServiceCollection extends Iterable<Service> {
+import io.github.amayaframework.core.Streamable;
+
+public interface ServiceCollection extends Streamable<Service> {
 
     <T extends Service> T get(Class<T> type);
 
@@ -9,4 +11,6 @@ public interface ServiceCollection extends Iterable<Service> {
     <T extends Service> T add(T service);
 
     <T extends Service> T remove(Class<T> type);
+
+    void clear();
 }

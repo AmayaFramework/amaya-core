@@ -1,10 +1,8 @@
 package io.github.amayaframework.core.context;
 
-import java.util.Map;
+import io.github.amayaframework.core.Mappable;
 
-public interface Attributable<K> {
-
-    Map<K, Object> asMap();
+public interface Attributable<K> extends Mappable<K, Object> {
 
     <V> V get(K key);
 
