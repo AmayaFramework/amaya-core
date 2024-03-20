@@ -1,10 +1,15 @@
 package io.github.amayaframework.core;
 
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public interface Streamable<T> extends Iterable<T> {
 
-    Stream<T> stream();
+    default Stream<T> stream() {
+        return StreamSupport.stream(spliterator(), false);
+    }
 
-    Stream<T> parallelStream();
+    default Stream<T> parallelStream() {
+        return StreamSupport.stream(spliterator(), true);
+    }
 }
