@@ -1,6 +1,14 @@
 open module io.github.amayaframework.core {
     // Imports
-    // requires <module>;
+    requires org.slf4j;
+    requires io.github.amayaframework.di;
+    requires io.github.amayaframework.events;
+    requires com.github.romanqed.jconv;
+    requires com.github.romanqed.jfunc;
     // Exports
-    // exports <module>;
+    exports io.github.amayaframework.core;
+    exports io.github.amayaframework.core.builder;
+    exports io.github.amayaframework.core.configuration;
+    exports io.github.amayaframework.core.context;
+    exports io.github.amayaframework.core.service;
 }

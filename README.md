@@ -14,11 +14,7 @@ To install it, you will need:
 
 ### Gradle dependency
 
-
-
 ### Maven dependency
-
-
 
 ## Usage example
 
