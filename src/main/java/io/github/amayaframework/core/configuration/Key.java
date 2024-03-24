@@ -2,17 +2,17 @@ package io.github.amayaframework.core.configuration;
 
 import java.util.Objects;
 
-public final class Entry<T> {
+public final class Key<T> {
     private final String name;
     private final Class<T> type;
 
-    public Entry(String name, Class<T> type) {
+    public Key(String name, Class<T> type) {
         this.name = Objects.requireNonNull(name);
         this.type = Objects.requireNonNull(type);
     }
 
-    public static <T> Entry<T> of(String name, Class<T> type) {
-        return new Entry<>(name, type);
+    public static <T> Key<T> of(String name, Class<T> type) {
+        return new Key<>(name, type);
     }
 
     public String getName() {
@@ -27,8 +27,8 @@ public final class Entry<T> {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        var entry = (Entry<?>) object;
-        return name.equals(entry.name) && type.equals(entry.type);
+        var key = (Key<?>) object;
+        return name.equals(key.name) && type.equals(key.type);
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class Entry<T> {
 
     @Override
     public String toString() {
-        return "Entry {" +
+        return "Key {" +
                 "name='" + name + '\'' +
                 ", type=" + type +
                 '}';

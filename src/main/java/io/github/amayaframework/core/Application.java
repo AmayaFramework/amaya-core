@@ -8,9 +8,7 @@ import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.events.EventManager;
 import org.slf4j.Logger;
 
-import java.util.concurrent.Future;
-
-public interface Application extends ServiceManager {
+public interface Application extends ServiceManager, AutoCloseable {
 
     Logger getLogger();
 
@@ -26,7 +24,5 @@ public interface Application extends ServiceManager {
 
     void setHandler(Task<ApplicationContext> handler);
 
-    Future<?> shutdown();
-
-    void shutdownNow() throws InterruptedException;
+    void shutdown() throws InterruptedException;
 }

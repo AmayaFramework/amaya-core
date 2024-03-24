@@ -1,16 +1,10 @@
 package io.github.amayaframework.core.service;
 
-import java.util.concurrent.Future;
-
 public interface Service {
 
     ServiceState getState();
 
-    Future<?> start();
+    boolean start() throws Throwable;
 
-    Future<?> stop();
-
-    boolean startNow() throws InterruptedException;
-
-    boolean stopNow() throws InterruptedException;
+    boolean stop() throws Throwable;
 }

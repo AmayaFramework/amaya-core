@@ -1,7 +1,5 @@
 package io.github.amayaframework.core.service;
 
-import java.util.concurrent.Future;
-
 public interface ServiceManager extends Service {
 
     ServiceCollection getServiceCollection();
@@ -10,14 +8,8 @@ public interface ServiceManager extends Service {
     ServiceState getState();
 
     @Override
-    Future<?> start();
+    boolean start() throws Throwable;
 
     @Override
-    Future<?> stop();
-
-    @Override
-    boolean startNow() throws InterruptedException;
-
-    @Override
-    boolean stopNow() throws InterruptedException;
+    boolean stop() throws Throwable;
 }
