@@ -2,13 +2,13 @@ package io.github.amayaframework.core.configuration;
 
 import io.github.amayaframework.core.Mappable;
 
-public interface Configuration extends Mappable<Key<?>, Object> {
+public interface Configuration extends Mappable<Key, Object> {
 
-    <T> T get(Key<T> key);
+    <T> T get(Key key);
 
-    <T> void set(Key<T> key, T value);
+    void set(Key key, Object value);
 
-    boolean contains(Key<?> key);
+    boolean contains(Key key);
 
-    <T> T remove(Key<T> key);
+    Object remove(Key key);
 }

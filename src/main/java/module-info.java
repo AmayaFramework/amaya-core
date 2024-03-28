@@ -3,6 +3,7 @@ open module io.github.amayaframework.core {
     requires org.slf4j;
     requires io.github.amayaframework.di;
     requires io.github.amayaframework.events;
+    requires com.google.gson;
     requires com.github.romanqed.jconv;
     requires com.github.romanqed.jfunc;
     // Exports

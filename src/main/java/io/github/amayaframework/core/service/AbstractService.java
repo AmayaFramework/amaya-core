@@ -1,8 +1,8 @@
 package io.github.amayaframework.core.service;
 
 public abstract class AbstractService implements Service {
-    protected volatile ServiceState state;
     protected final Object lock;
+    protected volatile ServiceState state;
 
     protected AbstractService(ServiceState initial) {
         this.state = initial;
