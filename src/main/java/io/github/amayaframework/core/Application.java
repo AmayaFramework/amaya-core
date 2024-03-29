@@ -3,6 +3,7 @@ package io.github.amayaframework.core;
 import com.github.romanqed.jconv.Task;
 import io.github.amayaframework.core.configuration.Configuration;
 import io.github.amayaframework.core.context.ApplicationContext;
+import io.github.amayaframework.core.environment.Environment;
 import io.github.amayaframework.core.service.ServiceManager;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.events.EventManager;

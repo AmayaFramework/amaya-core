@@ -11,4 +11,5 @@ open module io.github.amayaframework.core {
     exports io.github.amayaframework.core.configuration;
     exports io.github.amayaframework.core.context;
     exports io.github.amayaframework.core.service;
+    exports io.github.amayaframework.core.environment;
 }
