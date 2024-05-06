@@ -20,10 +20,6 @@ version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
-
-    maven {
-        url 'https://s01.oss.sonatype.org/content/repositories/iogithubamayaframework-1274/'
-    }
 }
 
 dependencies {
@@ -36,10 +32,12 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.12'
     // Conveyor builder
     implementation group: 'com.github.romanqed', name: 'jconv', version: '1.0.3'
+    // Java generic types
+    implementation group: 'com.github.romanqed', name: 'jtype', version: '1.0.0'
     // DI
-    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '1.3.1'
-    // Events TODO: Remove preview version
-    implementation group: 'io.github.amayaframework', name: 'amaya-events', version: 'preview'
+    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '2.0.0'
+    // Events
+    implementation group: 'io.github.amayaframework', name: 'amaya-events', version: '1.0.2'
 }
 
 test {

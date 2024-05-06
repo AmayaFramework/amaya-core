@@ -1,82 +1,63 @@
 package io.github.amayaframework.core.configuration;
 
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class MapScheme implements ConfigurationScheme {
-    private final Map<String, Type> body;
-    private final Map<String, Type> unmodifiable;
+public class MapScheme implements Scheme {
+    private final Map<String, Key<?>> keys;
+    private final Collection<Key<?>> values;
 
-    public MapScheme(Supplier<Map<String, Type>> supplier) {
-        this.body = Objects.requireNonNull(supplier.get());
-        this.unmodifiable = Collections.unmodifiableMap(this.body);
+    public MapScheme(Supplier<Map<String, Key<?>>> supplier) {
+        this.keys = Objects.requireNonNull(supplier.get());
+        this.values = Collections.unmodifiableCollection(keys.values());
+    }
+
+    public MapScheme() {
+        this.keys = new HashMap<>();
+        this.values = Collections.unmodifiableCollection(keys.values());
     }
 
     @Override
-    public Map<String, Type> map() {
-        return unmodifiable;
-    }
-
-    @Override
-    public void forEach(BiConsumer<? super String, ? super Type> consumer) {
-        body.forEach(consumer);
-    }
-
-    @Override
-    public Stream<Map.Entry<String, Type>> stream() {
-        return unmodifiable.entrySet().stream();
-    }
-
-    @Override
-    public Stream<Map.Entry<String, Type>> parallelStream() {
-        return unmodifiable.entrySet().parallelStream();
-    }
-
-    @Override
-    public void add(Key key) {
+    public void add(Key<?> key) {
         Objects.requireNonNull(key);
-        body.put(key.getName(), key.getType());
+        keys.put(key.getName(), key);
     }
 
     @Override
-    public Type add(String name, Type type) {
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(type);
-        return body.put(name, type);
+    public Key<?> get(String name) {
+        return keys.get(name);
     }
 
     @Override
-    public Type get(String name) {
-        return body.get(name);
-    }
-
-    @Override
-    public boolean remove(Key key) {
+    public boolean remove(Key<?> key) {
         Objects.requireNonNull(key);
-        return body.remove(key.getName()) != null;
+        return keys.remove(key.getName()) != null;
     }
 
     @Override
-    public Type remove(String name) {
-        return body.remove(name);
+    public Iterator<Key<?>> iterator() {
+        return values.iterator();
     }
 
     @Override
-    public Iterator<Map.Entry<String, Type>> iterator() {
-        return unmodifiable.entrySet().iterator();
+    public void forEach(Consumer<? super Key<?>> action) {
+        values.forEach(action);
     }
 
     @Override
-    public void forEach(Consumer<? super Map.Entry<String, Type>> action) {
-        body.entrySet().forEach(action);
+    public Spliterator<Key<?>> spliterator() {
+        return values.spliterator();
     }
 
     @Override
-    public Spliterator<Map.Entry<String, Type>> spliterator() {
-        return body.entrySet().spliterator();
+    public Stream<Key<?>> stream() {
+        return values.stream();
+    }
+
+    @Override
+    public Stream<Key<?>> parallelStream() {
+        return values.parallelStream();
     }
 }

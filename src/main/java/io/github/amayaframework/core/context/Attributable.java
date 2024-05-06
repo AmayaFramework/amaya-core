@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.context;
 
-import io.github.amayaframework.core.Mappable;
+import io.github.amayaframework.core.util.Mappable;
 
 public interface Attributable<K> extends Mappable<K, Object> {
 

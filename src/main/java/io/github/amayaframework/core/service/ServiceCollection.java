@@ -1,6 +1,6 @@
 package io.github.amayaframework.core.service;
 
-import io.github.amayaframework.core.Streamable;
+import io.github.amayaframework.core.util.Streamable;
 
 public interface ServiceCollection extends Streamable<Service> {
 

@@ -1,4 +1,4 @@
-package io.github.amayaframework.core;
+package io.github.amayaframework.core.util;
 
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
