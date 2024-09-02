@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -5,15 +7,11 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     compileJava.options.encoding('UTF-8')
     withJavadocJar()
     withSourcesJar()
-}
-
-compileTestJava {
-    options.compilerArgs << '-parameters'
 }
 
 group = 'io.github.amayaframework'
@@ -26,18 +24,8 @@ repositories {
 
 dependencies {
     // Tests
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    // Reflection
-    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
-    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.11'
-    implementation group: 'com.github.romanqed', name: 'jeflect', version: '3.0.0'
-    // IO
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
-    api group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-    // Util
-    api group: 'io.github.amayaframework', name: 'http-utils', version: '1.1.0'
-    api group: 'com.github.romanqed', name: 'java-utils', version: '1.3.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 }
 
 test {
@@ -45,8 +33,29 @@ test {
 }
 
 jar {
-    from sourceSets.main.output
-    from sourceSets.main.allJava
+    manifest {
+        var date = new Date()
+        var javaVersion = System.getProperty("java.version")
+        var vmVendor = System.getProperty("java.vm.vendor")
+        var vmVersion = System.getProperty("java.vm.version")
+
+        attributes(
+                'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
+                'Gradle-Version': "Gradle $gradle.gradleVersion",
+                'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
+                'Build-Time': new SimpleDateFormat("HH:mm:ss.SSSZ").format(date),
+                'Built-By': 'Roman Bakaldin',
+                'Bundle-Name': 'Amaya Core',
+                'Bundle-Version': archiveVersion,
+                'Bundle-SymbolicName': archivesBaseName,
+                'Implementation-Title': archivesBaseName,
+                'Implementation-Vendor': 'github.com/amayaframework',
+                'Implementation-Version': archiveVersion,
+                'Specification-Title': archivesBaseName,
+                'Specification-Vendor': 'github.com/amayaframework',
+                'Specification-Version': archiveVersion
+        )
+    }
 }
 
 signing {
