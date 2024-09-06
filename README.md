@@ -1,4 +1,5 @@
 # UNDER BIG RECONSTRUCTION
+main&develop branches is totally outdated.
 # amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-core/)
 
 The basis of the amaya framework, which provides basic functionality.
