@@ -40,6 +40,7 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
+                'Main-Class': 'io.github.amayaframework.core.Main',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
