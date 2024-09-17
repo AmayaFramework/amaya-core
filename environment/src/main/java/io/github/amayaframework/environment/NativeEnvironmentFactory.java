@@ -24,20 +24,26 @@ public class NativeEnvironmentFactory implements EnvironmentFactory {
 
     @Override
     public Environment create(String name, EnvironmentOption... options) throws IOException {
-        var base = Path.of(".");
-        if (options.length == 0) {
-            return create(name, base, true);
-        }
-        var init = true;
-        for (var option : options) {
-            if (option.is(StandardEnvironmentOption.ROOT_LOCATION)) {
-                base = option.getValue();
-                continue;
-            }
-            if (option.is(StandardEnvironmentOption.INIT_ROOT)) {
-                init = option.getValue();
-            }
-        }
-        return create(name, base, init);
+//        var base = Path.of(".");
+//        if (options.length == 0) {
+//            return create(name, base, true);
+//        }
+//        var init = true;
+//        for (var option : options) {
+//            if (option.is(StandardEnvironmentOption.ROOT_LOCATION)) {
+//                base = option.getValue();
+//                continue;
+//            }
+//            if (option.is(StandardEnvironmentOption.INIT_ROOT)) {
+//                init = option.getValue();
+//            }
+//        }
+//        return create(name, base, init);
+        return null;
+    }
+
+    @Override
+    public Environment create(String name) throws IOException {
+        return create(name, Path.of("."), true);
     }
 }

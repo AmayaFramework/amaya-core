@@ -6,7 +6,5 @@ public interface EnvironmentFactory {
 
     Environment create(String name, EnvironmentOption... options) throws IOException;
 
-    default Environment create(String name) throws IOException {
-        return create(name, EnvironmentOption.EMPTY);
-    }
+    Environment create(String name) throws IOException;
 }
