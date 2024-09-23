@@ -15,8 +15,8 @@ java {
 }
 
 group = 'io.github.amayaframework'
-archivesBaseName = 'amaya-core'
-version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
+archivesBaseName = 'amaya-environment'
+version = System.getenv('ENV_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
@@ -26,7 +26,8 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
-    implementation project(':environment')
+    // Options
+    api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.0.0'
 }
 
 test {
@@ -41,13 +42,12 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                'Main-Class': 'io.github.amayaframework.core.Main',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
                 'Build-Time': new SimpleDateFormat("HH:mm:ss.SSSZ").format(date),
                 'Built-By': 'Roman Bakaldin',
-                'Bundle-Name': 'Amaya Core',
+                'Bundle-Name': 'Amaya Environment',
                 'Bundle-Version': archiveVersion,
                 'Bundle-SymbolicName': archivesBaseName,
                 'Implementation-Title': archivesBaseName,
@@ -75,7 +75,7 @@ publishing {
             // Configure pom
             pom {
                 name.set(archivesBaseName)
-                description.set('The basis of the amaya framework, which provides basic functionality.')
+                description.set('Amaya Environment Module')
                 url.set('https://github.com/AmayaFramework/amaya-core')
 
                 organization {

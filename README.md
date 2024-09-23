@@ -113,6 +113,7 @@ b) in case of inconsistency, report this to the framework by means of an excepti
 You can very easily create your own filter in this way:
 
 ```Java
+
 @NamedFilter("int")
 public class IntegerFilter implements Filter {
     @Override
@@ -140,6 +141,7 @@ and link it to the getter in your HttpRequest implementation.
 <p>Custom request</p>
 
 ```Java
+
 @SourceRequest(MyReq.class)
 public class MyReq extends CommonHttpRequest {
 
@@ -157,10 +159,12 @@ public class MyReq extends CommonHttpRequest {
 <p>Custom annotation</p>
 
 ```Java
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyAnnot {
     @Position
     String a();
+
     @Position(1)
     int b();
 }
