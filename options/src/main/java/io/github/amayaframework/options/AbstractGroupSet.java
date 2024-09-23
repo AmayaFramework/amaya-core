@@ -14,9 +14,21 @@ import java.util.Set;
  * Contains the implementation of all basic methods except {@link GroupOptionSet#set(String, Object)}.
  */
 public abstract class AbstractGroupSet implements GroupOptionSet {
+    /**
+     * Key qualifier delimiter. For example, 'group.key' -> '.' is delimiter.
+     */
     protected final String delimiter;
+    /**
+     * Delimiter length.
+     */
     protected final int length;
+    /**
+     * Default group name. For example, value from this variable will be used for 'key' qualifier.
+     */
     protected final String defGroup;
+    /**
+     * {@link Map} instance containing {@link OptionSet} instances associated with group names.
+     */
     protected final Map<String, OptionSet> groups;
 
     /**

@@ -8,8 +8,17 @@ import java.util.Set;
  * This class contains some useful methods that allow you to create an {@link OptionSet} implementation.
  */
 public final class Options {
+    /**
+     * Singleton instance of {@link EmptyOptionSet}.
+     */
     public static final OptionSet EMPTY_OPTION_SET = new EmptyOptionSet();
+    /**
+     * Group delimiter used by default.
+     */
     public static final String DEFAULT_GROUP_DELIMITER = ".";
+    /**
+     * Default group name used by default.
+     */
     public static final String DEFAULT_GROUP = "";
 
     private Options() {

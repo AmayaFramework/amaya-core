@@ -6,7 +6,13 @@ import java.util.Set;
  * Thrown to indicate that given key is unacceptable in option set.
  */
 public class IllegalKeyException extends IllegalArgumentException {
+    /**
+     * Illegal key.
+     */
     private final String key;
+    /**
+     * Set of acceptable keys.
+     */
     private final Set<String> acceptable;
 
     /**

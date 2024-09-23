@@ -15,6 +15,9 @@ import java.util.Set;
  * and {@link OptionSet#remove(String)}.
  */
 public abstract class AbstractOptionSet implements OptionSet {
+    /**
+     * {@link Map} instance containing option values associated with key names.
+     */
     protected final Map<String, Object> body;
 
     /**
