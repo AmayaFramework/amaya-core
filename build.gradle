@@ -26,7 +26,8 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
-    implementation project(':environment')
+    api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.0.0'
+    api group: 'io.github.amayaframework', name: 'amaya-environment', version: '1.0.0'
 }
 
 test {
@@ -41,7 +42,6 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                'Main-Class': 'io.github.amayaframework.core.Main',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
