@@ -26,6 +26,8 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    // Options
+    api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.0.0'
 }
 
 test {
@@ -40,7 +42,6 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                'Main-Class': 'io.github.amayaframework.environment.Main',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
@@ -74,7 +75,7 @@ publishing {
             // Configure pom
             pom {
                 name.set(archivesBaseName)
-                description.set('Amaya Environment module.')
+                description.set('Amaya Environment Module')
                 url.set('https://github.com/AmayaFramework/amaya-core')
 
                 organization {

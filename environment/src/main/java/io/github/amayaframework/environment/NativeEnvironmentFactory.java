@@ -1,11 +1,20 @@
 package io.github.amayaframework.environment;
 
+import io.github.amayaframework.options.OptionSet;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 
-public class NativeEnvironmentFactory implements EnvironmentFactory {
+/**
+ * Implementation of {@link EnvironmentFactory} that creates environment in native filesystem.
+ * <br>
+ * Uses the name of the environment to create the root directory.
+ * <br>
+ * The default mount point is the current directory ('.').
+ */
+public final class NativeEnvironmentFactory implements EnvironmentFactory {
 
     private static void initRoot(Path root) throws IOException {
         if (Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)) {
@@ -23,23 +32,9 @@ public class NativeEnvironmentFactory implements EnvironmentFactory {
     }
 
     @Override
-    public Environment create(String name, EnvironmentOption... options) throws IOException {
-//        var base = Path.of(".");
-//        if (options.length == 0) {
-//            return create(name, base, true);
-//        }
-//        var init = true;
-//        for (var option : options) {
-//            if (option.is(StandardEnvironmentOption.ROOT_LOCATION)) {
-//                base = option.getValue();
-//                continue;
-//            }
-//            if (option.is(StandardEnvironmentOption.INIT_ROOT)) {
-//                init = option.getValue();
-//            }
-//        }
-//        return create(name, base, init);
-        return null;
+    public Environment create(String name, OptionSet options) throws IOException {
+        var base = Path.of(options.<String>get(Environment.ROOT));
+        return create(name, base, options.asKey(Environment.INIT));
     }
 
     @Override
