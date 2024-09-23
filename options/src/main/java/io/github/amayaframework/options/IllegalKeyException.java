@@ -11,7 +11,8 @@ public class IllegalKeyException extends IllegalArgumentException {
 
     /**
      * Constructs an {@link IllegalKeyException} with the specified illegal key and set of acceptable keys.
-     * @param key the specified illegal key
+     *
+     * @param key        the specified illegal key
      * @param acceptable the specified acceptable set
      */
     public IllegalKeyException(String key, Set<String> acceptable) {
@@ -22,6 +23,7 @@ public class IllegalKeyException extends IllegalArgumentException {
 
     /**
      * Constructs an {@link IllegalKeyException} with the specified illegal key.
+     *
      * @param key the specified illegal key
      */
     public IllegalKeyException(String key) {
@@ -32,6 +34,7 @@ public class IllegalKeyException extends IllegalArgumentException {
 
     /**
      * Gets the illegal key.
+     *
      * @return the illegal key
      */
     public String getKey() {
@@ -40,6 +43,7 @@ public class IllegalKeyException extends IllegalArgumentException {
 
     /**
      * Gets the set containing acceptable keys.
+     *
      * @return the set containing acceptable keys
      */
     public Set<String> getAcceptable() {

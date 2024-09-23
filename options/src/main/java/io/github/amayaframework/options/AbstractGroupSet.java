@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 /**
  * Skeletal implementation of {@link GroupOptionSet}.
@@ -22,18 +21,18 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
 
     /**
      * Constructs instance of {@link GroupOptionSet} with the specified delimiter, default group name and
-     * group map supplier.
+     * group map.
      *
      * @param delimiter the specified delimiter, used in key qualifiers.
      *                  For example, if delim will be '.', qualifiers will be 'org.group.key'
      * @param defGroup  the specified group name, used by default
-     * @param supplier  the specified supplier, providing group map instance
+     * @param groups    the specified group map instance
      */
-    protected AbstractGroupSet(String delimiter, String defGroup, Supplier<Map<String, OptionSet>> supplier) {
-        this.delimiter = Objects.requireNonNull(delimiter);
+    protected AbstractGroupSet(String delimiter, String defGroup, Map<String, OptionSet> groups) {
+        this.delimiter = delimiter;
         this.length = delimiter.length();
         this.defGroup = defGroup;
-        this.groups = supplier.get();
+        this.groups = groups;
     }
 
     /**

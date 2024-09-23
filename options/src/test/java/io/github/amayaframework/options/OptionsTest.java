@@ -39,20 +39,20 @@ public final class OptionsTest {
     @Test
     public void testFromSet() {
         var set = Options.of(Set.of("k1", "k2", "k3", "k4", "k5"));
-        assertTrue(set.<Boolean>get("k1"));
-        assertTrue(set.<Boolean>get("k2"));
-        assertTrue(set.<Boolean>get("k3"));
-        assertTrue(set.<Boolean>get("k4"));
-        assertTrue(set.<Boolean>get("k5"));
+        assertTrue(set.asKey("k1"));
+        assertTrue(set.asKey("k2"));
+        assertTrue(set.asKey("k3"));
+        assertTrue(set.asKey("k4"));
+        assertTrue(set.asKey("k5"));
     }
 
     @Test
     public void testFromKeys() {
         var set = Options.of("k1", "k2", "k3", "k4", "k5");
-        assertTrue(set.<Boolean>get("k1"));
-        assertTrue(set.<Boolean>get("k2"));
-        assertTrue(set.<Boolean>get("k3"));
-        assertTrue(set.<Boolean>get("k4"));
-        assertTrue(set.<Boolean>get("k5"));
+        assertTrue(set.asKey("k1"));
+        assertTrue(set.asKey("k2"));
+        assertTrue(set.asKey("k3"));
+        assertTrue(set.asKey("k4"));
+        assertTrue(set.asKey("k5"));
     }
 }

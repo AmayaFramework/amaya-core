@@ -6,22 +6,26 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- *
+ * The implementation of {@link OptionSet} that accepts keys only from limited key set.
  */
 public class ClosedOptionSet extends AbstractOptionSet {
     private final Set<String> keys;
 
     /**
-     * @param supplier
-     * @param keys
+     * Constructs {@link ClosedOptionSet} instance with the map given by supplier and the specified key set.
+     *
+     * @param supplier supplier providing key-value map instance
+     * @param keys     the specified key set
      */
     public ClosedOptionSet(Supplier<Map<String, Object>> supplier, Set<String> keys) {
-        super(supplier.get());
+        super(Objects.requireNonNull(supplier.get()));
         this.keys = Collections.unmodifiableSet(keys);
     }
 
     /**
-     * @param keys
+     * Constructs {@link ClosedOptionSet} with {@link HashMap} and the specified key set.
+     *
+     * @param keys the specified key set
      */
     public ClosedOptionSet(Set<String> keys) {
         super(new HashMap<>());

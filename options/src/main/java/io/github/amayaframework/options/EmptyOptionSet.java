@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Unmodifiable implementation of {@link OptionSet} that contains no values.
  */
 public final class EmptyOptionSet implements OptionSet {
 
@@ -19,12 +19,12 @@ public final class EmptyOptionSet implements OptionSet {
 
     @Override
     public Object set(String key, Object value) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Object remove(String key) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -62,5 +62,10 @@ public final class EmptyOptionSet implements OptionSet {
     @Override
     public void forEach(Runnable2<String, Object> action) {
         // Do nothing
+    }
+
+    @Override
+    public String toString() {
+        return "Options {}";
     }
 }

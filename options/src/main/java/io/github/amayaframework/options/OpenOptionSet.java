@@ -6,22 +6,28 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- *
+ * The open implementation of an {@link OptionSet} that allows you to add and remove any keys without restrictions.
  */
 public class OpenOptionSet extends AbstractOptionSet {
 
     /**
-     * @param supplier
+     * Constructs {@link OpenOptionSet} instance with option map, provided by given supplier.
+     *
+     * @param supplier the specified option map supplier
      */
     public OpenOptionSet(Supplier<Map<String, Object>> supplier) {
-        super(supplier.get());
+        super(Objects.requireNonNull(supplier.get()));
     }
 
     /**
-     *
+     * Constructs {@link OpenOptionSet} instance with {@link HashMap} as option map.
      */
     public OpenOptionSet() {
         super(new HashMap<>());
+    }
+
+    OpenOptionSet(Map<String, Object> map) {
+        super(map);
     }
 
     @Override

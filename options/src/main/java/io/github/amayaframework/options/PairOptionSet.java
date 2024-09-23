@@ -90,4 +90,9 @@ final class PairOptionSet implements OptionSet {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Options {" + key + "=" + value + "}";
+    }
 }
