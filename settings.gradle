@@ -3,4 +3,5 @@ include 'options'
 include 'environment'
 include 'service'
 include 'tokenizer'
+include 'http'
 
