@@ -3,6 +3,10 @@ package io.github.amayaframework.http;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * A class that implements the information holder about the http method.
+ * Implements {@link HttpDefinition}.
+ */
 public final class HttpMethod implements HttpDefinition {
     // Since 1.0
     public static final HttpMethod GET = new HttpMethod("GET", HttpVersion.HTTP_1_0, false);
@@ -30,29 +34,58 @@ public final class HttpMethod implements HttpDefinition {
     final HttpVersion since;
     final boolean allowBody;
 
+    /**
+     * Constructs {@link HttpMethod} instance with given method name, http version defining this method
+     * and request body flag.
+     *
+     * @param name      the http method name
+     * @param since     the http version defining this method
+     * @param allowBody request body flag
+     */
     public HttpMethod(String name, HttpVersion since, boolean allowBody) {
         this.name = name;
         this.since = since;
         this.allowBody = allowBody;
     }
 
+    /**
+     * Searches among predefined methods for the method with the specified name.
+     *
+     * @param name the specified http method name
+     * @return {@link HttpMethod} instance if found, null otherwise
+     */
     public static HttpMethod of(String name) {
         return METHODS.get(name.toUpperCase(Locale.ENGLISH));
     }
 
-    public static Iterable<HttpMethod> all() {
-        return METHODS.values();
+    /**
+     * Returns {@link Map} instance containing all predefined http methods.
+     *
+     * @return an unmodifiable {@link Map} instance
+     */
+    public static Map<String, HttpMethod> all() {
+        return METHODS;
     }
 
+    /**
+     * Gets name of this http method.
+     *
+     * @return http method name
+     */
     public String getName() {
         return name;
     }
 
     @Override
-    public HttpVersion getSince() {
+    public HttpVersion since() {
         return since;
     }
 
+    /**
+     * Checks whether a request with this method can have a body.
+     *
+     * @return true if body allowed, false otherwise
+     */
     public boolean isAllowBody() {
         return allowBody;
     }

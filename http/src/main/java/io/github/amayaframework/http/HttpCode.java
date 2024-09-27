@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A class that implements the information holder about the http code.
+ * Implements {@link HttpDefinition}.
+ */
 public final class HttpCode implements HttpDefinition {
     // 1xx
     public static final HttpCode CONTINUE = of11(100, "Continue");
@@ -85,18 +89,36 @@ public final class HttpCode implements HttpDefinition {
     final String description;
     final HttpVersion since;
 
+    /**
+     * Constructs {@link HttpCode} instance with given code number, description and http version defining this code.
+     *
+     * @param code        the specified http code number
+     * @param description the specified http code description
+     * @param since       the http version defining this code
+     */
     public HttpCode(int code, String description, HttpVersion since) {
         this.code = code;
         this.description = description;
         this.since = since;
     }
 
+    /**
+     * Searches among predefined methods for the method with the specified number.
+     *
+     * @param code the specified number of http code
+     * @return {@link HttpCode} instance if found, null otherwise
+     */
     public static HttpCode of(int code) {
         return CODES.get(code);
     }
 
-    public static Iterable<HttpCode> all() {
-        return CODES.values();
+    /**
+     * Returns {@link Map} instance containing all predefined http codes.
+     *
+     * @return an unmodifiable {@link Map} instance
+     */
+    public static Map<Integer, HttpCode> all() {
+        return CODES;
     }
 
     private static HttpCode of1(int code, String description) {
@@ -175,16 +197,26 @@ public final class HttpCode implements HttpDefinition {
         return Collections.unmodifiableMap(ret);
     }
 
+    /**
+     * Gets number of this http code.
+     *
+     * @return number of http code
+     */
     public int getCode() {
         return code;
     }
 
+    /**
+     * Gets description of this http code.
+     *
+     * @return description of http code
+     */
     public String getDescription() {
         return description;
     }
 
     @Override
-    public HttpVersion getSince() {
+    public HttpVersion since() {
         return since;
     }
 

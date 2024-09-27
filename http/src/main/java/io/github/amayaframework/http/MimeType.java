@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * A class that implements the information holder about the mime type.
+ */
 public final class MimeType {
 
     // Application
@@ -98,15 +101,29 @@ public final class MimeType {
     final String qualifier;
     final String group;
     final String name;
-    final boolean text;
+    final Boolean text;
 
-    public MimeType(String group, String name, boolean text) {
+    /**
+     * Constructs {@link MimeType} instance with given group, name and text flag.
+     *
+     * @param group the specified mime group
+     * @param name  the specified mime name
+     * @param text  the specified text flag, if set true, then this type can be interpreted as string
+     */
+    public MimeType(String group, String name, Boolean text) {
         this.qualifier = (group + "/" + name).toLowerCase(Locale.ENGLISH);
         this.group = group;
         this.name = name;
         this.text = text;
     }
 
+    /**
+     * Constructs {@link MimeType} instance with given group and name.
+     * Sets that this type cannot be interpreted as string.
+     *
+     * @param group the specified mime group
+     * @param name  the specified mime name
+     */
     public MimeType(String group, String name) {
         this(group, name, false);
     }
@@ -188,32 +205,70 @@ public final class MimeType {
         return Collections.unmodifiableMap(ret);
     }
 
-    public static Iterable<MimeType> all() {
-        return TYPES.values();
+    /**
+     * Returns {@link Map} instance containing all predefined mime types.
+     *
+     * @return an unmodifiable {@link Map} instance
+     */
+    public static Map<String, MimeType> all() {
+        return TYPES;
     }
 
+    /**
+     * Searches among predefined mime types for the type with the specified qualifier.
+     *
+     * @param qualifier the specified qualifier of the mime type
+     * @return {@link MimeType} instance if found, null otherwise
+     */
     public static MimeType of(String qualifier) {
         return TYPES.get(qualifier.toLowerCase(Locale.ENGLISH));
     }
 
+    /**
+     * Searches among predefined mime types for the type with the specified mime group and name.
+     *
+     * @param group the specified mime group
+     * @param name  the specified mime name
+     * @return {@link MimeType} instance if found, null otherwise
+     */
     public static MimeType of(String group, String name) {
         var qualifier = group + "/" + name;
         return TYPES.get(qualifier.toLowerCase(Locale.ENGLISH));
     }
 
+    /**
+     * Gets qualifier of this mime type. For example, 'application/json'.
+     *
+     * @return the mime qualifier
+     */
     public String getQualifier() {
         return qualifier;
     }
 
+    /**
+     * Gets group of this mime type. For example, 'application'.
+     *
+     * @return the mime group
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     * Gets name of this mime type. For example, 'json'.
+     *
+     * @return the mime name
+     */
     public String getName() {
         return name;
     }
 
-    public boolean isText() {
+    /**
+     * Checks whether object of this mime type can be interpreted as a string.
+     *
+     * @return true if can be interpreted as a string, false otherwise
+     */
+    public Boolean isText() {
         return text;
     }
 
