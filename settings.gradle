@@ -4,4 +4,5 @@ include 'environment'
 include 'service'
 include 'tokenizer'
 include 'http'
+include 'context'
 
