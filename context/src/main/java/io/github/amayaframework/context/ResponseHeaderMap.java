@@ -5,13 +5,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- *
+ * A class that implements a header map on a {@link HttpServletResponse}.
+ * <br>
+ * Uses {@link HttpServletResponse#getHeaderNames()}, {@link HttpServletResponse#getHeader(String)}
+ * and {@link HttpServletResponse#setHeader(String, String)} to fully emulate {@link Map} behaviour.
  */
 public final class ResponseHeaderMap implements Map<String, String> {
     private final HttpServletResponse response;
 
     /**
-     * @param response
+     * Constructs {@link ResponseHeaderMap} instance with given {@link HttpServletResponse}.
+     *
+     * @param response the underlying {@link HttpServletResponse} instance, must be non-null
      */
     public ResponseHeaderMap(HttpServletResponse response) {
         this.response = response;

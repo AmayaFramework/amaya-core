@@ -18,8 +18,6 @@ public interface HttpResponse extends Response, HttpTransaction {
      */
     void setCookie(Cookie cookie);
 
-    // Any header type
-
     /**
      * @param name
      * @param value
@@ -30,23 +28,7 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param name
      * @param value
      */
-    void addHeader(String name, Object value);
-
-    // String headers
-
-    /**
-     * @param name
-     * @param value
-     */
     void setHeader(String name, String value);
-
-    /**
-     * @param name
-     * @param value
-     */
-    void addHeader(String name, String value);
-
-    // Date headers
 
     /**
      * @param name
@@ -58,19 +40,7 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param name
      * @param date
      */
-    void addHeader(String name, Date date);
-
-    /**
-     * @param name
-     * @param date
-     */
     void setHeader(String name, long date);
-
-    /**
-     * @param name
-     * @param date
-     */
-    void addHeader(String name, long date);
 
     /**
      * @return

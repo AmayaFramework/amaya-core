@@ -5,13 +5,18 @@ import jakarta.servlet.ServletRequest;
 import java.util.*;
 
 /**
- *
+ * A class that implements an attribute map on a {@link ServletRequest}.
+ * <br>
+ * Uses {@link ServletRequest#getAttribute(String)}, {@link ServletRequest#setAttribute(String, Object)}
+ * and {@link ServletRequest#getAttributeNames()} to fully emulate {@link Map} behaviour.
  */
 public final class RequestAttributeMap extends AbstractIteratedMap<String, Object> {
     private final ServletRequest request;
 
     /**
-     * @param request
+     * Constructs {@link RequestAttributeMap} instance with given {@link ServletRequest}.
+     *
+     * @param request the underlying {@link ServletRequest} instance, must be non-null
      */
     public RequestAttributeMap(ServletRequest request) {
         super(() -> request.getAttributeNames().asIterator());

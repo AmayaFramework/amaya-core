@@ -11,38 +11,42 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 
 /**
- * @param <T>
+ * Skeletal implementation of {@link Response}. Built over underlying {@link ServletResponse} instance.
+ *
+ * @param <T> the type of underlying response
  */
 public abstract class AbstractResponse<T extends ServletResponse> implements Response {
     /**
-     *
+     * The underlying {@link ServletResponse} instance.
      */
     protected final T response;
     /**
-     *
+     * Response protocol.
      */
     protected final String protocol;
     /**
-     *
+     * Response scheme.
      */
     protected final String scheme;
     /**
-     *
+     * Response charset.
      */
     protected Charset charset;
     /**
-     *
+     * Length of response content.
      */
     protected long length;
     /**
-     *
+     * Response mime data.
      */
     protected MimeData data;
 
     /**
-     * @param response
-     * @param protocol
-     * @param scheme
+     * Constructs {@link AbstractResponse} instance with given {@link ServletResponse} instance, protocol and scheme.
+     *
+     * @param response the underlying {@link ServletResponse} instance, must be non-null
+     * @param protocol the specified protocol string
+     * @param scheme   the specified scheme string
      */
     protected AbstractResponse(T response, String protocol, String scheme) {
         this.response = response;
@@ -128,8 +132,10 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     }
 
     /**
-     * @param data
-     * @return
+     * Formats {@link MimeData} instance as mime string, e.g. 'group/type;param=value'.
+     *
+     * @param data the specified {@link MimeData} instance to be formatted
+     * @return mime string
      */
     protected abstract String formatMimeData(MimeData data);
 

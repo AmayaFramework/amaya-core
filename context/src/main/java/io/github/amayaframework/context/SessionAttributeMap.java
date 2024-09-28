@@ -5,13 +5,18 @@ import jakarta.servlet.http.HttpSession;
 import java.util.*;
 
 /**
- *
+ * A class that implements an attribute map on a {@link HttpSession}.
+ * <br>
+ * Uses {@link HttpSession#getAttribute(String)}, {@link HttpSession#setAttribute(String, Object)}
+ * and {@link HttpSession#getAttributeNames()} to fully emulate {@link Map} behaviour.
  */
 public final class SessionAttributeMap extends AbstractIteratedMap<String, Object> {
     private final HttpSession session;
 
     /**
-     * @param session
+     * Constructs {@link SessionAttributeMap} instance with given {@link HttpSession}.
+     *
+     * @param session the underlying {@link HttpSession} instance, must be non-null
      */
     public SessionAttributeMap(HttpSession session) {
         super(() -> session.getAttributeNames().asIterator());

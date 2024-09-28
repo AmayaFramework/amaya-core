@@ -37,10 +37,11 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     /**
      * Constructs {@link AbstractHttpResponse} instance with given {@link HttpServletResponse},
      * protocol, scheme and {@link HttpVersion}.
+     *
      * @param response the underlying {@link HttpServletResponse} instance, must be non-null
      * @param protocol the specified protocol string
-     * @param scheme the specified scheme string
-     * @param version the specified http protocol version, must be non-null
+     * @param scheme   the specified scheme string
+     * @param version  the specified http protocol version, must be non-null
      */
     protected AbstractHttpResponse(HttpServletResponse response, String protocol, String scheme, HttpVersion version) {
         super(response, protocol, scheme);
@@ -99,18 +100,8 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public void addHeader(String name, Object value) {
-        response.addHeader(name, value.toString());
-    }
-
-    @Override
     public void setHeader(String name, String value) {
         response.setHeader(name, value);
-    }
-
-    @Override
-    public void addHeader(String name, String value) {
-        response.addHeader(name, value);
     }
 
     @Override
@@ -119,18 +110,8 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public void addHeader(String name, Date date) {
-        response.addDateHeader(name, date.getTime());
-    }
-
-    @Override
     public void setHeader(String name, long date) {
         response.setDateHeader(name, date);
-    }
-
-    @Override
-    public void addHeader(String name, long date) {
-        response.addDateHeader(name, date);
     }
 
     @Override

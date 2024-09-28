@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 /**
  * Skeletal implementation for {@link Map} based on key sequence stored as {@link Iterable}.
+ *
  * @param <K> the key type
  * @param <V> the value type
  */
@@ -17,6 +18,7 @@ public abstract class AbstractIteratedMap<K, V> implements Map<K, V> {
 
     /**
      * Constructs {@link AbstractIteratedMap} with given key sequence.
+     *
      * @param keys the {@link Iterable} instance containing key sequence, must be non-null
      */
     protected AbstractIteratedMap(Iterable<K> keys) {
@@ -25,6 +27,7 @@ public abstract class AbstractIteratedMap<K, V> implements Map<K, V> {
 
     /**
      * Creates stream over {@link AbstractIteratedMap#keys}.
+     *
      * @return {@link Stream} instance
      */
     protected Stream<K> getKeyStream() {

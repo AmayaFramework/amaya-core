@@ -5,13 +5,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- *
+ * A class that implements a readonly header map on a {@link HttpServletRequest}.
+ * <br>
+ * Uses {@link HttpServletRequest#getHeader(String)} and {@link HttpServletRequest#getHeaderNames()}
+ * to fully emulate readonly {@link Map} behaviour.
  */
 public final class RequestHeaderMap extends AbstractIteratedMap<String, String> {
     private final HttpServletRequest request;
 
     /**
-     * @param request
+     * Constructs {@link RequestHeaderMap} instance with given {@link HttpServletRequest}.
+     *
+     * @param request the underlying {@link HttpServletRequest} instance, must be non-null
      */
     public RequestHeaderMap(HttpServletRequest request) {
         super(() -> request.getHeaderNames().asIterator());

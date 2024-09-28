@@ -15,36 +15,39 @@ import java.util.Map;
 
 /**
  * Skeletal implementation of {@link Request}. Built over underlying {@link ServletRequest} instance.
+ *
  * @param <T> the type of underlying request
  */
 public abstract class AbstractRequest<T extends ServletRequest> implements Request {
     /**
-     *
+     * The underlying {@link ServletRequest} instance.
      */
     protected final T request;
     /**
-     *
+     * Local address.
      */
     protected InetSocketAddress local;
     /**
-     *
+     * Remote address.
      */
     protected InetSocketAddress remote;
     /**
-     *
+     * Request charset.
      */
     protected Charset charset;
     /**
-     *
+     * Request mime data.
      */
     protected MimeData data;
     /**
-     *
+     * Request attribute map.
      */
     protected Map<String, Object> attributes;
 
     /**
-     * @param request
+     * Constructs {@link AbstractRequest} instance with given {@link ServletRequest} instance.
+     *
+     * @param request the underlying {@link ServletRequest} instance, must be non-null
      */
     protected AbstractRequest(T request) {
         this.request = request;
@@ -170,8 +173,10 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     }
 
     /**
-     * @param data
-     * @return
+     * Parses {@link MimeData} from given qualifier.
+     *
+     * @param data the specified string containing mime data qualifier
+     * @return {@link MimeData} instance
      */
     protected abstract MimeData parseMimeData(String data);
 
