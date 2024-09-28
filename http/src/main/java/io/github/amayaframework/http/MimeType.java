@@ -266,7 +266,7 @@ public final class MimeType {
     /**
      * Checks whether object of this mime type can be interpreted as a string.
      *
-     * @return true if can be interpreted as a string, false otherwise
+     * @return true if can be interpreted as a string, false if not, null if is undefined
      */
     public Boolean isText() {
         return text;
