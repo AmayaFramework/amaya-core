@@ -5,7 +5,9 @@ import io.github.amayaframework.http.HttpVersion;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,10 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
      * {@link URI} containing path from http request line.
      */
     protected URI uri;
+    /**
+     * {@link URL} containing full request path.
+     */
+    protected URL url;
     /**
      * Parsed segments of request path.
      */
@@ -81,7 +87,11 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public Date getDateHeader(String name) {
-        return new Date(request.getDateHeader(name));
+        var ret = request.getDateHeader(name);
+        if (ret < 0) {
+            return null;
+        }
+        return new Date(ret);
     }
 
     @Override
@@ -106,12 +116,53 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
         return method;
     }
 
+    private URL createURL() {
+        var ret = new StringBuilder();
+        var scheme = request.getScheme();
+        var port = request.getServerPort();
+        ret.append(scheme);
+        ret.append("://");
+        ret.append(request.getServerName());
+        if ((scheme.equals("http") && port != 80) || (scheme.equals("https") && port != 443)) {
+            ret.append(':');
+            ret.append(port);
+        }
+        ret.append(request.getRequestURI());
+        var query = request.getQueryString();
+        if (query != null) {
+            ret.append('?').append(query);
+        }
+        try {
+            return new URL(ret.toString());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
-    public URI getURI() {
+    public URL getURL() {
+        if (url != null) {
+            return url;
+        }
+        url = createURL();
+        return url;
+    }
+
+    private URI createURI() {
+        var path = request.getRequestURI();
+        var query = request.getQueryString();
+        if (query == null) {
+            return URI.create(path);
+        }
+        return URI.create(path + '?' + query);
+    }
+
+    @Override
+    public URI getRequestURI() {
         if (uri != null) {
             return uri;
         }
-        uri = URI.create(request.getRequestURI() + "?" + request.getQueryString());
+        uri = createURI();
         return uri;
     }
 

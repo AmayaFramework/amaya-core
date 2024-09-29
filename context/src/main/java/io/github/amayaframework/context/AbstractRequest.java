@@ -124,7 +124,7 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     }
 
     @Override
-    public Map<String, String[]> getParameterValues() {
+    public Map<String, String[]> getParameters() {
         return request.getParameterMap();
     }
 
@@ -139,7 +139,7 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     }
 
     @Override
-    public String[] getParameterValues(String name) {
+    public String[] getParameters(String name) {
         return request.getParameterValues(name);
     }
 
