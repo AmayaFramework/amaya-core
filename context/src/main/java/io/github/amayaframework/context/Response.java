@@ -98,7 +98,6 @@ public interface Response extends Transaction {
      * A larger buffer allows more content to be written before anything is actually sent, thus providing the servlet
      * with more time to set appropriate status codes and headers. A smaller buffer decreases server memory load and
      * allows the client to start receiving data more quickly.
-     * <p>
      *
      * @param size the preferred buffer size
      * @throws IllegalStateException if this method is called after content has been written

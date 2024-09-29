@@ -29,25 +29,7 @@ public interface HttpRequest extends Request, HttpTransaction {
 
     /**
      * Returns the part of this request's URL from the protocol name up to the query string in the first line of the
-     * HTTP request. The web container does not decode this String. For example:
-     *
-     * <table summary="Examples of Returned Values">
-     * <tr align=left>
-     * <th>First line of HTTP request</th>
-     * <th>Returned Value</th>
-     * <tr>
-     * <td>POST /some/path.html HTTP/1.1
-     * <td>
-     * <td>/some/path.html
-     * <tr>
-     * <td>GET http://foo.bar/a.html HTTP/1.0
-     * <td>
-     * <td>/a.html
-     * <tr>
-     * <td>HEAD /xyz?a=b HTTP/1.1
-     * <td>
-     * <td>/xyz?a=b
-     * </table>
+     * HTTP request. The web container does not decode this String.
      *
      * @return the {@link URI} instance containing URI from http request line.
      */
