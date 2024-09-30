@@ -16,7 +16,7 @@ java {
 
 group = 'io.github.amayaframework'
 archivesBaseName = 'amaya-core'
-version = System.getenv('RELEASE_VERSION') ?: '1.0.0'
+version = System.getenv('CORE_VERSION') ?: '1.0.0'
 
 repositories {
     mavenCentral()
@@ -26,8 +26,18 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    // JFunc
+    api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
+    // Middlewares
+    api group: 'com.github.romanqed', name: 'jconv', version: '1.0.3'
+    // Amaya modules
     api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.0.0'
     api group: 'io.github.amayaframework', name: 'amaya-environment', version: '1.0.0'
+    api group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
+    api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.0.0'
+    api group: 'io.github.amayaframework', name: 'amaya-server', version: '1.0.0'
+    // DI
+    api group: 'io.github.amayaframework', name: 'amaya-di', version: '2.1.1'
 }
 
 test {
@@ -75,7 +85,7 @@ publishing {
             // Configure pom
             pom {
                 name.set(archivesBaseName)
-                description.set('The basis of the amaya framework, which provides basic functionality.')
+                description.set('The core api of the amaya framework, which provides basic functionality.')
                 url.set('https://github.com/AmayaFramework/amaya-core')
 
                 organization {
