@@ -5,8 +5,8 @@
  */
 module io.github.amayaframework.server {
     // Imports
-    requires com.github.romanqed.jconv;
-    requires static io.github.amayaframework.options;
+    requires com.github.romanqed.jfunc;
+    requires io.github.amayaframework.options;
     requires io.github.amayaframework.context;
     requires io.github.amayaframework.service;
     requires io.github.amayaframework.http;

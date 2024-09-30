@@ -26,8 +26,8 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
-    // Middlewared tasks
-    api group: 'com.github.romanqed', name: 'jconv', version: '1.0.3'
+    // JFunc
+    api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
     // Amaya options
     api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.0.0'
     // Amaya context
