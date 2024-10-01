@@ -33,6 +33,9 @@ public final class NativeEnvironmentFactory implements EnvironmentFactory {
 
     @Override
     public Environment create(String name, OptionSet options) throws IOException {
+        if (options == null || options.isEmpty()) {
+            return create(name, Path.of("."), true);
+        }
         var base = Path.of(options.<String>get(Environment.ROOT));
         return create(name, base, options.asKey(Environment.INIT));
     }
