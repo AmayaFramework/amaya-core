@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public abstract class AbstractGroupSet implements GroupOptionSet {
     /**
-     * Key qualifier delimiter. For example, 'group.key' -> '.' is delimiter.
+     * Key qualifier delimiter. For example, 'group.key' -&gt; '.' is delimiter.
      */
     protected final String delimiter;
     /**
@@ -138,6 +138,11 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
             return null;
         }
         return found.remove(extractName(index, key));
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return groups.isEmpty();
     }
 
     @Override

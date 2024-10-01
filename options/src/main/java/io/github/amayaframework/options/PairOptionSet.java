@@ -36,6 +36,11 @@ final class PairOptionSet implements OptionSet {
     }
 
     @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
     public boolean asKey(String key) {
         if (!this.key.equals(key)) {
             return false;

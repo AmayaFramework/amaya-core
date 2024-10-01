@@ -55,6 +55,11 @@ public abstract class AbstractOptionSet implements OptionSet {
     }
 
     @Override
+    public boolean isEmpty() {
+        return body.isEmpty();
+    }
+
+    @Override
     public Set<String> getKeys() {
         return Collections.unmodifiableSet(body.keySet());
     }
