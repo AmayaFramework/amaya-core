@@ -37,7 +37,7 @@ dependencies {
     api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.0.0'
     api group: 'io.github.amayaframework', name: 'amaya-server', version: '1.0.1'
     // DI
-    compileOnlyApi group: 'io.github.amayaframework', name: 'amaya-di', version: '2.1.1'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.1.1'
 }
 
 test {
