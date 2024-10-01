@@ -141,6 +141,11 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
     }
 
     @Override
+    public boolean isEmpty() {
+        return groups.isEmpty();
+    }
+
+    @Override
     public Set<String> getKeys() {
         return Collections.unmodifiableSet(groups.keySet());
     }

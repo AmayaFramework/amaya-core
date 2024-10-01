@@ -79,6 +79,12 @@ public interface OptionSet {
     Object remove(String key);
 
     /**
+     * Checks if this {@link OptionSet} contains no options.
+     * @return true if {@link OptionSet} is empty, false otherwise
+     */
+    boolean isEmpty();
+
+    /**
      * Gets set contains all known keys from this {@link OptionSet} instance.
      *
      * @return {@link Set} instance

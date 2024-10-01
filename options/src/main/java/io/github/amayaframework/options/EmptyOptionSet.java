@@ -28,6 +28,11 @@ public final class EmptyOptionSet implements OptionSet {
     }
 
     @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
+    @Override
     public boolean asKey(String key) {
         return false;
     }
