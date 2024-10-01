@@ -1,14 +1,14 @@
-package io.github.amayaframework.impl;
+package io.github.amayaframework.core;
 
 import io.github.amayaframework.core.OptionSetBuilder;
 import io.github.amayaframework.core.OptionSetFactory;
 import io.github.amayaframework.core.OptionSetHandler;
 import io.github.amayaframework.options.GroupOptionSet;
 
-class WrappedOptionSetBuilder implements OptionSetBuilder {
+class WrappedOptionBuilder implements OptionSetBuilder {
     private final OptionSetBuilder builder;
 
-    WrappedOptionSetBuilder(OptionSetBuilder builder) {
+    WrappedOptionBuilder(OptionSetBuilder builder) {
         this.builder = builder;
     }
 
@@ -37,7 +37,13 @@ class WrappedOptionSetBuilder implements OptionSetBuilder {
     }
 
     @Override
+    public OptionSetBuilder reset() {
+        builder.reset();
+        return this;
+    }
+
+    @Override
     public GroupOptionSet build() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("The builder is managed by the application builder");
     }
 }

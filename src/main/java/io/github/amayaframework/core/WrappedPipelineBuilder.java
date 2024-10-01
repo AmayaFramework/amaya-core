@@ -1,4 +1,4 @@
-package io.github.amayaframework.impl;
+package io.github.amayaframework.core;
 
 import com.github.romanqed.jconv.PipelineBuilder;
 import com.github.romanqed.jconv.Task;
@@ -31,6 +31,6 @@ final class WrappedPipelineBuilder<T> implements PipelineBuilder<T> {
 
     @Override
     public Task<T> build() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("The builder is managed by the application builder");
     }
 }

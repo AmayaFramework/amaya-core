@@ -8,7 +8,7 @@ import io.github.amayaframework.server.HttpServerFactory;
 
 import java.net.InetSocketAddress;
 
-public interface ApplicationBuilder {
+public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
 
     OptionSetBuilder getOptionBuilder();
 

@@ -1,4 +1,4 @@
-package io.github.amayaframework.impl;
+package io.github.amayaframework.core;
 
 import io.github.amayaframework.core.ServiceManagerBuilder;
 import io.github.amayaframework.service.Service;
@@ -58,7 +58,13 @@ final class WrappedManagerBuilder implements ServiceManagerBuilder {
     }
 
     @Override
+    public ServiceManagerBuilder reset() {
+        builder.reset();
+        return this;
+    }
+
+    @Override
     public ServiceManager build() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("The builder is managed by the application builder");
     }
 }

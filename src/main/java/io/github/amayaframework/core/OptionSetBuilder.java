@@ -2,7 +2,7 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.options.GroupOptionSet;
 
-public interface OptionSetBuilder {
+public interface OptionSetBuilder extends Resettable<OptionSetBuilder> {
 
     OptionSetBuilder setFactory(OptionSetFactory factory);
 
