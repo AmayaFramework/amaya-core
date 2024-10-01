@@ -55,7 +55,9 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
             var factory = Objects.requireNonNullElse(this.factory, getDefaultFactory());
             var handler = Objects.requireNonNullElse(this.handler, getDefaultHandler());
             var ret = factory.create(handler);
-            services.forEach(ret::add);
+            if (services != null) {
+                services.forEach(ret::add);
+            }
             return ret;
         } finally {
             innerReset();
