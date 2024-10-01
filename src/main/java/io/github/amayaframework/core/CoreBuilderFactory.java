@@ -15,7 +15,8 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public final class CoreBuilderFactory implements ApplicationBuilderFactory {
-    private static final String AMAYA_DI = "io.github.amayaframework.di";
+    private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
+    private static final String AMAYA_SERVICE_PROVER = "io.github.amayaframework.di.ServiceProvider";
     private static final EnvironmentFactory DEFAULT_ENVIRONMENT_FACTORY = new NativeEnvironmentFactory();
     private static final ServiceHandler DEFAULT_HANDLER = new PlainServiceHandler();
     private static final ServiceManagerFactory DEFAULT_MANAGER_FACTORY = new HandledManagerFactory();
@@ -35,9 +36,23 @@ public final class CoreBuilderFactory implements ApplicationBuilderFactory {
         }
     }
 
-    private static boolean isDILoaded() {
+    private static boolean isDIModuleLoaded() {
         var layer = ModuleLayer.boot();
-        return layer.findModule(AMAYA_DI).isPresent();
+        return layer.findModule(AMAYA_DI_MODULE).isPresent();
+    }
+
+    private static boolean isDIClassExists() {
+        var loader = Thread.currentThread().getContextClassLoader();
+        try {
+            var loaded = loader.loadClass(AMAYA_SERVICE_PROVER);
+            return loaded.getName().equals(AMAYA_SERVICE_PROVER);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    private static boolean isDILoaded() {
+        return isDIModuleLoaded() || isDIClassExists();
     }
 
     @Override
