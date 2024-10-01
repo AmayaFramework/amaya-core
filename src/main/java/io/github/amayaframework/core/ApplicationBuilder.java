@@ -33,6 +33,8 @@ public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
 
     ApplicationBuilder configure(ProviderBuilderConsumer action);
 
+    ApplicationBuilder configure(ProviderConsumer action);
+
     ApplicationBuilder setServerFactory(HttpServerFactory factory);
 
     ApplicationBuilder configure(HttpConfigConsumer action);

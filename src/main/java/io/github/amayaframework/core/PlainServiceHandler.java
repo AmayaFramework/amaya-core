@@ -1,4 +1,4 @@
-package io.github.amayaframework.impl;
+package io.github.amayaframework.core;
 
 import io.github.amayaframework.service.ServiceHandler;
 import io.github.amayaframework.service.WatchedService;

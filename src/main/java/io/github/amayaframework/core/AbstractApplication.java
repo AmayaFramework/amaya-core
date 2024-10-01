@@ -1,6 +1,5 @@
 package io.github.amayaframework.core;
 
-import io.github.amayaframework.core.Application;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServer;

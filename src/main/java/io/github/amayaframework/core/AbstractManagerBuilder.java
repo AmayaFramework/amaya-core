@@ -49,15 +49,12 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
 
     protected abstract ServiceHandler getDefaultHandler();
 
-    protected abstract void handleServices();
-
     @Override
     public ServiceManager build() {
         try {
             var factory = Objects.requireNonNullElse(this.factory, getDefaultFactory());
             var handler = Objects.requireNonNullElse(this.handler, getDefaultHandler());
             var ret = factory.create(handler);
-            handleServices();
             services.forEach(ret::add);
             return ret;
         } finally {
