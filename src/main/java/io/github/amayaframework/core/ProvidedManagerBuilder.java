@@ -51,7 +51,7 @@ final class ProvidedManagerBuilder extends AbstractManagerBuilder {
     public ServiceManagerBuilder addService(Service service) {
         Objects.requireNonNull(service);
         builder.addInstance(service);
-        services.add(service);
+        add(service);
         return this;
     }
 
@@ -60,7 +60,7 @@ final class ProvidedManagerBuilder extends AbstractManagerBuilder {
         Objects.requireNonNull(type);
         Objects.requireNonNull(service);
         builder.addInstance(type, service);
-        services.add(service);
+        add(service);
         return this;
     }
 
