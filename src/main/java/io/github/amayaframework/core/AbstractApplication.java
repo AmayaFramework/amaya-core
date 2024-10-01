@@ -27,6 +27,7 @@ public abstract class AbstractApplication implements Application {
         this.manager = manager;
         this.server = server;
         this.lock = new Object();
+        this.state = STOPPED;
     }
 
     @Override
