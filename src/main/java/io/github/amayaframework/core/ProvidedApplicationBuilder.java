@@ -35,6 +35,7 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
         this.defaultFactory = defaultFactory;
         this.supplier = supplier;
         this.builder = supplier.get();
+        this.providedBuilder.setProviderBuilder(this.builder);
     }
 
     @Override
