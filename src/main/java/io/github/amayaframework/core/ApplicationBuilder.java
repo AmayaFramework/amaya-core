@@ -4,15 +4,18 @@ import com.github.romanqed.jconv.PipelineBuilder;
 import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.environment.EnvironmentFactory;
+import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServerFactory;
 
 import java.net.InetSocketAddress;
 
 public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
 
-    OptionSetBuilder getOptionBuilder();
+    GroupOptionSet getOptions();
 
-    ApplicationBuilder configure(OptionBuilderConsumer action);
+    ApplicationBuilder setOptions(GroupOptionSet options);
+
+    ApplicationBuilder configure(OptionSetConsumer action);
 
     ApplicationBuilder setEnvironmentFactory(EnvironmentFactory factory);
 

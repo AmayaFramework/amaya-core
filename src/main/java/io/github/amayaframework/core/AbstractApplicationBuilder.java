@@ -14,35 +14,30 @@ import java.util.Objects;
 
 public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     // Builders
-    protected final OptionSetBuilder optionBuilder;
     protected final ServiceManagerBuilder managerBuilder;
     protected final PipelineBuilder<HttpContext> handlerBuilder;
     // Wrapped builders
-    protected final OptionSetBuilder wrappedOptionBuilder;
     protected final ServiceManagerBuilder wrappedManagerBuilder;
     protected final PipelineBuilder<HttpContext> wrappedHandlerBuilder;
     // Modifiable params
     protected EnvironmentFactory environmentFactory;
     protected String environmentName;
     protected HttpServerFactory serverFactory;
+    protected GroupOptionSet options;
     // Http server binds
     protected List<InetSocketAddress> binds;
     // Deferred http config handlers
     protected List<HttpConfigConsumer> httpConsumers;
 
-    protected AbstractApplicationBuilder(OptionSetBuilder optionBuilder,
-                                         ServiceManagerBuilder managerBuilder,
+    protected AbstractApplicationBuilder(ServiceManagerBuilder managerBuilder,
                                          PipelineBuilder<HttpContext> handlerBuilder) {
-        this.optionBuilder = optionBuilder;
         this.managerBuilder = managerBuilder;
         this.handlerBuilder = handlerBuilder;
-        this.wrappedOptionBuilder = new WrappedOptionBuilder(optionBuilder);
         this.wrappedManagerBuilder = new WrappedManagerBuilder(managerBuilder);
         this.wrappedHandlerBuilder = new WrappedPipelineBuilder<>(handlerBuilder);
     }
 
     protected void innerReset() {
-        optionBuilder.reset();
         managerBuilder.reset();
         handlerBuilder.clear();
         this.environmentFactory = null;
@@ -53,14 +48,20 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     }
 
     @Override
-    public OptionSetBuilder getOptionBuilder() {
-        return wrappedOptionBuilder;
+    public GroupOptionSet getOptions() {
+        return options;
     }
 
     @Override
-    public ApplicationBuilder configure(OptionBuilderConsumer action) {
+    public ApplicationBuilder setOptions(GroupOptionSet options) {
+        this.options = options;
+        return this;
+    }
+
+    @Override
+    public ApplicationBuilder configure(OptionSetConsumer action) {
         try {
-            action.run(wrappedOptionBuilder);
+            action.run(options);
         } catch (Error | RuntimeException e) {
             throw e;
         } catch (Throwable e) {
@@ -164,25 +165,15 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     protected abstract HttpServerFactory getDefaultServerFactory();
 
     private Environment create(GroupOptionSet set) {
-        var environmentFactory = Objects.requireNonNullElse(this.environmentFactory, getDefaultEnvironmentFactory());
-        var name = Objects.requireNonNullElse(this.environmentName, getDefaultName());
-        var options = set.getGroup(Options.ENVIRONMENT_OPTION_GROUP);
-        if (options == null || options.asMap().isEmpty()) {
-            return null;
-        }
         return null;
     }
 
     protected Application checkedBuild() throws Throwable {
-        // Build options
-        var options = optionBuilder.build();
-        // Create env
         return null;
     }
 
     @Override
     public Application build() {
-
         return null;
     }
 }
