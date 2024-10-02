@@ -105,8 +105,8 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
 
     @Override
     public void setCharset(Charset charset) {
-        this.charset = charset;
         response.setCharacterEncoding(charset.name());
+        this.charset = charset;
     }
 
     @Override
@@ -116,8 +116,8 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
 
     @Override
     public void setContentLength(long length) {
-        this.length = length;
         response.setContentLengthLong(length);
+        this.length = length;
     }
 
     @Override
@@ -127,8 +127,12 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
 
     @Override
     public void setMimeData(MimeData data) {
+        if (data == null) {
+            response.setContentType(null);
+        } else {
+            response.setContentType(formatMimeData(data));
+        }
         this.data = data;
-        response.setContentType(formatMimeData(data));
     }
 
     /**
@@ -141,6 +145,10 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
 
     @Override
     public void setMimeType(MimeType type) {
+        if (type == null) {
+            setMimeData(null);
+            return;
+        }
         setMimeData(new MimeData(type));
     }
 
