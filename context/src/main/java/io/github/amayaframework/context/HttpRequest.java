@@ -47,9 +47,9 @@ public interface HttpRequest extends Request, HttpTransaction {
      * <br>
      * For example, for path /a/b/c method returns [a, b, c].
      *
-     * @return the {@link String} array containing path segments
+     * @return the {@link String} list containing path segments
      */
-    String[] getPathSegments();
+    List<String> getPathSegments();
 
     /**
      * Gets the query string that is contained in the request URL after the path.

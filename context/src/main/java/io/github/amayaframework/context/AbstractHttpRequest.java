@@ -37,7 +37,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     /**
      * Parsed segments of request path.
      */
-    protected String[] segments;
+    protected List<String> segments;
     /**
      * Parsed query parameters of this request.
      */
@@ -175,12 +175,12 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
      * Splits given path by segments.
      *
      * @param path the specified path to be split
-     * @return {@link String[]} containing path segments
+     * @return {@link List} containing path segments
      */
-    protected abstract String[] splitPath(String path);
+    protected abstract List<String> splitPath(String path);
 
     @Override
-    public String[] getPathSegments() {
+    public List<String> getPathSegments() {
         if (segments != null) {
             return segments;
         }
