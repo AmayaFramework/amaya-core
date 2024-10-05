@@ -29,11 +29,11 @@ dependencies {
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
     // Amaya options
-    api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.1.0'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-options', version: '1.1.0'
     // Amaya context
-    api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.0.0'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-context', version: '1.1.2'
     // Amaya services
-    api group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
 }
 
 test {

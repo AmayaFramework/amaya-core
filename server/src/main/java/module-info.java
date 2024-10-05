@@ -3,7 +3,7 @@
  *
  * @author Roman Bakaldin
  */
-module io.github.amayaframework.server {
+open module io.github.amayaframework.server {
     // Imports
     requires com.github.romanqed.jfunc;
     requires io.github.amayaframework.options;
