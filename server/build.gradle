@@ -31,7 +31,7 @@ dependencies {
     // Amaya options
     compileOnly group: 'io.github.amayaframework', name: 'amaya-options', version: '1.1.0'
     // Amaya context
-    compileOnly group: 'io.github.amayaframework', name: 'amaya-context', version: '1.1.1'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-context', version: '1.1.2'
     // Amaya services
     compileOnly group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
 }
