@@ -159,12 +159,12 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
 
     @Override
     public void setCharset(Charset charset) {
-        this.charset = charset;
         try {
             request.setCharacterEncoding(charset.name());
         } catch (UnsupportedEncodingException e) {
             // Unreachable code
         }
+        this.charset = charset;
     }
 
     @Override
@@ -200,6 +200,10 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
 
     @Override
     public void setMimeType(MimeType type) {
+        if (type == null) {
+            this.data = null;
+            return;
+        }
         this.data = new MimeData(type);
     }
 

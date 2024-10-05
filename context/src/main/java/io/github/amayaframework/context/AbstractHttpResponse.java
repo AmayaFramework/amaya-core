@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -87,11 +88,12 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     @Override
     public void setCookie(Cookie cookie) {
+        Objects.requireNonNull(cookie);
+        response.addCookie(cookie);
         if (cookies == null) {
             cookies = new HashMap<>();
         }
         cookies.put(cookie.getName(), cookie);
-        response.addCookie(cookie);
     }
 
     @Override
@@ -121,23 +123,27 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     @Override
     public void setStatus(HttpCode code) {
-        this.status = code;
         response.setStatus(code.getCode());
+        this.status = code;
     }
 
     @Override
     public void sendError(HttpCode code, String message) throws IOException {
         response.sendError(code.getCode(), message);
+        this.status = code;
     }
 
     @Override
     public void sendError(HttpCode code) throws IOException {
         response.sendError(code.getCode());
+        this.status = code;
     }
 
     @Override
     public void sendRedirect(String location) throws IOException {
+        Objects.requireNonNull(location);
         response.sendRedirect(location);
+        this.status = HttpCode.FOUND;
     }
 
     @Override
