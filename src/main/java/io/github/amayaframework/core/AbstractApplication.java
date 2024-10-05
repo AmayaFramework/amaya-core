@@ -1,14 +1,21 @@
 package io.github.amayaframework.core;
 
+import com.github.romanqed.jconv.OpenedPipelineBuilder;
+import com.github.romanqed.jconv.PipelineBuilder;
+import com.github.romanqed.jfunc.Runnable1;
+import com.github.romanqed.jfunc.Runnable2;
+import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServer;
+import io.github.amayaframework.server.HttpServerConfig;
 import io.github.amayaframework.service.ServiceManager;
 
 public abstract class AbstractApplication implements Application {
     protected static final int STARTED = 0;
     protected static final int STOPPED = 1;
     protected static final int SHUTDOWN = 2;
+    protected final PipelineBuilder<HttpContext> builder;
     protected final GroupOptionSet options;
     protected final Environment environment;
     protected final ServiceManager manager;
@@ -22,6 +29,7 @@ public abstract class AbstractApplication implements Application {
                                   Environment environment,
                                   ServiceManager manager,
                                   HttpServer server) {
+        this.builder = new OpenedPipelineBuilder<>();
         this.options = options;
         this.environment = environment;
         this.manager = manager;
@@ -46,22 +54,45 @@ public abstract class AbstractApplication implements Application {
     }
 
     @Override
-    public HttpServer getServer() {
-        return server;
+    public HttpServerConfig getServerConfig() {
+        return server.getConfig();
+    }
+
+    @Override
+    public void addHandler(Runnable2<HttpContext, Runnable1<HttpContext>> node) {
+        builder.add(node);
+    }
+
+    @Override
+    public void resetHandler() {
+        builder.clear();
+    }
+
+    protected void innerStart(Runnable1<HttpContext> handler) throws Throwable {
+        if (state == STARTED) {
+            throw new IllegalStateException("Application already started");
+        }
+        if (state == SHUTDOWN) {
+            throw new IllegalStateException("Application already shutdown");
+        }
+        this.server.setHandler(handler);
+        this.manager.start();
+        this.server.start();
+        this.state = STARTED;
     }
 
     @Override
     public void start() throws Throwable {
         synchronized (lock) {
-            if (state == STARTED) {
-                throw new IllegalStateException("Application already started");
-            }
-            if (state == SHUTDOWN) {
-                throw new IllegalStateException("Application already shutdown");
-            }
-            this.manager.start();
-            this.server.start();
-            this.state = STARTED;
+            innerStart(builder.build());
+        }
+    }
+
+    @Override
+    public void start(Runnable1<HttpContext> handler) throws Throwable {
+        synchronized (lock) {
+            innerStart(handler);
+            builder.clear();
         }
     }
 
@@ -101,36 +132,51 @@ public abstract class AbstractApplication implements Application {
         return hook;
     }
 
+    protected void innerRun(Runnable1<HttpContext> handler) throws Throwable {
+        if (state == STARTED) {
+            throw new IllegalStateException("Application already started");
+        }
+        if (state == SHUTDOWN) {
+            throw new IllegalStateException("Application already shutdown");
+        }
+        Runtime.getRuntime().addShutdownHook(getHook());
+        this.server.setHandler(handler);
+        this.manager.start();
+        this.server.start();
+        this.state = STARTED;
+    }
+
     @Override
     public void run() throws Throwable {
         synchronized (lock) {
-            if (state == STARTED) {
-                throw new IllegalStateException("Application already started");
-            }
-            if (state == SHUTDOWN) {
-                throw new IllegalStateException("Application already shutdown");
-            }
-            Runtime.getRuntime().addShutdownHook(getHook());
-            this.manager.start();
-            this.server.start();
-            this.state = STARTED;
+            innerRun(builder.build());
+        }
+    }
+
+    @Override
+    public void run(Runnable1<HttpContext> handler) throws Throwable {
+        synchronized (lock) {
+            innerRun(handler);
+            builder.clear();
         }
     }
 
     @Override
     public void shutdown() throws Throwable {
         synchronized (lock) {
-            if (state == STOPPED) {
-                throw new IllegalStateException("Application already stopped");
-            }
             if (state == SHUTDOWN) {
                 throw new IllegalStateException("Application already shutdown");
             }
-            Runtime.getRuntime().removeShutdownHook(hook);
-            this.server.stop();
-            this.manager.stop();
+            if (state == STARTED) {
+                this.server.stop();
+                this.manager.stop();
+            }
             this.environment.close();
             this.state = SHUTDOWN;
+            if (hook != null) {
+                Runtime.getRuntime().removeShutdownHook(hook);
+            }
+            this.hook = null;
         }
     }
 }

@@ -1,7 +1,7 @@
 package io.github.amayaframework.core;
 
-import com.github.romanqed.jconv.PipelineBuilder;
-import io.github.amayaframework.context.HttpContext;
+import com.github.romanqed.jfunc.Runnable1;
+import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.environment.EnvironmentFactory;
@@ -11,19 +11,17 @@ import io.github.amayaframework.options.ProvidedGroupSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.service.ServiceManager;
 
-final class PlainApplicationBuilder extends AbstractApplicationBuilder {
+final class StandaloneApplicationBuilder extends AbstractApplicationBuilder {
     private final EnvironmentFactory defaultFactory;
 
-    PlainApplicationBuilder(ServiceManagerBuilder managerBuilder,
-                            PipelineBuilder<HttpContext> handlerBuilder,
-                            EnvironmentFactory defaultFactory) {
-        super(managerBuilder, handlerBuilder);
+    StandaloneApplicationBuilder(ServiceManagerBuilder managerBuilder, EnvironmentFactory defaultFactory) {
+        super(managerBuilder);
         this.defaultFactory = defaultFactory;
     }
 
     @Override
     protected String getDefaultName() {
-        return Defaults.DEFAULT_ENVIRONMENT_NAME;
+        return CoreOptions.DEFAULT_ENVIRONMENT_NAME;
     }
 
     @Override
@@ -41,7 +39,7 @@ final class PlainApplicationBuilder extends AbstractApplicationBuilder {
                                             Environment environment,
                                             ServiceManager manager,
                                             HttpServer server) {
-        return new PlainApplication(options, environment, manager, server);
+        return new StandaloneApplication(options, environment, manager, server);
     }
 
     @Override
@@ -50,12 +48,12 @@ final class PlainApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(ProviderBuilderConsumer action) {
+    public ApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
         throw new UnsupportedOperationException("The amaya-di module is not loaded");
     }
 
     @Override
-    public ApplicationBuilder configure(ProviderConsumer action) {
+    public ApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
         throw new UnsupportedOperationException("The amaya-di module is not loaded");
     }
 }

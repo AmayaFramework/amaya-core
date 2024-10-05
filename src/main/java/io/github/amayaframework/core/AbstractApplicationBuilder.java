@@ -1,7 +1,6 @@
 package io.github.amayaframework.core;
 
-import com.github.romanqed.jconv.PipelineBuilder;
-import io.github.amayaframework.context.HttpContext;
+import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
@@ -19,10 +18,8 @@ import java.util.Objects;
 public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     // Builders
     protected final ServiceManagerBuilder managerBuilder;
-    protected final PipelineBuilder<HttpContext> handlerBuilder;
     // Wrapped builders
     protected final ServiceManagerBuilder wrappedManagerBuilder;
-    protected final PipelineBuilder<HttpContext> wrappedHandlerBuilder;
     // Modifiable params
     protected EnvironmentFactory environmentFactory;
     protected String environmentName;
@@ -30,25 +27,33 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     protected GroupOptionSet options;
     // Http server binds
     protected List<InetSocketAddress> binds;
-    // Deferred http config handlers
-    protected List<HttpConfigConsumer> httpConsumers;
+    // Deferred application consumers
+    protected List<Runnable1<Application>> consumers;
 
-    protected AbstractApplicationBuilder(ServiceManagerBuilder managerBuilder,
-                                         PipelineBuilder<HttpContext> handlerBuilder) {
+    protected AbstractApplicationBuilder(ServiceManagerBuilder managerBuilder) {
         this.managerBuilder = managerBuilder;
-        this.handlerBuilder = handlerBuilder;
         this.wrappedManagerBuilder = new WrappedManagerBuilder(managerBuilder);
-        this.wrappedHandlerBuilder = new WrappedPipelineBuilder<>(handlerBuilder);
     }
 
     protected void innerReset() {
         managerBuilder.reset();
-        handlerBuilder.clear();
         this.environmentFactory = null;
         this.environmentName = null;
         this.serverFactory = null;
         this.binds = null;
-        this.httpConsumers = null;
+        this.consumers = null;
+    }
+
+    @Override
+    public ApplicationBuilder configure(Runnable1<ApplicationBuilder> action) {
+        try {
+            action.run(this);
+        } catch (Error | RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        return this;
     }
 
     @Override
@@ -63,7 +68,7 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(OptionSetConsumer action) {
+    public ApplicationBuilder configureOptions(Runnable1<GroupOptionSet> action) {
         try {
             action.run(options);
         } catch (Error | RuntimeException e) {
@@ -92,26 +97,9 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(ManagerBuilderConsumer action) {
+    public ApplicationBuilder configureManager(Runnable1<ServiceManagerBuilder> action) {
         try {
             action.run(wrappedManagerBuilder);
-        } catch (Error | RuntimeException e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        return this;
-    }
-
-    @Override
-    public PipelineBuilder<HttpContext> getHandlerBuilder() {
-        return wrappedHandlerBuilder;
-    }
-
-    @Override
-    public ApplicationBuilder configure(HandlerBuilderConsumer action) {
-        try {
-            action.run(wrappedHandlerBuilder);
         } catch (Error | RuntimeException e) {
             throw e;
         } catch (Throwable e) {
@@ -127,12 +115,12 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(HttpConfigConsumer action) {
+    public ApplicationBuilder configureApplication(Runnable1<Application> action) {
         Objects.requireNonNull(action);
-        if (httpConsumers == null) {
-            httpConsumers = new LinkedList<>();
+        if (consumers == null) {
+            consumers = new LinkedList<>();
         }
-        httpConsumers.add(action);
+        consumers.add(action);
         return this;
     }
 
@@ -185,18 +173,11 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
         var factory = Objects.requireNonNull(serverFactory);
         var ret = factory.create(set);
         var config = ret.getConfig();
-        if (httpConsumers != null) {
-            for (var consumer : httpConsumers) {
-                consumer.run(config);
-            }
-        }
         if (binds != null) {
             for (var bind : binds) {
                 config.addAddress(bind);
             }
         }
-        var handler = handlerBuilder.build();
-        ret.setHandler(handler);
         return ret;
     }
 
@@ -204,12 +185,19 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
         // Prepare options
         var set = Objects.requireNonNullElse(options, createDefaultOptions());
         // Prepare environment
-        var environment = createEnvironment(set.getGroup(Defaults.ENVIRONMENT_GROUP));
+        var environment = createEnvironment(set.getGroup(CoreOptions.ENVIRONMENT_GROUP));
         // Prepare service manager
         var manager = managerBuilder.build();
         // Prepare http server
-        var server = createServer(set.getGroup(Defaults.SERVER_GROUP));
-        return createApplication(set, environment, manager, server);
+        var server = createServer(set.getGroup(CoreOptions.SERVER_GROUP));
+        // Prepare application
+        var ret = createApplication(set, environment, manager, server);
+        if (consumers != null) {
+            for (var consumer : consumers) {
+                consumer.run(ret);
+            }
+        }
+        return ret;
     }
 
     @Override

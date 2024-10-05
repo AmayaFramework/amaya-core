@@ -1,7 +1,7 @@
 package io.github.amayaframework.core;
 
-import com.github.romanqed.jconv.PipelineBuilder;
-import io.github.amayaframework.context.HttpContext;
+import com.github.romanqed.jfunc.Runnable1;
+import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
@@ -11,11 +11,13 @@ import java.net.InetSocketAddress;
 
 public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
 
+    ApplicationBuilder configure(Runnable1<ApplicationBuilder> action);
+
     GroupOptionSet getOptions();
 
     ApplicationBuilder setOptions(GroupOptionSet options);
 
-    ApplicationBuilder configure(OptionSetConsumer action);
+    ApplicationBuilder configureOptions(Runnable1<GroupOptionSet> action);
 
     ApplicationBuilder setEnvironmentFactory(EnvironmentFactory factory);
 
@@ -23,21 +25,17 @@ public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
 
     ServiceManagerBuilder getManagerBuilder();
 
-    ApplicationBuilder configure(ManagerBuilderConsumer action);
-
-    PipelineBuilder<HttpContext> getHandlerBuilder();
-
-    ApplicationBuilder configure(HandlerBuilderConsumer action);
+    ApplicationBuilder configureManager(Runnable1<ServiceManagerBuilder> action);
 
     ServiceProviderBuilder getProviderBuilder();
 
-    ApplicationBuilder configure(ProviderBuilderConsumer action);
+    ApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action);
 
-    ApplicationBuilder configure(ProviderConsumer action);
+    ApplicationBuilder configureProvider(Runnable1<ServiceProvider> action);
 
     ApplicationBuilder setServerFactory(HttpServerFactory factory);
 
-    ApplicationBuilder configure(HttpConfigConsumer action);
+    ApplicationBuilder configureApplication(Runnable1<Application> action);
 
     ApplicationBuilder bind(InetSocketAddress address);
 

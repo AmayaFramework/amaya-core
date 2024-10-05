@@ -6,9 +6,9 @@ import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.service.ServiceManager;
 
-final class PlainApplication extends AbstractApplication {
+final class StandaloneApplication extends AbstractApplication {
 
-    PlainApplication(GroupOptionSet options, Environment environment, ServiceManager manager, HttpServer server) {
+    StandaloneApplication(GroupOptionSet options, Environment environment, ServiceManager manager, HttpServer server) {
         super(options, environment, manager, server);
     }
 

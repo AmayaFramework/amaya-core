@@ -7,11 +7,11 @@ import io.github.amayaframework.service.ServiceManagerFactory;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-final class PlainManagerBuilder extends AbstractManagerBuilder {
+final class StandaloneManagerBuilder extends AbstractManagerBuilder {
     private final ServiceManagerFactory defaultFactory;
     private final ServiceHandler defaultHandler;
 
-    PlainManagerBuilder(ServiceManagerFactory defaultFactory, ServiceHandler defaultHandler) {
+    StandaloneManagerBuilder(ServiceManagerFactory defaultFactory, ServiceHandler defaultHandler) {
         this.defaultFactory = defaultFactory;
         this.defaultHandler = defaultHandler;
     }

@@ -29,15 +29,17 @@ dependencies {
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
     // Middlewares
-    api group: 'com.github.romanqed', name: 'jconv', version: '1.0.3'
+    api group: 'com.github.romanqed', name: 'jconv', version: '1.1.0'
     // Amaya modules
     api group: 'io.github.amayaframework', name: 'amaya-options', version: '1.1.0'
     api group: 'io.github.amayaframework', name: 'amaya-environment', version: '1.0.1'
     api group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
-    api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.0.0'
-    api group: 'io.github.amayaframework', name: 'amaya-server', version: '1.0.1'
+    api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.1.2'
+    api group: 'io.github.amayaframework', name: 'amaya-server', version: '1.1.3'
     // DI
     compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.1.1'
+    // TODO REMOVE
+    api group: 'io.github.amayaframework', name: 'amaya-jetty', version: '1.0.0'
 }
 
 test {

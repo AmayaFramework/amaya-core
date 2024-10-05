@@ -11,4 +11,7 @@ open module io.github.amayaframework.core {
     requires static io.github.amayaframework.di;
     // Exports
     exports io.github.amayaframework.core;
+    // TODO REMOVE
+    requires io.github.amayaframework.jetty;
+    requires io.github.amayaframework.http;
 }

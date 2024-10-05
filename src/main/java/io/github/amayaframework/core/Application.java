@@ -1,9 +1,12 @@
 package io.github.amayaframework.core;
 
+import com.github.romanqed.jfunc.Runnable1;
+import com.github.romanqed.jfunc.Runnable2;
+import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
-import io.github.amayaframework.server.HttpServer;
+import io.github.amayaframework.server.HttpServerConfig;
 import io.github.amayaframework.service.ServiceManager;
 
 public interface Application {
@@ -14,13 +17,21 @@ public interface Application {
 
     ServiceManager getManager();
 
-    HttpServer getServer();
+    HttpServerConfig getServerConfig();
 
     ServiceProvider getProvider();
+
+    void addHandler(Runnable2<HttpContext, Runnable1<HttpContext>> handler);
+
+    void resetHandler();
+
+    void start(Runnable1<HttpContext> handler) throws Throwable;
 
     void start() throws Throwable;
 
     void stop() throws Throwable;
+
+    void run(Runnable1<HttpContext> handler) throws Throwable;
 
     void run() throws Throwable;
 

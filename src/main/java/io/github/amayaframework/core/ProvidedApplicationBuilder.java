@@ -1,7 +1,6 @@
 package io.github.amayaframework.core;
 
-import com.github.romanqed.jconv.PipelineBuilder;
-import io.github.amayaframework.context.HttpContext;
+import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.environment.Environment;
@@ -23,14 +22,13 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     private final EnvironmentFactory defaultFactory;
     private final Supplier<ServiceProviderBuilder> supplier;
     private ServiceProviderBuilder builder;
-    private List<ProviderConsumer> providerConsumers;
+    private List<Runnable1<ServiceProvider>> providerConsumers;
     private ServiceProvider provider;
 
     ProvidedApplicationBuilder(ProvidedManagerBuilder managerBuilder,
-                               PipelineBuilder<HttpContext> handlerBuilder,
                                Supplier<ServiceProviderBuilder> supplier,
                                EnvironmentFactory defaultFactory) {
-        super(managerBuilder, handlerBuilder);
+        super(managerBuilder);
         this.providedBuilder = managerBuilder;
         this.defaultFactory = defaultFactory;
         this.supplier = supplier;
@@ -49,7 +47,7 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
 
     @Override
     protected String getDefaultName() {
-        return Defaults.DEFAULT_ENVIRONMENT_NAME;
+        return CoreOptions.DEFAULT_ENVIRONMENT_NAME;
     }
 
     @Override
@@ -81,7 +79,7 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(ProviderBuilderConsumer action) {
+    public ApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
         try {
             action.run(builder);
         } catch (Error | RuntimeException e) {
@@ -93,7 +91,7 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configure(ProviderConsumer action) {
+    public ApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
         Objects.requireNonNull(action);
         if (providerConsumers == null) {
             providerConsumers = new LinkedList<>();
