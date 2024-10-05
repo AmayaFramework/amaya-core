@@ -12,6 +12,7 @@ public interface MimeParser {
      *
      * @param data the specified mime string to be parsed, must be non-null
      * @return the {@link MimeData} instance
+     * @throws IllegalMimeType if given mime type violates rfc2045 format
      */
     MimeData read(String data);
 }
