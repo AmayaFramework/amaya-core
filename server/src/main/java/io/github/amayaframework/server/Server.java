@@ -22,6 +22,14 @@ public interface Server<T extends Context> extends Service {
     void bind(InetSocketAddress address);
 
     /**
+     * Binds server to given port.
+     * If the implementation supports it, multiple bindings are possible.
+     *
+     * @param port the specified port that the server will listen to
+     */
+    void bind(int port);
+
+    /**
      * Gets server config. Any config changes are reflected on the server and vice versa.
      *
      * @return the {@link ServerConfig} instance
