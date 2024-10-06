@@ -52,6 +52,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
         managerBuilder.reset();
         this.environmentFactory = null;
         this.environmentName = null;
+        this.options = null;
         this.consumers = null;
     }
 
