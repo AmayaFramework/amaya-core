@@ -1,7 +1,7 @@
 package io.github.amayaframework.application;
 
 /**
- * AAn abstract interface describing a resettable entity.
+ * An abstract interface describing a resettable entity.
  */
 public interface Resettable {
 
