@@ -3,50 +3,52 @@ package io.github.amayaframework.core;
 import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.options.GroupOptionSet;
+import io.github.amayaframework.web.WebApplicationBuilder;
 
 import java.util.function.Supplier;
 
-public final class CoreBuilders {
-    private CoreBuilders() {
+public final class WebBuilders {
+    private WebBuilders() {
     }
 
-    public static ApplicationBuilder createStandalone(GroupOptionSet options) {
+    public static WebApplicationBuilder createStandalone(GroupOptionSet options) {
         var factory = new StandaloneBuilderFactory();
         return factory.create(options);
     }
 
-    public static ApplicationBuilder createStandalone() {
+    public static WebApplicationBuilder createStandalone() {
         var factory = new StandaloneBuilderFactory();
         return factory.create();
     }
 
-    public static ApplicationBuilder createProvided(Supplier<ServiceProviderBuilder> supplier, GroupOptionSet options) {
+    public static WebApplicationBuilder createProvided(Supplier<ServiceProviderBuilder> supplier,
+                                                       GroupOptionSet options) {
         var factory = new ServiceBuilderFactory(supplier);
         return factory.create(options);
     }
 
-    public static ApplicationBuilder createProvided(Supplier<ServiceProviderBuilder> supplier) {
+    public static WebApplicationBuilder createProvided(Supplier<ServiceProviderBuilder> supplier) {
         var factory = new ServiceBuilderFactory(supplier);
         return factory.create();
     }
 
-    public static ApplicationBuilder createProvided(GroupOptionSet options) {
+    public static WebApplicationBuilder createProvided(GroupOptionSet options) {
         var factory = new ServiceBuilderFactory(ProviderBuilders::createChecked);
         return factory.create(options);
     }
 
-    public static ApplicationBuilder createProvided() {
+    public static WebApplicationBuilder createProvided() {
         var factory = new ServiceBuilderFactory(ProviderBuilders::createChecked);
         return factory.create();
     }
 
-    public static ApplicationBuilder create(GroupOptionSet options) {
-        var factory = CoreBuilderFactories.create();
+    public static WebApplicationBuilder create(GroupOptionSet options) {
+        var factory = WebBuilderFactories.create();
         return factory.create(options);
     }
 
-    public static ApplicationBuilder create() {
-        var factory = CoreBuilderFactories.create();
+    public static WebApplicationBuilder create() {
+        var factory = WebBuilderFactories.create();
         return factory.create();
     }
 }

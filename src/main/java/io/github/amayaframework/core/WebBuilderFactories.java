@@ -2,14 +2,15 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
+import io.github.amayaframework.web.WebBuilderFactory;
 
 import java.util.function.Supplier;
 
-public final class CoreBuilderFactories {
+public final class WebBuilderFactories {
     private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
     private static final String AMAYA_SERVICE_PROVER = "io.github.amayaframework.di.ServiceProvider";
 
-    private CoreBuilderFactories() {
+    private WebBuilderFactories() {
     }
 
     private static boolean isDIModuleLoaded() {
@@ -31,19 +32,19 @@ public final class CoreBuilderFactories {
         return isDIModuleLoaded() || isDIClassExists();
     }
 
-    public static ApplicationBuilderFactory createStandalone() {
+    public static WebBuilderFactory createStandalone() {
         return new StandaloneBuilderFactory();
     }
 
-    public static ApplicationBuilderFactory createProvided(Supplier<ServiceProviderBuilder> supplier) {
+    public static WebBuilderFactory createProvided(Supplier<ServiceProviderBuilder> supplier) {
         return new ServiceBuilderFactory(supplier);
     }
 
-    public static ApplicationBuilderFactory createProvided() {
+    public static WebBuilderFactory createProvided() {
         return new ServiceBuilderFactory(ProviderBuilders::createChecked);
     }
 
-    public static ApplicationBuilderFactory create() {
+    public static WebBuilderFactory create() {
         if (isDILoaded()) {
             return createProvided();
         }

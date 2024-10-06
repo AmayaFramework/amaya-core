@@ -1,5 +1,7 @@
 package io.github.amayaframework.core;
 
+import io.github.amayaframework.application.AbstractManagerBuilder;
+import io.github.amayaframework.application.ServiceManagerBuilder;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceHandler;
@@ -23,10 +25,10 @@ final class ProvidedManagerBuilder extends AbstractManagerBuilder {
     }
 
     @Override
-    protected void innerReset() {
+    public void reset() {
         this.builder = null;
         this.provided = new HashSet<>();
-        super.innerReset();
+        super.reset();
     }
 
     Set<Type> getProvidedServices() {

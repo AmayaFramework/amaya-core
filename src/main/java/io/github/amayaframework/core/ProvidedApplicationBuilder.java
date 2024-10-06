@@ -7,23 +7,24 @@ import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.options.OpenOptionSet;
-import io.github.amayaframework.options.OptionSet;
 import io.github.amayaframework.options.ProvidedGroupSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.service.ServiceManager;
+import io.github.amayaframework.web.AbstractWebBuilder;
+import io.github.amayaframework.web.WebApplication;
+import io.github.amayaframework.web.WebApplicationBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
+final class ProvidedApplicationBuilder extends AbstractWebBuilder {
     private final ProvidedManagerBuilder providedBuilder;
     private final EnvironmentFactory defaultFactory;
     private final Supplier<ServiceProviderBuilder> supplier;
     private ServiceProviderBuilder builder;
     private List<Runnable1<ServiceProvider>> providerConsumers;
-    private ServiceProvider provider;
 
     ProvidedApplicationBuilder(ProvidedManagerBuilder managerBuilder,
                                Supplier<ServiceProviderBuilder> supplier,
@@ -37,17 +38,11 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    protected void innerReset() {
+    public void reset() {
         builder = supplier.get();
         providedBuilder.setProviderBuilder(builder);
         providerConsumers = null;
-        provider = null;
-        super.innerReset();
-    }
-
-    @Override
-    protected String getDefaultName() {
-        return CoreOptions.DEFAULT_ENVIRONMENT_NAME;
+        super.reset();
     }
 
     @Override
@@ -61,14 +56,22 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    protected Application createApplication(GroupOptionSet options,
-                                            Environment environment,
-                                            ServiceManager manager,
-                                            HttpServer server) {
+    protected WebApplication createApplication(GroupOptionSet options,
+                                               Environment environment,
+                                               ServiceManager manager,
+                                               HttpServer server) throws Throwable {
+        // Build di container
+        var provider = builder.build();
         // Add delayed services
         var types = providedBuilder.getProvidedServices();
         for (var type : types) {
             manager.add(provider.get(type));
+        }
+        // Fire delayed actions
+        if (providerConsumers != null) {
+            for (var consumer : providerConsumers) {
+                consumer.run(provider);
+            }
         }
         return new ProvidedApplication(options, environment, manager, server, provider);
     }
@@ -79,7 +82,7 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
+    public WebApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
         try {
             action.run(builder);
         } catch (Error | RuntimeException e) {
@@ -91,25 +94,12 @@ final class ProvidedApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
+    public WebApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
         Objects.requireNonNull(action);
         if (providerConsumers == null) {
             providerConsumers = new LinkedList<>();
         }
         providerConsumers.add(action);
         return this;
-    }
-
-    @Override
-    protected HttpServer createServer(OptionSet set) throws Throwable {
-        // Build di container
-        provider = builder.build();
-        // Fire delayed actions
-        if (providerConsumers != null) {
-            for (var consumer : providerConsumers) {
-                consumer.run(provider);
-            }
-        }
-        return super.createServer(set);
     }
 }

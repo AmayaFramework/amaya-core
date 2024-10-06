@@ -1,3 +1,7 @@
+/**
+ * Amaya Core Module
+ * @author Roman Bakaldin
+ */
 open module io.github.amayaframework.core {
     // Imports
     requires com.github.romanqed.jfunc;
@@ -7,6 +11,8 @@ open module io.github.amayaframework.core {
     requires io.github.amayaframework.service;
     requires io.github.amayaframework.context;
     requires io.github.amayaframework.server;
+    requires io.github.amayaframework.application;
+    requires io.github.amayaframework.web;
     // Optional imports
     requires static io.github.amayaframework.di;
     // Exports

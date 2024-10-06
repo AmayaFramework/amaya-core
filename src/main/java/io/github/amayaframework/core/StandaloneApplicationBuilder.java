@@ -1,6 +1,7 @@
 package io.github.amayaframework.core;
 
 import com.github.romanqed.jfunc.Runnable1;
+import io.github.amayaframework.application.ServiceManagerBuilder;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.environment.Environment;
@@ -10,18 +11,16 @@ import io.github.amayaframework.options.OpenOptionSet;
 import io.github.amayaframework.options.ProvidedGroupSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.service.ServiceManager;
+import io.github.amayaframework.web.AbstractWebBuilder;
+import io.github.amayaframework.web.WebApplication;
+import io.github.amayaframework.web.WebApplicationBuilder;
 
-final class StandaloneApplicationBuilder extends AbstractApplicationBuilder {
+final class StandaloneApplicationBuilder extends AbstractWebBuilder {
     private final EnvironmentFactory defaultFactory;
 
     StandaloneApplicationBuilder(ServiceManagerBuilder managerBuilder, EnvironmentFactory defaultFactory) {
         super(managerBuilder);
         this.defaultFactory = defaultFactory;
-    }
-
-    @Override
-    protected String getDefaultName() {
-        return CoreOptions.DEFAULT_ENVIRONMENT_NAME;
     }
 
     @Override
@@ -35,10 +34,10 @@ final class StandaloneApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    protected Application createApplication(GroupOptionSet options,
-                                            Environment environment,
-                                            ServiceManager manager,
-                                            HttpServer server) {
+    protected WebApplication createApplication(GroupOptionSet options,
+                                               Environment environment,
+                                               ServiceManager manager,
+                                               HttpServer server) {
         return new StandaloneApplication(options, environment, manager, server);
     }
 
@@ -48,12 +47,12 @@ final class StandaloneApplicationBuilder extends AbstractApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
+    public WebApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
         throw new UnsupportedOperationException("The amaya-di module is not loaded");
     }
 
     @Override
-    public ApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
+    public WebApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
         throw new UnsupportedOperationException("The amaya-di module is not loaded");
     }
 }
