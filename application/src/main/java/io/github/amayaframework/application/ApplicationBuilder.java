@@ -9,17 +9,9 @@ import io.github.amayaframework.options.GroupOptionSet;
 /**
  * An interface describing the abstract builder of the {@link Application}.
  *
- * @param <T> the type of application context
+ * @param <T> the application type
  */
-public interface ApplicationBuilder<T> extends Resettable {
-
-    /**
-     * Applies given action to this {@link ApplicationBuilder} instance.
-     *
-     * @param action the specified action to be applied to this builder, must be non-null
-     * @return this {@link ApplicationBuilder} instance
-     */
-    ApplicationBuilder<T> configure(Runnable1<ApplicationBuilder<T>> action);
+public interface ApplicationBuilder<T extends Application<?>> extends Resettable {
 
     /**
      * Gets the {@link GroupOptionSet} instance.
@@ -111,12 +103,12 @@ public interface ApplicationBuilder<T> extends Resettable {
      * @param action the specified action to be applied to {@link Application} instance, must be non-null
      * @return this {@link ApplicationBuilder} instance
      */
-    ApplicationBuilder<T> configureApplication(Runnable1<Application<T>> action);
+    ApplicationBuilder<T> configureApplication(Runnable1<T> action);
 
     /**
      * Builds the {@link Application} instance with the specified components.
      *
      * @return the {@link Application} instance
      */
-    Application<T> build();
+    T build();
 }

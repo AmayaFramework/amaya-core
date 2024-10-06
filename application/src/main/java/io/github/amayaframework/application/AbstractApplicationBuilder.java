@@ -13,9 +13,9 @@ import java.util.Objects;
 /**
  * A class that provides a skeletal implementation of the {@link ApplicationBuilder}.
  *
- * @param <T> the type of application context
+ * @param <T> the application type
  */
-public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilder<T> {
+public abstract class AbstractApplicationBuilder<T extends Application<?>> implements ApplicationBuilder<T> {
     /**
      * Service manager builder.
      */
@@ -36,7 +36,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
     /**
      * Deferred application consumers.
      */
-    protected List<Runnable1<Application<T>>> consumers;
+    protected List<Runnable1<T>> consumers;
 
     /**
      * Constructs an {@link AbstractApplicationBuilder} instance with given service manager builder.
@@ -54,19 +54,6 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
         this.environmentName = null;
         this.options = null;
         this.consumers = null;
-    }
-
-    @Override
-    public ApplicationBuilder<T> configure(Runnable1<ApplicationBuilder<T>> action) {
-        Objects.requireNonNull(action);
-        try {
-            action.run(this);
-        } catch (Error | RuntimeException e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        return this;
     }
 
     /**
@@ -137,7 +124,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
     }
 
     @Override
-    public ApplicationBuilder<T> configureApplication(Runnable1<Application<T>> action) {
+    public ApplicationBuilder<T> configureApplication(Runnable1<T> action) {
         Objects.requireNonNull(action);
         if (consumers == null) {
             consumers = new LinkedList<>();
@@ -164,9 +151,9 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
      * @return the {@link Application} instance
      * @throws Throwable if any problems during application initialization occurred
      */
-    protected abstract Application<T> createApplication(GroupOptionSet options,
-                                                        Environment environment,
-                                                        ServiceManager manager) throws Throwable;
+    protected abstract T createApplication(GroupOptionSet options,
+                                           Environment environment,
+                                           ServiceManager manager) throws Throwable;
 
     /**
      * Does application build.
@@ -174,7 +161,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
      * @return the {@link Application} instance
      * @throws Throwable if any problems during application build occurred
      */
-    protected Application<T> doBuild() throws Throwable {
+    protected T doBuild() throws Throwable {
         // Prepare options
         var set = Objects.requireNonNullElse(options, createDefaultOptions());
         // Prepare environment
@@ -197,7 +184,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
     }
 
     @Override
-    public Application<T> build() {
+    public T build() {
         try {
             return doBuild();
         } catch (Error | RuntimeException e) {

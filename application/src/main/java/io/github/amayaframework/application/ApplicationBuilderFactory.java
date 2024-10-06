@@ -5,9 +5,9 @@ import io.github.amayaframework.options.GroupOptionSet;
 /**
  * An interface describing an abstract {@link ApplicationBuilder} factory.
  *
- * @param <T> the type of application context
+ * @param <T> the application type
  */
-public interface ApplicationBuilderFactory<T> {
+public interface ApplicationBuilderFactory<T extends Application<?>> {
 
     /**
      * Creates the {@link ApplicationBuilder} instance with the specified {@link GroupOptionSet}.
