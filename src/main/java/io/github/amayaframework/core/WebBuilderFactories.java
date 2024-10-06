@@ -6,6 +6,9 @@ import io.github.amayaframework.web.WebBuilderFactory;
 
 import java.util.function.Supplier;
 
+/**
+ *
+ */
 public final class WebBuilderFactories {
     private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
     private static final String AMAYA_SERVICE_PROVER = "io.github.amayaframework.di.ServiceProvider";
@@ -32,18 +35,35 @@ public final class WebBuilderFactories {
         return isDIModuleLoaded() || isDIClassExists();
     }
 
+    /**
+     *
+     * @return
+     */
     public static WebBuilderFactory createStandalone() {
         return new StandaloneBuilderFactory();
     }
 
+    /**
+     *
+     * @param supplier
+     * @return
+     */
     public static WebBuilderFactory createProvided(Supplier<ServiceProviderBuilder> supplier) {
         return new ServiceBuilderFactory(supplier);
     }
 
+    /**
+     *
+     * @return
+     */
     public static WebBuilderFactory createProvided() {
         return new ServiceBuilderFactory(ProviderBuilders::createChecked);
     }
 
+    /**
+     *
+     * @return
+     */
     public static WebBuilderFactory create() {
         if (isDILoaded()) {
             return createProvided();

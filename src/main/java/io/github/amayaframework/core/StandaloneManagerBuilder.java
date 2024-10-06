@@ -36,21 +36,21 @@ final class StandaloneManagerBuilder extends AbstractManagerBuilder {
 
     @Override
     public ServiceManagerBuilder addService(Type type, Service service) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 
     @Override
     public ServiceManagerBuilder addService(Type type, Class<? extends Service> implementation) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 
     @Override
     public ServiceManagerBuilder addService(Class<? extends Service> implementation) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 
     @Override
     public <T extends Service> ServiceManagerBuilder addService(Class<T> type, Class<? extends T> implementation) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 }

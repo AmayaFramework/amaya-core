@@ -8,9 +8,16 @@ import io.github.amayaframework.web.WebBuilderFactory;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ *
+ */
 public final class ServiceBuilderFactory implements WebBuilderFactory {
     private final Supplier<ServiceProviderBuilder> supplier;
 
+    /**
+     *
+     * @param supplier
+     */
     public ServiceBuilderFactory(Supplier<ServiceProviderBuilder> supplier) {
         this.supplier = Objects.requireNonNull(supplier);
     }

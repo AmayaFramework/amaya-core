@@ -4,6 +4,9 @@ import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.web.WebApplicationBuilder;
 import io.github.amayaframework.web.WebBuilderFactory;
 
+/**
+ *
+ */
 public final class StandaloneBuilderFactory implements WebBuilderFactory {
 
     @Override

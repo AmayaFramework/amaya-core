@@ -87,7 +87,7 @@ publishing {
             // Configure pom
             pom {
                 name.set(archivesBaseName)
-                description.set('The core api of the amaya framework, which provides basic functionality.')
+                description.set('Placeholder')
                 url.set('https://github.com/AmayaFramework/amaya-core')
 
                 organization {

@@ -43,16 +43,16 @@ final class StandaloneApplicationBuilder extends AbstractWebBuilder {
 
     @Override
     public ServiceProviderBuilder getProviderBuilder() {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 
     @Override
     public WebApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 
     @Override
     public WebApplicationBuilder configureProvider(Runnable1<ServiceProvider> action) {
-        throw new UnsupportedOperationException("The amaya-di module is not loaded");
+        throw new UnsupportedOperationException("The amaya di module is not loaded");
     }
 }
