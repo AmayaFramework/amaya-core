@@ -5,7 +5,7 @@ import io.github.amayaframework.web.WebApplicationBuilder;
 import io.github.amayaframework.web.WebBuilderFactory;
 
 /**
- *
+ * A factory implementation that creates standalone web applications (without integration with amaya di module).
  */
 public final class StandaloneBuilderFactory implements WebBuilderFactory {
 

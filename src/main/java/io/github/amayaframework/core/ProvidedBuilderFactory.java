@@ -9,16 +9,17 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- *
+ * A factory implementation that creates web applications integrated with the amaya di module.
  */
-public final class ServiceBuilderFactory implements WebBuilderFactory {
+public final class ProvidedBuilderFactory implements WebBuilderFactory {
     private final Supplier<ServiceProviderBuilder> supplier;
 
     /**
+     * Constructs a {@link ProvidedBuilderFactory} instance with given {@link ServiceProviderBuilder} supplier.
      *
-     * @param supplier
+     * @param supplier the specified {@link ServiceProviderBuilder} supplier, must be non-null
      */
-    public ServiceBuilderFactory(Supplier<ServiceProviderBuilder> supplier) {
+    public ProvidedBuilderFactory(Supplier<ServiceProviderBuilder> supplier) {
         this.supplier = Objects.requireNonNull(supplier);
     }
 

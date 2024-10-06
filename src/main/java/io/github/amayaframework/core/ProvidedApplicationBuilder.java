@@ -60,6 +60,9 @@ final class ProvidedApplicationBuilder extends AbstractWebBuilder {
                                                Environment environment,
                                                ServiceManager manager,
                                                HttpServer server) throws Throwable {
+        // Add options and environment to container
+        builder.addInstance(GroupOptionSet.class, options);
+        builder.addInstance(Environment.class, environment);
         // Build di container
         var provider = builder.build();
         // Add delayed services
