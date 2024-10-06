@@ -1,43 +1,69 @@
 package io.github.amayaframework.web;
 
 import com.github.romanqed.jfunc.Runnable1;
-import io.github.amayaframework.application.Application;
 import io.github.amayaframework.application.ApplicationBuilder;
 import io.github.amayaframework.application.ServiceManagerBuilder;
-import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
+import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
+import io.github.amayaframework.server.HttpServerFactory;
 
-public interface WebApplicationBuilder extends ApplicationBuilder<HttpContext> {
+import java.net.InetSocketAddress;
 
-//    @Override
-//    WebApplicationBuilder configure(Runnable1<WebApplicationBuilder> runnable1);
+/**
+ *
+ */
+public interface WebApplicationBuilder extends ApplicationBuilder<WebApplication> {
+
+    /**
+     * @param action
+     * @return
+     */
+    WebApplicationBuilder configure(Runnable1<WebApplicationBuilder> action);
+
+    /**
+     * @param factory
+     * @return
+     */
+    WebApplicationBuilder setServerFactory(HttpServerFactory factory);
+
+    /**
+     * @param address
+     * @return
+     */
+    WebApplicationBuilder bind(InetSocketAddress address);
+
+    /**
+     * @param port
+     * @return
+     */
+    WebApplicationBuilder bind(int port);
 
     @Override
-    WebApplicationBuilder setOptions(GroupOptionSet groupOptionSet);
+    WebApplicationBuilder setOptions(GroupOptionSet options);
 
     @Override
-    WebApplicationBuilder configureOptions(Runnable1<GroupOptionSet> runnable1);
-
-//    @Override
-//    WebApplicationBuilder setEnvironmentFactory(EnvironmentFactory environmentFactory);
+    WebApplicationBuilder configureOptions(Runnable1<GroupOptionSet> action);
 
     @Override
-    ApplicationBuilder<HttpContext> setEnvironmentName(String s);
+    WebApplicationBuilder setEnvironmentFactory(EnvironmentFactory factory);
 
     @Override
-    ApplicationBuilder<HttpContext> configureManager(Runnable1<ServiceManagerBuilder> runnable1);
+    WebApplicationBuilder setEnvironmentName(String name);
 
     @Override
-    ApplicationBuilder<HttpContext> configureProviderBuilder(Runnable1<ServiceProviderBuilder> runnable1);
+    WebApplicationBuilder configureManager(Runnable1<ServiceManagerBuilder> action);
 
     @Override
-    ApplicationBuilder<HttpContext> configureProvider(Runnable1<ServiceProvider> runnable1);
+    WebApplicationBuilder configureProviderBuilder(Runnable1<ServiceProviderBuilder> action);
 
     @Override
-    ApplicationBuilder<HttpContext> configureApplication(Runnable1<Application<HttpContext>> runnable1);
+    WebApplicationBuilder configureProvider(Runnable1<ServiceProvider> action);
 
     @Override
-    Application<HttpContext> build();
+    WebApplicationBuilder configureApplication(Runnable1<WebApplication> action);
+
+    @Override
+    WebApplication build();
 }
