@@ -56,7 +56,7 @@ public class Main {
                 .setServerFactory(new JettyServerFactory())
                 .build();
         app.bind(8080);
-        app.run(ctx -> System.out.println("Hello, world"));
+        app.run(ctx -> ctx.getResponse().getWriter().write("Hello, I am Amaya"));
     }
 }
 ```
