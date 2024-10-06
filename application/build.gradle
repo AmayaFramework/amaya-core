@@ -26,6 +26,16 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    // JFunc
+    api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
+    // Middlewares
+    api group: 'com.github.romanqed', name: 'jconv', version: '1.1.0'
+    // Amaya modules
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-options', version: '1.1.0'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-environment', version: '1.0.1'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
+    // DI
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.2.0'
 }
 
 test {
