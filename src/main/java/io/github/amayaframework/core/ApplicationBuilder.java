@@ -9,7 +9,7 @@ import io.github.amayaframework.server.HttpServerFactory;
 
 import java.net.InetSocketAddress;
 
-public interface ApplicationBuilder extends Resettable<ApplicationBuilder> {
+public interface ApplicationBuilder extends Resettable {
 
     ApplicationBuilder configure(Runnable1<ApplicationBuilder> action);
 

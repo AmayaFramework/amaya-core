@@ -7,7 +7,7 @@ import io.github.amayaframework.service.ServiceManagerFactory;
 
 import java.lang.reflect.Type;
 
-public interface ServiceManagerBuilder extends Resettable<ServiceManagerBuilder> {
+public interface ServiceManagerBuilder extends Resettable {
 
     ServiceManagerBuilder setFactory(ServiceManagerFactory factory);
 

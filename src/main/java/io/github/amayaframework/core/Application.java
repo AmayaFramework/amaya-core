@@ -9,7 +9,7 @@ import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServerConfig;
 import io.github.amayaframework.service.ServiceManager;
 
-public interface Application {
+public interface Application extends Resettable {
 
     GroupOptionSet getOptions();
 
@@ -23,7 +23,8 @@ public interface Application {
 
     void addHandler(Runnable2<HttpContext, Runnable1<HttpContext>> handler);
 
-    void resetHandler();
+    @Override
+    void reset();
 
     void start(Runnable1<HttpContext> handler) throws Throwable;
 

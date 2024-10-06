@@ -40,9 +40,8 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
     }
 
     @Override
-    public ServiceManagerBuilder reset() {
+    public void reset() {
         innerReset();
-        return this;
     }
 
     protected abstract ServiceManagerFactory getDefaultFactory();

@@ -57,9 +57,8 @@ final class WrappedManagerBuilder implements ServiceManagerBuilder {
     }
 
     @Override
-    public ServiceManagerBuilder reset() {
+    public void reset() {
         builder.reset();
-        return this;
     }
 
     @Override

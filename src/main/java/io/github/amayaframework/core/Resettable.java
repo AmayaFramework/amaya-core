@@ -1,6 +1,6 @@
 package io.github.amayaframework.core;
 
-public interface Resettable<T> {
+public interface Resettable {
 
-    T reset();
+    void reset();
 }

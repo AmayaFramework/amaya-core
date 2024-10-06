@@ -64,7 +64,7 @@ public abstract class AbstractApplication implements Application {
     }
 
     @Override
-    public void resetHandler() {
+    public void reset() {
         builder.clear();
     }
 

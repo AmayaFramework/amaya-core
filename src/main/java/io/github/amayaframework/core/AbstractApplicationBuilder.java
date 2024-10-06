@@ -147,9 +147,8 @@ public abstract class AbstractApplicationBuilder implements ApplicationBuilder {
     }
 
     @Override
-    public ApplicationBuilder reset() {
+    public void reset() {
         innerReset();
-        return this;
     }
 
     protected abstract String getDefaultName();
