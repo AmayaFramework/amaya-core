@@ -11,25 +11,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * A class that provides a skeletal implementation of the {@link ApplicationBuilder}.
  *
- * @param <T>
+ * @param <T> the type of application context
  */
 public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilder<T> {
     /**
-     *  Service manager builder.
+     * Service manager builder.
      */
     protected final ServiceManagerBuilder managerBuilder;
     // Modifiable params
     /**
-     *
+     * Application environment factory.
      */
     protected EnvironmentFactory environmentFactory;
     /**
-     *
+     * Application environment name.
      */
     protected String environmentName;
     /**
-     *
+     * Application options.
      */
     protected GroupOptionSet options;
     /**
@@ -38,8 +39,9 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
     protected List<Runnable1<Application<T>>> consumers;
 
     /**
+     * Constructs an {@link AbstractApplicationBuilder} instance with given service manager builder.
      *
-     * @param managerBuilder
+     * @param managerBuilder the specified {@link ServiceManagerBuilder} instance, must be non-null
      */
     protected AbstractApplicationBuilder(ServiceManagerBuilder managerBuilder) {
         this.managerBuilder = managerBuilder;
@@ -55,6 +57,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
 
     @Override
     public ApplicationBuilder<T> configure(Runnable1<ApplicationBuilder<T>> action) {
+        Objects.requireNonNull(action);
         try {
             action.run(this);
         } catch (Error | RuntimeException e) {
@@ -65,8 +68,18 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
         return this;
     }
 
+    /**
+     * Creates default instance of {@link GroupOptionSet}.
+     *
+     * @return the {@link GroupOptionSet} instance
+     */
+    protected abstract GroupOptionSet createDefaultOptions();
+
     @Override
     public GroupOptionSet getOptions() {
+        if (options == null) {
+            options = createDefaultOptions();
+        }
         return options;
     }
 
@@ -78,6 +91,10 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
 
     @Override
     public ApplicationBuilder<T> configureOptions(Runnable1<GroupOptionSet> action) {
+        Objects.requireNonNull(action);
+        if (options == null) {
+            options = createDefaultOptions();
+        }
         try {
             action.run(options);
         } catch (Error | RuntimeException e) {
@@ -107,6 +124,7 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
 
     @Override
     public ApplicationBuilder<T> configureManager(Runnable1<ServiceManagerBuilder> action) {
+        Objects.requireNonNull(action);
         try {
             action.run(managerBuilder);
         } catch (Error | RuntimeException e) {
@@ -128,35 +146,32 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
     }
 
     /**
+     * Creates environment with given options.
      *
-     * @param options
-     * @return
-     * @throws Throwable
+     * @param options the specified {@link GroupOptionSet} instance
+     * @return the {@link Environment} instance
+     * @throws Throwable if any problems during environment initialization occurred
      */
     protected abstract Environment createEnvironment(GroupOptionSet options) throws Throwable;
 
     /**
+     * Creates application with given options, environment and service manager.
      *
-     * @return
-     */
-    protected abstract GroupOptionSet createDefaultOptions();
-
-    /**
-     *
-     * @param options
-     * @param environment
-     * @param manager
-     * @return
-     * @throws Throwable
+     * @param options     the specified {@link GroupOptionSet} instance
+     * @param environment the specified {@link Environment} instance
+     * @param manager     the specified {@link ServiceManager} instance
+     * @return the {@link Application} instance
+     * @throws Throwable if any problems during application initialization occurred
      */
     protected abstract Application<T> createApplication(GroupOptionSet options,
                                                         Environment environment,
                                                         ServiceManager manager) throws Throwable;
 
     /**
+     * Does application build.
      *
-     * @return
-     * @throws Throwable
+     * @return the {@link Application} instance
+     * @throws Throwable if any problems during application build occurred
      */
     protected Application<T> doBuild() throws Throwable {
         // Prepare options

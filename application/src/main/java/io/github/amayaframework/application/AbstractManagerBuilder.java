@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
+ * A class that provides a skeletal implementation of the {@link ServiceManagerBuilder}.
  */
 public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
     /**
-     *
+     * Service manager factory.
      */
     protected ServiceManagerFactory factory;
     /**
-     *
+     * Service handler.
      */
     protected ServiceHandler handler;
     /**
-     *
+     * List of managed services.
      */
     protected List<Service> services;
 
@@ -46,8 +46,9 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
     }
 
     /**
+     * Adds service to managed services list.
      *
-     * @param service
+     * @param service the specified {@link Service} instance, must be non-null
      */
     protected void add(Service service) {
         if (services == null) {
@@ -57,14 +58,16 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
     }
 
     /**
+     * Gets default service manager factory.
      *
-     * @return
+     * @return the {@link ServiceManagerFactory} instance
      */
     protected abstract ServiceManagerFactory getDefaultFactory();
 
     /**
+     * Gets default service handler.
      *
-     * @return
+     * @return the {@link ServiceHandler} instance
      */
     protected abstract ServiceHandler getDefaultHandler();
 

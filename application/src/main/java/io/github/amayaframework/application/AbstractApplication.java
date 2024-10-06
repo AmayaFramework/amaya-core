@@ -8,23 +8,65 @@ import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.service.ServiceManager;
 
+/**
+ * A class that provides a skeletal implementation of the {@link Application}.
+ *
+ * @param <T> the type of application context
+ */
 public abstract class AbstractApplication<T> implements Application<T> {
     // Constants
+    /**
+     * Started state value.
+     */
     protected static final int STARTED = 0;
+    /**
+     * Stopped state value.
+     */
     protected static final int STOPPED = 1;
+    /**
+     * Shutdown state value.
+     */
     protected static final int SHUTDOWN = 2;
 
     // Components
+    /**
+     * The {@link PipelineBuilder} containing middlewared context handlers.
+     */
     protected final PipelineBuilder<T> builder;
+    /**
+     * The application options.
+     */
     protected final GroupOptionSet options;
+    /**
+     * The application environment.
+     */
     protected final Environment environment;
+    /**
+     * The application service manager.
+     */
     protected final ServiceManager manager;
+    /**
+     * The application state change lock.
+     */
     protected final Object lock;
 
     // Self-managed fields
+    /**
+     * Current application state.
+     */
     protected int state;
+    /**
+     * Current application shutdown hook.
+     */
     protected Thread hook;
 
+    /**
+     * Constructs an {@link AbstractApplication} instance with given options, environment and service manager.
+     *
+     * @param options     the specified {@link GroupOptionSet} instance, must be non-null
+     * @param environment the specified {@link Environment} instance, must be non-null
+     * @param manager     the specified {@link ServiceManager} instance, must be non-null
+     */
     protected AbstractApplication(GroupOptionSet options, Environment environment, ServiceManager manager) {
         this.builder = new OpenedPipelineBuilder<>();
         this.options = options;
@@ -59,6 +101,12 @@ public abstract class AbstractApplication<T> implements Application<T> {
         builder.clear();
     }
 
+    /**
+     * Does application start, i.e. manage application services.
+     *
+     * @param handler the application context handler
+     * @throws Throwable if any problems during application start occurred
+     */
     protected abstract void doStart(Runnable1<T> handler) throws Throwable;
 
     @Override
@@ -90,6 +138,11 @@ public abstract class AbstractApplication<T> implements Application<T> {
         }
     }
 
+    /**
+     * Does application stop, i.e. manage application services.
+     *
+     * @throws Throwable if any problems during application stop occurred
+     */
     protected abstract void doStop() throws Throwable;
 
     @Override
@@ -110,6 +163,9 @@ public abstract class AbstractApplication<T> implements Application<T> {
         }
     }
 
+    /**
+     * Does application shutdown. Used as shutdown hook body.
+     */
     protected void doShutdown() {
         try {
             doStop();
