@@ -1,6 +1,6 @@
 package io.github.amayaframework.core;
 
-import io.github.amayaframework.di.Builders;
+import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 
 import java.util.function.Supplier;
@@ -40,7 +40,7 @@ public final class CoreBuilderFactories {
     }
 
     public static ApplicationBuilderFactory createProvided() {
-        return new ServiceBuilderFactory(Builders::createChecked);
+        return new ServiceBuilderFactory(ProviderBuilders::createChecked);
     }
 
     public static ApplicationBuilderFactory create() {

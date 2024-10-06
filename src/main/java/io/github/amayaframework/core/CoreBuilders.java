@@ -1,6 +1,6 @@
 package io.github.amayaframework.core;
 
-import io.github.amayaframework.di.Builders;
+import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.github.amayaframework.options.GroupOptionSet;
 
@@ -31,12 +31,12 @@ public final class CoreBuilders {
     }
 
     public static ApplicationBuilder createProvided(GroupOptionSet options) {
-        var factory = new ServiceBuilderFactory(Builders::createChecked);
+        var factory = new ServiceBuilderFactory(ProviderBuilders::createChecked);
         return factory.create(options);
     }
 
     public static ApplicationBuilder createProvided() {
-        var factory = new ServiceBuilderFactory(Builders::createChecked);
+        var factory = new ServiceBuilderFactory(ProviderBuilders::createChecked);
         return factory.create();
     }
 
