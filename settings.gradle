@@ -1,2 +1,11 @@
 rootProject.name = 'amaya-core'
+include 'options'
+include 'environment'
+include 'service'
+include 'tokenizer'
+include 'http'
+include 'context'
+include 'server'
+include 'application'
+include 'web'
 
