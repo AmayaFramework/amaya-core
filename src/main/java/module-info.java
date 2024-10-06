@@ -1,5 +1,6 @@
 /**
  * Amaya Core Module
+ *
  * @author Roman Bakaldin
  */
 open module io.github.amayaframework.core {

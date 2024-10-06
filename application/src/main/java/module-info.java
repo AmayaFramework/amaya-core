@@ -1,5 +1,6 @@
 /**
  * Amaya Application Module
+ *
  * @author Roman Bakaldin
  */
 module io.github.amayaframework.application {
