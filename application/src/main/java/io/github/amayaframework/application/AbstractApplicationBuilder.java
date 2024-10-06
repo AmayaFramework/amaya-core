@@ -165,7 +165,7 @@ public abstract class AbstractApplicationBuilder<T extends Application<?>> imple
         // Prepare options
         var set = Objects.requireNonNullElse(options, createDefaultOptions());
         // Prepare environment
-        var environment = createEnvironment(options);
+        var environment = createEnvironment(set);
         try {
             // Prepare service manager
             var manager = managerBuilder.build();
