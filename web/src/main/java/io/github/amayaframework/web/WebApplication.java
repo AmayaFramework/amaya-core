@@ -9,42 +9,37 @@ import io.github.amayaframework.server.HttpServerConfig;
 import java.net.InetSocketAddress;
 
 /**
- *
+ * An interface describing an abstract web application that manages services.
  */
 public interface WebApplication extends Application<HttpContext> {
 
     /**
-     * @return
+     * Gets http server config. Any config changes are reflected on the server and vice versa.
+     *
+     * @return the {@link HttpServerConfig} instance
      */
     HttpServerConfig getServerConfig();
 
     /**
-     * @param address
+     * Binds web application to given address.
+     *
+     * @param address the specified address that the server will listen to, must be non-null
      */
     void bind(InetSocketAddress address);
 
     /**
-     * @param port
+     * Binds web application to given port.
+     *
+     * @param port the specified port that the server will listen to
      */
     void bind(int port);
 
-    /**
-     * @param runnable2
-     */
     @Override
-    void addHandler(Runnable2<HttpContext, Runnable1<HttpContext>> runnable2);
+    void addHandler(Runnable2<HttpContext, Runnable1<HttpContext>> handler);
 
-    /**
-     * @param runnable1
-     * @throws Throwable
-     */
     @Override
-    void start(Runnable1<HttpContext> runnable1) throws Throwable;
+    void start(Runnable1<HttpContext> handler) throws Throwable;
 
-    /**
-     * @param runnable1
-     * @throws Throwable
-     */
     @Override
-    void run(Runnable1<HttpContext> runnable1) throws Throwable;
+    void run(Runnable1<HttpContext> handler) throws Throwable;
 }

@@ -10,27 +10,23 @@ import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.server.HttpServerFactory;
 import io.github.amayaframework.service.ServiceManager;
 
-import java.net.InetSocketAddress;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- *
+ * A class that provides a skeletal implementation of the {@link WebApplicationBuilder}.
  */
-public abstract class AbstractWebBuilder extends AbstractApplicationBuilder<WebApplication> implements WebApplicationBuilder {
+public abstract class AbstractWebBuilder
+        extends AbstractApplicationBuilder<WebApplication>
+        implements WebApplicationBuilder {
     /**
      * Http server factory.
      */
     protected HttpServerFactory factory;
-    /**
-     * Http server binds.
-     */
-    protected List<InetSocketAddress> binds;
 
     /**
+     * Constructs an {@link AbstractWebBuilder} instance with given service manager builder.
      *
-     * @param managerBuilder
+     * @param managerBuilder the specified {@link ServiceManagerBuilder} instance, must be non-null
      */
     protected AbstractWebBuilder(ServiceManagerBuilder managerBuilder) {
         super(managerBuilder);
@@ -39,7 +35,6 @@ public abstract class AbstractWebBuilder extends AbstractApplicationBuilder<WebA
     @Override
     public void reset() {
         this.factory = null;
-        this.binds = null;
         super.reset();
     }
 
@@ -62,31 +57,10 @@ public abstract class AbstractWebBuilder extends AbstractApplicationBuilder<WebA
         return this;
     }
 
-    @Override
-    public WebApplicationBuilder bind(InetSocketAddress address) {
-        Objects.requireNonNull(address);
-        if (binds == null) {
-            binds = new LinkedList<>();
-        }
-        binds.add(address);
-        return this;
-    }
-
-    @Override
-    public WebApplicationBuilder bind(int port) {
-        if (port < 0 || port > 65535) {
-            throw new IllegalArgumentException("Illegal port value: " + port);
-        }
-        if (binds == null) {
-            binds = new LinkedList<>();
-        }
-        binds.add(new InetSocketAddress(port));
-        return this;
-    }
-
     /**
+     * Creates default environment factory.
      *
-     * @return
+     * @return the {@link EnvironmentFactory} instance
      */
     protected abstract EnvironmentFactory getDefaultEnvironmentFactory();
 
@@ -99,13 +73,14 @@ public abstract class AbstractWebBuilder extends AbstractApplicationBuilder<WebA
     }
 
     /**
+     * Creates application with given options, environment, service manager and server.
      *
-     * @param options
-     * @param environment
-     * @param manager
-     * @param server
-     * @return
-     * @throws Throwable
+     * @param options     the specified {@link GroupOptionSet} instance
+     * @param environment the specified {@link Environment} instance
+     * @param manager     the specified {@link ServiceManager} instance
+     * @param server      the specified {@link HttpServer} instance
+     * @return the {@link WebApplication} instance
+     * @throws Throwable if any problems during application initialization occurred
      */
     protected abstract WebApplication createApplication(GroupOptionSet options,
                                                         Environment environment,
@@ -119,12 +94,6 @@ public abstract class AbstractWebBuilder extends AbstractApplicationBuilder<WebA
         var factory = Objects.requireNonNull(this.factory);
         var group = options.getGroup(WebOptions.SERVER_GROUP);
         var server = factory.create(group);
-        if (binds != null) {
-            var config = server.getConfig();
-            for (var bind : binds) {
-                config.addAddress(bind);
-            }
-        }
         return createApplication(options, environment, manager, server);
     }
 

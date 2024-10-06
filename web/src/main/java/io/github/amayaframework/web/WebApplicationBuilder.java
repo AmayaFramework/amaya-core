@@ -9,36 +9,26 @@ import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServerFactory;
 
-import java.net.InetSocketAddress;
-
 /**
- *
+ * An interface describing the abstract builder of the {@link WebApplication}.
  */
 public interface WebApplicationBuilder extends ApplicationBuilder<WebApplication> {
 
     /**
-     * @param action
-     * @return
+     * Applies given action to this {@link WebApplicationBuilder} instance.
+     *
+     * @param action the specified action to be applied, must be non-null
+     * @return this {@link WebApplicationBuilder} instance
      */
     WebApplicationBuilder configure(Runnable1<WebApplicationBuilder> action);
 
     /**
-     * @param factory
-     * @return
+     * Sets the http server factory.
+     *
+     * @param factory the {@link HttpServerFactory} instance
+     * @return this {@link WebApplicationBuilder} instance
      */
     WebApplicationBuilder setServerFactory(HttpServerFactory factory);
-
-    /**
-     * @param address
-     * @return
-     */
-    WebApplicationBuilder bind(InetSocketAddress address);
-
-    /**
-     * @param port
-     * @return
-     */
-    WebApplicationBuilder bind(int port);
 
     @Override
     WebApplicationBuilder setOptions(GroupOptionSet options);

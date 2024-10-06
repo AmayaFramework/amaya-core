@@ -13,20 +13,22 @@ import java.net.InetSocketAddress;
 import java.util.Objects;
 
 /**
- *
+ * A class that provides a skeletal implementation of the {@link WebApplication}.
  */
 public abstract class AbstractWebApplication extends AbstractApplication<HttpContext> implements WebApplication {
     /**
-     *
+     * The web application http server.
      */
     protected final HttpServer server;
 
     /**
+     * Constructs an {@link AbstractWebApplication} instance with given options, environment, service manager
+     * and http server.
      *
-     * @param options
-     * @param environment
-     * @param manager
-     * @param server
+     * @param options     the specified {@link GroupOptionSet} instance, must be non-null
+     * @param environment the specified {@link Environment} instance, must be non-null
+     * @param manager     the specified {@link ServiceManager} instance, must be non-null
+     * @param server      the specified {@link HttpServer} instance, must be non-null
      */
     protected AbstractWebApplication(GroupOptionSet options,
                                      Environment environment,
