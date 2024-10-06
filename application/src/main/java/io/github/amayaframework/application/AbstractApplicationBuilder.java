@@ -10,16 +10,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ *
+ * @param <T>
+ */
 public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilder<T> {
-    // Service manager builder
+    /**
+     *  Service manager builder.
+     */
     protected final ServiceManagerBuilder managerBuilder;
     // Modifiable params
+    /**
+     *
+     */
     protected EnvironmentFactory environmentFactory;
+    /**
+     *
+     */
     protected String environmentName;
+    /**
+     *
+     */
     protected GroupOptionSet options;
-    // Deferred application consumers
+    /**
+     * Deferred application consumers.
+     */
     protected List<Runnable1<Application<T>>> consumers;
 
+    /**
+     *
+     * @param managerBuilder
+     */
     protected AbstractApplicationBuilder(ServiceManagerBuilder managerBuilder) {
         this.managerBuilder = managerBuilder;
     }
@@ -106,14 +127,37 @@ public abstract class AbstractApplicationBuilder<T> implements ApplicationBuilde
         return this;
     }
 
+    /**
+     *
+     * @param options
+     * @return
+     * @throws Throwable
+     */
     protected abstract Environment createEnvironment(GroupOptionSet options) throws Throwable;
 
+    /**
+     *
+     * @return
+     */
     protected abstract GroupOptionSet createDefaultOptions();
 
+    /**
+     *
+     * @param options
+     * @param environment
+     * @param manager
+     * @return
+     * @throws Throwable
+     */
     protected abstract Application<T> createApplication(GroupOptionSet options,
                                                         Environment environment,
                                                         ServiceManager manager) throws Throwable;
 
+    /**
+     *
+     * @return
+     * @throws Throwable
+     */
     protected Application<T> doBuild() throws Throwable {
         // Prepare options
         var set = Objects.requireNonNullElse(options, createDefaultOptions());

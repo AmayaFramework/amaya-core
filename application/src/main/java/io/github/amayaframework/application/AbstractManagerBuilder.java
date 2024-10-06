@@ -9,9 +9,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ *
+ */
 public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
+    /**
+     *
+     */
     protected ServiceManagerFactory factory;
+    /**
+     *
+     */
     protected ServiceHandler handler;
+    /**
+     *
+     */
     protected List<Service> services;
 
     @Override
@@ -33,6 +45,10 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
         return this;
     }
 
+    /**
+     *
+     * @param service
+     */
     protected void add(Service service) {
         if (services == null) {
             services = new LinkedList<>();
@@ -40,8 +56,16 @@ public abstract class AbstractManagerBuilder implements ServiceManagerBuilder {
         services.add(service);
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract ServiceManagerFactory getDefaultFactory();
 
+    /**
+     *
+     * @return
+     */
     protected abstract ServiceHandler getDefaultHandler();
 
     @Override
