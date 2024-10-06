@@ -1,6 +1,6 @@
-# amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-core?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-core/)
+# amaya-core [![maven-central](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-core/2.0.0?color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-core/2.0.0)
 
-Placeholder
+An amaya framework module that implements a web application and its infrastructure.
 
 ## Getting Started
 
@@ -8,7 +8,7 @@ To install it, you will need:
 
 * Java 11+
 * Maven/Gradle
-* Some Lib
+* Any amaya-server implementation (for example, [amaya-jetty](https://github.com/AmayaFramework/amaya-jetty))
 
 ## Installing
 
@@ -16,7 +16,7 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-   implementation group: 'io.github.amayaframework', name: 'amaya-core', version: 'LATEST'
+   implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.0'
 }
 ```
 
@@ -26,18 +26,46 @@ dependencies {
 <dependency>
     <groupId>io.github.amayaframework</groupId>
     <artifactId>amaya-core</artifactId>
-    <version>LATEST</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 ## Usage example
 
-Placeholder
+### Hello, world
+
+<p>Gradle dependency section:</p>
+
+```Gradle
+dependencies {
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '1.0.0'
+}
+```
+
+<p>Java code:</p>
+
+```Java
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.jetty.JettyServerFactory;
+
+public class Main {
+    public static void main(String[] args) throws Throwable {
+        var builder = WebBuilders.create();
+        var app = builder
+                .setServerFactory(new JettyServerFactory())
+                .build();
+        app.bind(8080);
+        app.run(ctx -> System.out.println("Hello, world"));
+    }
+}
+```
 
 ## Built With
 
 * [Gradle](https://gradle.org) - Dependency management
-* [Black Magic]() - Black magic
+* [jfunc](https://github.com/RomanQed/jfunc) - Functional interfaces
+* [jakarta.servlet](https://projects.eclipse.org/projects/ee4j.servlet) - Servlet API
 
 ## Authors
 
