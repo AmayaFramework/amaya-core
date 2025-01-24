@@ -1,8 +1,5 @@
 # Gradle files
 .gradle/
-gradle/wrapper/gradle-wrapper.jar
-gradlew
-gradlew.bat
 
 # IDE files
 .idea/
@@ -20,7 +17,7 @@ build/
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Package Files
 *.jar
 *.war
 *.nar
@@ -29,8 +26,7 @@ build/
 *.tar.gz
 *.rar
 
+!gradle-wrapper.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-# Maven publishing
-secring.gpg
