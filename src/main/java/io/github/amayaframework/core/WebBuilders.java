@@ -2,6 +2,7 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
+import io.github.amayaframework.di.stub.StubFactory;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.web.WebApplicationBuilder;
 
@@ -70,7 +71,8 @@ public final class WebBuilders {
      * @return the {@link WebApplicationBuilder} instance
      */
     public static WebApplicationBuilder createProvided(GroupOptionSet options) {
-        var factory = new ProvidedBuilderFactory(ProviderBuilders::createChecked);
+        var stubFactory = (StubFactory) ReflectUtil.lookupStubFactory();
+        var factory = new ProvidedBuilderFactory(() -> ProviderBuilders.createChecked(stubFactory));
         return factory.create(options);
     }
 
@@ -80,7 +82,8 @@ public final class WebBuilders {
      * @return the {@link WebApplicationBuilder} instance
      */
     public static WebApplicationBuilder createProvided() {
-        var factory = new ProvidedBuilderFactory(ProviderBuilders::createChecked);
+        var stubFactory = (StubFactory) ReflectUtil.lookupStubFactory();
+        var factory = new ProvidedBuilderFactory(() -> ProviderBuilders.createChecked(stubFactory));
         return factory.create();
     }
 
