@@ -2,6 +2,7 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.di.ProviderBuilders;
 import io.github.amayaframework.di.ServiceProviderBuilder;
+import io.github.amayaframework.di.stub.StubFactory;
 import io.github.amayaframework.web.WebBuilderFactory;
 
 import java.util.function.Supplier;
@@ -10,29 +11,7 @@ import java.util.function.Supplier;
  * A class containing methods for creating {@link WebBuilderFactory} instances.
  */
 public final class WebBuilderFactories {
-    private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
-    private static final String AMAYA_SERVICE_PROVER = "io.github.amayaframework.di.ServiceProvider";
-
     private WebBuilderFactories() {
-    }
-
-    private static boolean isDIModuleLoaded() {
-        var layer = ModuleLayer.boot();
-        return layer.findModule(AMAYA_DI_MODULE).isPresent();
-    }
-
-    private static boolean isDIClassExists() {
-        var loader = Thread.currentThread().getContextClassLoader();
-        try {
-            var loaded = loader.loadClass(AMAYA_SERVICE_PROVER);
-            return loaded.getName().equals(AMAYA_SERVICE_PROVER);
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    private static boolean isDILoaded() {
-        return isDIModuleLoaded() || isDIClassExists();
     }
 
     /**
@@ -61,7 +40,8 @@ public final class WebBuilderFactories {
      * @return the {@link WebBuilderFactory} instance
      */
     public static WebBuilderFactory createProvided() {
-        return new ProvidedBuilderFactory(ProviderBuilders::createChecked);
+        var factory = (StubFactory) ReflectUtil.lookupStubFactory();
+        return new ProvidedBuilderFactory(() -> ProviderBuilders.createChecked(factory));
     }
 
     /**
@@ -71,7 +51,7 @@ public final class WebBuilderFactories {
      * @return the {@link WebBuilderFactory} instance
      */
     public static WebBuilderFactory create() {
-        if (isDILoaded()) {
+        if (ReflectUtil.isDILoaded()) {
             return createProvided();
         }
         return createStandalone();
