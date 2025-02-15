@@ -15,6 +15,7 @@ final class StandaloneApplication extends AbstractWebApplication {
 
     @Override
     public ServiceProvider getProvider() {
-        throw new UnsupportedOperationException("The amaya di module is not loaded");
+        // No-op impl
+        return null;
     }
 }
