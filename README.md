@@ -16,7 +16,7 @@ To install it, you will need:
 
 ```Groovy
 dependencies {
-   implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.1'
+   implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.2'
 }
 ```
 
@@ -26,7 +26,7 @@ dependencies {
 <dependency>
     <groupId>io.github.amayaframework</groupId>
     <artifactId>amaya-core</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 </dependency>
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 
 ```Gradle
 dependencies {
-    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.1'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '2.0.2'
     implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '1.0.0'
 }
 ```
