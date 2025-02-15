@@ -38,8 +38,7 @@ public interface Application<T> extends Resettable {
     /**
      * Gets the {@link ServiceProvider} instance.
      *
-     * @return the {@link ServiceProvider} instance
-     * @throws UnsupportedOperationException if amaya di module not loaded
+     * @return the {@link ServiceProvider} instance if amaya di module loaded, null otherwise
      */
     ServiceProvider getProvider();
 

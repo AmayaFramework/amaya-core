@@ -36,8 +36,8 @@ dependencies {
     api group: 'io.github.amayaframework', name: 'amaya-service', version: '1.0.0'
     api group: 'io.github.amayaframework', name: 'amaya-context', version: '1.1.2'
     api group: 'io.github.amayaframework', name: 'amaya-server', version: '1.1.3'
-    api group: 'io.github.amayaframework', name: 'amaya-application', version: '1.1.1'
-    api group: 'io.github.amayaframework', name: 'amaya-web', version: '1.0.0'
+    api group: 'io.github.amayaframework', name: 'amaya-application', version: '1.1.3'
+    api group: 'io.github.amayaframework', name: 'amaya-web', version: '1.0.1'
     // DI
     compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.3.1'
 }

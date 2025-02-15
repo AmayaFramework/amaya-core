@@ -39,11 +39,11 @@ public interface ServiceManagerBuilder extends Resettable {
 
     /**
      * Adds a {@link Service} instance to service manager and register as server instance at di container.
+     * If amaya di module loaded, it will be registered as service instance at di container.
      *
      * @param type    the specified service type, must be non-null
      * @param service the {@link Service} instance to be managed
      * @return this {@link ServiceManagerBuilder} instance
-     * @throws UnsupportedOperationException if amaya di module not loaded
      */
     ServiceManagerBuilder addService(Type type, Service service);
 
