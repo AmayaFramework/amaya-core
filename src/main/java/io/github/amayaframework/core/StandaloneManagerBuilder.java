@@ -36,7 +36,9 @@ final class StandaloneManagerBuilder extends AbstractManagerBuilder {
 
     @Override
     public ServiceManagerBuilder addService(Type type, Service service) {
-        throw new UnsupportedOperationException("The amaya di module is not loaded");
+        // Just add service to list and do nothing about di
+        add(Objects.requireNonNull(service));
+        return this;
     }
 
     @Override

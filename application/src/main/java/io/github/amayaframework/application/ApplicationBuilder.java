@@ -74,26 +74,24 @@ public interface ApplicationBuilder<T extends Application<?>> extends Resettable
     /**
      * Gets the {@link ServiceProviderBuilder} instance.
      *
-     * @return the {@link ServiceProviderBuilder} instance
-     * @throws UnsupportedOperationException if amaya di module not loaded
+     * @return the {@link ServiceProviderBuilder} instance if amaya di module loaded, null otherwise
      */
     ServiceProviderBuilder getProviderBuilder();
 
     /**
-     * Applies given action to the {@link ServiceProviderBuilder}.
+     * Applies given action to the {@link ServiceProviderBuilder}. Do nothing if amaya di module not loaded.
      *
      * @param action the specified action to be applied to {@link ServiceProviderBuilder} instance, must be non-null
      * @return this {@link ApplicationBuilder} instance
-     * @throws UnsupportedOperationException if amaya di module not loaded
      */
     ApplicationBuilder<T> configureProviderBuilder(Runnable1<ServiceProviderBuilder> action);
 
     /**
      * Applies given action to the {@link ServiceProvider} instance after it will be built.
+     * Do nothing if amaya di module not loaded.
      *
      * @param action the specified action to be applied to {@link ServiceProvider} instance, must be non-null
      * @return this {@link ApplicationBuilder} instance
-     * @throws UnsupportedOperationException if amaya di module not loaded
      */
     ApplicationBuilder<T> configureProvider(Runnable1<ServiceProvider> action);
 
