@@ -28,6 +28,8 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
+    // JType
+    api group: 'com.github.romanqed', name: 'jtype', version: '1.0.1'
 }
 
 test {
