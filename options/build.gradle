@@ -29,7 +29,7 @@ dependencies {
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
     // JType
-    api group: 'com.github.romanqed', name: 'jtype', version: '1.0.1'
+    api group: 'com.github.romanqed', name: 'jtype', version: '1.0.2'
 }
 
 test {
