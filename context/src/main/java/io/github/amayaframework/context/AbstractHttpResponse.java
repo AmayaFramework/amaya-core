@@ -123,18 +123,27 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     @Override
     public void setStatus(HttpCode code) {
+        if (!code.isSupported(version)) {
+            throw new UnsupportedHttpDefinition(version, code);
+        }
         response.setStatus(code.getCode());
         this.status = code;
     }
 
     @Override
     public void sendError(HttpCode code, String message) throws IOException {
+        if (!code.isSupported(version)) {
+            throw new UnsupportedHttpDefinition(version, code);
+        }
         response.sendError(code.getCode(), message);
         this.status = code;
     }
 
     @Override
     public void sendError(HttpCode code) throws IOException {
+        if (!code.isSupported(version)) {
+            throw new UnsupportedHttpDefinition(version, code);
+        }
         response.sendError(code.getCode());
         this.status = code;
     }
