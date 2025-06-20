@@ -38,7 +38,7 @@ dependencies {
     compileOnly project(':server')
     compileOnly project(':application')
     // DI
-    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.3.1'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '2.3.3'
 }
 
 test {
