@@ -21,6 +21,11 @@ public final class HttpVersionTest {
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of(20));
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of("HTTP/2"));
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of("HTTP/2.0"));
+        // 3.0
+        assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of(3));
+        assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of(30));
+        assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of("HTTP/3"));
+        assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of("HTTP/3.0"));
     }
 
     @Test
@@ -28,18 +33,30 @@ public final class HttpVersionTest {
         var http1 = HttpVersion.HTTP_1_0;
         var http11 = HttpVersion.HTTP_1_1;
         var http2 = HttpVersion.HTTP_2_0;
+        var http3 = HttpVersion.HTTP_3_0;
+        // http/1
         assertTrue(http1.before(http11));
         assertFalse(http1.after(http11));
         assertTrue(http1.before(http2));
         assertFalse(http1.after(http2));
+        // http/1.1
         assertTrue(http11.after(http1));
         assertFalse(http11.before(http1));
         assertTrue(http11.before(http2));
         assertFalse(http11.after(http2));
+        // http/2
         assertTrue(http2.after(http1));
         assertFalse(http2.before(http1));
         assertTrue(http2.after(http11));
         assertFalse(http2.before(http11));
+        // http/3
+        assertTrue(http3.after(http11));
+        assertFalse(http3.before(http11));
+        assertTrue(http3.after(http1));
+        assertFalse(http3.before(http1));
+        assertTrue(http3.after(http2));
+        assertTrue(http3.after(http2));
+        assertFalse(http3.before(http2));
         assertEquals(-1, http1.compareTo(http11));
         assertEquals(1, http11.compareTo(http1));
     }
