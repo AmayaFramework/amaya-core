@@ -2,6 +2,8 @@ package io.github.amayaframework.server;
 
 import io.github.amayaframework.http.HttpVersion;
 
+import java.net.InetSocketAddress;
+
 /**
  * An interface describing the http server config.
  */
@@ -21,6 +23,14 @@ public interface HttpServerConfig extends ServerConfig {
      * @throws IllegalStateException if server started
      */
     void setHttpVersion(HttpVersion version);
+
+    /**
+     * Adds given address to listened set and starts listen it with specified http protocol.
+     *
+     * @param address the specified address to be listened, must be non-null
+     * @param version the specified http version, must be non-null
+     */
+    void addAddress(InetSocketAddress address, HttpVersion version);
 
     /**
      * Gets the {@link MimeFormatter} instance used by server. The default value depends on the implementation.

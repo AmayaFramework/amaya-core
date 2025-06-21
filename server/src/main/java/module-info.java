@@ -10,6 +10,8 @@ open module io.github.amayaframework.server {
     requires io.github.amayaframework.context;
     requires io.github.amayaframework.service;
     requires io.github.amayaframework.http;
+    // Optional imports
+    requires static io.github.amayaframework.environment;
     // Exports
     exports io.github.amayaframework.server;
 }

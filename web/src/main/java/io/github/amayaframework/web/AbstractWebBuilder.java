@@ -93,7 +93,7 @@ public abstract class AbstractWebBuilder
                                                ServiceManager manager) throws Throwable {
         var factory = Objects.requireNonNull(this.factory);
         var group = options.getGroup(WebOptions.SERVER_GROUP);
-        var server = factory.create(group);
+        var server = factory.create(group, environment);
         return createApplication(options, environment, manager, server);
     }
 

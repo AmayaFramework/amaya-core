@@ -29,7 +29,7 @@ dependencies {
     // Servlets
     compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '5.0.0'
     // Http
-    api group: 'io.github.amayaframework', name: 'amaya-http', version: '1.0.0'
+    compileOnly project(':http')
 }
 
 test {

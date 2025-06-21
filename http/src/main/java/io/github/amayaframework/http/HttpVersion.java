@@ -12,13 +12,16 @@ public final class HttpVersion implements Comparable<HttpVersion> {
     public static final HttpVersion HTTP_1_0 = new HttpVersion("HTTP/1.0", 10);
     public static final HttpVersion HTTP_1_1 = new HttpVersion("HTTP/1.1", 11);
     public static final HttpVersion HTTP_2_0 = new HttpVersion("HTTP/2.0", 20);
+    public static final HttpVersion HTTP_3_0 = new HttpVersion("HTTP/3.0", 30);
 
     private static final Map<String, HttpVersion> VERSIONS = Map.of(
             "HTTP/1.0", HTTP_1_0,
             "HTTP/1", HTTP_1_0,
             "HTTP/1.1", HTTP_1_1,
             "HTTP/2.0", HTTP_2_0,
-            "HTTP/2", HTTP_2_0
+            "HTTP/2", HTTP_2_0,
+            "HTTP/3.0", HTTP_3_0,
+            "HTTP/3", HTTP_3_0
     );
     final String tag;
     final int number;
@@ -64,6 +67,9 @@ public final class HttpVersion implements Comparable<HttpVersion> {
             case 2:
             case 20:
                 return HTTP_2_0;
+            case 3:
+            case 30:
+                return HTTP_3_0;
         }
         return null;
     }
