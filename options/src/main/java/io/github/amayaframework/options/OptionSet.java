@@ -23,6 +23,19 @@ public interface OptionSet {
     <T> T get(String key);
 
     /**
+     * Gets the value associated with given key. If key not found, returns given default value.
+     *
+     * @param key the specified key
+     * @param def the specified default value
+     * @param <T> the type of requested value
+     * @return the value associated with key or default value
+     */
+    default <T> T get(String key, T def) {
+        T t;
+        return ((t = get(key)) != null) || contains(key) ? t : def;
+    }
+
+    /**
      * Gets the value associated with given key.
      *
      * @param key the specified key
@@ -31,6 +44,20 @@ public interface OptionSet {
      */
     default <T> T get(Key<T> key) {
         return get(key.getKey());
+    }
+
+    /**
+     * Gets the value associated with given key. If key not found, returns given default value.
+     *
+     * @param key the specified key
+     * @param def the specified default value
+     * @param <T> the type of requested value
+     * @return the value associated with key or default value
+     */
+    default <T> T get(Key<T> key, T def) {
+        var k = key.getKey();
+        T t;
+        return ((t = get(k)) != null) || contains(k) ? t : def;
     }
 
     /**

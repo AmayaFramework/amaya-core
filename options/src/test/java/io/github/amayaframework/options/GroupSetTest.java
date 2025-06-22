@@ -23,6 +23,27 @@ public final class GroupSetTest extends CommonSetTest {
     }
 
     @Test
+    public void testDefault() {
+        var gs = new ProvidedGroupSet(".", OpenOptionSet::new);
+        testDefault(gs);
+        // Test some groups
+        var k1Key = Key.of("k1", Integer.class);
+        var g1k1Key = k1Key.withGroup("kg1");
+        var g2k1Key = k1Key.withGroup("kg2");
+        var g3k1Key = k1Key.withGroup("kg3");
+        gs.set("g1.k1", null);
+        gs.set("g2.k1", 1);
+        gs.set(g1k1Key, null);
+        gs.set(g2k1Key, 2);
+        assertNull(gs.get("g1.k1", 1));
+        assertEquals(1, gs.get("g2.k1", 2));
+        assertEquals(10, gs.get("g3.k1", 10));
+        assertNull(gs.get(g1k1Key, 1));
+        assertEquals(2, gs.get(g2k1Key, 1));
+        assertEquals(10, gs.get(g3k1Key, 10));
+    }
+
+    @Test
     public void testKey() {
         testKey(new ProvidedGroupSet(".", OpenOptionSet::new));
     }
