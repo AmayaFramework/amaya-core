@@ -19,6 +19,22 @@ class CommonSetTest {
         assertEquals("string", set.get("k6"));
     }
 
+    void testDefault(OptionSet set) {
+        var kd1Key = Key.of("kd1Keyed", Integer.class);
+        var kd2Key = Key.of("kd2Keyed", Integer.class);
+        var kd3Key = Key.of("kd3Keyed", Integer.class);
+        set.set("kd1", null);
+        set.set("kd2", 1);
+        set.set(kd1Key, null);
+        set.set(kd2Key, 2);
+        assertNull(set.get("kd1", 1));
+        assertEquals(1, set.get("kd2", 2));
+        assertEquals(10, set.get("kd3", 10));
+        assertNull(set.get(kd1Key, 1));
+        assertEquals(2, set.get(kd2Key, 1));
+        assertEquals(10, set.get(kd3Key, 10));
+    }
+
     void testKey(OptionSet set) {
         // Pure true value
         set.set("kt", true);

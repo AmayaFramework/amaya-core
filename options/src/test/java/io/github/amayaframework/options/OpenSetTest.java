@@ -12,6 +12,11 @@ public final class OpenSetTest extends CommonSetTest {
     }
 
     @Test
+    public void testDefault() {
+        testDefault(new OpenOptionSet());
+    }
+
+    @Test
     public void testKey() {
         testKey(new OpenOptionSet());
     }

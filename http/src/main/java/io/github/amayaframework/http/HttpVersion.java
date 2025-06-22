@@ -51,23 +51,18 @@ public final class HttpVersion implements Comparable<HttpVersion> {
     /**
      * Searches among predefined versions for the version with the specified number.
      * If the version is unknown, it returns null.
-     * <br>
-     * It supports shortcuts, for example, '1' instead of '10'.
      *
      * @param number the specified version number
      * @return {@link HttpVersion} instance if found, null otherwise
      */
     public static HttpVersion of(int number) {
         switch (number) {
-            case 1:
             case 10:
                 return HTTP_1_0;
             case 11:
                 return HTTP_1_1;
-            case 2:
             case 20:
                 return HTTP_2_0;
-            case 3:
             case 30:
                 return HTTP_3_0;
         }

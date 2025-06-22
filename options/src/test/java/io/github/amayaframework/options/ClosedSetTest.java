@@ -14,6 +14,11 @@ public final class ClosedSetTest extends CommonSetTest {
     }
 
     @Test
+    public void testDefault() {
+        testDefault(new ClosedOptionSet(Set.of("kd1", "kd2", "kd1Keyed", "kd2Keyed")));
+    }
+
+    @Test
     public void testKey() {
         testKey(new ClosedOptionSet(Set.of("kt", "kf", "ko", "kn")));
     }

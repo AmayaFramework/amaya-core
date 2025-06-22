@@ -9,7 +9,6 @@ public final class HttpVersionTest {
     @Test
     public void testPredefined() {
         // 1.0
-        assertEquals(HttpVersion.HTTP_1_0, HttpVersion.of(1));
         assertEquals(HttpVersion.HTTP_1_0, HttpVersion.of(10));
         assertEquals(HttpVersion.HTTP_1_0, HttpVersion.of("HTTP/1"));
         assertEquals(HttpVersion.HTTP_1_0, HttpVersion.of("HTTP/1.0"));
@@ -17,12 +16,10 @@ public final class HttpVersionTest {
         assertEquals(HttpVersion.HTTP_1_1, HttpVersion.of(11));
         assertEquals(HttpVersion.HTTP_1_1, HttpVersion.of("HTTP/1.1"));
         // 2.0
-        assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of(2));
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of(20));
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of("HTTP/2"));
         assertEquals(HttpVersion.HTTP_2_0, HttpVersion.of("HTTP/2.0"));
         // 3.0
-        assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of(3));
         assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of(30));
         assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of("HTTP/3"));
         assertEquals(HttpVersion.HTTP_3_0, HttpVersion.of("HTTP/3.0"));
