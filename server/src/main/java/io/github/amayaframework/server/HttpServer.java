@@ -3,6 +3,7 @@ package io.github.amayaframework.server;
 import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.http.HttpVersion;
+import jakarta.servlet.ServletContext;
 
 import java.net.InetSocketAddress;
 
@@ -10,6 +11,16 @@ import java.net.InetSocketAddress;
  * An interface describing an abstract http server.
  */
 public interface HttpServer extends Server<HttpContext> {
+
+    /**
+     * Returns the {@link ServletContext} associated with this server.
+     * <p>
+     * If the implementation does not support a {@code ServletContext}, this method will return {@code null}.
+     * Otherwise, the returned context is guaranteed to be fully initialized and ready for use.
+     *
+     * @return the {@code ServletContext} if supported, or {@code null} otherwise
+     */
+    ServletContext getServletContext();
 
     /**
      * Binds server to given {@link InetSocketAddress} address with the specified http version.

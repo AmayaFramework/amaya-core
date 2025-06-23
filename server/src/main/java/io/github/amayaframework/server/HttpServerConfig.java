@@ -1,6 +1,7 @@
 package io.github.amayaframework.server;
 
 import io.github.amayaframework.http.HttpVersion;
+import jakarta.servlet.ServletContext;
 
 import java.net.InetSocketAddress;
 
@@ -8,6 +9,16 @@ import java.net.InetSocketAddress;
  * An interface describing the http server config.
  */
 public interface HttpServerConfig extends ServerConfig {
+
+    /**
+     * Returns the {@link ServletContext} associated with this server.
+     * <p>
+     * If the implementation does not support a {@code ServletContext}, this method will return {@code null}.
+     * Otherwise, the returned context is guaranteed to be fully initialized and ready for use.
+     *
+     * @return the {@code ServletContext} if supported, or {@code null} otherwise
+     */
+    ServletContext getServletContext();
 
     /**
      * Gets the http version used. The default value depends on the implementation.
