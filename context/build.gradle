@@ -27,7 +27,7 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
     // Servlets
-    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '5.0.0'
+    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
     // Http
     compileOnly project(':http')
 }
@@ -44,7 +44,6 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                'Automatic-Module-Name': 'io.github.amayaframework.context',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
