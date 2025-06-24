@@ -29,7 +29,7 @@ dependencies {
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.1.4'
     // Servlets
-    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '5.0.0'
+    compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
     // Amaya environment
     compileOnly project(':environment')
     // Amaya options
@@ -54,7 +54,6 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                'Automatic-Module-Name': 'io.github.amayaframework.server',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
