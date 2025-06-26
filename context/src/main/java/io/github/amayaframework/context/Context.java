@@ -27,6 +27,15 @@ public interface Context {
     ServletRequest getServletRequest();
 
     /**
+     * Returns the original, unwrapped {@link ServletRequest} instance as provided by the servlet container.
+     * This is the raw request object, without any modifications or wrappers applied by the framework.
+     * Use this method only if low-level access to the servlet API is required.
+     *
+     * @return the original {@link ServletRequest} instance
+     */
+    ServletRequest getOriginalRequest();
+
+    /**
      * Gets the {@link Response} instance representing the current response.
      * Changes made to {@link Response} reflects on {@link ServletResponse} and vice versa.
      *
@@ -41,4 +50,13 @@ public interface Context {
      * @return the {@link ServletResponse} instance
      */
     ServletResponse getServletResponse();
+
+    /**
+     * Returns the original, unwrapped {@link ServletResponse} instance as provided by the servlet container.
+     * This is the raw response object, without any modifications or wrappers applied by the framework.
+     * Use this method only if low-level access to the servlet API is required.
+     *
+     * @return the original {@link ServletResponse} instance
+     */
+    ServletResponse getOriginalResponse();
 }
