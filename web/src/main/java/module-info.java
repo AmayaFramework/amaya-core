@@ -6,6 +6,7 @@
 module io.github.amayaframework.web {
     // Requires
     requires com.github.romanqed.jfunc;
+    requires io.github.amayaframework.http;
     requires io.github.amayaframework.options;
     requires io.github.amayaframework.environment;
     requires io.github.amayaframework.service;

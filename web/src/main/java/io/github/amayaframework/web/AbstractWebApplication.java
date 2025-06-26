@@ -4,6 +4,7 @@ import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.application.AbstractApplication;
 import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.environment.Environment;
+import io.github.amayaframework.http.HttpVersion;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.server.HttpServerConfig;
@@ -50,11 +51,27 @@ public abstract class AbstractWebApplication extends AbstractApplication<HttpCon
     }
 
     @Override
+    public void bind(InetSocketAddress address, HttpVersion version) {
+        Objects.requireNonNull(address);
+        Objects.requireNonNull(version);
+        server.getConfig().addAddress(address, version);
+    }
+
+    @Override
     public void bind(int port) {
         if (port < 0 || port > 65535) {
             throw new IllegalArgumentException("Illegal port value: " + port);
         }
         server.getConfig().addAddress(new InetSocketAddress(port));
+    }
+
+    @Override
+    public void bind(int port, HttpVersion version) {
+        Objects.requireNonNull(version);
+        if (port < 0 || port > 65535) {
+            throw new IllegalArgumentException("Illegal port value: " + port);
+        }
+        server.getConfig().addAddress(new InetSocketAddress(port), version);
     }
 
     @Override

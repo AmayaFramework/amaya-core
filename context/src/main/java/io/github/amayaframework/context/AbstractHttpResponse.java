@@ -149,8 +149,11 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public void sendRedirect(String location) throws IOException {
+    public void sendRedirect(String location, boolean encode) throws IOException {
         Objects.requireNonNull(location);
+        if (encode) {
+            location = response.encodeRedirectURL(location);
+        }
         response.sendRedirect(location);
         this.status = HttpCode.FOUND;
     }
