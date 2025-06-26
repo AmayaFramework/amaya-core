@@ -29,6 +29,16 @@ public interface HttpContext extends Context {
     HttpServletRequest getServletRequest();
 
     /**
+     * Returns the original, unwrapped {@link HttpServletRequest} instance as provided by the servlet container.
+     * This is the raw request object, without any modifications or wrappers applied by the framework.
+     * Use this method only if low-level access to the servlet API is required.
+     *
+     * @return the original {@link HttpServletRequest} instance
+     */
+    @Override
+    HttpServletRequest getOriginalRequest();
+
+    /**
      * Gets the {@link HttpResponse} instance representing the current http response.
      * Changes made to {@link HttpResponse} reflects on {@link HttpServletResponse} and vice versa.
      *
@@ -45,4 +55,14 @@ public interface HttpContext extends Context {
      */
     @Override
     HttpServletResponse getServletResponse();
+
+    /**
+     * Returns the original, unwrapped {@link HttpServletResponse} instance as provided by the servlet container.
+     * This is the raw response object, without any modifications or wrappers applied by the framework.
+     * Use this method only if low-level access to the servlet API is required.
+     *
+     * @return the original {@link HttpServletResponse} instance
+     */
+    @Override
+    HttpServletResponse getOriginalResponse();
 }
