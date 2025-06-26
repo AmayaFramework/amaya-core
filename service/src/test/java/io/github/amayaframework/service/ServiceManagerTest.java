@@ -56,12 +56,12 @@ public final class ServiceManagerTest {
         assertEquals(ServiceState.NEW, s2.getState());
         assertEquals(ServiceState.NEW, s3.getState());
         manager.start();
-        assertEquals(cnt[0], 3);
+        assertEquals(3, cnt[0]);
         assertEquals(ServiceState.STARTED, s1.getState());
         assertEquals(ServiceState.STARTED, s2.getState());
         assertEquals(ServiceState.STARTED, s3.getState());
         manager.stop();
-        assertEquals(cnt[1], 3);
+        assertEquals(3, cnt[1]);
         assertEquals(ServiceState.STOPPED, s1.getState());
         assertEquals(ServiceState.STOPPED, s2.getState());
         assertEquals(ServiceState.STOPPED, s3.getState());
