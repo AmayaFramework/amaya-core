@@ -128,11 +128,37 @@ public interface HttpResponse extends Response, HttpTransaction {
      * the response should be considered to be committed and should not be written to.
      *
      * @param location the redirect location URL
+     * @param encode   the flag determines either url will be encoded with current session id
      * @throws IOException           if an input or output exception occurs
      * @throws IllegalStateException if the response was committed or if a partial URL is given and cannot be converted
      *                               into a valid URL
      */
-    void sendRedirect(String location) throws IOException;
+    void sendRedirect(String location, boolean encode) throws IOException;
+
+    /**
+     * Sends a temporary redirect response to the client using the specified redirect location URL
+     * and clears the buffer. The buffer will be replaced with the data set by this method. Calling this method sets
+     * the status code to {@link HttpCode#FOUND}. This method can accept relative URLs;the servlet container must
+     * convert the relative URL to an absolute URL before sending the response to the client.
+     * If the location is relative without a leading '/' the container interprets it as relative to the current request
+     * URI. If the location is relative with a leading '/' the container interprets it as relative to the servlet
+     * container root. If the location is relative with two leading '/' the container interprets it as a network-path
+     * reference (see <a href="http://www.ietf.org/rfc/rfc3986.txt"> RFC 3986: Uniform Resource Identifier (URI):
+     * Generic Syntax</a>, section 4.2 &quot;Relative Reference&quot;).
+     * <p>
+     * If the response has already been committed, this method throws an IllegalStateException. After using this method,
+     * the response should be considered to be committed and should not be written to.
+     * <p>
+     * Does not encode redirect url.
+     *
+     * @param location the redirect location URL
+     * @throws IOException           if an input or output exception occurs
+     * @throws IllegalStateException if the response was committed or if a partial URL is given and cannot be converted
+     *                               into a valid URL
+     */
+    default void sendRedirect(String location) throws IOException {
+        sendRedirect(location, false);
+    }
 
     /**
      * Gets the supplier of trailer headers.
