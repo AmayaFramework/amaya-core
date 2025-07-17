@@ -16,6 +16,7 @@ open module io.github.amayaframework.core {
     requires io.github.amayaframework.web;
     // Optional imports
     requires static io.github.amayaframework.di;
+    requires static io.github.amayaframework.di.stub;
     // Exports
     exports io.github.amayaframework.core;
 }
