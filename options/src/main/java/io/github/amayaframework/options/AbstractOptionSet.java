@@ -3,10 +3,8 @@ package io.github.amayaframework.options;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Skeletal implementation of {@link OptionSet}.
@@ -19,6 +17,7 @@ public abstract class AbstractOptionSet implements OptionSet {
      * {@link Map} instance containing option values associated with key names.
      */
     protected final Map<String, Object> body;
+    protected final Set<String> keySet;
 
     /**
      * Constructs instance of {@link OptionSet} with the given option map instance.
@@ -27,6 +26,7 @@ public abstract class AbstractOptionSet implements OptionSet {
      */
     protected AbstractOptionSet(Map<String, Object> body) {
         this.body = body;
+        this.keySet = body.keySet();
     }
 
     @Override
@@ -71,7 +71,6 @@ public abstract class AbstractOptionSet implements OptionSet {
 
     @Override
     public void forEach(Runnable1<String> action) {
-        Objects.requireNonNull(action);
         try {
             for (var key : body.keySet()) {
                 action.run(key);
@@ -85,7 +84,6 @@ public abstract class AbstractOptionSet implements OptionSet {
 
     @Override
     public void forEach(Runnable2<String, Object> action) {
-        Objects.requireNonNull(action);
         try {
             for (var entry : body.entrySet()) {
                 action.run(entry.getKey(), entry.getValue());
@@ -95,6 +93,21 @@ public abstract class AbstractOptionSet implements OptionSet {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void forEach(Consumer<? super String> action) {
+        keySet.forEach(action);
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return keySet.iterator();
+    }
+
+    @Override
+    public Spliterator<String> spliterator() {
+        return keySet.spliterator();
     }
 
     @Override

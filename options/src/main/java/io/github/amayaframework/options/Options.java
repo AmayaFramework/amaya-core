@@ -13,10 +13,6 @@ public final class Options {
      */
     public static final OptionSet EMPTY_OPTION_SET = new EmptyOptionSet();
     /**
-     * Group delimiter used by default.
-     */
-    public static final String DEFAULT_GROUP_DELIMITER = ".";
-    /**
      * Default group name used by default.
      */
     public static final String DEFAULT_GROUP = "";
@@ -56,22 +52,20 @@ public final class Options {
      * Creates an empty modifiable instance of {@link GroupOptionSet}
      * with the specified key qualifier delimiter and default group name.
      *
-     * @param delimiter the specified delimiter
      * @param def       the specified default group name
      * @return instance of {@link GroupOptionSet}
      */
-    public static GroupOptionSet createGrouped(String delimiter, String def) {
-        return new ProvidedGroupSet(delimiter, def, OpenOptionSet::new);
+    public static GroupOptionSet createGrouped(String def) {
+        return new ProvidedGroupSet(def, OpenOptionSet::new);
     }
 
     /**
-     * Creates an empty modifiable instance of {@link GroupOptionSet}
-     * with {@link Options#DEFAULT_GROUP_DELIMITER} and {@link Options#DEFAULT_GROUP}.
+     * Creates an empty modifiable instance of {@link GroupOptionSet} with {@link Options#DEFAULT_GROUP}.
      *
      * @return instance of {@link GroupOptionSet}
      */
     public static GroupOptionSet createGrouped() {
-        return new ProvidedGroupSet(DEFAULT_GROUP_DELIMITER, DEFAULT_GROUP, OpenOptionSet::new);
+        return new ProvidedGroupSet(DEFAULT_GROUP, OpenOptionSet::new);
     }
 
     /**

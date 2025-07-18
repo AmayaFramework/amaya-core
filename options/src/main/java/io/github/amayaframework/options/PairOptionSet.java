@@ -3,9 +3,8 @@ package io.github.amayaframework.options;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 final class PairOptionSet implements OptionSet {
     private final String key;
@@ -97,7 +96,46 @@ final class PairOptionSet implements OptionSet {
     }
 
     @Override
+    public void forEach(Consumer<? super String> action) {
+        action.accept(key);
+    }
+
+    @Override
+    public Spliterator<String> spliterator() {
+        return Spliterators.spliterator(new PairIterator(key), 1, Spliterator.SIZED | Spliterator.IMMUTABLE);
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return new PairIterator(key);
+    }
+
+    @Override
     public String toString() {
         return "Options {" + key + "=" + value + "}";
+    }
+
+    private static final class PairIterator implements Iterator<String> {
+        private final String key;
+        private boolean hasNext;
+
+        private PairIterator(String key) {
+            this.key = key;
+            this.hasNext = true;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return hasNext;
+        }
+
+        @Override
+        public String next() {
+            if (hasNext) {
+                hasNext = false;
+                return key;
+            }
+            throw new NoSuchElementException();
+        }
     }
 }

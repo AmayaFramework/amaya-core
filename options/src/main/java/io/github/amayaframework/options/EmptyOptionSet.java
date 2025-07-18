@@ -3,14 +3,14 @@ package io.github.amayaframework.options;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Unmodifiable implementation of {@link OptionSet} that contains no values.
  */
 public final class EmptyOptionSet implements OptionSet {
+    private static final EmptyIterator EMPTY_ITERATOR = new EmptyIterator();
 
     @Override
     public <T> T get(String key) {
@@ -72,5 +72,33 @@ public final class EmptyOptionSet implements OptionSet {
     @Override
     public String toString() {
         return "Options {}";
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return EMPTY_ITERATOR;
+    }
+
+    @Override
+    public void forEach(Consumer<? super String> action) {
+        // Do nothing
+    }
+
+    @Override
+    public Spliterator<String> spliterator() {
+        return Spliterators.emptySpliterator();
+    }
+
+    private static final class EmptyIterator implements Iterator<String> {
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public String next() {
+            throw new NoSuchElementException();
+        }
     }
 }

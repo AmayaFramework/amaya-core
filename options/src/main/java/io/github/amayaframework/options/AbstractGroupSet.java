@@ -2,11 +2,10 @@ package io.github.amayaframework.options;
 
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
+import com.github.romanqed.jfunc.Runnable3;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Skeletal implementation of {@link GroupOptionSet}.
@@ -15,64 +14,48 @@ import java.util.Set;
  */
 public abstract class AbstractGroupSet implements GroupOptionSet {
     /**
-     * Key qualifier delimiter. For example, 'group.key' -&gt; '.' is delimiter.
-     */
-    protected final String delimiter;
-    /**
-     * Delimiter length.
-     */
-    protected final int length;
-    /**
      * Default group name. For example, value from this variable will be used for 'key' qualifier.
      */
-    protected final String defGroup;
+    protected final String defName;
     /**
      * {@link Map} instance containing {@link OptionSet} instances associated with group names.
      */
     protected final Map<String, OptionSet> groups;
+    /**
+     * Default group set.
+     */
+    protected OptionSet defGroup;
 
     /**
      * Constructs instance of {@link GroupOptionSet} with the specified delimiter, default group name and
      * group map.
      *
-     * @param delimiter the specified delimiter, used in key qualifiers.
-     *                  For example, if delim will be '.', qualifiers will be 'org.group.key'
-     * @param defGroup  the specified group name, used by default
+     * @param defName the specified group name, used by default
      * @param groups    the specified group map instance
      */
-    protected AbstractGroupSet(String delimiter, String defGroup, Map<String, OptionSet> groups) {
-        this.delimiter = delimiter;
-        this.length = delimiter.length();
-        this.defGroup = defGroup;
+    protected AbstractGroupSet(String defName, Map<String, OptionSet> groups) {
+        this.defName = defName;
         this.groups = groups;
     }
 
-    /**
-     * Gets group identifier from full key qualifier.
-     *
-     * @param index     the index of first delimiter symbol
-     * @param qualifier the specified key qualifier
-     * @return default group name, if index &lt; 0, found identifier otherwise
-     */
-    protected String extractGroup(int index, String qualifier) {
-        if (index < 0) {
+    protected abstract OptionSet createGroup(String name);
+
+    protected OptionSet ensure(String group) {
+        if (group == null || defName.equals(group)) {
+            if (defGroup != null) {
+                return defGroup;
+            }
+            defGroup = createGroup(defName);
+            groups.put(defName, defGroup);
             return defGroup;
         }
-        return qualifier.substring(0, index);
-    }
-
-    /**
-     * Gets key identifier from full key qualifier.
-     *
-     * @param index     the index of first delimiter symbol
-     * @param qualifier the specified key qualifier
-     * @return full string, if index &lt; 0, found identifier otherwise
-     */
-    protected String extractName(int index, String qualifier) {
-        if (index < 0) {
-            return qualifier;
+        var ret = groups.get(group);
+        if (ret != null) {
+            return ret;
         }
-        return qualifier.substring(index + length);
+        ret = createGroup(group);
+        groups.put(group, ret);
+        return ret;
     }
 
     @Override
@@ -86,58 +69,133 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
     }
 
     @Override
+    public OptionSet ensureGroup(String group) {
+        return ensure(group);
+    }
+
+    @Override
+    public OptionSet setGroup(String group, OptionSet set) {
+        if (group == null || defName.equals(group)) {
+            defGroup = set;
+        }
+        return groups.put(group, set);
+    }
+
+    @Override
+    public OptionSet removeGroup(String group) {
+        if (group == null || defName.equals(group)) {
+            defGroup = null;
+        }
+        return groups.remove(group);
+    }
+
+    @Override
     public <T> T get(String key) {
-        var index = key.lastIndexOf(delimiter);
-        var group = extractGroup(index, key);
-        var found = groups.get(group);
-        if (found == null) {
+        if (defGroup == null) {
             return null;
         }
-        return found.get(extractName(index, key));
+        return defGroup.get(key);
     }
 
     @Override
     public boolean asKey(String key) {
-        var index = key.lastIndexOf(delimiter);
-        var group = extractGroup(index, key);
-        var found = groups.get(group);
-        if (found == null) {
+        if (defGroup == null) {
             return false;
         }
-        return found.asKey(extractName(index, key));
+        return defGroup.asKey(key);
     }
 
     @Override
     public boolean asBool(String key) {
-        var index = key.lastIndexOf(delimiter);
-        var group = extractGroup(index, key);
-        var found = groups.get(group);
-        if (found == null) {
+        if (defGroup == null) {
             return false;
         }
-        return found.asBool(extractName(index, key));
+        return defGroup.asBool(key);
     }
 
     @Override
     public boolean contains(String key) {
-        var index = key.lastIndexOf(delimiter);
-        var group = extractGroup(index, key);
-        var found = groups.get(group);
-        if (found == null) {
+        if (defGroup == null) {
             return false;
         }
-        return found.contains(extractName(index, key));
+        return defGroup.contains(key);
+    }
+
+    @Override
+    public Object set(String key, Object value) {
+        if (defGroup == null) {
+            defGroup = createGroup(defName);
+            groups.put(defName, defGroup);
+        }
+        return defGroup.set(key, value);
     }
 
     @Override
     public Object remove(String key) {
-        var index = key.lastIndexOf(delimiter);
-        var group = extractGroup(index, key);
-        var found = groups.get(group);
-        if (found == null) {
+        if (defGroup == null) {
             return null;
         }
-        return found.remove(extractName(index, key));
+        return defGroup.remove(key);
+    }
+
+    @Override
+    public <T> T get(String group, String key) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return null;
+        }
+        return set.get(key);
+    }
+
+    @Override
+    public <T> T get(String group, String key, T def) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return def;
+        }
+        return set.get(key, def);
+    }
+
+    @Override
+    public boolean asKey(String group, String key) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return false;
+        }
+        return set.asKey(key);
+    }
+
+    @Override
+    public boolean asBool(String group, String key) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return false;
+        }
+        return set.asBool(key);
+    }
+
+    @Override
+    public boolean contains(String group, String key) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return false;
+        }
+        return set.contains(key);
+    }
+
+    @Override
+    public Object set(String group, String key, Object value) {
+        var set = ensure(group);
+        return set.set(key, value);
+    }
+
+    @Override
+    public Object remove(String group, String key) {
+        var set = group == null || defName.equals(group) ? defGroup : groups.get(group);
+        if (set == null) {
+            return null;
+        }
+        return set.remove(key);
     }
 
     @Override
@@ -157,34 +215,107 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
 
     @Override
     public void forEach(Runnable1<String> action) {
-        Objects.requireNonNull(action);
-        for (var entry : groups.entrySet()) {
-            var group = entry.getKey();
-            if (group.equals(defGroup)) {
-                entry.getValue().forEach(action);
-            } else {
-                var prefix = group + delimiter;
-                entry.getValue().forEach(key -> action.run(prefix + key));
-            }
+        if (defGroup != null) {
+            defGroup.forEach(action);
         }
     }
 
     @Override
     public void forEach(Runnable2<String, Object> action) {
-        Objects.requireNonNull(action);
-        for (var entry : groups.entrySet()) {
-            var group = entry.getKey();
-            if (group.equals(defGroup)) {
-                entry.getValue().forEach(action);
-            } else {
-                var prefix = entry.getKey() + delimiter;
-                entry.getValue().forEach((key, value) -> action.run(prefix + key, value));
-            }
+        if (defGroup != null) {
+            defGroup.forEach(action);
         }
+    }
+
+    @Override
+    public void forEachGroup(Runnable2<String, String> action) {
+        try {
+            for (var entry : groups.entrySet()) {
+                var group = entry.getKey();
+                var set = entry.getValue();
+                for (var key : set) {
+                    action.run(group, key);
+                }
+            }
+        } catch (Error | RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void forEachGroup(Runnable3<String, String, Object> action) {
+        try {
+            for (var entry : groups.entrySet()) {
+                var group = entry.getKey();
+                var set = entry.getValue();
+                set.forEach((key, val) -> action.run(group, key, val));
+            }
+        } catch (Error | RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void forEach(Consumer<? super String> action) {
+        if (defGroup != null) {
+            defGroup.forEach(action);
+        }
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return new GroupedIterator(groups.values().iterator());
     }
 
     @Override
     public String toString() {
         return "Grouped Options " + groups;
+    }
+
+    protected static final class GroupedIterator implements Iterator<String> {
+        private final Iterator<OptionSet> groupIterator;
+        private Iterator<String> current;
+
+        protected GroupedIterator(Iterator<OptionSet> groupIterator) {
+            this.groupIterator = groupIterator;
+        }
+
+        @Override
+        public boolean hasNext() {
+            while (true) {
+                if (current != null && current.hasNext()) {
+                    return true;
+                }
+                if (!groupIterator.hasNext()) {
+                    return false;
+                }
+                current = groupIterator.next().iterator();
+            }
+        }
+
+        @Override
+        public String next() {
+            while (true) {
+                if (current != null && current.hasNext()) {
+                    return current.next();
+                }
+                if (!groupIterator.hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                current = groupIterator.next().iterator();
+            }
+        }
+
+        @Override
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+            current.remove();
+        }
     }
 }

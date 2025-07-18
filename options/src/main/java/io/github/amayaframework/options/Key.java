@@ -51,44 +51,6 @@ public final class Key<T> {
     }
 
     /**
-     * Creates a new {@link Key} by prefixing the key with a group string.
-     *
-     * @param group the group name or namespace
-     * @param key   the base key string
-     * @param type  the class representing the type {@link T}
-     * @param <T>   the type of the value
-     * @return a new {@link Key} instance with a grouped key
-     */
-    public static <T> Key<T> of(String group, String key, Class<T> type) {
-        return new Key<>(group + key, JType.of(type));
-    }
-
-    /**
-     * Creates a new {@link Key} by prefixing the key with a group string.
-     *
-     * @param group the group name or namespace
-     * @param key   the base key string
-     * @param type  the {@link JType} representing the type {@link T}
-     * @param <T>   the type of the value
-     * @return a new {@link Key} instance with a grouped key
-     */
-    public static <T> Key<T> of(String group, String key, JType<T> type) {
-        return new Key<>(group + key, type);
-    }
-
-    /**
-     * Creates a new {@link Key} by prefixing an existing key with a group string.
-     *
-     * @param group the group name or namespace
-     * @param key   the original {@link Key}
-     * @param <T>   the type of the value
-     * @return a new {@link Key} instance with a grouped key
-     */
-    public static <T> Key<T> of(String group, Key<T> key) {
-        return new Key<>(group + key.key, key.type);
-    }
-
-    /**
      * Returns the string identifier of this key.
      *
      * @return the key string
@@ -104,16 +66,6 @@ public final class Key<T> {
      */
     public JType<T> getType() {
         return type;
-    }
-
-    /**
-     * Creates a new {@link Key} with the same type but with the key prefixed by the given group string.
-     *
-     * @param group the group name or namespace
-     * @return a new {@link Key} instance with a grouped key
-     */
-    public Key<T> withGroup(String group) {
-        return new Key<>(group + key, type);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Set;
  * <br>
  * It includes the basic operations: get, set, remove, contains.
  */
-public interface OptionSet {
+public interface OptionSet extends Iterable<String> {
 
     /**
      * Gets the value associated with given key.

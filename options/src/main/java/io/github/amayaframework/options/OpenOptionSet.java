@@ -26,8 +26,8 @@ public class OpenOptionSet extends AbstractOptionSet {
         super(new HashMap<>());
     }
 
-    OpenOptionSet(Map<String, Object> map) {
-        super(map);
+    public OpenOptionSet(Map<String, Object> map) {
+        super(Objects.requireNonNull(map));
     }
 
     @Override

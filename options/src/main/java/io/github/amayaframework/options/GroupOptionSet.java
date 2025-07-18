@@ -1,7 +1,7 @@
 package io.github.amayaframework.options;
 
-import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
+import com.github.romanqed.jfunc.Runnable3;
 
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +24,8 @@ public interface GroupOptionSet extends OptionSet {
      * @return the {@link OptionSet} instance associated with group name or null
      */
     OptionSet getGroup(String group);
+
+    OptionSet ensureGroup(String group);
 
     /**
      * Checks if set contains group with the specified name.
@@ -50,6 +52,52 @@ public interface GroupOptionSet extends OptionSet {
      */
     OptionSet removeGroup(String group);
 
+    // Grouped methods
+
+    <T> T get(String group, String key);
+
+    default <T> T get(String group, Key<T> key) {
+        return get(group, key.getKey());
+    }
+
+    <T> T get(String group, String key, T def);
+
+    default <T> T get(String group, Key<T> key, T def) {
+        return get(group, key.getKey(), def);
+    }
+
+    boolean asKey(String group, String key);
+
+    default boolean asKey(String group, Key<?> key) {
+        return asKey(group, key.getKey());
+    }
+
+    boolean asBool(String group, String key);
+
+    default boolean asBool(String group, Key<?> key) {
+        return asBool(group, key.getKey());
+    }
+
+    boolean contains(String group, String key);
+
+    default boolean contains(String group, Key<?> key) {
+        return contains(group, key.getKey());
+    }
+
+    Object set(String group, String key, Object value);
+
+    @SuppressWarnings("unchecked")
+    default <T> T set(String group, Key<T> key, T value) {
+        return (T) set(group, key.getKey(), value);
+    }
+
+    Object remove(String group, String key);
+
+    @SuppressWarnings("unchecked")
+    default <T> T remove(String group, Key<T> key) {
+        return (T) remove(group, key.getKey());
+    }
+
     /**
      * Gets set contains all group names from this {@link OptionSet} instance.
      *
@@ -71,14 +119,12 @@ public interface GroupOptionSet extends OptionSet {
      *
      * @param action the action to be performed, must be non-null
      */
-    @Override
-    void forEach(Runnable1<String> action);
+    void forEachGroup(Runnable2<String, String> action);
 
     /**
      * Performs given action for each key-value pair in each group in this {@link OptionSet} instance.
      *
      * @param action the action to be performed, must be non-null
      */
-    @Override
-    void forEach(Runnable2<String, Object> action);
+    void forEachGroup(Runnable3<String, String, Object> action);
 }

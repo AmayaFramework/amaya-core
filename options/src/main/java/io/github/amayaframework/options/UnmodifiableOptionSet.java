@@ -1,12 +1,12 @@
 package io.github.amayaframework.options;
 
+import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Read-only implementation of {@link OptionSet}.
  */
-public class UnmodifiableOptionSet extends AbstractOptionSet {
+public final class UnmodifiableOptionSet extends AbstractOptionSet {
 
     /**
      * Constructs {@link UnmodifiableOptionSet} instance with given {@link Map} instance.
@@ -14,7 +14,7 @@ public class UnmodifiableOptionSet extends AbstractOptionSet {
      * @param body the specified map, containing option entries
      */
     public UnmodifiableOptionSet(Map<String, Object> body) {
-        super(Objects.requireNonNull(body));
+        super(Collections.unmodifiableMap(body));
     }
 
     @Override
