@@ -28,16 +28,55 @@ public abstract class AbstractService implements Service {
 
     @Override
     public void start(ServiceCallback callback) throws Throwable {
-
+        if (state.get() == ServiceState.DISPOSED) {
+            throw new IllegalStateException("Cannot start disposed service");
+        }
+        if (state.get() == ServiceState.STARTED) {
+            return;
+        }
+        synchronized (lifecycleLock) {
+            if (state.get() == ServiceState.DISPOSED) {
+                throw new IllegalStateException("Cannot start disposed service");
+            }
+            if (state.get() == ServiceState.STARTED) {
+                return;
+            }
+            try {
+                state.set(ServiceState.STARTING);
+                doStart(callback);
+                state.compareAndSet(ServiceState.STARTING, ServiceState.STARTED);
+            } catch (Throwable e) {
+                state.set(ServiceState.FAILED);
+                throw e;
+            }
+        }
     }
 
     @Override
     public void stop() throws Throwable {
-
+        if (state.get() == ServiceState.DISPOSED || state.get() == ServiceState.STOPPED) {
+            return;
+        }
+        synchronized (lifecycleLock) {
+            if (state.get() == ServiceState.DISPOSED || state.get() == ServiceState.STOPPED) {
+                return;
+            }
+            try {
+                state.set(ServiceState.STOPPING);
+                doStop();
+                state.compareAndSet(ServiceState.STOPPING, ServiceState.STOPPED);
+            } catch (Throwable e) {
+                state.set(ServiceState.FAILED);
+                throw e;
+            }
+        }
     }
 
     @Override
     public void dispose() {
-
+        if (state.getAndSet(ServiceState.DISPOSED) == ServiceState.DISPOSED) {
+            return;
+        }
+        doDispose();
     }
 }
