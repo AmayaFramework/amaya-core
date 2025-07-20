@@ -11,6 +11,6 @@ public interface Service extends Disposable {
     void stop() throws Throwable;
 
     default int state() {
-        return ServiceState.UNKNOWN;
+        return ServiceState.UNMANAGED;
     }
 }

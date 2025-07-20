@@ -4,7 +4,7 @@ public final class ServiceState {
     private ServiceState() {
     }
 
-    public static final int UNKNOWN = 0;
+    public static final int UNMANAGED = 0;
     public static final int NEW = 1;
     public static final int DISPOSED = 2;
     public static final int FAILED = 3;
