@@ -1,6 +1,5 @@
 package io.github.amayaframework.service;
 
-import com.github.romanqed.jfunc.Runnable0;
 import com.github.romanqed.jfunc.Runnable1;
 
 import java.util.Collection;
@@ -20,8 +19,4 @@ public interface ServiceManager extends Service {
     Runnable1<Throwable> onHalt();
 
     void onHalt(Runnable1<Throwable> action);
-
-    Runnable0 onRestart();
-
-    void onRestart(Runnable0 action);
 }
