@@ -1,5 +1,6 @@
 package io.github.amayaframework.options;
 
+import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 import com.github.romanqed.jfunc.Runnable3;
@@ -237,10 +238,8 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
                     action.run(group, key);
                 }
             }
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 
@@ -252,10 +251,8 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
                 var set = entry.getValue();
                 set.forEach((key, val) -> action.run(group, key, val));
             }
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 

@@ -1,5 +1,6 @@
 package io.github.amayaframework.options;
 
+import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 
 import java.util.*;
@@ -57,10 +58,8 @@ public class ClosedOptionSet extends AbstractOptionSet {
             for (var key : keys) {
                 action.run(key);
             }
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 }

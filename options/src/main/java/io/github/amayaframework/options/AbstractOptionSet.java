@@ -1,5 +1,6 @@
 package io.github.amayaframework.options;
 
+import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 
@@ -75,10 +76,8 @@ public abstract class AbstractOptionSet implements OptionSet {
             for (var key : body.keySet()) {
                 action.run(key);
             }
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 
@@ -88,10 +87,8 @@ public abstract class AbstractOptionSet implements OptionSet {
             for (var entry : body.entrySet()) {
                 action.run(entry.getKey(), entry.getValue());
             }
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 

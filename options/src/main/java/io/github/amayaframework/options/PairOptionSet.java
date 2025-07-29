@@ -1,5 +1,6 @@
 package io.github.amayaframework.options;
 
+import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 import com.github.romanqed.jfunc.Runnable2;
 
@@ -77,10 +78,8 @@ final class PairOptionSet implements OptionSet {
     public void forEach(Runnable1<String> action) {
         try {
             action.run(key);
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 
@@ -88,10 +87,8 @@ final class PairOptionSet implements OptionSet {
     public void forEach(Runnable2<String, Object> action) {
         try {
             action.run(key, value);
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            Exceptions.throwAny(e);
         }
     }
 
