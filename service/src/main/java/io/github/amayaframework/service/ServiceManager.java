@@ -7,7 +7,13 @@ public interface ServiceManager extends Service {
 
     void add(Service service);
 
+    void add(Iterable<Service> services);
+
     void remove(Service service);
+
+    void remove(Iterable<Service> services);
+
+    Collection<Service> removeAll();
 
     Collection<Service> services();
 
