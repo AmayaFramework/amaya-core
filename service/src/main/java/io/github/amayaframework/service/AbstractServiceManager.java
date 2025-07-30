@@ -200,14 +200,14 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             if (disposed) {
                 return;
             }
-            if (state == ServiceState.STOPPED || state == ServiceState.FAILED || state == ServiceState.DISPOSED) {
+            if (state.isStopped()) {
                 return;
             }
             synchronized (lifecycleLock) {
                 if (disposed) {
                     return;
                 }
-                if (state == ServiceState.STOPPED || state == ServiceState.FAILED || state == ServiceState.DISPOSED) {
+                if (state.isStopped()) {
                     return;
                 }
                 if (inTransition) {
@@ -225,14 +225,14 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             if (disposed) {
                 return;
             }
-            if (state == ServiceState.STOPPED || state == ServiceState.FAILED || state == ServiceState.DISPOSED) {
+            if (state.isStopped()) {
                 return;
             }
             synchronized (lifecycleLock) {
                 if (disposed) {
                     return;
                 }
-                if (state == ServiceState.STOPPED || state == ServiceState.FAILED || state == ServiceState.DISPOSED) {
+                if (state.isStopped()) {
                     return;
                 }
                 if (inTransition) {

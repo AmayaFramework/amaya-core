@@ -32,17 +32,11 @@ public abstract class AbstractService implements Service {
 
     @Override
     public void start(CancelToken token, ServiceCallback callback) throws Throwable {
-        if (state == ServiceState.DISPOSED) {
-            return;
-        }
-        if (state == ServiceState.STARTED) {
+        if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
             return;
         }
         synchronized (lifecycleLock) {
-            if (state == ServiceState.DISPOSED) {
-                return;
-            }
-            if (state == ServiceState.STARTED) {
+            if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
                 return;
             }
             cancelSource.reset();

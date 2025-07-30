@@ -1,12 +1,22 @@
 package io.github.amayaframework.service;
 
 public enum ServiceState {
-    UNMANAGED,
-    NEW,
-    DISPOSED,
-    FAILED,
-    STARTING,
-    STARTED,
-    STOPPING,
-    STOPPED
+    UNMANAGED(false),
+    NEW(true),
+    DISPOSED(true),
+    FAILED(true),
+    STARTING(false),
+    STARTED(false),
+    STOPPING(false),
+    STOPPED(true);
+
+    private final boolean isStopped;
+
+    ServiceState(boolean isStopped) {
+        this.isStopped = isStopped;
+    }
+
+    public boolean isStopped() {
+        return isStopped;
+    }
 }
