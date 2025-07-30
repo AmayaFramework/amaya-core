@@ -97,10 +97,12 @@ public abstract class AbstractService implements Service {
             }
             cancelSource.reset();
             try {
+                var old = state;
                 state = ServiceState.STARTING;
                 var cancelToken = cancelSource.token();
                 var combined = token == null ? cancelToken : Cancellation.combinedToken(cancelToken, token);
                 if (combined.canceled()) {
+                    state = old;
                     return;
                 }
                 doStart(combined, callback);
@@ -125,10 +127,12 @@ public abstract class AbstractService implements Service {
             }
             cancelSource.reset();
             try {
+                var old = state;
                 state = ServiceState.STOPPING;
                 var cancelToken = cancelSource.token();
                 var combined = token == null ? cancelToken : Cancellation.combinedToken(cancelToken, token);
                 if (combined.canceled()) {
+                    state = old;
                     return;
                 }
                 doStop(combined);
