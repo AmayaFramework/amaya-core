@@ -32,4 +32,11 @@ public final class ServiceStateTest {
         assertFalse(ServiceState.STARTED.isStopped());
         assertFalse(ServiceState.STOPPING.isStopped());
     }
+
+    @Test
+    public void testIsTerminal() {
+        for (var state : ServiceState.values()) {
+            assertEquals(state == ServiceState.UNMANAGED || state == ServiceState.DISPOSED, state.isTerminal());
+        }
+    }
 }

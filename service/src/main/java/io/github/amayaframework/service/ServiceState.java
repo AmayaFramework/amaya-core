@@ -5,12 +5,13 @@ package io.github.amayaframework.service;
  * including allowed transitions between states.
  */
 public enum ServiceState {
+
     /**
      * The service is not managed by any manager and is in an undefined state.
      * <p>
      * No valid transitions from this state, as it represents an unmanaged service.
      */
-    UNMANAGED(false),
+    UNMANAGED(false, true),
 
     /**
      * The service has been created but not yet started.
@@ -28,7 +29,7 @@ public enum ServiceState {
      * <p>
      * Terminal state with no allowed transitions.
      */
-    DISPOSED(true),
+    DISPOSED(true, true),
 
     /**
      * The service has encountered a failure and is no longer operational.
@@ -86,9 +87,15 @@ public enum ServiceState {
     STOPPED(true);
 
     private final boolean isStopped;
+    private final boolean isTerminal;
+
+    ServiceState(boolean isStopped, boolean isTerminal) {
+        this.isStopped = isStopped;
+        this.isTerminal = isTerminal;
+    }
 
     ServiceState(boolean isStopped) {
-        this.isStopped = isStopped;
+        this(isStopped, false);
     }
 
     /**
@@ -98,5 +105,14 @@ public enum ServiceState {
      */
     public boolean isStopped() {
         return isStopped;
+    }
+
+    /**
+     * Returns whether this state is terminal
+     *
+     * @return {@code true} if the state is terminal, {@code false} otherwise
+     */
+    public boolean isTerminal() {
+        return isTerminal;
     }
 }
