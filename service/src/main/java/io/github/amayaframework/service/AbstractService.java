@@ -1,72 +1,86 @@
 package io.github.amayaframework.service;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import com.github.romanqed.jct.CancelSource;
+import com.github.romanqed.jct.CancelToken;
+import com.github.romanqed.jct.Cancellation;
 
 public abstract class AbstractService implements Service {
     protected final Object lifecycleLock;
-    protected AtomicInteger state;
+    protected final CancelSource cancelSource;
+    protected volatile ServiceState state;
 
-    protected AbstractService(Object lifecycleLock) {
+    protected AbstractService(Object lifecycleLock, CancelSource cancelSource) {
         this.lifecycleLock = lifecycleLock;
-        this.state = new AtomicInteger(ServiceState.NEW);
+        this.cancelSource = cancelSource;
+        this.state = ServiceState.NEW;
     }
 
     protected AbstractService() {
-        this(new Object());
+        this(new Object(), Cancellation.source());
     }
 
     @Override
-    public int state() {
-        return state.get();
+    public ServiceState state() {
+        return state;
     }
 
-    protected abstract void doStart(ServiceCallback callback) throws Throwable;
+    protected abstract void doStart(CancelToken token, ServiceCallback callback) throws Throwable;
 
-    protected abstract void doStop() throws Throwable;
+    protected abstract void doStop(CancelToken token) throws Throwable;
 
     protected abstract void doDispose();
 
     @Override
-    public void start(ServiceCallback callback) throws Throwable {
-        if (state.get() == ServiceState.DISPOSED) {
-            throw new IllegalStateException("Cannot start disposed service");
+    public void start(CancelToken token, ServiceCallback callback) throws Throwable {
+        if (state == ServiceState.DISPOSED) {
+            return;
         }
-        if (state.get() == ServiceState.STARTED) {
+        if (state == ServiceState.STARTED) {
             return;
         }
         synchronized (lifecycleLock) {
-            if (state.get() == ServiceState.DISPOSED) {
-                throw new IllegalStateException("Cannot start disposed service");
-            }
-            if (state.get() == ServiceState.STARTED) {
+            if (state == ServiceState.DISPOSED) {
                 return;
             }
+            if (state == ServiceState.STARTED) {
+                return;
+            }
+            cancelSource.reset();
             try {
-                state.set(ServiceState.STARTING);
-                doStart(callback);
-                state.compareAndSet(ServiceState.STARTING, ServiceState.STARTED);
+                state = ServiceState.STARTING;
+                var cancelToken = cancelSource.token();
+                var combined = token == null ? cancelToken : Cancellation.combinedToken(cancelToken, token);
+                doStart(combined, callback);
+                if (state == ServiceState.STARTING) {
+                    state = ServiceState.STARTED;
+                }
             } catch (Throwable e) {
-                state.set(ServiceState.FAILED);
+                state = ServiceState.FAILED;
                 throw e;
             }
         }
     }
 
     @Override
-    public void stop() throws Throwable {
-        if (state.get() == ServiceState.DISPOSED || state.get() == ServiceState.STOPPED) {
+    public void stop(CancelToken token) throws Throwable {
+        if (state == ServiceState.DISPOSED || state == ServiceState.STOPPED) {
             return;
         }
         synchronized (lifecycleLock) {
-            if (state.get() == ServiceState.DISPOSED || state.get() == ServiceState.STOPPED) {
+            if (state == ServiceState.DISPOSED || state == ServiceState.STOPPED) {
                 return;
             }
+            cancelSource.reset();
             try {
-                state.set(ServiceState.STOPPING);
-                doStop();
-                state.compareAndSet(ServiceState.STOPPING, ServiceState.STOPPED);
+                state = ServiceState.STOPPING;
+                var cancelToken = cancelSource.token();
+                var combined = token == null ? cancelToken : Cancellation.combinedToken(cancelToken, token);
+                doStop(combined);
+                if (state == ServiceState.STOPPING) {
+                    state = ServiceState.STOPPED;
+                }
             } catch (Throwable e) {
-                state.set(ServiceState.FAILED);
+                state = ServiceState.FAILED;
                 throw e;
             }
         }
@@ -74,9 +88,16 @@ public abstract class AbstractService implements Service {
 
     @Override
     public void dispose() {
-        if (state.getAndSet(ServiceState.DISPOSED) == ServiceState.DISPOSED) {
+        if (state == ServiceState.DISPOSED) {
             return;
         }
-        doDispose();
+        cancelSource.cancel();
+        synchronized (lifecycleLock) {
+            if (state == ServiceState.DISPOSED) {
+                return;
+            }
+            state = ServiceState.DISPOSED;
+            doDispose();
+        }
     }
 }
