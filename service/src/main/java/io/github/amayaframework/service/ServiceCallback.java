@@ -1,6 +1,7 @@
 package io.github.amayaframework.service;
 
-import com.github.romanqed.jfunc.Runnable0;
+import com.github.romanqed.jct.CancelToken;
+import com.github.romanqed.jfunc.Runnable1;
 
 public interface ServiceCallback {
 
@@ -16,5 +17,5 @@ public interface ServiceCallback {
         halt(null);
     }
 
-    void exclusive(Runnable0 action);
+    void exclusive(Runnable1<CancelToken> action);
 }

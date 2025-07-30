@@ -2,8 +2,9 @@ package io.github.amayaframework.service;
 
 import com.github.romanqed.jct.CancelSource;
 import com.github.romanqed.jct.CancelToken;
+import com.github.romanqed.jct.EmptyCancelToken;
 import com.github.romanqed.jfunc.Exceptions;
-import com.github.romanqed.jfunc.Runnable0;
+import com.github.romanqed.jfunc.Runnable1;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -61,7 +62,8 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     @SuppressWarnings("unchecked")
     public Collection<Service> services() {
-        return services == null ? Collections.EMPTY_LIST : Collections.unmodifiableCollection(services.keySet());
+        var ret = services;
+        return ret == null ? Collections.EMPTY_LIST : Collections.unmodifiableCollection(ret.keySet());
     }
 
     protected void handleAddedService(Service service, ServiceCallback callback) {
@@ -317,7 +319,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
 
         void dispose();
 
-        void doExclusive(Runnable0 action) throws Throwable;
+        void doExclusive(Runnable1<CancelToken> action) throws Throwable;
 
         void handleFailure(Throwable cause);
 
@@ -333,8 +335,8 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
 
         @Override
-        public void doExclusive(Runnable0 action) throws Throwable {
-            action.run();
+        public void doExclusive(Runnable1<CancelToken> action) throws Throwable {
+            action.run(EmptyCancelToken.TOKEN);
         }
 
         @Override
@@ -378,17 +380,14 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
 
         @Override
-        public void doExclusive(Runnable0 action) throws Throwable {
+        public void doExclusive(Runnable1<CancelToken> action) throws Throwable {
             synchronized (manager.lifecycleLock) {
-                action.run();
+                action.run(manager.cancelSource.token());
             }
         }
 
         @Override
         public void handleFailure(Throwable cause) {
-            if (parent != null) {
-                parent.fail(cause);
-            }
             if (disposed || manager.state.isStopped()) {
                 return;
             }
@@ -400,14 +399,14 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                     throw new IllegalStateException("Service failed", cause);
                 }
                 manager.handleFailure(cause);
+                if (parent != null) {
+                    parent.fail(cause);
+                }
             }
         }
 
         @Override
         public void handleHalt(Throwable cause) {
-            if (parent != null) {
-                parent.halt(cause);
-            }
             if (disposed || manager.state.isStopped()) {
                 return;
             }
@@ -419,6 +418,9 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                     throw new IllegalStateException("Service halted", cause);
                 }
                 manager.handleHalt(cause);
+                if (parent != null) {
+                    parent.halt(cause);
+                }
             }
         }
     }
@@ -446,7 +448,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
 
         @Override
-        public void exclusive(Runnable0 action) {
+        public void exclusive(Runnable1<CancelToken> action) {
             try {
                 base.doExclusive(action);
             } catch (Throwable e) {
