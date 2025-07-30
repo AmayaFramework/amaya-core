@@ -14,7 +14,7 @@ public interface Service extends Disposable {
     /**
      * Starts the service asynchronously or synchronously, reporting lifecycle events via callback.
      *
-     * @param token cancellation token to cooperatively cancel the start operation
+     * @param token    cancellation token to cooperatively cancel the start operation
      * @param callback callback to notify about lifecycle events such as failure or halt
      * @throws Throwable if starting fails
      */

@@ -19,11 +19,17 @@ import com.github.romanqed.jct.Cancellation;
  * Disposal must not throw exceptions and should be as fast as possible.
  */
 public abstract class AbstractService implements Service {
-    /** Lock object for synchronizing lifecycle state changes. */
+    /**
+     * Lock object for synchronizing lifecycle state changes.
+     */
     protected final Object lifecycleLock;
-    /** Cancellation source controlling service cancellation tokens. */
+    /**
+     * Cancellation source controlling service cancellation tokens.
+     */
     protected final CancelSource cancelSource;
-    /** Current lifecycle state of the service. */
+    /**
+     * Current lifecycle state of the service.
+     */
     protected volatile ServiceState state;
 
     /**
