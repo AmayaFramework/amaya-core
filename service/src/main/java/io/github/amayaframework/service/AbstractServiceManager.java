@@ -439,11 +439,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     protected interface CallbackBase {
 
         /**
-         * Disposes internal callback resources.
-         */
-        void dispose();
-
-        /**
          * Executes an exclusive action with cancellation token.
          *
          * @param action action to run
@@ -475,11 +470,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
          * Singleton instance of empty callback base.
          */
         public static final EmptyCallbackBase CALLBACK_BASE = new EmptyCallbackBase();
-
-        @Override
-        public void dispose() {
-            // Do nothing
-        }
 
         @Override
         public void doExclusive(Runnable1<CancelToken> action) throws Throwable {
@@ -548,7 +538,10 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             this.inTransition = false;
         }
 
-        @Override
+        /**
+         * Disposes callback base.
+         * Resets the {@code parent} to null and sets the {@code disposed} flag to {@code true}.
+         */
         public void dispose() {
             this.disposed = true;
             this.parent = null;

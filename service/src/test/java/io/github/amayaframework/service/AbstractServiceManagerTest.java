@@ -2,6 +2,7 @@ package io.github.amayaframework.service;
 
 import com.github.romanqed.jct.CancelToken;
 import com.github.romanqed.jct.Cancellation;
+import com.github.romanqed.jfunc.Exceptions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -170,12 +171,10 @@ public final class AbstractServiceManagerTest {
 
             @Override
             public void stop(CancelToken token) {
-
             }
 
             @Override
             public void dispose() {
-
             }
         };
         manager.add(throwsInStart);
@@ -201,6 +200,31 @@ public final class AbstractServiceManagerTest {
         manager.add(throwsInStop);
         manager.start();
         assertThrows(IllegalStateException.class, manager::stop);
+    }
+
+    @Test
+    public void testCallbackCallInWatchdog() throws Throwable {
+        var manager = new TestManager();
+        manager.add(new Service() {
+            @Override
+            public void start(CancelToken token, ServiceCallback callback) {
+                new Thread(() -> {
+                    Exceptions.silent(() -> Thread.sleep(500));
+                    callback.fail(new IOException());
+                }).start();
+            }
+
+            @Override
+            public void stop(CancelToken token) {
+            }
+
+            @Override
+            public void dispose() {
+            }
+        });
+        manager.start();
+        Thread.sleep(1000);
+        assertEquals(ServiceState.FAILED, manager.state());
     }
 
     private static final class TestManager extends AbstractServiceManager {
