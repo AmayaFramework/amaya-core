@@ -1,3 +1,6 @@
+/**
+ * Amaya Service Module
+ */
 module io.github.amayaframework.service {
     // Imports
     requires com.github.romanqed.jfunc;
