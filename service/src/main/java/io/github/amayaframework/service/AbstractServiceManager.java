@@ -63,7 +63,10 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @SuppressWarnings("unchecked")
     public Collection<Service> services() {
         var ret = services;
-        return ret == null ? Collections.EMPTY_LIST : Collections.unmodifiableCollection(ret.keySet());
+        if (ret == null) {
+            return Collections.EMPTY_LIST;
+        }
+        return Collections.unmodifiableCollection(ret.keySet());
     }
 
     protected void handleAddedService(Service service, ServiceCallback callback) {
@@ -152,8 +155,10 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                 return;
             }
             var callback = services.remove(service);
-            callback.reset();
-            handleRemovedService(service);
+            if (callback != null) {
+                callback.reset();
+                handleRemovedService(service);
+            }
         }
     }
 
@@ -175,9 +180,14 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             }
             while (iterator.hasNext()) {
                 var service = iterator.next();
+                if (service == null) {
+                    continue;
+                }
                 var callback = this.services.remove(service);
-                callback.reset();
-                handleRemovedService(service);
+                if (callback != null) {
+                    callback.reset();
+                    handleRemovedService(service);
+                }
             }
         }
     }
