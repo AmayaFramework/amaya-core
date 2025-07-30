@@ -94,7 +94,7 @@ public class AbstractServiceTest {
         var service = new TestService();
         var token = Cancellation.canceledToken();
         service.start(token, null);
-        assertEquals(ServiceState.STOPPED, service.state()); // doStart wasn't called
+        assertEquals(ServiceState.NEW, service.state()); // doStart wasn't called
         assertFalse(service.isStarted());
     }
 
@@ -116,6 +116,27 @@ public class AbstractServiceTest {
         };
         assertThrows(IllegalStateException.class, () -> throwingService.start(null, null));
         assertEquals(ServiceState.FAILED, throwingService.state());
+    }
+
+    @Test
+    public void testStartAfterStop() throws Throwable {
+        var service = new AbstractService() {
+            @Override
+            protected void doStart(CancelToken token, ServiceCallback callback) {
+            }
+
+            @Override
+            protected void doStop(CancelToken token) {
+            }
+
+            @Override
+            protected void doDispose() {
+            }
+        };
+        service.start(null, null);
+        service.stop(null);
+        service.start(null, null);
+        assertEquals(ServiceState.STARTED, service.state());
     }
 
     @Test
