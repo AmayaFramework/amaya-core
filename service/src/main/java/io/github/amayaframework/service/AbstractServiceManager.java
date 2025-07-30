@@ -6,10 +6,7 @@ import com.github.romanqed.jct.EmptyCancelToken;
 import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -144,21 +141,22 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     }
 
     /**
-     * Handles logic after adding a new service,
+     * Handles logic when adding a new service,
      * e.g. starting the service if manager is started and service is stopped.
      *
      * @param service  the added service
      * @param callback associated service callback
      */
-    protected void handleAddedService(Service service, ServiceCallback callback) {
+    protected void handleAddingService(Service service, ManagedServiceCallback callback) {
         var serviceState = service.state();
         if (serviceState == ServiceState.UNMANAGED) {
             return;
         }
-        if (serviceState == ServiceState.STOPPED && state == ServiceState.STARTED) {
+        if (serviceState.isStopped() && state == ServiceState.STARTED) {
             try {
                 doStart(service, cancelSource.token(), callback);
             } catch (Throwable e) {
+                callback.reset();
                 throw new IllegalStateException("Service startup failed", e);
             }
         }
@@ -177,9 +175,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
         synchronized (lifecycleLock) {
             ensureServices();
+            if (services.containsKey(service)) {
+                return;
+            }
             var callback = new ManagedServiceCallback(callbackBase);
+            handleAddingService(service, callback);
             services.put(service, callback);
-            handleAddedService(service, callback);
         }
     }
 
@@ -202,9 +203,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                 if (service.state() == ServiceState.DISPOSED) {
                     throw new IllegalArgumentException("Cannot add disposed service");
                 }
+                if (this.services.containsKey(service)) {
+                    continue;
+                }
                 var callback = new ManagedServiceCallback(callbackBase);
+                handleAddingService(service, callback);
                 this.services.put(service, callback);
-                handleAddedService(service, callback);
             }
         }
     }
@@ -350,21 +354,22 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
         callbackBase.in(callback);
         var started = new LinkedList<Service>();
-        for (var entry : services.entrySet()) {
-            if (token.canceled()) {
-                break;
-            }
-            var service = entry.getKey();
-            try {
+        try {
+            for (var entry : services.entrySet()) {
+                if (token.canceled()) {
+                    break;
+                }
+                var service = entry.getKey();
                 doStart(service, token, entry.getValue());
-            } catch (Throwable e) {
-                state = ServiceState.FAILED;
-                doStop(started, token);
-                throw e;
+                started.add(service);
             }
-            started.add(service);
+        } catch (Throwable e) {
+            state = ServiceState.FAILED;
+            doStop(started, token);
+            throw e;
+        } finally {
+            callbackBase.out();
         }
-        callbackBase.out();
     }
 
     @Override
@@ -373,8 +378,11 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             return;
         }
         callbackBase.in();
-        doStop(services.keySet(), token);
-        callbackBase.out();
+        try {
+            doStop(services.keySet(), token);
+        } finally {
+            callbackBase.out();
+        }
     }
 
     @Override
@@ -616,7 +624,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
          * After reset, all subsequent operations on this instance become inert.
          */
         public void reset() {
-            this.base.dispose();
             this.base = EmptyCallbackBase.CALLBACK_BASE;
         }
 

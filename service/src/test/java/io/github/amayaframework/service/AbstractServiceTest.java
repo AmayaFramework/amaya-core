@@ -8,56 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AbstractServiceTest {
-
-    private static final class TestService extends AbstractService {
-        private final AtomicBoolean started = new AtomicBoolean(false);
-        private final AtomicBoolean stopped = new AtomicBoolean(false);
-        private final AtomicBoolean disposed = new AtomicBoolean(false);
-
-        public TestService() {
-            super();
-        }
-
-        @Override
-        protected void doStart(CancelToken token, ServiceCallback callback) {
-            if (token.canceled()) {
-                return;
-            }
-            if (started.getAndSet(true)) {
-                throw new RuntimeException("Double-started");
-            }
-        }
-
-        @Override
-        protected void doStop(CancelToken token) {
-            if (token.canceled()) {
-                return;
-            }
-            if (stopped.getAndSet(true)) {
-                throw new RuntimeException("Double-stopped");
-            }
-        }
-
-        @Override
-        protected void doDispose() {
-            if (disposed.getAndSet(true)) {
-                throw new RuntimeException("Double-disposed");
-            }
-        }
-
-        public boolean isStarted() {
-            return started.get();
-        }
-
-        public boolean isStopped() {
-            return stopped.get();
-        }
-
-        public boolean isDisposed() {
-            return disposed.get();
-        }
-    }
+public final class AbstractServiceTest {
 
     @Test
     public void testNewState() {
@@ -213,5 +164,54 @@ public class AbstractServiceTest {
         };
         assertDoesNotThrow(throwingService::dispose);
         assertEquals(ServiceState.DISPOSED, throwingService.state());
+    }
+
+    private static final class TestService extends AbstractService {
+        private final AtomicBoolean started = new AtomicBoolean(false);
+        private final AtomicBoolean stopped = new AtomicBoolean(false);
+        private final AtomicBoolean disposed = new AtomicBoolean(false);
+
+        public TestService() {
+            super();
+        }
+
+        @Override
+        protected void doStart(CancelToken token, ServiceCallback callback) {
+            if (token.canceled()) {
+                return;
+            }
+            if (started.getAndSet(true)) {
+                throw new RuntimeException("Double-started");
+            }
+        }
+
+        @Override
+        protected void doStop(CancelToken token) {
+            if (token.canceled()) {
+                return;
+            }
+            if (stopped.getAndSet(true)) {
+                throw new RuntimeException("Double-stopped");
+            }
+        }
+
+        @Override
+        protected void doDispose() {
+            if (disposed.getAndSet(true)) {
+                throw new RuntimeException("Double-disposed");
+            }
+        }
+
+        public boolean isStarted() {
+            return started.get();
+        }
+
+        public boolean isStopped() {
+            return stopped.get();
+        }
+
+        public boolean isDisposed() {
+            return disposed.get();
+        }
     }
 }
