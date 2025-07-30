@@ -110,11 +110,11 @@ public abstract class AbstractService implements Service {
 
     @Override
     public void stop(CancelToken token) throws Throwable {
-        if (state == ServiceState.DISPOSED || state == ServiceState.STOPPED) {
+        if (state.isStopped()) {
             return;
         }
         synchronized (lifecycleLock) {
-            if (state == ServiceState.DISPOSED || state == ServiceState.STOPPED) {
+            if (state.isStopped()) {
                 return;
             }
             cancelSource.reset();
