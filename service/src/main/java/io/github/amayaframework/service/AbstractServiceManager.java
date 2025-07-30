@@ -13,14 +13,65 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Base abstract implementation of {@link ServiceManager}.
+ * <p>
+ * Manages a collection of {@link Service} instances with lifecycle control,
+ * propagating start, stop, and dispose operations to managed services.
+ * <p>
+ * Handles service addition/removal, failure and halt events, and exposes hooks
+ * for customization via {@link #doStart(Service, CancelToken, ServiceCallback)},
+ * {@link #doStop(Service, CancelToken)} and {@link #doDispose(Service)}.
+ * <p>
+ * Uses internal callbacks to coordinate service state changes and failure handling.
+ */
 public abstract class AbstractServiceManager extends AbstractService implements ServiceManager {
+    /**
+     * A supplier that creates a new {@link Map} binding each {@link Service}
+     * to its corresponding {@link ManagedServiceCallback}. This is used for initialization
+     * and recovery after failures.
+     */
     protected final Supplier<Map<Service, ManagedServiceCallback>> supplier;
+
+    /**
+     * The base callback used to delegate management actions (such as halting or failing)
+     * from individual services back to the service manager.
+     */
     protected final ManagedCallbackBase callbackBase;
+
+    /**
+     * A handler for exceptions thrown during failure processing. It is invoked only
+     * if an exception occurs while processing {@code onFailure}.
+     * This handler must not throw.
+     */
     protected final Consumer<Throwable> onFailureException;
+
+    /**
+     * A map of currently managed services and their associated callbacks.
+     * This map is volatile and may be rebuilt on restart.
+     */
     protected volatile Map<Service, ManagedServiceCallback> services;
+
+    /**
+     * A callback that is triggered when a managed service fails (transitions to {@code FAILED}).
+     * Must not throw.
+     */
     protected volatile Consumer<Throwable> onFailure;
+
+    /**
+     * A callback that is triggered when a managed service is halted due to stop or cancellation.
+     * Must not throw.
+     */
     protected volatile Consumer<Throwable> onHalt;
 
+    /**
+     * Constructs a new service manager with given synchronization primitives and callbacks.
+     *
+     * @param lifecycleLock      lock object used for lifecycle synchronization
+     * @param cancelSource       cancellation source controlling cancellation tokens
+     * @param supplier           supplier for the map of managed services and their callbacks
+     * @param onFailureException consumer for exceptions thrown during failure handling
+     */
     protected AbstractServiceManager(Object lifecycleLock,
                                      CancelSource cancelSource,
                                      Supplier<Map<Service, ManagedServiceCallback>> supplier,
@@ -47,12 +98,35 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         stop(null);
     }
 
+    /**
+     * Starts the given service with the specified cancellation token and callback.
+     *
+     * @param service  the service to start
+     * @param token    the cancellation token to observe
+     * @param callback the service callback for lifecycle events
+     * @throws Throwable if starting the service fails
+     */
     protected abstract void doStart(Service service, CancelToken token, ServiceCallback callback) throws Throwable;
 
+    /**
+     * Stops the given service with the specified cancellation token.
+     *
+     * @param service the service to stop
+     * @param token   the cancellation token to observe
+     * @throws Throwable if stopping the service fails
+     */
     protected abstract void doStop(Service service, CancelToken token) throws Throwable;
 
+    /**
+     * Disposes the given service, releasing resources.
+     *
+     * @param service the service to dispose
+     */
     protected abstract void doDispose(Service service);
 
+    /**
+     * Ensures the internal map of services is initialized.
+     */
     protected void ensureServices() {
         if (services == null) {
             services = supplier.get();
@@ -69,6 +143,13 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         return Collections.unmodifiableCollection(ret.keySet());
     }
 
+    /**
+     * Handles logic after adding a new service,
+     * e.g. starting the service if manager is started and service is stopped.
+     *
+     * @param service  the added service
+     * @param callback associated service callback
+     */
     protected void handleAddedService(Service service, ServiceCallback callback) {
         var serviceState = service.state();
         if (serviceState == ServiceState.UNMANAGED) {
@@ -128,6 +209,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
     }
 
+    /**
+     * Handles logic after removing a service,
+     * e.g. stopping the service if it was started.
+     *
+     * @param service the removed service
+     */
     protected void handleRemovedService(Service service) {
         var serviceState = service.state();
         if (serviceState == ServiceState.UNMANAGED) {
@@ -302,6 +389,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         services = null;
     }
 
+    /**
+     * Handles failure events from managed services,
+     * invokes failure listeners and attempts to stop all services.
+     *
+     * @param cause the cause of the failure
+     */
     protected void handleFailure(Throwable cause) {
         try {
             if (onFailure != null) {
@@ -317,6 +410,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
     }
 
+    /**
+     * Handles halt events from managed services,
+     * invokes halt listeners and disposes all services.
+     *
+     * @param cause the cause of the halt
+     */
     protected void handleHalt(Throwable cause) {
         if (onHalt != null) {
             onHalt.accept(cause);
@@ -325,19 +424,49 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         state = ServiceState.DISPOSED;
     }
 
+
+    /**
+     * Base interface for internal callback handling.
+     */
     protected interface CallbackBase {
 
+        /**
+         * Disposes internal callback resources.
+         */
         void dispose();
 
+        /**
+         * Executes an exclusive action with cancellation token.
+         *
+         * @param action action to run
+         * @throws Throwable any exception thrown by the action
+         */
         void doExclusive(Runnable1<CancelToken> action) throws Throwable;
 
+        /**
+         * Handles failure event with the given cause.
+         *
+         * @param cause failure cause
+         */
         void handleFailure(Throwable cause);
 
+        /**
+         * Handles halt event with the given cause.
+         *
+         * @param cause halt cause
+         */
         void handleHalt(Throwable cause);
     }
 
+    /**
+     * Empty implementation of {@link CallbackBase} performing no actions.
+     */
     protected static final class EmptyCallbackBase implements CallbackBase {
-        static final EmptyCallbackBase CALLBACK_BASE = new EmptyCallbackBase();
+
+        /**
+         * Singleton instance of empty callback base.
+         */
+        public static final EmptyCallbackBase CALLBACK_BASE = new EmptyCallbackBase();
 
         @Override
         public void dispose() {
@@ -360,26 +489,54 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
     }
 
+    /**
+     * Callback base implementation that manages failure and halt propagation
+     * to the {@link AbstractServiceManager} and user callbacks.
+     * <p>
+     * This class is reused by all managed services and handles lifecycle transitions
+     * and callback forwarding in a thread-safe way. All logic is protected by the manager's
+     * internal lock.
+     */
     protected static final class ManagedCallbackBase implements CallbackBase {
-        final AbstractServiceManager manager;
-        volatile ServiceCallback parent;
-        volatile boolean disposed;
-        boolean inTransition;
+        private final AbstractServiceManager manager;
+        private volatile ServiceCallback parent;
+        private volatile boolean disposed;
+        private boolean inTransition;
 
+        /**
+         * Creates a new callback base for the given service manager.
+         *
+         * @param manager the manager to which this callback is bound
+         */
         ManagedCallbackBase(AbstractServiceManager manager) {
             this.manager = manager;
         }
 
-        void in(ServiceCallback parent) {
+        /**
+         * Signals entry into a managed service lifecycle phase,
+         * associating this callback with the given {@link ServiceCallback}.
+         * Sets the {@code inTransition} flag to {@code true}.
+         *
+         * @param parent the parent callback associated with a specific service
+         */
+        public void in(ServiceCallback parent) {
             this.parent = parent;
             this.inTransition = true;
         }
 
-        void in() {
+        /**
+         * Signals entry into a transition phase without a parent callback.
+         * Sets the {@code inTransition} flag to {@code true}.
+         */
+        public void in() {
             this.inTransition = true;
         }
 
-        void out() {
+        /**
+         * Signals exit from a transition phase.
+         * Resets the {@code inTransition} flag to {@code false}.
+         */
+        public void out() {
             this.inTransition = false;
         }
 
@@ -435,14 +592,30 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         }
     }
 
+    /**
+     * Service callback implementation delegating to a {@link CallbackBase}.
+     * <p>
+     * This class wraps a callback base and exposes the {@link ServiceCallback} interface,
+     * enabling callback forwarding to the manager. After reset, it becomes inert.
+     */
     protected static final class ManagedServiceCallback implements ServiceCallback {
-        volatile CallbackBase base;
+        private volatile CallbackBase base;
 
-        ManagedServiceCallback(CallbackBase base) {
+        /**
+         * Creates a new wrapper over the given callback base.
+         *
+         * @param base the callback base to delegate to
+         */
+        public ManagedServiceCallback(CallbackBase base) {
             this.base = base;
         }
 
-        void reset() {
+        /**
+         * Disposes the current base and replaces it with a no-op implementation.
+         * <p>
+         * After reset, all subsequent operations on this instance become inert.
+         */
+        public void reset() {
             this.base.dispose();
             this.base = EmptyCallbackBase.CALLBACK_BASE;
         }
