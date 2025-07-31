@@ -296,18 +296,18 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             if (services == null) {
                 return Collections.EMPTY_LIST;
             }
-            try {
-                if (state == ServiceState.STARTED) {
-                    doStop(services.keySet(), cancelSource.token());
-                }
-            } catch (Throwable e) {
-                throw new IllegalStateException("Services stopping failed", e);
-            }
             for (var callback : services.values()) {
                 callback.reset();
             }
             var ret = services.keySet();
             services = null;
+            try {
+                if (state == ServiceState.STARTED) {
+                    doStop(ret, cancelSource.token());
+                }
+            } catch (Throwable e) {
+                throw new IllegalStateException("Services stopping failed", e);
+            }
             return Collections.unmodifiableCollection(ret);
         }
     }
@@ -425,6 +425,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
      * @param cause the cause of the halt
      */
     protected void handleHalt(Throwable cause) {
+        cancelSource.cancel();
         if (onHalt != null) {
             onHalt.accept(cause);
         }
