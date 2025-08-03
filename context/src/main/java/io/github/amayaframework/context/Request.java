@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * An interface describing the abstract web protocol request.
  */
-public interface Request extends Transaction, Attributable<String> {
+public interface Request extends Transaction {
 
     /**
      * Retrieves the body of the request as binary data using a {@link ServletInputStream}.

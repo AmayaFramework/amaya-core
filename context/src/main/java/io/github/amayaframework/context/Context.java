@@ -8,7 +8,7 @@ import jakarta.servlet.ServletResponse;
  * Contains both a servlet request and response, and {@link Request} and {@link Response}.
  * {@link Request} and {@link Response} act as higher-level wrappers over servlet context.
  */
-public interface Context {
+public interface Context extends Attributable<String> {
 
     /**
      * Gets the {@link Request} instance representing the current request.
