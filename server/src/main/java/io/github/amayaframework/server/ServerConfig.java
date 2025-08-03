@@ -16,14 +16,14 @@ public interface ServerConfig {
     Set<InetSocketAddress> getAddresses();
 
     /**
-     * Adds given address to listened set and starts listen it.
+     * Adds given address to listen set and starts listen to it.
      *
      * @param address the specified address to be listened, must be non-null
      */
     void addAddress(InetSocketAddress address);
 
     /**
-     * Removes given address from listened set and stops listen it.
+     * Removes given address from a listened set and stops listen it.
      *
      * @param address the specified address to be removed, must be non-null
      */

@@ -52,7 +52,7 @@ public interface Server<T extends Context> extends Service {
      * @param token cancellation token for cooperative stopping
      * @param callback lifecycle callback
      * @throws IllegalStateException if server already started
-     * @throws Throwable             if any problems occurred during start
+     * @throws Throwable             if any problems occurred during the start
      */
     @Override
     void start(CancelToken token, ServiceCallback callback) throws Throwable;
