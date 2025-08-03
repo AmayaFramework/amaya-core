@@ -1,6 +1,6 @@
 package io.github.amayaframework.server;
 
-import com.github.romanqed.jfunc.Runnable1;
+import com.github.romanqed.juni.UniRunnable1;
 import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.http.HttpVersion;
 import jakarta.servlet.ServletContext;
@@ -48,20 +48,11 @@ public interface HttpServer extends Server<HttpContext> {
     @Override
     HttpServerConfig getConfig();
 
-    /**
-     * Gets http context handler.
-     *
-     * @return the {@link Runnable1} instance
-     */
+    // TODO jdoc
     @Override
-    Runnable1<HttpContext> getHandler();
+    UniRunnable1<HttpContext> getHandler();
 
-    /**
-     * Sets the context handler for the http protocol. This handler is called for each transaction.
-     *
-     * @param handler the {@link Runnable1} instance to be set as context handler
-     * @throws IllegalStateException if server started
-     */
+    // TODO jdoc
     @Override
-    void setHandler(Runnable1<HttpContext> handler);
+    void setHandler(UniRunnable1<HttpContext> handler);
 }

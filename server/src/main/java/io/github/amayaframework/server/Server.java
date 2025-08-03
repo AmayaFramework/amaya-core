@@ -1,7 +1,7 @@
 package io.github.amayaframework.server;
 
 import com.github.romanqed.jct.CancelToken;
-import com.github.romanqed.jfunc.Runnable1;
+import com.github.romanqed.juni.UniRunnable1;
 import io.github.amayaframework.context.Context;
 import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceCallback;
@@ -38,20 +38,11 @@ public interface Server<T extends Context> extends Service {
      */
     ServerConfig getConfig();
 
-    /**
-     * Gets protocol context handler.
-     *
-     * @return the {@link Runnable1} instance
-     */
-    Runnable1<T> getHandler();
+    // TODO jdoc
+    UniRunnable1<T> getHandler();
 
-    /**
-     * Sets the context handler for the protocol used by the server. This handler is called for each transaction.
-     *
-     * @param handler the {@link Runnable1} instance to be set as context handler
-     * @throws IllegalStateException if server started
-     */
-    void setHandler(Runnable1<T> handler);
+    // TODO jdoc
+    void setHandler(UniRunnable1<T> handler);
 
     /**
      * Starts the server, after which the listening of the specified addresses begins.

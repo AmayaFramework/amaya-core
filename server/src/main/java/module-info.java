@@ -6,6 +6,7 @@
 module io.github.amayaframework.server {
     // Imports
     requires com.github.romanqed.jfunc;
+    requires com.github.romanqed.juni;
     requires com.github.romanqed.jct;
     // Servlets
     requires jakarta.servlet;
