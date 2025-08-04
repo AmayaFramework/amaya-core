@@ -23,7 +23,7 @@ public interface Application<T> extends Service, Resettable {
     @Override
     void reset();
 
-    void run(Task<T> task);
+    void run(Task<T> task) throws Throwable;
 
-    void run();
+    void run() throws Throwable;
 }

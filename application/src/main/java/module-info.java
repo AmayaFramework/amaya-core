@@ -12,6 +12,8 @@ module io.github.amayaframework.application {
     requires io.github.amayaframework.service;
     // Optional imports
     requires static io.github.amayaframework.di;
+    requires com.github.romanqed.jct;
+    requires jdk.unsupported;
     // Exports
     exports io.github.amayaframework.application;
 }

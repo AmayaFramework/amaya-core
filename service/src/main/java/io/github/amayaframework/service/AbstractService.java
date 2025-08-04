@@ -106,7 +106,9 @@ public abstract class AbstractService implements Service {
                     return;
                 }
                 doStart(combined, callback);
-                if (state == ServiceState.STARTING) {
+                if (combined.canceled()) {
+                    state = old;
+                } else if (state == ServiceState.STARTING) {
                     state = ServiceState.STARTED;
                 }
             } catch (Throwable e) {
@@ -136,7 +138,9 @@ public abstract class AbstractService implements Service {
                     return;
                 }
                 doStop(combined);
-                if (state == ServiceState.STOPPING) {
+                if (combined.canceled()) {
+                    state = old;
+                } else if (state == ServiceState.STOPPING) {
                     state = ServiceState.STOPPED;
                 }
             } catch (Throwable e) {
