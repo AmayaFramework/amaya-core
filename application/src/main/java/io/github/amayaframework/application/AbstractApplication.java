@@ -89,6 +89,9 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
     }
 
     protected void addHook() {
+        if (shutdown) {
+            return;
+        }
         hook = new Thread(this::shutdown);
         Runtime.getRuntime().addShutdownHook(hook);
     }
@@ -118,10 +121,16 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
 
     @Override
     public void run(Task<T> task) throws Throwable {
+        if (shutdown) {
+            return;
+        }
         if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
             throw new IllegalStateException("Cannot run application from state " + state);
         }
         synchronized (lifecycleLock) {
+            if (shutdown) {
+                return;
+            }
             if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
                 throw new IllegalStateException("Cannot run application from state " + state);
             }
@@ -136,7 +145,10 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
                     return;
                 }
                 doAppStart(task, cancelToken, EmptyServiceCallback.CALLBACK);
-                if (cancelToken.canceled()) {
+                if (shutdown) {
+                    System.out.println("Shutdown block");
+                    state = ServiceState.DISPOSED;
+                } else if (cancelToken.canceled()) {
                     removeHook();
                     state = old;
                 } else if (state == ServiceState.STARTING) {
@@ -151,10 +163,16 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
 
     @Override
     public void run() throws Throwable {
+        if (shutdown) {
+            return;
+        }
         if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
             throw new IllegalStateException("Cannot run application from state " + state);
         }
         synchronized (lifecycleLock) {
+            if (shutdown) {
+                return;
+            }
             if (state == ServiceState.DISPOSED || state == ServiceState.STARTED) {
                 throw new IllegalStateException("Cannot run application from state " + state);
             }
@@ -173,7 +191,10 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
                 }
                 doAppStart(task, cancelToken, EmptyServiceCallback.CALLBACK);
                 System.out.println("After doAppStart");
-                if (cancelToken.canceled()) {
+                if (shutdown) {
+                    System.out.println("Shutdown block");
+                    state = ServiceState.DISPOSED;
+                } else if (cancelToken.canceled()) {
                     System.out.println("CancelBlock: 1");
                     removeHook();
                     System.out.println("CancelBlock: 2");
