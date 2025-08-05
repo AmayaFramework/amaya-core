@@ -42,7 +42,7 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      * @param factory the {@link EnvironmentFactory} instance, may be null
      * @return this {@link ApplicationConfigurer} instance
      */
-    ApplicationConfigurer<A, C> environmentFactory(EnvironmentFactory factory);
+    ApplicationConfigurer<A, C> withEnvironmentFactory(EnvironmentFactory factory);
 
     /**
      * Sets the environment name, that will be used to create application environment.
@@ -52,16 +52,16 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      */
     ApplicationConfigurer<A, C> environmentName(String name);
 
-    ServiceManagerConfigurer managerConfigurer();
+    ServicesConfigurer servicesConfigurer();
 
-    ApplicationConfigurer<A, C> configureManager(Runnable1<ServiceManagerConfigurer> action);
+    ApplicationConfigurer<A, C> configureServices(Runnable1<ServicesConfigurer> action);
 
     /**
      * Gets the {@link ScopedProviderBuilder} instance.
      *
      * @return the {@link ScopedProviderBuilder} instance if amaya di module loaded, null otherwise
      */
-    ScopedProviderBuilder getProviderBuilder();
+    ScopedProviderBuilder providerBuilder();
 
     /**
      * Applies given action to the {@link ScopedProviderBuilder}. Do nothing if amaya di module not loaded.

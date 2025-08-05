@@ -5,7 +5,7 @@ package io.github.amayaframework.application;
  *
  * @param <T> the application type
  */
-public interface ApplicationBuilder<A extends Application<?>, C extends ApplicationBuilder<A, C>>
+public interface ApplicationBuilder<A extends Application<?>, C extends ApplicationConfigurer<A, C>>
         extends ApplicationConfigurer<A, C> {
 
     /**
