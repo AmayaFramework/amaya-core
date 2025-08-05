@@ -428,13 +428,16 @@ public abstract class AbstractServiceManager extends AbstractService implements 
      */
     protected void handleHalt(Throwable cause) {
         cancelSource.cancel();
-        if (onHalt != null) {
-            onHalt.accept(cause);
+        try {
+            if (onHalt != null) {
+                onHalt.accept(cause);
+            }
+        } catch (Throwable ignored) {
+            // onHalt must not throw exceptions
         }
         doDispose();
         state = ServiceState.DISPOSED;
     }
-
 
     /**
      * Base interface for internal callback handling.
