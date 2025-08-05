@@ -47,6 +47,9 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
             synchronized (lifecycleLock) {
                 try {
                     onHalt(throwable);
+                    environment.close();
+                } catch (Throwable ignored) {
+                    // No exceptions while disposing
                 } finally {
                     removeHook();
                     state = ServiceState.DISPOSED;
@@ -115,7 +118,12 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
                 return;
             }
             state = ServiceState.DISPOSED;
-            doAppDispose();
+            try {
+                doAppDispose();
+                environment.close();
+            } catch (Throwable ignored) {
+                // No exceptions while disposing
+            }
         }
     }
 
@@ -146,7 +154,12 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
     @Override
     protected void doDispose() {
         removeHook();
-        doAppDispose();
+        try {
+            doAppDispose();
+            environment.close();
+        } catch (Throwable ignored) {
+            // No exceptions while disposing
+        }
     }
 
     @Override
