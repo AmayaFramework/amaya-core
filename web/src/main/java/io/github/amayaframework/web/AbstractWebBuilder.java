@@ -47,7 +47,7 @@ public abstract class AbstractWebBuilder
 
     @Override
     protected WebApplication createApplication(GroupOptionSet options, Environment environment) throws Throwable {
-        var factory = Objects.requireNonNull(this.serverFactory);
+        var factory = Objects.requireNonNull(this.serverFactory, "TODO: Missing server factory msg");
         var group = options.getGroup(WebOptions.SERVER_GROUP);
         var server = factory.create(group, environment);
         return createApplication(options, environment, server);
