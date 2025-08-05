@@ -78,8 +78,8 @@ final class ProvidedWebBuilder extends CommonWebBuilder {
     protected WebApplication createApplication(GroupOptionSet options,
                                                Environment environment,
                                                HttpServer server) throws Throwable {
-        // Add inner entities to container
         var builder = ensureBuilder();
+        // Add inner entities to container
         builder.addInstance(GroupOptionSet.class, options);
         builder.addInstance(Environment.class, environment);
         if (loggerFactory != null) {
