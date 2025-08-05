@@ -24,7 +24,7 @@ public final class NativeTest {
 
     @Test
     public void testNativeWithOptions() throws Exception {
-        var options = Options.of(Environment.INIT, false, Environment.ROOT, "test-root");
+        var options = Options.of(EnvOptions.INIT, false, EnvOptions.ROOT.getKey(), "test-root");
         var factory = new NativeEnvironmentFactory();
         var env = factory.create("test", options);
         assertEquals(FileSystems.getDefault(), env.fileSystem());

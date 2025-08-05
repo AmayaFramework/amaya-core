@@ -8,16 +8,6 @@ import java.nio.file.Path;
  * It can be both virtual and real, or combined.
  */
 public interface Environment extends AutoCloseable {
-    /**
-     * The string key for {@link io.github.amayaframework.options.OptionSet}
-     * that allows you to set the mount point of the environment. By default, '.'.
-     */
-    String ROOT = "root";
-    /**
-     * The boolean key for {@link io.github.amayaframework.options.OptionSet}
-     * that allows you to set the initialization of the environment during creation. By default, 'true'.
-     */
-    String INIT = "init";
 
     /**
      * Returns {@link Path} instance containing real or virtual path to environment root.

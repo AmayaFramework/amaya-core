@@ -4,7 +4,6 @@ import io.github.amayaframework.options.OptionSet;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 
 /**
@@ -16,17 +15,10 @@ import java.nio.file.Path;
  */
 public final class NativeEnvironmentFactory implements EnvironmentFactory {
 
-    private static void initRoot(Path root) throws IOException {
-        if (Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS)) {
-            return;
-        }
-        Files.createDirectory(root);
-    }
-
     private static Environment create(String name, Path base, boolean init) throws IOException {
         var root = base.toAbsolutePath().normalize().resolve(name);
-        if (init) {
-            initRoot(root);
+        if (init && !Files.isDirectory(root)) {
+            Files.createDirectory(root);
         }
         return new NativeEnvironment(root, root.getFileSystem(), name);
     }
@@ -36,8 +28,8 @@ public final class NativeEnvironmentFactory implements EnvironmentFactory {
         if (options == null || options.isEmpty()) {
             return create(name, Path.of("."), true);
         }
-        var base = Path.of(options.<String>get(Environment.ROOT));
-        return create(name, base, options.asKey(Environment.INIT));
+        var base = Path.of(options.get(EnvOptions.ROOT));
+        return create(name, base, options.asKey(EnvOptions.INIT));
     }
 
     @Override
