@@ -22,7 +22,7 @@ public interface HttpTransaction extends Transaction, Headerable {
      *
      * @return the {@link Map} instance
      */
-    Map<String, Cookie> getCookies();
+    Map<String, Cookie> cookies();
 
     /**
      * Gets {@link Cookie} of this transaction with given name.

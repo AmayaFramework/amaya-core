@@ -39,10 +39,6 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
      * Request mime data.
      */
     protected MimeData data;
-    /**
-     * Request attribute map.
-     */
-    protected Map<String, Object> attributes;
 
     /**
      * Constructs {@link AbstractRequest} instance with given {@link ServletRequest} instance.
@@ -51,38 +47,6 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
      */
     protected AbstractRequest(T request) {
         this.request = request;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        if (attributes != null) {
-            return attributes;
-        }
-        attributes = new RequestAttributeMap(request);
-        return attributes;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <V> V get(String key) {
-        return (V) request.getAttribute(key);
-    }
-
-    @Override
-    public void set(String key, Object value) {
-        request.setAttribute(key, value);
-    }
-
-    @Override
-    public Object remove(String key) {
-        var ret = request.getAttribute(key);
-        request.removeAttribute(key);
-        return ret;
-    }
-
-    @Override
-    public boolean contains(String key) {
-        return request.getAttribute(key) != null;
     }
 
     @Override

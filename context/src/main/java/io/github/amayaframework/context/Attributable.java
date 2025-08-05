@@ -14,7 +14,7 @@ public interface Attributable<K> {
      *
      * @return {@link Map} instance
      */
-    Map<K, Object> getAttributes();
+    Map<K, Object> attributes();
 
     /**
      * Gets attribute value associated with given key.

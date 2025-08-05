@@ -17,7 +17,7 @@ public interface HttpContext extends Context {
      * @return the {@link HttpRequest} instance
      */
     @Override
-    HttpRequest getRequest();
+    HttpRequest request();
 
     /**
      * Gets the {@link HttpServletRequest} instance representing the current http request at the servlet level.
@@ -26,7 +26,7 @@ public interface HttpContext extends Context {
      * @return the {@link HttpServletRequest} instance
      */
     @Override
-    HttpServletRequest getServletRequest();
+    HttpServletRequest servletRequest();
 
     /**
      * Returns the original, unwrapped {@link HttpServletRequest} instance as provided by the servlet container.
@@ -36,7 +36,7 @@ public interface HttpContext extends Context {
      * @return the original {@link HttpServletRequest} instance
      */
     @Override
-    HttpServletRequest getOriginalRequest();
+    HttpServletRequest originalRequest();
 
     /**
      * Gets the {@link HttpResponse} instance representing the current http response.
@@ -45,7 +45,7 @@ public interface HttpContext extends Context {
      * @return the {@link HttpResponse} instance
      */
     @Override
-    HttpResponse getResponse();
+    HttpResponse response();
 
     /**
      * Gets the {@link HttpServletResponse} instance representing the current http response at the servlet level.
@@ -54,7 +54,7 @@ public interface HttpContext extends Context {
      * @return the {@link HttpServletResponse} instance
      */
     @Override
-    HttpServletResponse getServletResponse();
+    HttpServletResponse servletResponse();
 
     /**
      * Returns the original, unwrapped {@link HttpServletResponse} instance as provided by the servlet container.
@@ -64,5 +64,5 @@ public interface HttpContext extends Context {
      * @return the original {@link HttpServletResponse} instance
      */
     @Override
-    HttpServletResponse getOriginalResponse();
+    HttpServletResponse originalResponse();
 }

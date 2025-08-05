@@ -12,7 +12,7 @@ public interface Headerable {
      *
      * @return the {@link Map} instance
      */
-    Map<String, String> getHeaders();
+    Map<String, String> headers();
 
     /**
      * Checks if object containing header with given name.

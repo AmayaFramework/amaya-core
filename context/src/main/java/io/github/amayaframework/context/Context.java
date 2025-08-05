@@ -16,7 +16,7 @@ public interface Context extends Attributable<String> {
      *
      * @return the {@link Request} instance
      */
-    Request getRequest();
+    Request request();
 
     /**
      * Gets the {@link ServletRequest} instance representing the current request at the servlet level.
@@ -24,7 +24,7 @@ public interface Context extends Attributable<String> {
      *
      * @return the {@link ServletRequest} instance
      */
-    ServletRequest getServletRequest();
+    ServletRequest servletRequest();
 
     /**
      * Returns the original, unwrapped {@link ServletRequest} instance as provided by the servlet container.
@@ -33,7 +33,7 @@ public interface Context extends Attributable<String> {
      *
      * @return the original {@link ServletRequest} instance
      */
-    ServletRequest getOriginalRequest();
+    ServletRequest originalRequest();
 
     /**
      * Gets the {@link Response} instance representing the current response.
@@ -41,7 +41,7 @@ public interface Context extends Attributable<String> {
      *
      * @return the {@link Response} instance
      */
-    Response getResponse();
+    Response response();
 
     /**
      * Gets the {@link ServletResponse} instance representing the current response at the servlet level.
@@ -49,7 +49,7 @@ public interface Context extends Attributable<String> {
      *
      * @return the {@link ServletResponse} instance
      */
-    ServletResponse getServletResponse();
+    ServletResponse servletResponse();
 
     /**
      * Returns the original, unwrapped {@link ServletResponse} instance as provided by the servlet container.
@@ -58,5 +58,5 @@ public interface Context extends Attributable<String> {
      *
      * @return the original {@link ServletResponse} instance
      */
-    ServletResponse getOriginalResponse();
+    ServletResponse originalResponse();
 }

@@ -67,7 +67,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Map<String, String> getHeaders() {
+    public Map<String, String> headers() {
         if (headers != null) {
             return headers;
         }
@@ -269,7 +269,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Map<String, Cookie> getCookies() {
+    public Map<String, Cookie> cookies() {
         if (cookies != null) {
             return cookies;
         }
