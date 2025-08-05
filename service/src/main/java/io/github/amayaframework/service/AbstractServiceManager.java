@@ -69,12 +69,13 @@ public abstract class AbstractServiceManager extends AbstractService implements 
      * @param supplier           supplier for the map of managed services and their callbacks
      * @param onFailureException consumer for exceptions thrown during failure handling
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected AbstractServiceManager(Object lifecycleLock,
                                      CancelSource cancelSource,
-                                     Supplier<Map<Service, ManagedServiceCallback>> supplier,
+                                     Supplier<Map<Service, ?>> supplier,
                                      Consumer<Throwable> onFailureException) {
         super(lifecycleLock, cancelSource);
-        this.supplier = supplier;
+        this.supplier = (Supplier<Map<Service, ManagedServiceCallback>>) (Supplier) supplier;
         this.services = null;
         this.onFailureException = onFailureException;
         this.callbackBase = new ManagedCallbackBase(this);
@@ -409,12 +410,13 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                 onFailure.accept(cause);
             }
             doStop(services.keySet(), cancelSource.token());
+            state = ServiceState.FAILED;
         } catch (Throwable e) {
             if (onFailureException != null) {
                 onFailureException.accept(e);
             }
-        } finally {
-            state = ServiceState.FAILED;
+            doDispose();
+            state = ServiceState.DISPOSED;
         }
     }
 
