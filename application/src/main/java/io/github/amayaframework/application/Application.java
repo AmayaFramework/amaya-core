@@ -1,5 +1,7 @@
 package io.github.amayaframework.application;
 
+import com.github.romanqed.jconv.AsyncTask;
+import com.github.romanqed.jconv.SyncTask;
 import com.github.romanqed.jconv.Task;
 import com.github.romanqed.jconv.TaskConfigurer;
 import io.github.amayaframework.di.core.ServiceProvider;
@@ -24,6 +26,14 @@ public interface Application<T> extends Service, Resettable {
     void reset();
 
     void run(Task<T> task) throws Throwable;
+
+    default void run(SyncTask<T> task) throws Throwable {
+        run((Task<T>) task);
+    }
+
+    default void run(AsyncTask<T> task) throws Throwable {
+        run((Task<T>) task);
+    }
 
     void run() throws Throwable;
 }

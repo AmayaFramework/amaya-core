@@ -2,9 +2,9 @@ package io.github.amayaframework.core;
 
 final class ReflectUtil {
     private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
-    private static final String AMAYA_SERVICE_PROVIDER = "io.github.amayaframework.di.ServiceProvider";
+    private static final String AMAYA_SERVICE_PROVIDER = "io.github.amayaframework.di.core.ServiceProvider";
     private static final String DI_ASM_MODULE = "io.github.amayaframework.di.asm";
-    private static final String DI_ASM_FACTORY = "io.github.amayaframework.di.asm.BytecodeStubFactory";
+    private static final String DI_ASM_FACTORY = "io.github.amayaframework.di.asm.AsmStubFactory";
     private static final String DI_REFLECT_MODULE = "io.github.amayaframework.di.reflect";
     private static final String DI_REFLECT_FACTORY = "io.github.amayaframework.di.reflect.ReflectStubFactory";
 
@@ -19,8 +19,8 @@ final class ReflectUtil {
     static boolean isClassExists(String name) {
         var loader = Thread.currentThread().getContextClassLoader();
         try {
-            var loaded = loader.loadClass(name);
-            return loaded.getName().equals(name);
+            loader.loadClass(name);
+            return true;
         } catch (ClassNotFoundException e) {
             return false;
         }

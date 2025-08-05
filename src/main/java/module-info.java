@@ -3,6 +3,9 @@ module io.github.amayaframework.core {
     // Basic
     requires com.github.romanqed.jfunc;
     requires com.github.romanqed.jconv;
+    requires com.github.romanqed.jct;
+    // Logger
+    requires static org.slf4j;
     // Amaya modules
     requires io.github.amayaframework.options;
     requires io.github.amayaframework.environment;

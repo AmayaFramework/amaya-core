@@ -40,8 +40,7 @@ public abstract class AbstractServicesConfigurer implements ServicesConfigurer {
 
     @Override
     public ServicesConfigurer add(Service service) {
-        Objects.requireNonNull(service);
-        addService(service);
+        addService(Objects.requireNonNull(service));
         return this;
     }
 

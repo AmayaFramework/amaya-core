@@ -3,7 +3,6 @@ package io.github.amayaframework.application;
 import com.github.romanqed.jfunc.Exceptions;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
-import io.github.amayaframework.service.ServiceManager;
 
 public abstract class AbstractApplicationBuilder
         <A extends Application<?>, C extends ApplicationConfigurer<A, C>, R extends ApplicationBuilder<A, C>>
@@ -16,11 +15,7 @@ public abstract class AbstractApplicationBuilder
 
     protected abstract Environment createEnvironment(GroupOptionSet options) throws Throwable;
 
-    protected abstract ServiceManager createServiceManager(GroupOptionSet options, Environment env) throws Throwable;
-
-    protected abstract A createApplication(GroupOptionSet options,
-                                           Environment env,
-                                           ServiceManager manager) throws Throwable;
+    protected abstract A createApplication(GroupOptionSet options, Environment env) throws Throwable;
 
     protected A doBuild() throws Throwable {
         // Prepare options
@@ -28,10 +23,8 @@ public abstract class AbstractApplicationBuilder
         // Prepare environment
         var environment = createEnvironment(options);
         try {
-            // Prepare service manager
-            var manager = createServiceManager(options, environment);
             // Create application
-            var ret = createApplication(options, environment, manager);
+            var ret = createApplication(options, environment);
             if (consumers != null) {
                 for (var consumer : consumers) {
                     consumer.run(ret);
