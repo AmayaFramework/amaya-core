@@ -4,8 +4,6 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    // TODO REMOVE
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 java {
@@ -35,7 +33,7 @@ dependencies {
     // Amaya modules
     compileOnly project(':options')
     compileOnly project(':environment')
-    implementation project(':service')
+    implementation project(':service') // TODO -> compileOnly
     // DI
     compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '3.0.5'
 }
@@ -52,8 +50,6 @@ jar {
         var vmVersion = System.getProperty("java.vm.version")
 
         attributes(
-                // TODO REMOVE
-                'Main-Class': 'io.github.amayaframework.application.Main',
                 'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
                 'Gradle-Version': "Gradle $gradle.gradleVersion",
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
@@ -70,12 +66,6 @@ jar {
                 'Specification-Version': archiveVersion
         )
     }
-}
-
-shadowJar {
-    archiveBaseName.set(archivesBaseName)
-    archiveClassifier.set('')
-    archiveVersion.set('')
 }
 
 signing {
