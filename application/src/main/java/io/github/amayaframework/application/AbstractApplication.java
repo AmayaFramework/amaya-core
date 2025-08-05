@@ -52,8 +52,10 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
 
     @Override
     public void reset() {
-        this.task = null;
-        this.builder.clear();
+        synchronized (lifecycleLock) {
+            this.task = null;
+            this.builder.clear();
+        }
     }
 
     protected abstract void doAppStart(Task<T> task, CancelToken token, ServiceCallback callback) throws Throwable;
