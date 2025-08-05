@@ -30,6 +30,12 @@ final class NativeEnvironment implements Environment {
     }
 
     @Override
+    public boolean opened() {
+        // Native filesystem always opened
+        return true;
+    }
+
+    @Override
     public void close() {
         // Do nothing, because we cannot close native filesystem
     }

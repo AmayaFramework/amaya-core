@@ -39,4 +39,6 @@ public interface Environment extends AutoCloseable {
      * @return the environment name
      */
     String name();
+
+    boolean opened();
 }
