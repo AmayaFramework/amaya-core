@@ -28,7 +28,36 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
         this.task = null;
         this.shutdown = false;
         this.hook = null;
+        registerEvents();
     }
+
+    protected void registerEvents() {
+        manager.onFailure(throwable -> {
+            synchronized (lifecycleLock) {
+                try {
+                    onFailure(throwable);
+                } finally {
+                    removeHook();
+                    state = ServiceState.FAILED;
+                }
+            }
+        });
+        manager.onHalt(throwable -> {
+            cancelSource.cancel();
+            synchronized (lifecycleLock) {
+                try {
+                    onHalt(throwable);
+                } finally {
+                    removeHook();
+                    state = ServiceState.DISPOSED;
+                }
+            }
+        });
+    }
+
+    protected abstract void onFailure(Throwable throwable);
+
+    protected abstract void onHalt(Throwable throwable);
 
     @Override
     public GroupOptionSet options() {
