@@ -61,7 +61,7 @@ public abstract class AbstractOptionSet implements OptionSet {
     }
 
     @Override
-    public Set<String> getKeys() {
+    public Set<String> keys() {
         return Collections.unmodifiableSet(body.keySet());
     }
 

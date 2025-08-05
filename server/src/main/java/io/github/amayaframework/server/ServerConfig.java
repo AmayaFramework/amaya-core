@@ -13,7 +13,7 @@ public interface ServerConfig {
      *
      * @return the {@link Set} instance containing all listened addresses
      */
-    Set<InetSocketAddress> getAddresses();
+    Set<InetSocketAddress> addresses();
 
     /**
      * Adds given address to listen set and starts listen to it.

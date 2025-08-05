@@ -13,7 +13,7 @@ public final class OptionsTest {
     @Test
     public void testEmpty() {
         var empty = Options.empty();
-        assertEquals(0, empty.getKeys().size());
+        assertEquals(0, empty.keys().size());
         assertTrue(empty.asMap().isEmpty());
     }
 

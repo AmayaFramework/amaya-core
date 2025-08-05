@@ -18,14 +18,14 @@ public interface HttpServerConfig extends ServerConfig {
      *
      * @return the {@code ServletContext} if supported, or {@code null} otherwise
      */
-    ServletContext getServletContext();
+    ServletContext servletContext();
 
     /**
      * Gets the http version used. The default value depends on the implementation.
      *
      * @return the {@link HttpVersion} instance
      */
-    HttpVersion getHttpVersion();
+    HttpVersion httpVersion();
 
     /**
      * Sets the http version used by server.
@@ -33,7 +33,7 @@ public interface HttpServerConfig extends ServerConfig {
      * @param version the specified {@link HttpVersion} instance to be set, must be non-null
      * @throws IllegalStateException if server started
      */
-    void setHttpVersion(HttpVersion version);
+    void httpVersion(HttpVersion version);
 
     /**
      * Adds given address to listened set and starts listen it with specified http protocol.
@@ -48,7 +48,7 @@ public interface HttpServerConfig extends ServerConfig {
      *
      * @return the {@link MimeFormatter} instance
      */
-    MimeFormatter getMimeFormatter();
+    MimeFormatter mimeFormatter();
 
     /**
      * Sets the {@link MimeFormatter} instance used by server.
@@ -56,14 +56,14 @@ public interface HttpServerConfig extends ServerConfig {
      * @param formatter the {@link MimeFormatter} instance, must be non-null
      * @throws IllegalStateException if server started
      */
-    void setMimeFormatter(MimeFormatter formatter);
+    void mimeFormatter(MimeFormatter formatter);
 
     /**
      * Gets the {@link MimeParser} instance used by server. The default value depends on the implementation.
      *
      * @return the {@link MimeParser} instance
      */
-    MimeParser getMimeParser();
+    MimeParser mimeParser();
 
     /**
      * Sets the {@link MimeParser} instance used by server.
@@ -71,14 +71,14 @@ public interface HttpServerConfig extends ServerConfig {
      * @param parser the {@link MimeParser} instance, must be non-null
      * @throws IllegalStateException if server started
      */
-    void setMimeParser(MimeParser parser);
+    void mimeParser(MimeParser parser);
 
     /**
      * Gets the {@link PathTokenizer} instance used by server. The default value depends on the implementation.
      *
      * @return the {@link PathTokenizer} instance
      */
-    PathTokenizer getPathTokenizer();
+    PathTokenizer pathTokenizer();
 
     /**
      * Sets the {@link PathTokenizer} instance used by server.
@@ -86,5 +86,5 @@ public interface HttpServerConfig extends ServerConfig {
      * @param tokenizer the {@link PathTokenizer} instance, must be non-null
      * @throws IllegalStateException if server started
      */
-    void setPathTokenizer(PathTokenizer tokenizer);
+    void pathTokenizer(PathTokenizer tokenizer);
 }

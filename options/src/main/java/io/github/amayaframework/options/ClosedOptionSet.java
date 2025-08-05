@@ -48,7 +48,7 @@ public class ClosedOptionSet extends AbstractOptionSet {
     }
 
     @Override
-    public Set<String> getKeys() {
+    public Set<String> keys() {
         return keys;
     }
 

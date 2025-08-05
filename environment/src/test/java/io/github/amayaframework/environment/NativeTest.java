@@ -15,10 +15,10 @@ public final class NativeTest {
     public void testNative() throws Exception {
         var factory = new NativeEnvironmentFactory();
         var env = factory.create("test");
-        assertEquals(FileSystems.getDefault(), env.getFileSystem());
-        assertEquals(Path.of("./test").toAbsolutePath().normalize(), env.getRoot());
-        assertTrue(Files.isDirectory(env.getRoot()));
-        Files.delete(env.getRoot());
+        assertEquals(FileSystems.getDefault(), env.fileSystem());
+        assertEquals(Path.of("./test").toAbsolutePath().normalize(), env.root());
+        assertTrue(Files.isDirectory(env.root()));
+        Files.delete(env.root());
         env.close();
     }
 
@@ -27,9 +27,9 @@ public final class NativeTest {
         var options = Options.of(Environment.INIT, false, Environment.ROOT, "test-root");
         var factory = new NativeEnvironmentFactory();
         var env = factory.create("test", options);
-        assertEquals(FileSystems.getDefault(), env.getFileSystem());
-        assertEquals(Path.of("./test-root/test").toAbsolutePath().normalize(), env.getRoot());
-        assertFalse(Files.isDirectory(env.getRoot()));
+        assertEquals(FileSystems.getDefault(), env.fileSystem());
+        assertEquals(Path.of("./test-root/test").toAbsolutePath().normalize(), env.root());
+        assertFalse(Files.isDirectory(env.root()));
         env.close();
     }
 }

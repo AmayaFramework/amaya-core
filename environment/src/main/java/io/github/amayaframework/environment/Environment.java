@@ -24,19 +24,19 @@ public interface Environment extends AutoCloseable {
      *
      * @return the {@link Path} instance
      */
-    Path getRoot();
+    Path root();
 
     /**
      * Returns {@link FileSystem} instance in which the environment is mounted.
      *
      * @return the {@link FileSystem} instance
      */
-    FileSystem getFileSystem();
+    FileSystem fileSystem();
 
     /**
      * Returns environment name. Maybe used for some purposes as name of root dir, etc.
      *
      * @return the environment name
      */
-    String getName();
+    String name();
 }

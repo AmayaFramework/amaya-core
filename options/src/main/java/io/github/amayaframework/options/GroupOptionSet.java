@@ -104,7 +104,7 @@ public interface GroupOptionSet extends OptionSet {
      * @return {@link Set} instance
      */
     @Override
-    Set<String> getKeys();
+    Set<String> keys();
 
     /**
      * Gets map contains all group entries from this {@link OptionSet} instance.

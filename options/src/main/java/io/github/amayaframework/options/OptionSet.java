@@ -200,7 +200,7 @@ public interface OptionSet extends Iterable<String> {
      *
      * @return {@link Set} instance
      */
-    Set<String> getKeys();
+    Set<String> keys();
 
     /**
      * Gets all option entries from this {@link OptionSet} instance as {@link Map}.

@@ -36,13 +36,13 @@ public interface Server<T extends Context> extends Service {
      *
      * @return the {@link ServerConfig} instance
      */
-    ServerConfig getConfig();
+    ServerConfig config();
 
     // TODO jdoc
-    UniRunnable1<T> getHandler();
+    UniRunnable1<T> handler();
 
     // TODO jdoc
-    void setHandler(UniRunnable1<T> handler);
+    void handler(UniRunnable1<T> handler);
 
     /**
      * Starts the server, after which the listening of the specified addresses begins.

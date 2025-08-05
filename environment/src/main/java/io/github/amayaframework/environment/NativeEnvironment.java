@@ -15,17 +15,17 @@ final class NativeEnvironment implements Environment {
     }
 
     @Override
-    public Path getRoot() {
+    public Path root() {
         return root;
     }
 
     @Override
-    public FileSystem getFileSystem() {
+    public FileSystem fileSystem() {
         return fileSystem;
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 

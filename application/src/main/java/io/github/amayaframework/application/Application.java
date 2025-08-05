@@ -10,15 +10,15 @@ import io.github.amayaframework.service.ServiceManager;
 
 public interface Application<T> extends Service, Resettable {
 
-    GroupOptionSet getOptions();
+    GroupOptionSet options();
 
-    Environment getEnvironment();
+    Environment environment();
 
-    TaskConfigurer<T> getConfigurer();
+    TaskConfigurer<T> configurer();
 
-    ServiceManager getServiceManager();
+    ServiceManager manager();
 
-    ServiceProvider getServiceProvider();
+    ServiceProvider provider();
 
     @Override
     void reset();

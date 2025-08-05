@@ -205,7 +205,7 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
     }
 
     @Override
-    public Set<String> getKeys() {
+    public Set<String> keys() {
         return Collections.unmodifiableSet(groups.keySet());
     }
 

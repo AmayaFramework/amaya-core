@@ -65,7 +65,7 @@ final class PairOptionSet implements OptionSet {
     }
 
     @Override
-    public Set<String> getKeys() {
+    public Set<String> keys() {
         return Set.of(key);
     }
 

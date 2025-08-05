@@ -15,7 +15,7 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      *
      * @return the {@link GroupOptionSet} instance
      */
-    GroupOptionSet getOptions();
+    GroupOptionSet options();
 
     /**
      * Sets the {@link GroupOptionSet} instance.
@@ -23,7 +23,7 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      * @param options the {@link GroupOptionSet} instance to be set, must be non-null
      * @return this {@link ApplicationConfigurer} instance
      */
-    ApplicationConfigurer<A, C> setOptions(GroupOptionSet options);
+    ApplicationConfigurer<A, C> options(GroupOptionSet options);
 
     ApplicationConfigurer<A, C> configure(Runnable1<C> action);
 
@@ -42,7 +42,7 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      * @param factory the {@link EnvironmentFactory} instance, may be null
      * @return this {@link ApplicationConfigurer} instance
      */
-    ApplicationConfigurer<A, C> setEnvironmentFactory(EnvironmentFactory factory);
+    ApplicationConfigurer<A, C> environmentFactory(EnvironmentFactory factory);
 
     /**
      * Sets the environment name, that will be used to create application environment.
@@ -50,9 +50,9 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
      * @param name the string containing environment name, may be null
      * @return this {@link ApplicationConfigurer} instance
      */
-    ApplicationConfigurer<A, C> setEnvironmentName(String name);
+    ApplicationConfigurer<A, C> environmentName(String name);
 
-    ServiceManagerConfigurer getManagerConfigurer();
+    ServiceManagerConfigurer managerConfigurer();
 
     ApplicationConfigurer<A, C> configureManager(Runnable1<ServiceManagerConfigurer> action);
 

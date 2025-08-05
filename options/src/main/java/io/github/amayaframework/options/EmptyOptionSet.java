@@ -49,7 +49,7 @@ public final class EmptyOptionSet implements OptionSet {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<String> getKeys() {
+    public Set<String> keys() {
         return Collections.EMPTY_SET;
     }
 

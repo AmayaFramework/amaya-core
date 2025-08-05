@@ -31,22 +31,22 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
     }
 
     @Override
-    public GroupOptionSet getOptions() {
+    public GroupOptionSet options() {
         return options;
     }
 
     @Override
-    public Environment getEnvironment() {
+    public Environment environment() {
         return environment;
     }
 
     @Override
-    public TaskConfigurer<T> getConfigurer() {
+    public TaskConfigurer<T> configurer() {
         return builder;
     }
 
     @Override
-    public ServiceManager getServiceManager() {
+    public ServiceManager manager() {
         return manager;
     }
 
@@ -97,7 +97,6 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
     }
 
     protected void removeHook() {
-        System.out.println("SHUTDOWN = " + shutdown);
         if (!shutdown && hook != null) {
             Runtime.getRuntime().removeShutdownHook(hook);
             hook = null;
@@ -146,7 +145,6 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
                 }
                 doAppStart(task, cancelToken, EmptyServiceCallback.CALLBACK);
                 if (shutdown) {
-                    System.out.println("Shutdown block");
                     state = ServiceState.DISPOSED;
                 } else if (cancelToken.canceled()) {
                     removeHook();
@@ -190,28 +188,18 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
                     task = builder.build();
                 }
                 doAppStart(task, cancelToken, EmptyServiceCallback.CALLBACK);
-                System.out.println("After doAppStart");
                 if (shutdown) {
-                    System.out.println("Shutdown block");
                     state = ServiceState.DISPOSED;
                 } else if (cancelToken.canceled()) {
-                    System.out.println("CancelBlock: 1");
                     removeHook();
-                    System.out.println("CancelBlock: 2");
                     state = old;
                 } else if (state == ServiceState.STARTING) {
-                    System.out.println("StartingBlock");
                     state = ServiceState.STARTED;
                 }
-                System.out.println("Try End");
             } catch (Throwable e) {
-                System.out.println("Catch block");
                 state = ServiceState.FAILED;
-                System.out.println("Rethrow");
                 throw e;
             }
-            System.out.println("Sync end");
         }
-        System.out.println("Run end");
     }
 }

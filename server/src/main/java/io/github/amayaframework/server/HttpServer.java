@@ -20,7 +20,7 @@ public interface HttpServer extends Server<HttpContext> {
      *
      * @return the {@code ServletContext} if supported, or {@code null} otherwise
      */
-    ServletContext getServletContext();
+    ServletContext servletContext();
 
     /**
      * Binds server to given {@link InetSocketAddress} address with the specified http version.
@@ -46,13 +46,13 @@ public interface HttpServer extends Server<HttpContext> {
      * @return the {@link HttpServerConfig} instance
      */
     @Override
-    HttpServerConfig getConfig();
+    HttpServerConfig config();
 
     // TODO jdoc
     @Override
-    UniRunnable1<HttpContext> getHandler();
+    UniRunnable1<HttpContext> handler();
 
     // TODO jdoc
     @Override
-    void setHandler(UniRunnable1<HttpContext> handler);
+    void handler(UniRunnable1<HttpContext> handler);
 }
