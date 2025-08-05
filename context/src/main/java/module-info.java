@@ -1,8 +1,3 @@
-/**
- * Amaya Context Module
- *
- * @author Roman Bakaldin
- */
 module io.github.amayaframework.context {
     // Imports
     // Servlets

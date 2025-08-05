@@ -1,12 +1,9 @@
-/**
- * Amaya Core Module
- *
- * @author Roman Bakaldin
- */
-open module io.github.amayaframework.core {
+module io.github.amayaframework.core {
     // Imports
+    // Basic
     requires com.github.romanqed.jfunc;
     requires com.github.romanqed.jconv;
+    // Amaya modules
     requires io.github.amayaframework.options;
     requires io.github.amayaframework.environment;
     requires io.github.amayaframework.service;
@@ -14,7 +11,7 @@ open module io.github.amayaframework.core {
     requires io.github.amayaframework.server;
     requires io.github.amayaframework.application;
     requires io.github.amayaframework.web;
-    // Optional imports
+    // Optional modules
     requires static io.github.amayaframework.di;
     requires static io.github.amayaframework.di.stub;
     // Exports

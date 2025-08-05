@@ -1,10 +1,6 @@
-/**
- * Amaya Server Module
- *
- * @author Roman Bakaldin
- */
 module io.github.amayaframework.server {
     // Imports
+    // Base dependencies
     requires com.github.romanqed.jfunc;
     requires com.github.romanqed.juni;
     requires com.github.romanqed.jct;

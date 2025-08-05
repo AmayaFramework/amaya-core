@@ -1,10 +1,5 @@
-/**
- * Amaya Web Application Module
- *
- * @author Roman Bakaldin
- */
 module io.github.amayaframework.web {
-    // Requires
+    // Imports
     // Basic
     requires com.github.romanqed.jfunc;
     requires com.github.romanqed.jconv;
