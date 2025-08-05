@@ -9,7 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractApplicationConfigurer<A extends Application<?>, C extends ApplicationConfigurer<A, C>>
+public abstract class AbstractApplicationConfigurer
+        <A extends Application<?>, C extends ApplicationConfigurer<A, C>, R extends ApplicationConfigurer<A, C>>
         implements ApplicationConfigurer<A, C> {
 
     protected final ServicesConfigurer configurer;
@@ -42,25 +43,27 @@ public abstract class AbstractApplicationConfigurer<A extends Application<?>, C 
     }
 
     @Override
-    public ApplicationConfigurer<A, C> options(GroupOptionSet options) {
+    @SuppressWarnings("unchecked")
+    public R options(GroupOptionSet options) {
         this.options = options;
-        return this;
+        return (R) this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public ApplicationConfigurer<A, C> configure(Runnable1<C> action) {
+    public R configure(Runnable1<C> action) {
         Objects.requireNonNull(action);
         try {
             action.run((C) this);
         } catch (Throwable e) {
             Exceptions.throwAny(e);
         }
-        return this;
+        return (R) this;
     }
 
     @Override
-    public ApplicationConfigurer<A, C> configureOptions(Runnable1<GroupOptionSet> action) {
+    @SuppressWarnings("unchecked")
+    public R configureOptions(Runnable1<GroupOptionSet> action) {
         Objects.requireNonNull(action);
         if (options == null) {
             options = createDefaultOptions();
@@ -70,19 +73,21 @@ public abstract class AbstractApplicationConfigurer<A extends Application<?>, C 
         } catch (Throwable e) {
             Exceptions.throwAny(e);
         }
-        return this;
+        return (R) this;
     }
 
     @Override
-    public ApplicationConfigurer<A, C> withEnvironmentFactory(EnvironmentFactory factory) {
+    @SuppressWarnings("unchecked")
+    public R withEnvironmentFactory(EnvironmentFactory factory) {
         this.environmentFactory = factory;
-        return this;
+        return (R) this;
     }
 
     @Override
-    public ApplicationConfigurer<A, C> environmentName(String name) {
+    @SuppressWarnings("unchecked")
+    public R environmentName(String name) {
         this.environmentName = name;
-        return this;
+        return (R) this;
     }
 
     @Override
@@ -91,23 +96,25 @@ public abstract class AbstractApplicationConfigurer<A extends Application<?>, C 
     }
 
     @Override
-    public ApplicationConfigurer<A, C> configureServices(Runnable1<ServicesConfigurer> action) {
+    @SuppressWarnings("unchecked")
+    public R configureServices(Runnable1<ServicesConfigurer> action) {
         Objects.requireNonNull(action);
         try {
             action.run(configurer);
         } catch (Throwable e) {
             Exceptions.throwAny(e);
         }
-        return this;
+        return (R) this;
     }
 
     @Override
-    public ApplicationConfigurer<A, C> configureApplication(Runnable1<A> action) {
+    @SuppressWarnings("unchecked")
+    public R configureApplication(Runnable1<A> action) {
         Objects.requireNonNull(action);
         if (consumers == null) {
             consumers = new LinkedList<>();
         }
         consumers.add(action);
-        return this;
+        return (R) this;
     }
 }

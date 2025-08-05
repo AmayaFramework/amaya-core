@@ -5,8 +5,10 @@ import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.service.ServiceManager;
 
-public abstract class AbstractApplicationBuilder<A extends Application<?>, C extends ApplicationConfigurer<A, C>>
-        extends AbstractApplicationConfigurer<A, C> implements ApplicationBuilder<A, C> {
+public abstract class AbstractApplicationBuilder
+        <A extends Application<?>, C extends ApplicationConfigurer<A, C>, R extends ApplicationBuilder<A, C>>
+        extends AbstractApplicationConfigurer<A, C, R>
+        implements ApplicationBuilder<A, C> {
 
     protected AbstractApplicationBuilder(ServicesConfigurer configurer) {
         super(configurer);
@@ -16,7 +18,9 @@ public abstract class AbstractApplicationBuilder<A extends Application<?>, C ext
 
     protected abstract ServiceManager createServiceManager(GroupOptionSet options, Environment env) throws Throwable;
 
-    protected abstract A createApplication(GroupOptionSet options, Environment env, ServiceManager manager) throws Throwable;
+    protected abstract A createApplication(GroupOptionSet options,
+                                           Environment env,
+                                           ServiceManager manager) throws Throwable;
 
     protected A doBuild() throws Throwable {
         // Prepare options
