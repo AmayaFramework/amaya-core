@@ -78,10 +78,13 @@ final class ProvidedWebBuilder extends CommonWebBuilder {
     protected WebApplication createApplication(GroupOptionSet options,
                                                Environment environment,
                                                HttpServer server) throws Throwable {
-        // Add options and environment to container
+        // Add inner entities to container
         var builder = ensureBuilder();
         builder.addInstance(GroupOptionSet.class, options);
         builder.addInstance(Environment.class, environment);
+        if (loggerFactory != null) {
+            builder.addInstance(ILoggerFactory.class, loggerFactory);
+        }
         // Build provider
         var provider = builder.build();
         // Build service manager

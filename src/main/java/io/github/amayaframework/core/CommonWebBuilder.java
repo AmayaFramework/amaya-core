@@ -15,7 +15,7 @@ import io.github.amayaframework.web.WebApplication;
 import org.slf4j.ILoggerFactory;
 
 public abstract class CommonWebBuilder extends AbstractWebBuilder {
-    private final ILoggerFactory loggerFactory;
+    protected final ILoggerFactory loggerFactory;
 
     protected CommonWebBuilder(ServicesConfigurer configurer,
                      EnvironmentFactory defaultEnvironmentFactory,
