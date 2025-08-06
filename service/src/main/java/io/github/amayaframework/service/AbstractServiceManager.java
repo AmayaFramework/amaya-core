@@ -56,7 +56,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
      * A callback that is triggered when a managed service fails (transitions to {@code FAILED}).
      * Must not throw.
      */
-    protected volatile Consumer<Throwable> onFailure;
+    protected volatile Runnable1<Throwable> onFailure;
 
     /**
      * A callback that is triggered when a managed service is halted due to stop or cancellation.
@@ -316,12 +316,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     }
 
     @Override
-    public Consumer<Throwable> onFailure() {
+    public Runnable1<Throwable> onFailure() {
         return onFailure;
     }
 
     @Override
-    public void onFailure(Consumer<Throwable> action) {
+    public void onFailure(Runnable1<Throwable> action) {
         this.onFailure = action;
     }
 
@@ -409,7 +409,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     protected void handleFailure(Throwable cause) {
         try {
             if (onFailure != null) {
-                onFailure.accept(cause);
+                onFailure.run(cause);
             }
             doStop(services.keySet(), cancelSource.token());
             state = ServiceState.FAILED;
