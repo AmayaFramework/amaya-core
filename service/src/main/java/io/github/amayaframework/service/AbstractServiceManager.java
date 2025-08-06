@@ -6,7 +6,10 @@ import com.github.romanqed.jct.EmptyCancelToken;
 import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
