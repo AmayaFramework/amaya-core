@@ -31,5 +31,10 @@ public interface Environment extends Closeable {
      */
     String name();
 
+    /**
+     * Indicates whether this {@link Environment} is currently open and usable.
+     *
+     * @return {@code true} if the environment is open; {@code false} otherwise
+     */
     boolean opened();
 }
