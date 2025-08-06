@@ -13,7 +13,6 @@
  *     <li>{@link io.github.amayaframework.http.HttpCode} – predefined HTTP status codes</li>
  *     <li>{@link io.github.amayaframework.http.MimeType} – commonly used MIME types</li>
  * </ul>
- * </p>
  *
  * <p>
  * This module is implementation-agnostic and forms the foundation for
