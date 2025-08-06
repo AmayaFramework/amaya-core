@@ -11,21 +11,33 @@ import java.util.function.Supplier;
 public class OpenOptionSet extends AbstractOptionSet {
 
     /**
-     * Constructs {@link OpenOptionSet} instance with option map, provided by given supplier.
+     * Constructs a new {@link OpenOptionSet} using the provided map supplier.
+     * <p>
+     * This constructor allows for deferred or customized map creation (e.g., concurrent map, pre-filled map, etc.).
+     * The supplier must return a non-null map instance.
+     * </p>
      *
-     * @param supplier the specified option map supplier
+     * @param supplier a supplier that provides the backing option map
+     * @throws NullPointerException if the supplier returns {@code null}
      */
     public OpenOptionSet(Supplier<Map<String, Object>> supplier) {
         super(Objects.requireNonNull(supplier.get()));
     }
 
     /**
-     * Constructs {@link OpenOptionSet} instance with {@link HashMap} as option map.
+     * Constructs a new {@link OpenOptionSet} with an empty {@link HashMap} as the backing storage.
      */
     public OpenOptionSet() {
         super(new HashMap<>());
     }
 
+    /**
+     * Constructs a new {@link OpenOptionSet} using the given map as the backing storage.
+     * Useful when external control over the storage map is required.
+     *
+     * @param map the map instance to use for storing option values
+     * @throws NullPointerException if {@code map} is {@code null}
+     */
     public OpenOptionSet(Map<String, Object> map) {
         super(Objects.requireNonNull(map));
     }

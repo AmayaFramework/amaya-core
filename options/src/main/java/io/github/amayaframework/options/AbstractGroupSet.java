@@ -32,7 +32,7 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
      * group map.
      *
      * @param defName the specified group name, used by default
-     * @param groups    the specified group map instance
+     * @param groups  the specified group map instance
      */
     protected AbstractGroupSet(String defName, Map<String, OptionSet> groups) {
         this.defName = defName;

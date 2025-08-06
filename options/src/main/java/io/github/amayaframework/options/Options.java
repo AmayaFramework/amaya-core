@@ -52,7 +52,7 @@ public final class Options {
      * Creates an empty modifiable instance of {@link GroupOptionSet}
      * with the specified key qualifier delimiter and default group name.
      *
-     * @param def       the specified default group name
+     * @param def the specified default group name
      * @return instance of {@link GroupOptionSet}
      */
     public static GroupOptionSet createGrouped(String def) {

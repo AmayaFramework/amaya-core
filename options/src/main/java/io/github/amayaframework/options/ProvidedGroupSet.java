@@ -17,9 +17,9 @@ public class ProvidedGroupSet extends AbstractGroupSet {
      * Constructs {@link ProvidedGroupSet} instance with given delimiter, default group name, map provided by supplier
      * and group instance provider.
      *
-     * @param defGroup  the specified default group name
-     * @param supplier  supplier providing map instance
-     * @param provider  function providing group instance
+     * @param defGroup the specified default group name
+     * @param supplier supplier providing map instance
+     * @param provider function providing group instance
      */
     public ProvidedGroupSet(String defGroup,
                             Supplier<Map<String, OptionSet>> supplier,
@@ -32,9 +32,9 @@ public class ProvidedGroupSet extends AbstractGroupSet {
      * Constructs {@link ProvidedGroupSet} instance with given delimiter, default group name, map provided by supplier
      * and group instance provider.
      *
-     * @param defGroup  the specified default group name
-     * @param supplier  supplier providing map instance
-     * @param provider  supplier providing group instance
+     * @param defGroup the specified default group name
+     * @param supplier supplier providing map instance
+     * @param provider supplier providing group instance
      */
     public ProvidedGroupSet(String defGroup,
                             Supplier<Map<String, OptionSet>> supplier,
@@ -48,8 +48,8 @@ public class ProvidedGroupSet extends AbstractGroupSet {
      * Constructs {@link ProvidedGroupSet} instance with given delimiter, default group name
      * and group instance provider.
      *
-     * @param defGroup  the specified default group name
-     * @param provider  supplier providing group instance
+     * @param defGroup the specified default group name
+     * @param provider supplier providing group instance
      */
     public ProvidedGroupSet(String defGroup, Supplier<OptionSet> provider) {
         super(Objects.requireNonNull(defGroup), new HashMap<>());
@@ -61,7 +61,7 @@ public class ProvidedGroupSet extends AbstractGroupSet {
      * Constructs {@link ProvidedGroupSet} instance with given delimiter, '' as default group name
      * and group instance provider.
      *
-     * @param provider  supplier providing group instance
+     * @param provider supplier providing group instance
      */
     public ProvidedGroupSet(Supplier<OptionSet> provider) {
         super("", new HashMap<>());

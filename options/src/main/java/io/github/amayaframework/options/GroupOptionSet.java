@@ -66,8 +66,8 @@ public interface GroupOptionSet extends OptionSet {
      * Retrieves a value associated with the specified key within the given group.
      *
      * @param group the group name
-     * @param key the option key
-     * @param <T> the type of requested value
+     * @param key   the option key
+     * @param <T>   the type of requested value
      * @return the value associated with the key, or null if not found
      */
     <T> T get(String group, String key);
@@ -80,8 +80,8 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
-     * @param <T> the type of requested value
+     * @param key   the typed option key
+     * @param <T>   the type of requested value
      * @return the value associated with the key, or null if not found
      * @see #get(String, String)
      */
@@ -94,9 +94,9 @@ public interface GroupOptionSet extends OptionSet {
      * returning the default value if not found.
      *
      * @param group the group name
-     * @param key the option key
-     * @param def the default value to return if the key is not found
-     * @param <T> the type of requested value
+     * @param key   the option key
+     * @param def   the default value to return if the key is not found
+     * @param <T>   the type of requested value
      * @return the value associated with the key, or the default value
      */
     <T> T get(String group, String key, T def);
@@ -110,9 +110,9 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
-     * @param def the default value to return if the key is not found
-     * @param <T> the type of requested value
+     * @param key   the typed option key
+     * @param def   the default value to return if the key is not found
+     * @param <T>   the type of requested value
      * @return the value associated with the key, or the default value
      * @see #get(String, String, Object)
      */
@@ -124,7 +124,7 @@ public interface GroupOptionSet extends OptionSet {
      * Treats the value associated with the given key in the specified group as a key flag.
      *
      * @param group the group name
-     * @param key the option key
+     * @param key   the option key
      * @return true if considered a key, false otherwise
      */
     boolean asKey(String group, String key);
@@ -137,7 +137,7 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
+     * @param key   the typed option key
      * @return true if considered a key, false otherwise
      * @see #asKey(String, String)
      */
@@ -149,7 +149,7 @@ public interface GroupOptionSet extends OptionSet {
      * Treats the value associated with the given key in the specified group as a boolean.
      *
      * @param group the group name
-     * @param key the option key
+     * @param key   the option key
      * @return boolean value interpretation
      */
     boolean asBool(String group, String key);
@@ -162,7 +162,7 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
+     * @param key   the typed option key
      * @return boolean value interpretation
      * @see #asBool(String, String)
      */
@@ -174,7 +174,7 @@ public interface GroupOptionSet extends OptionSet {
      * Checks if the specified key exists within the given group.
      *
      * @param group the group name
-     * @param key the option key
+     * @param key   the option key
      * @return true if the key exists, false otherwise
      */
     boolean contains(String group, String key);
@@ -187,7 +187,7 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
+     * @param key   the typed option key
      * @return true if the key exists, false otherwise
      * @see #contains(String, String)
      */
@@ -199,7 +199,7 @@ public interface GroupOptionSet extends OptionSet {
      * Sets the given value to the specified key within the given group.
      *
      * @param group the group name
-     * @param key the option key
+     * @param key   the option key
      * @param value the value to associate
      * @return the previous value associated with the key, or null
      */
@@ -213,9 +213,9 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
+     * @param key   the typed option key
      * @param value the value to associate
-     * @param <T> the type of the provided value
+     * @param <T>   the type of the provided value
      * @return the previous value associated with the key, or null
      * @see #set(String, String, Object)
      */
@@ -228,7 +228,7 @@ public interface GroupOptionSet extends OptionSet {
      * Removes the specified key from the given group.
      *
      * @param group the group name
-     * @param key the option key
+     * @param key   the option key
      * @return the value previously associated with the key, or null
      */
     Object remove(String group, String key);
@@ -241,8 +241,8 @@ public interface GroupOptionSet extends OptionSet {
      * </p>
      *
      * @param group the group name
-     * @param key the typed option key
-     * @param <T> the type of the removed value
+     * @param key   the typed option key
+     * @param <T>   the type of the removed value
      * @return the value previously associated with the key, or null
      * @see #remove(String, String)
      */
