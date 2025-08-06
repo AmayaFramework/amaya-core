@@ -39,8 +39,21 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
         this.groups = groups;
     }
 
+    /**
+     * Creates a new {@link OptionSet} instance for the given group name.
+     *
+     * @param name the group name
+     * @return newly created {@link OptionSet}
+     */
     protected abstract OptionSet createGroup(String name);
 
+    /**
+     * Ensures the {@link OptionSet} associated with the given group exists,
+     * creating it if necessary.
+     *
+     * @param group the group name
+     * @return the existing or newly created {@link OptionSet} instance
+     */
     protected OptionSet ensure(String group) {
         if (group == null || defName.equals(group)) {
             if (defGroup != null) {
@@ -273,11 +286,19 @@ public abstract class AbstractGroupSet implements GroupOptionSet {
         return "Grouped Options " + groups;
     }
 
+    /**
+     * Iterator that traverses all keys across all {@link OptionSet}s in all groups.
+     */
     protected static final class GroupedIterator implements Iterator<String> {
         private final Iterator<OptionSet> groupIterator;
         private Iterator<String> current;
 
-        protected GroupedIterator(Iterator<OptionSet> groupIterator) {
+        /**
+         * Constructs iterator over provided group sets.
+         *
+         * @param groupIterator the iterator over {@link OptionSet} instances
+         */
+        public GroupedIterator(Iterator<OptionSet> groupIterator) {
             this.groupIterator = groupIterator;
         }
 

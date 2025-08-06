@@ -69,7 +69,6 @@ public class ProvidedGroupSet extends AbstractGroupSet {
         this.provider = k -> provider.get();
     }
 
-
     @Override
     protected OptionSet createGroup(String name) {
         return provider.apply(name);

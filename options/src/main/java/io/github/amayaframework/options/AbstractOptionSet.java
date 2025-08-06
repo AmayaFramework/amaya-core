@@ -18,6 +18,10 @@ public abstract class AbstractOptionSet implements OptionSet {
      * {@link Map} instance containing option values associated with key names.
      */
     protected final Map<String, Object> body;
+
+    /**
+     * Set view of keys contained in this option set.
+     */
     protected final Set<String> keySet;
 
     /**
