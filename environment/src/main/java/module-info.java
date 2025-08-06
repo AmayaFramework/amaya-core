@@ -9,7 +9,6 @@
  * <ul>
  *     <li>{@link io.github.amayaframework.options.OptionSet} for environment configuration</li>
  * </ul>
- * </p>
  */
 module amayaframework.environment {
     // Imports
