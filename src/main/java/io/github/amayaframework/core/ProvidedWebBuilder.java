@@ -10,6 +10,7 @@ import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.web.WebApplication;
 import io.github.amayaframework.web.WebApplicationBuilder;
+import io.github.amayaframework.web.WebOptions;
 import org.slf4j.ILoggerFactory;
 
 import java.util.LinkedList;
@@ -89,7 +90,7 @@ final class ProvidedWebBuilder extends CommonWebBuilder {
         var provider = builder.build();
         // Build service manager
         servicesBuilder.provide(provider);
-        var managerOptions = options.getGroup("TODO: Manager options");
+        var managerOptions = options.getGroup(WebOptions.MANAGER_GROUP);
         var manager = servicesBuilder.build(managerOptions, environment);
         // Fire delayed provider consumers
         if (providerConsumers != null) {

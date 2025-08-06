@@ -1,5 +1,6 @@
 package io.github.amayaframework.environment;
 
+import java.io.Closeable;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
 
@@ -7,7 +8,7 @@ import java.nio.file.Path;
  * An interface describing an abstract environment mounted on a specific file system.
  * It can be both virtual and real, or combined.
  */
-public interface Environment extends AutoCloseable {
+public interface Environment extends Closeable {
 
     /**
      * Returns {@link Path} instance containing real or virtual path to environment root.

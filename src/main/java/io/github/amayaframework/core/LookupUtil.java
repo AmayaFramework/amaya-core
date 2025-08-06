@@ -1,14 +1,20 @@
 package io.github.amayaframework.core;
 
-final class ReflectUtil {
+final class LookupUtil {
+    // Amaya DI
     private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
     private static final String AMAYA_SERVICE_PROVIDER = "io.github.amayaframework.di.core.ServiceProvider";
+    // Amaya DI ASM
     private static final String DI_ASM_MODULE = "io.github.amayaframework.di.asm";
     private static final String DI_ASM_FACTORY = "io.github.amayaframework.di.asm.AsmStubFactory";
+    // Amaya DI Reflect
     private static final String DI_REFLECT_MODULE = "io.github.amayaframework.di.reflect";
     private static final String DI_REFLECT_FACTORY = "io.github.amayaframework.di.reflect.ReflectStubFactory";
+    // SLF4J
+    private static final String SLF4J_MODULE = "org.slf4j";
+    private static final String SLF4J_LOGGER = "org.slf4j.Logger";
 
-    private ReflectUtil() {
+    private LookupUtil() {
     }
 
     static boolean isModuleLoaded(String name) {
@@ -46,29 +52,19 @@ final class ReflectUtil {
         return loadClass(type);
     }
 
-    static boolean isDILoaded() {
+    static boolean isDiLoaded() {
         return isLibraryLoaded(AMAYA_DI_MODULE, AMAYA_SERVICE_PROVIDER);
     }
 
-    static Class<?> lookupStubFactoryType() {
+    static boolean isSlf4jLoaded() {
+        return isLibraryLoaded(SLF4J_MODULE, SLF4J_LOGGER);
+    }
+
+    static Class<?> lookupStubFactory() {
         var clazz = tryLoadLibrary(DI_ASM_MODULE, DI_ASM_FACTORY);
         if (clazz != null) {
             return clazz;
         }
         return tryLoadLibrary(DI_REFLECT_MODULE, DI_REFLECT_FACTORY);
-    }
-
-    static Object lookupStubFactory() {
-        var clazz = lookupStubFactoryType();
-        if (clazz == null) {
-            throw new UnsupportedOperationException("No amaya di stub factory modules found");
-        }
-        try {
-            return clazz.getConstructor().newInstance((Object[]) null);
-        } catch (Error | RuntimeException e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -2,35 +2,33 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.application.ServiceManagerFactory;
 import io.github.amayaframework.options.OptionSet;
+import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceManager;
 import org.slf4j.ILoggerFactory;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
-public final class PlainManagerFactory implements ServiceManagerFactory {
+final class PlainManagerFactory implements ServiceManagerFactory {
+    private final Supplier<Map<Service, ?>> mapSupplier;
     private final ILoggerFactory loggerFactory;
 
-    public PlainManagerFactory(ILoggerFactory loggerFactory) {
+    PlainManagerFactory(Supplier<Map<Service, ?>> mapSupplier, ILoggerFactory loggerFactory) {
+        this.mapSupplier = mapSupplier;
         this.loggerFactory = loggerFactory;
     }
 
     @Override
     public ServiceManager create(OptionSet options) {
-        // TODO HashMap <-> ConcurrentHashMap
-        if (loggerFactory == null) {
-            return new PlainServiceManager(HashMap::new);
-        }
-        var logger = loggerFactory.getLogger("TODO: ServiceManager");
-        return new LoggingServiceManager(logger, HashMap::new);
+        return create();
     }
 
     @Override
     public ServiceManager create() {
-        // TODO Do not touch: HashMap by default
         if (loggerFactory == null) {
-            return new PlainServiceManager(HashMap::new);
+            return new PlainServiceManager(mapSupplier);
         }
-        var logger = loggerFactory.getLogger("TODO: ServiceManager");
-        return new LoggingServiceManager(logger, HashMap::new);
+        var logger = loggerFactory.getLogger(LogNames.SERVICE_MANAGER);
+        return new LoggingServiceManager(logger, mapSupplier);
     }
 }

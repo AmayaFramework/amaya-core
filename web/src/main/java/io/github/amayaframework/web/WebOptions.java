@@ -12,6 +12,9 @@ public final class WebOptions {
      * The name of server options group.
      */
     public static final String SERVER_GROUP = "server";
+
+    public static final String MANAGER_GROUP = "manager";
+
     /**
      * The default web application environment name.
      */

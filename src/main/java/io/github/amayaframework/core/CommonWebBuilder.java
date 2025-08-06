@@ -14,10 +14,10 @@ import io.github.amayaframework.web.AbstractWebBuilder;
 import io.github.amayaframework.web.WebApplication;
 import org.slf4j.ILoggerFactory;
 
-public abstract class CommonWebBuilder extends AbstractWebBuilder {
+abstract class CommonWebBuilder extends AbstractWebBuilder {
     protected final ILoggerFactory loggerFactory;
 
-    protected CommonWebBuilder(ServicesConfigurer configurer,
+    CommonWebBuilder(ServicesConfigurer configurer,
                      EnvironmentFactory defaultEnvironmentFactory,
                      ILoggerFactory loggerFactory) {
         super(configurer, defaultEnvironmentFactory);
@@ -35,7 +35,7 @@ public abstract class CommonWebBuilder extends AbstractWebBuilder {
                                                ServiceProvider provider,
                                                HttpServer server) {
         if (loggerFactory != null) {
-            var logger = loggerFactory.getLogger("WebApplication");
+            var logger = loggerFactory.getLogger(LogNames.WEB_APPLICATION);
             return new LoggingApplication(options, env, manager, TaskBuilders.linked(), server, provider, logger);
         }
         return new PlainApplication(options, env, manager, TaskBuilders.linked(), server, provider);

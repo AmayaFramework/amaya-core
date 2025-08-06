@@ -1,59 +1,92 @@
-//package io.github.amayaframework.core;
-//
-//import io.github.amayaframework.di.ProviderBuilders;
-//import io.github.amayaframework.di.ServiceProviderBuilder;
-//import io.github.amayaframework.di.stub.StubFactory;
-//import io.github.amayaframework.web.WebBuilderFactory;
-//
-//import java.util.function.Supplier;
-//
-///**
-// * A class containing methods for creating {@link WebBuilderFactory} instances.
-// */
-//public final class WebBuilderFactories {
-//    private WebBuilderFactories() {
-//    }
-//
-//    /**
-//     * Creates standalone {@link WebBuilderFactory} instance (without integration with amaya di module).
-//     *
-//     * @return the {@link WebBuilderFactory} instance
-//     */
-//    public static WebBuilderFactory createStandalone() {
-//        return new StandaloneBuilderFactory();
-//    }
-//
-//    /**
-//     * Creates provided {@link WebBuilderFactory} instance (with integration with amaya di module)
-//     * with given {@link ServiceProviderBuilder} supplier.
-//     *
-//     * @param supplier the specified supplier of {@link ServiceProviderBuilder}
-//     * @return the {@link WebBuilderFactory} instance
-//     */
-//    public static WebBuilderFactory createProvided(Supplier<ServiceProviderBuilder> supplier) {
-//        return new ProvidedBuilderFactory(supplier);
-//    }
-//
-//    /**
-//     * Creates provided {@link WebBuilderFactory} instance (with integration with amaya di module).
-//     *
-//     * @return the {@link WebBuilderFactory} instance
-//     */
-//    public static WebBuilderFactory createProvided() {
-//        var factory = (StubFactory) ReflectUtil.lookupStubFactory();
-//        return new ProvidedBuilderFactory(() -> ProviderBuilders.createChecked(factory));
-//    }
-//
-//    /**
-//     * Create a {@link WebBuilderFactory} instance.
-//     * Dynamically determines if amaya di module loaded and use appropriate factory.
-//     *
-//     * @return the {@link WebBuilderFactory} instance
-//     */
-//    public static WebBuilderFactory create() {
-//        if (ReflectUtil.isDILoaded()) {
-//            return createProvided();
-//        }
-//        return createStandalone();
-//    }
-//}
+package io.github.amayaframework.core;
+
+import com.github.romanqed.jfunc.Exceptions;
+import io.github.amayaframework.di.BuilderChecks;
+import io.github.amayaframework.di.ProviderBuilders;
+import io.github.amayaframework.di.ScopedProviderBuilder;
+import io.github.amayaframework.di.stub.StubFactory;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
+
+public final class WebBuilderFactories {
+    private static final boolean LOG_LOADED = LookupUtil.isSlf4jLoaded();
+    private static final boolean DI_LOADED = LookupUtil.isDiLoaded();
+
+    private WebBuilderFactories() {
+    }
+
+    private static StubFactory loadStubFactory() {
+        if (!DI_LOADED) {
+            return null;
+        }
+        var clazz = LookupUtil.lookupStubFactory();
+        if (clazz == null) {
+            return null;
+        }
+        try {
+            return (StubFactory) clazz.getConstructor().newInstance((Object[]) null);
+        } catch (Throwable e) {
+            Exceptions.throwAny(e);
+            // Unreachable code to suppress javac error
+            return null;
+        }
+    }
+
+    public static WebBuilderFactory createPlain(LoggerFactorySupplier supplier) {
+        return new PlainWebBuilderFactory(HashMap::new, supplier.get());
+    }
+
+    public static WebBuilderFactory createPlain() {
+        if (LOG_LOADED) {
+            return new PlainWebBuilderFactory(HashMap::new, LoggerFactory.getILoggerFactory());
+        }
+        return new PlainWebBuilderFactory(HashMap::new, null);
+    }
+
+    public static WebBuilderFactory createProvided(Supplier<ScopedProviderBuilder> supplier,
+                                                   LoggerFactorySupplier loggerFactorySupplier) {
+        return new ProvidedWebBuilderFactory(HashMap::new, supplier, loggerFactorySupplier.get());
+    }
+
+    public static WebBuilderFactory createProvided(Supplier<ScopedProviderBuilder> supplier) {
+        if (LOG_LOADED) {
+            return new ProvidedWebBuilderFactory(HashMap::new, supplier, LoggerFactory.getILoggerFactory());
+        }
+        return new ProvidedWebBuilderFactory(HashMap::new, supplier, null);
+    }
+
+    public static WebBuilderFactory createProvided(boolean enableChecks, LoggerFactorySupplier loggerFactorySupplier) {
+        var stubFactory = loadStubFactory();
+        if (enableChecks) {
+            return createProvided(
+                    () -> ProviderBuilders.createScoped(stubFactory, BuilderChecks.VALIDATE_ALL),
+                    loggerFactorySupplier
+            );
+        }
+        return createProvided(() -> ProviderBuilders.createScoped(stubFactory), loggerFactorySupplier);
+    }
+
+    public static WebBuilderFactory createProvided(boolean enableChecks) {
+        var stubFactory = loadStubFactory();
+        if (enableChecks) {
+            return createProvided(() -> ProviderBuilders.createScoped(stubFactory, BuilderChecks.VALIDATE_ALL));
+        }
+        return createProvided(() -> ProviderBuilders.createScoped(stubFactory));
+    }
+
+    public static WebBuilderFactory create(LoggerFactorySupplier supplier) {
+        if (DI_LOADED) {
+            return createProvided(true, supplier);
+        }
+        return createPlain(supplier);
+    }
+
+    public static WebBuilderFactory create() {
+        if (DI_LOADED) {
+            return createProvided(true);
+        }
+        return createPlain();
+    }
+}

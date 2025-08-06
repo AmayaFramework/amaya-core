@@ -7,9 +7,9 @@ import io.github.amayaframework.service.Service;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-public final class PlainServicesBuilder extends AbstractServicesBuilder {
+final class PlainServicesBuilder extends AbstractServicesBuilder {
 
-    public PlainServicesBuilder(ServiceManagerFactory defaultFactory) {
+    PlainServicesBuilder(ServiceManagerFactory defaultFactory) {
         super(defaultFactory);
     }
 
