@@ -26,6 +26,12 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.18.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.18.0'
+    testImplementation project(':options')
+    testImplementation project(':environment')
+    testImplementation project(':service')
+    testImplementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
     // JFunc
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.2.0'
     // Middlewares
@@ -33,7 +39,7 @@ dependencies {
     // Amaya modules
     compileOnly project(':options')
     compileOnly project(':environment')
-    implementation project(':service') // TODO -> compileOnly
+    compileOnly project(':service')
     // DI
     compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
 }
