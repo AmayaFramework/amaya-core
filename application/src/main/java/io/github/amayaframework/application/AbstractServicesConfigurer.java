@@ -72,7 +72,9 @@ public abstract class AbstractServicesConfigurer implements ServicesConfigurer {
      *
      * @param type the class type of the service(s) to remove
      */
-    protected abstract void removeService(Type type);
+    protected void removeService(Type type) {
+        services.removeIf(service -> service.getClass() == type);
+    }
 
     @Override
     public ServicesConfigurer add(Service service) {
@@ -90,7 +92,6 @@ public abstract class AbstractServicesConfigurer implements ServicesConfigurer {
     public ServicesConfigurer remove(Type type) {
         if (services != null) {
             removeService(type);
-            services.removeIf(service -> service.getClass() == type);
         }
         return this;
     }
