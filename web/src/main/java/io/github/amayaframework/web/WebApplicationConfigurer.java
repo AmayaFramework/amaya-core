@@ -7,7 +7,11 @@ import io.github.amayaframework.di.ScopedProviderBuilder;
 import io.github.amayaframework.di.core.ServiceProvider;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
+import io.github.amayaframework.server.HttpServerFactory;
 
+/**
+ * Configurer interface for building and customizing a {@link WebApplication}.
+ */
 public interface WebApplicationConfigurer extends ApplicationConfigurer<WebApplication, WebApplicationConfigurer> {
 
     @Override
@@ -36,4 +40,12 @@ public interface WebApplicationConfigurer extends ApplicationConfigurer<WebAppli
 
     @Override
     WebApplicationConfigurer configureApplication(Runnable1<WebApplication> action);
+
+    /**
+     * Sets the {@link HttpServerFactory} used to create the server instance for the web application.
+     *
+     * @param factory the server factory to use, must not be null
+     * @return this configurer instance for chaining
+     */
+    WebApplicationConfigurer withServerFactory(HttpServerFactory factory);
 }

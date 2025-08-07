@@ -9,7 +9,13 @@ import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
 import io.github.amayaframework.server.HttpServerFactory;
 
-public interface WebApplicationBuilder extends ApplicationBuilder<WebApplication, WebApplicationConfigurer> {
+/**
+ * Builder interface for creating a {@link WebApplication} instance,
+ * extending both {@link ApplicationBuilder} and {@link WebApplicationConfigurer}.
+ */
+public interface WebApplicationBuilder extends
+        ApplicationBuilder<WebApplication, WebApplicationConfigurer>,
+        WebApplicationConfigurer {
 
     @Override
     WebApplicationBuilder options(GroupOptionSet options);
@@ -38,8 +44,14 @@ public interface WebApplicationBuilder extends ApplicationBuilder<WebApplication
     @Override
     WebApplicationBuilder configureApplication(Runnable1<WebApplication> action);
 
+    @Override
     WebApplicationBuilder withServerFactory(HttpServerFactory factory);
 
+    /**
+     * Builds and returns the configured {@link WebApplication} instance.
+     *
+     * @return the built web application instance
+     */
     @Override
     WebApplication build();
 }
