@@ -23,7 +23,6 @@ public interface WebApplication extends Application<HttpContext> {
      * This provides low-level access to the servlet environment, if available.
      * If the implementation does not support a {@code ServletContext}, this method
      * returns {@code null}.
-     * <p>
      *
      * @return the {@code ServletContext} instance if supported, or {@code null} otherwise
      */
