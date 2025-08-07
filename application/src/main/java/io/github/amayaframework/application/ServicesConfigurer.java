@@ -42,7 +42,7 @@ public interface ServicesConfigurer extends Resettable {
      * Registers a service instance for a specific type,
      * optionally adding it to the dependency injection container.
      *
-     * @param type the service type, must be non-null
+     * @param type    the service type, must be non-null
      * @param service the service instance, must be non-null
      * @return this services configurer for chaining
      */
@@ -63,7 +63,7 @@ public interface ServicesConfigurer extends Resettable {
      * Throws an exception immediately if the DI module is not loaded.
      * </p>
      *
-     * @param type the service type, must be non-null
+     * @param type           the service type, must be non-null
      * @param implementation the implementation class, must be non-null
      * @return this services configurer for chaining
      * @throws IllegalStateException if DI module is not loaded
@@ -77,8 +77,8 @@ public interface ServicesConfigurer extends Resettable {
      * Throws an exception immediately if the DI module is not loaded.
      * </p>
      *
-     * @param <T> the service type
-     * @param type the service type class, must be non-null
+     * @param <T>            the service type
+     * @param type           the service type class, must be non-null
      * @param implementation the implementation class extending {@link Service}, must be non-null
      * @return this services configurer for chaining
      * @throws IllegalStateException if DI module is not loaded

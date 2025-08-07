@@ -9,22 +9,67 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A base implementation of the {@link ApplicationConfigurer} interface providing
+ * a fluent API for configuring application options, environment, services,
+ * and custom actions to be applied before application start.
+ *
+ * <p>This class is not thread-safe and is intended to be used in a single-threaded
+ * context during application configuration.</p>
+ *
+ * @param <A> the type of the application being configured
+ * @param <C> the type of the configurer interface used for chaining
+ * @param <R> the actual return type used for fluent method chaining
+ */
 public abstract class AbstractApplicationConfigurer
         <A extends Application<?>, C extends ApplicationConfigurer<A, C>, R extends ApplicationConfigurer<A, C>>
         implements ApplicationConfigurer<A, C> {
 
+    /**
+     * The internal services configurer used to define service bindings.
+     */
     protected final ServicesConfigurer configurer;
+
+    /**
+     * The option set used to configure application settings.
+     */
     protected GroupOptionSet options;
+
+    /**
+     * The factory used to create application environments.
+     */
     protected EnvironmentFactory environmentFactory;
+
+    /**
+     * The name of the application environment.
+     */
     protected String environmentName;
+
+    /**
+     * The list of actions to be executed against the application before starting.
+     */
     protected List<Runnable1<A>> consumers;
 
+    /**
+     * Constructs a new configurer with the provided services configurer.
+     *
+     * @param configurer the services configurer to be used for this configuration
+     */
     protected AbstractApplicationConfigurer(ServicesConfigurer configurer) {
         this.configurer = configurer;
     }
 
+    /**
+     * Creates a new default {@link GroupOptionSet} used when none was provided explicitly.
+     *
+     * @return a default option set instance
+     */
     protected abstract GroupOptionSet createDefaultOptions();
 
+    /**
+     * Resets the entire configuration to its initial state.
+     * This includes options, environment, and custom application consumers.
+     */
     @Override
     public void reset() {
         configurer.reset();
