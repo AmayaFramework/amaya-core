@@ -35,7 +35,7 @@ public interface ServiceManager extends Service {
      * If the service is already present, this call has no effect.
      *
      * @param service the service to add, may be {@code null}
-     * @throws IllegalStateException if the manager is disposed
+     * @throws IllegalStateException    if the manager is disposed
      * @throws IllegalArgumentException if the service is not stopped
      */
     void add(Service service);
@@ -50,7 +50,7 @@ public interface ServiceManager extends Service {
      * Already present services are silently skipped.
      *
      * @param iterable iterable collection of services to add, may be {@code null}
-     * @throws IllegalStateException if the manager is running or disposed
+     * @throws IllegalStateException    if the manager is running or disposed
      * @throws IllegalArgumentException if any service is not stopped
      */
     void add(Iterable<Service> iterable);
