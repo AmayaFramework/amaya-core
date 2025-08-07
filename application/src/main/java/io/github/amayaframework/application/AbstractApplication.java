@@ -113,7 +113,7 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
      *
      * @param throwable the exception that caused the failure
      */
-    protected abstract void onFailure(Throwable throwable);
+    protected abstract void onFailure(Throwable throwable) throws Throwable;
 
     /**
      * Called when the service manager halts execution, typically due to cancellation.
