@@ -35,7 +35,7 @@ dependencies {
     compileOnly project(':environment')
     implementation project(':service') // TODO -> compileOnly
     // DI
-    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '3.0.5'
+    compileOnly group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
 }
 
 test {
