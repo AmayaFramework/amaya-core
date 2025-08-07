@@ -23,7 +23,6 @@ import java.util.function.Consumer;
  *   <li>Disposed services cannot be added.</li>
  *   <li>After removal, service callbacks are reset to defaults.</li>
  * </ul>
- * </p>
  */
 public interface ServiceManager extends Service {
 
