@@ -22,9 +22,9 @@ public interface ServiceManager extends Service {
     /**
      * Adds multiple {@link Service} instances to be managed.
      *
-     * @param services iterable collection of services to add
+     * @param iterable iterable collection of services to add
      */
-    void add(Iterable<Service> services);
+    void add(Iterable<Service> iterable);
 
     /**
      * Removes a single {@link Service} from management.
@@ -36,9 +36,9 @@ public interface ServiceManager extends Service {
     /**
      * Removes multiple {@link Service} instances from management.
      *
-     * @param services iterable collection of services to remove
+     * @param iterable iterable collection of services to remove
      */
-    void remove(Iterable<Service> services);
+    void remove(Iterable<Service> iterable);
 
     /**
      * Removes all managed services, returning the removed services as a collection.
@@ -81,4 +81,19 @@ public interface ServiceManager extends Service {
      * @param action the halt handler consumer
      */
     void onHalt(Consumer<Throwable> action);
+
+    @Override
+    default void start(ServiceCallback callback) throws Throwable {
+        start(null, callback);
+    }
+
+    @Override
+    default void start() throws Throwable {
+        start(null, EmptyServiceCallback.CALLBACK);
+    }
+
+    @Override
+    default void stop() throws Throwable {
+        stop(null);
+    }
 }

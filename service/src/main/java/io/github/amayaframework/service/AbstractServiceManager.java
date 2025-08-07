@@ -67,7 +67,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     /**
      * Constructs a new service manager with given synchronization primitives and callbacks.
      *
-     * @param lifecycleLock      lock object used for lifecycle synchronization
+     * @param lifecycleLock      lock an object used for lifecycle synchronization
      * @param cancelSource       cancellation source controlling cancellation tokens
      * @param supplier           supplier for the map of managed services and their callbacks
      * @param onFailureException consumer for exceptions thrown during failure handling
@@ -81,21 +81,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         this.services = null;
         this.onFailureException = onFailureException;
         this.callbackBase = new ManagedCallbackBase(this);
-    }
-
-    @Override
-    public void start(ServiceCallback callback) throws Throwable {
-        start(null, callback);
-    }
-
-    @Override
-    public void start() throws Throwable {
-        start(null, EmptyServiceCallback.CALLBACK);
-    }
-
-    @Override
-    public void stop() throws Throwable {
-        stop(null);
     }
 
     /**
@@ -124,15 +109,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
      */
     protected abstract void doDispose(Service service);
 
-    /**
-     * Ensures the internal map of services is initialized.
-     */
-    protected void ensureServices() {
-        if (services == null) {
-            services = supplier.get();
-        }
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public Collection<Service> services() {
@@ -143,28 +119,6 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         return Collections.unmodifiableCollection(ret.keySet());
     }
 
-    /**
-     * Handles logic when adding a new service,
-     * e.g. starting the service if manager is started and service is stopped.
-     *
-     * @param service  the added service
-     * @param callback associated service callback
-     */
-    protected void handleAddingService(Service service, ManagedServiceCallback callback) {
-        var serviceState = service.state();
-        if (serviceState == ServiceState.UNMANAGED) {
-            return;
-        }
-        if (serviceState.isStopped() && state == ServiceState.STARTED) {
-            try {
-                doStart(service, cancelSource.token(), callback);
-            } catch (Throwable e) {
-                callback.reset();
-                throw new IllegalStateException("Service startup failed", e);
-            }
-        }
-    }
-
     @Override
     public void add(Service service) {
         if (state == ServiceState.DISPOSED) {
@@ -173,65 +127,77 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         if (service == null) {
             return;
         }
-        if (service.state() == ServiceState.DISPOSED) {
+        var serviceState = service.state();
+        if (serviceState == ServiceState.DISPOSED) {
             throw new IllegalArgumentException("Cannot add disposed service");
         }
         synchronized (lifecycleLock) {
-            ensureServices();
-            if (services.containsKey(service)) {
+            if (services != null && services.containsKey(service)) {
                 return;
             }
+            if (serviceState != ServiceState.UNMANAGED && !serviceState.isStopped()) {
+                throw new IllegalStateException("Cannot add not stopped service");
+            }
             var callback = new ManagedServiceCallback(callbackBase);
-            handleAddingService(service, callback);
+            if (state == ServiceState.STARTED) {
+                try {
+                    doStart(service, cancelSource.token(), callback);
+                } catch (Throwable e) {
+                    callback.reset();
+                    throw new IllegalStateException("Service startup failed", e);
+                }
+            }
+            if (services == null) {
+                services = supplier.get();
+            }
             services.put(service, callback);
         }
     }
 
     @Override
-    public void add(Iterable<Service> services) {
+    public void add(Iterable<Service> iterable) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Manager is disposed");
+            throw new IllegalArgumentException("Service manager is disposed");
         }
-        if (services == null) {
+        if (!state.isStopped()) {
+            throw new IllegalStateException("Cannot add multiple services when manager is started");
+        }
+        if (iterable == null) {
             return;
         }
-        var iterator = services.iterator();
+        var iterator = iterable.iterator();
         if (!iterator.hasNext()) {
             return;
         }
         synchronized (lifecycleLock) {
-            ensureServices();
+            if (state == ServiceState.STARTED) {
+                throw new IllegalStateException("Cannot add multiple services when manager is started");
+            }
+            // Do pre-check
             while (iterator.hasNext()) {
                 var service = iterator.next();
-                if (service.state() == ServiceState.DISPOSED) {
-                    throw new IllegalArgumentException("Cannot add disposed service");
-                }
-                if (this.services.containsKey(service)) {
+                if (service == null) {
                     continue;
                 }
-                var callback = new ManagedServiceCallback(callbackBase);
-                handleAddingService(service, callback);
-                this.services.put(service, callback);
+                var serviceState = service.state();
+                if (serviceState == ServiceState.DISPOSED) {
+                    throw new IllegalArgumentException("Cannot add disposed service");
+                }
+                if (services != null && services.containsKey(service)) {
+                    continue;
+                }
+                if (serviceState != ServiceState.UNMANAGED && !serviceState.isStopped()) {
+                    throw new IllegalStateException("Cannot add not stopped service");
+                }
             }
-        }
-    }
-
-    /**
-     * Handles logic after removing a service,
-     * e.g. stopping the service if it was started.
-     *
-     * @param service the removed service
-     */
-    protected void handleRemovedService(Service service) {
-        var serviceState = service.state();
-        if (serviceState == ServiceState.UNMANAGED) {
-            return;
-        }
-        if (serviceState == ServiceState.STARTED) {
-            try {
-                doStop(service, cancelSource.token());
-            } catch (Throwable e) {
-                throw new IllegalStateException("Service stopping failed", e);
+            if (services == null) {
+                services = supplier.get();
+            }
+            for (var service : iterable) {
+                if (service == null || services.containsKey(service)) {
+                    continue;
+                }
+                services.put(service, new ManagedServiceCallback(callbackBase));
             }
         }
     }
@@ -239,9 +205,9 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     public void remove(Service service) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Manager is disposed");
+            throw new IllegalArgumentException("Service manager is disposed");
         }
-        if (service == null || services == null) {
+        if (service == null) {
             return;
         }
         synchronized (lifecycleLock) {
@@ -251,25 +217,37 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             var callback = services.remove(service);
             if (callback != null) {
                 callback.reset();
-                handleRemovedService(service);
+                if (service.state() == ServiceState.STARTED) {
+                    try {
+                        doStop(service, cancelSource.token());
+                    } catch (Throwable e) {
+                        throw new IllegalStateException("Service stopping failed", e);
+                    }
+                }
             }
         }
     }
 
     @Override
-    public void remove(Iterable<Service> services) {
+    public void remove(Iterable<Service> iterable) {
         if (state == ServiceState.DISPOSED) {
             throw new IllegalArgumentException("Manager is disposed");
         }
-        if (services == null || this.services == null) {
+        if (!state.isStopped()) {
+            throw new IllegalStateException("Cannot remove multiple services when manager is started");
+        }
+        if (iterable == null) {
             return;
         }
-        var iterator = services.iterator();
+        var iterator = iterable.iterator();
         if (!iterator.hasNext()) {
             return;
         }
         synchronized (lifecycleLock) {
-            if (this.services == null) {
+            if (state == ServiceState.STARTED) {
+                throw new IllegalStateException("Cannot remove multiple services when manager is started");
+            }
+            if (services == null) {
                 return;
             }
             while (iterator.hasNext()) {
@@ -277,10 +255,9 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                 if (service == null) {
                     continue;
                 }
-                var callback = this.services.remove(service);
+                var callback = services.remove(service);
                 if (callback != null) {
                     callback.reset();
-                    handleRemovedService(service);
                 }
             }
         }
@@ -290,12 +267,15 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @SuppressWarnings("unchecked")
     public Collection<Service> removeAll() {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Manager is disposed");
+            throw new IllegalArgumentException("Service manager is disposed");
         }
-        if (services == null) {
-            return Collections.EMPTY_LIST;
+        if (!state.isStopped()) {
+            throw new IllegalStateException("Cannot remove all services when manager is started");
         }
         synchronized (lifecycleLock) {
+            if (state == ServiceState.STARTED) {
+                throw new IllegalStateException("Cannot remove all services when manager is started");
+            }
             if (services == null) {
                 return Collections.EMPTY_LIST;
             }
@@ -304,14 +284,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
             }
             var ret = services.keySet();
             services = null;
-            try {
-                if (state == ServiceState.STARTED) {
-                    doStop(ret, cancelSource.token());
-                }
-            } catch (Throwable e) {
-                throw new IllegalStateException("Services stopping failed", e);
-            }
-            return Collections.unmodifiableCollection(ret);
+            return ret;
         }
     }
 
@@ -622,7 +595,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
         /**
          * Disposes the current base and replaces it with a no-op implementation.
          * <p>
-         * After reset, all subsequent operations on this instance become inert.
+         * After reset, all further operations on this instance become inert.
          */
         public void reset() {
             this.base = EmptyCallbackBase.CALLBACK_BASE;
