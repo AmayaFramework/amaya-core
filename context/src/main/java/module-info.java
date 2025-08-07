@@ -21,7 +21,7 @@
 module amayaframework.context {
     // Imports
     // Servlets
-    requires jakarta.servlet;
+    requires transitive jakarta.servlet;
     // Amaya modules
     requires transitive amayaframework.http;
     // Exports
