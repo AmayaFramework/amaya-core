@@ -6,14 +6,24 @@ import jakarta.servlet.ServletContext;
 import java.net.InetSocketAddress;
 
 /**
- * An interface describing the http server config.
+ * An interface describing the configuration options for an HTTP server.
+ * <p>
+ * Extends {@link ServerConfig} by adding HTTP-specific configuration properties such as
+ * HTTP protocol version, MIME handling, and path tokenization.
+ * <p>
+ * Implementations are expected to allow configuration changes only when the server is stopped.
+ * Attempts to modify configuration during runtime should throw {@link IllegalStateException}.
+ * <p>
+ * Configuration changes are reflected on the running server if allowed.
+ * <p>
+ * Provides access to the underlying {@link jakarta.servlet.ServletContext} if available.
  */
 public interface HttpServerConfig extends ServerConfig {
 
     /**
      * Returns the {@link ServletContext} associated with this server.
      * <p>
-     * If the implementation does not support a {@code ServletContext}, this method will return {@code null}.
+     * If the implementation does not support a {@code ServletContext}, this method returns {@code null}.
      * Otherwise, the returned context is guaranteed to be fully initialized and ready for use.
      *
      * @return the {@code ServletContext} if supported, or {@code null} otherwise
@@ -21,40 +31,49 @@ public interface HttpServerConfig extends ServerConfig {
     ServletContext servletContext();
 
     /**
-     * Gets the http version used. The default value depends on the implementation.
+     * Gets the HTTP protocol version used by the server.
+     * <p>
+     * The default value depends on the implementation.
      *
-     * @return the {@link HttpVersion} instance
+     * @return the current {@link HttpVersion} in use
      */
     HttpVersion httpVersion();
 
     /**
-     * Sets the http version used by server.
+     * Sets the HTTP protocol version for the server.
+     * <p>
+     * This operation can be performed at any time, but the change
+     * will only take effect after the server is restarted.
      *
-     * @param version the specified {@link HttpVersion} instance to be set, must be non-null
-     * @throws IllegalStateException if server started
+     * @param version the {@link HttpVersion} to set; must be non-null
      */
     void httpVersion(HttpVersion version);
 
     /**
-     * Adds given address to listened set and starts listen it with specified http protocol.
+     * Adds the specified address to the set of addresses the server listens to,
+     * using the provided HTTP protocol version.
      *
-     * @param address the specified address to be listened, must be non-null
-     * @param version the specified http version, must be non-null
+     * @param address the {@link InetSocketAddress} to listen on; must be non-null
+     * @param version the {@link HttpVersion} to use for this address; must be non-null
      */
     void addAddress(InetSocketAddress address, HttpVersion version);
 
     /**
-     * Gets the {@link MimeFormatter} instance used by server. The default value depends on the implementation.
+     * Gets the {@link MimeFormatter} instance used by the server for formatting MIME types.
+     * <p>
+     * The default formatter depends on the implementation.
      *
-     * @return the {@link MimeFormatter} instance
+     * @return the current {@link MimeFormatter} instance
      */
     MimeFormatter mimeFormatter();
 
     /**
-     * Sets the {@link MimeFormatter} instance used by server.
+     * Sets the {@link MimeFormatter} instance used by the server.
+     * <p>
+     * This operation can be performed at any time, but the change
+     * will only take effect after the server is restarted.
      *
-     * @param formatter the {@link MimeFormatter} instance, must be non-null
-     * @throws IllegalStateException if server started
+     * @param formatter the {@link MimeFormatter} to use; must be non-null
      */
     void mimeFormatter(MimeFormatter formatter);
 
@@ -66,25 +85,31 @@ public interface HttpServerConfig extends ServerConfig {
     MimeParser mimeParser();
 
     /**
-     * Sets the {@link MimeParser} instance used by server.
+     * Sets the {@link MimeParser} instance used by the server.
+     * <p>
+     * This operation can be performed at any time, but the change
+     * will only take effect after the server is restarted.
      *
-     * @param parser the {@link MimeParser} instance, must be non-null
-     * @throws IllegalStateException if server started
+     * @param parser the {@link MimeParser} to use; must be non-null
      */
     void mimeParser(MimeParser parser);
 
     /**
-     * Gets the {@link PathTokenizer} instance used by server. The default value depends on the implementation.
+     * Gets the {@link PathTokenizer} instance used by the server for tokenizing request paths.
+     * <p>
+     * The default tokenizer depends on the implementation.
      *
-     * @return the {@link PathTokenizer} instance
+     * @return the current {@link PathTokenizer} instance
      */
     PathTokenizer pathTokenizer();
 
     /**
-     * Sets the {@link PathTokenizer} instance used by server.
+     * Sets the {@link PathTokenizer} instance used by the server.
+     * <p>
+     * This operation can be performed at any time, but the change
+     * will only take effect after the server is restarted.
      *
-     * @param tokenizer the {@link PathTokenizer} instance, must be non-null
-     * @throws IllegalStateException if server started
+     * @param tokenizer the {@link PathTokenizer} to use; must be non-null
      */
     void pathTokenizer(PathTokenizer tokenizer);
 }

@@ -5,6 +5,12 @@ import io.github.amayaframework.options.Key;
 
 import java.net.InetSocketAddress;
 
+/**
+ * A utility class defining standard {@link io.github.amayaframework.options.Key keys}
+ * used for server configuration options.
+ * <p>
+ * All fields are static constants representing option keys and their expected value types.
+ */
 public final class ServerOptions {
     private ServerOptions() {
     }

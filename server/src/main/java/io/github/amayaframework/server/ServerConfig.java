@@ -4,28 +4,36 @@ import java.net.InetSocketAddress;
 import java.util.Set;
 
 /**
- * An interface describing the server config. Allows to set the addresses that the server will listen to.
+ * An interface describing the server configuration.
+ * Allows managing the set of addresses the server will listen on.
+ * Changes to the addresses are reflected dynamically on the running server if supported.
  */
 public interface ServerConfig {
 
     /**
-     * Gets the {@link Set} instance containing all listened addresses.
+     * Returns a mutable {@link Set} containing all currently listened addresses.
+     * Modifications to this set (adding or removing addresses) will dynamically
+     * update the server's listening state for those addresses.
      *
-     * @return the {@link Set} instance containing all listened addresses
+     * @return a mutable set of all addresses the server listens on
      */
     Set<InetSocketAddress> addresses();
 
     /**
-     * Adds given address to listen set and starts listen to it.
+     * Adds the specified address to the set of addresses to listen on.
+     * If the server is running, it should begin listening on this address immediately if supported.
      *
-     * @param address the specified address to be listened, must be non-null
+     * @param address the address to add; must not be {@code null}
+     * @throws IllegalArgumentException if {@code address} is {@code null}
      */
     void addAddress(InetSocketAddress address);
 
     /**
-     * Removes given address from a listened set and stops listen it.
+     * Removes the specified address from the set of addresses the server listens on.
+     * If the server is listening on this address, it should stop listening immediately if supported.
      *
-     * @param address the specified address to be removed, must be non-null
+     * @param address the address to remove; must not be {@code null}
+     * @throws IllegalArgumentException if {@code address} is {@code null}
      */
     void removeAddress(InetSocketAddress address);
 }
