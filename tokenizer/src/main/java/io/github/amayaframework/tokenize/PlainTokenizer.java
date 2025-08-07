@@ -4,16 +4,17 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
- * {@link Tokenizer} implementation using {@link StringTokenizer}.
+ * A {@link Tokenizer} implementation using {@link StringTokenizer}.
+ * <p>
+ * Performs tokenization based on character-based delimiters.
+ * This implementation does not use regular expressions and is generally faster
+ * for simple use cases.
  */
 public final class PlainTokenizer implements Tokenizer {
 
     @Override
     public Iterable<String> tokenize(String target, String delim) {
-        return () -> {
-            var tokenizer = new StringTokenizer(target, delim);
-            return new TokenIterator(tokenizer);
-        };
+        return () -> new TokenIterator(new StringTokenizer(target, delim));
     }
 
     private static final class TokenIterator implements Iterator<String> {

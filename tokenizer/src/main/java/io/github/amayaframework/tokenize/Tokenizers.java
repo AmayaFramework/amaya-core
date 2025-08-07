@@ -1,9 +1,14 @@
 package io.github.amayaframework.tokenize;
 
 /**
- * A class containing singleton instances of the main tokenizers.
+ * A utility class providing singleton instances of commonly used {@link Tokenizer} implementations.
+ * <p>
+ * Also includes static helper methods for quick tokenization.
  */
 public final class Tokenizers {
+    private Tokenizers() {
+    }
+
     /**
      * Singleton instance of {@link PlainTokenizer}.
      */
@@ -14,44 +19,41 @@ public final class Tokenizers {
      */
     public static final Tokenizer REGEX_TOKENIZER = new RegexTokenizer();
 
-    private Tokenizers() {
-    }
-
     /**
-     * Returns singleton instance of {@link PlainTokenizer}.
+     * Returns the singleton instance of {@link PlainTokenizer}.
      *
-     * @return {@link Tokenizer} instance
+     * @return a {@link Tokenizer} for simple character-based tokenization
      */
     public static Tokenizer plain() {
         return PLAIN_TOKENIZER;
     }
 
     /**
-     * Returns singleton instance of {@link RegexTokenizer}.
+     * Returns the singleton instance of {@link RegexTokenizer}.
      *
-     * @return {@link Tokenizer} instance
+     * @return a {@link Tokenizer} using regular expressions
      */
     public static Tokenizer regex() {
         return REGEX_TOKENIZER;
     }
 
     /**
-     * Splits given string by {@link PlainTokenizer}.
+     * Splits the given string using the {@link PlainTokenizer}.
      *
-     * @param target the specified string to be split
-     * @param delim  the specified delimiter
-     * @return {@link Iterable} instance containing tokens
+     * @param target the string to tokenize
+     * @param delim  the delimiter characters
+     * @return an {@link Iterable} of tokens
      */
     public static Iterable<String> split(String target, String delim) {
         return PLAIN_TOKENIZER.tokenize(target, delim);
     }
 
     /**
-     * Splits given string by {@link RegexTokenizer}.
+     * Splits the given string using the {@link RegexTokenizer}.
      *
-     * @param target the specified string to be split
-     * @param delim  the specified regex
-     * @return {@link Iterable} instance containing tokens
+     * @param target the string to tokenize
+     * @param delim  the regular expression used as delimiter
+     * @return an {@link Iterable} of tokens
      */
     public static Iterable<String> splitByRegex(String target, String delim) {
         return REGEX_TOKENIZER.tokenize(target, delim);

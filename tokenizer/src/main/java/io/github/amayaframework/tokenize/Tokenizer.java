@@ -1,20 +1,22 @@
 package io.github.amayaframework.tokenize;
 
 /**
- * An interface describing an abstract tokenizer.
- * Splits a string by delimiters and returns the result as an abstract {@link Iterable} instance.
- * <br>
- * A good way to implement it would be not to create any collection storing tokens,
- * but to implement an {@link java.util.Iterator} that performs splitting on the fly.
+ * An abstraction for a string tokenizer.
+ * <p>
+ * Implementations of this interface split an input string using
+ * the specified delimiters and return the result as a lazily evaluated {@link Iterable}.
+ * <p>
+ * A recommended implementation strategy is to avoid creating intermediate collections
+ * and instead return an {@link java.util.Iterator} that performs splitting on-the-fly.
  */
 public interface Tokenizer {
 
     /**
-     * Splits string by given delimiter.
+     * Splits the given string using the specified delimiter.
      *
-     * @param target the specified string to be split
-     * @param delim  the specified string containing delimiters
-     * @return the {@link Iterable} instance, containing result of splitting
+     * @param target the string to tokenize
+     * @param delim  the delimiter(s) to use for splitting
+     * @return an {@link Iterable} containing the tokens, lazily produced
      */
     Iterable<String> tokenize(String target, String delim);
 }

@@ -6,7 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * {@link Tokenizer} implementation using {@link Matcher}.
+ * A {@link Tokenizer} implementation using {@link java.util.regex.Matcher}.
+ * <p>
+ * Tokenizes a string using a regular expression as the delimiter.
+ * Supports full regex capabilities and handles empty tokens appropriately.
  */
 public final class RegexTokenizer implements Tokenizer {
 
