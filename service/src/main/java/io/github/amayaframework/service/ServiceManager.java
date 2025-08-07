@@ -88,9 +88,11 @@ public interface ServiceManager extends Service {
     Collection<Service> removeAll();
 
     /**
-     * Returns an unmodifiable collection of currently managed services.
+     * Returns a snapshot of currently managed services.
+     * <p>
+     * The returned collection is a read-only copy and safe for concurrent iteration.
      *
-     * @return unmodifiable collection of managed services
+     * @return unmodifiable snapshot collection of services; never {@code null}
      */
     Collection<Service> services();
 

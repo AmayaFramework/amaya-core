@@ -6,10 +6,7 @@ import com.github.romanqed.jct.EmptyCancelToken;
 import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -112,11 +109,15 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     @SuppressWarnings("unchecked")
     public Collection<Service> services() {
-        var ret = services;
-        if (ret == null) {
+        if (services == null) {
             return Collections.EMPTY_LIST;
         }
-        return Collections.unmodifiableCollection(ret.keySet());
+        synchronized (lifecycleLock) {
+            if (services == null) {
+                return Collections.EMPTY_LIST;
+            }
+            return List.copyOf(services.keySet());
+        }
     }
 
     @Override
