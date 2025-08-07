@@ -122,7 +122,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     public void add(Service service) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Manager is disposed");
+            throw new IllegalStateException("Service manager is disposed");
         }
         if (service == null) {
             return;
@@ -136,7 +136,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                 return;
             }
             if (serviceState != ServiceState.UNMANAGED && !serviceState.isStopped()) {
-                throw new IllegalStateException("Cannot add not stopped service");
+                throw new IllegalArgumentException("Cannot add not stopped service");
             }
             var callback = new ManagedServiceCallback(callbackBase);
             if (state == ServiceState.STARTED) {
@@ -157,7 +157,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     public void add(Iterable<Service> iterable) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Service manager is disposed");
+            throw new IllegalStateException("Service manager is disposed");
         }
         if (!state.isStopped()) {
             throw new IllegalStateException("Cannot add multiple services when manager is started");
@@ -187,7 +187,7 @@ public abstract class AbstractServiceManager extends AbstractService implements 
                     continue;
                 }
                 if (serviceState != ServiceState.UNMANAGED && !serviceState.isStopped()) {
-                    throw new IllegalStateException("Cannot add not stopped service");
+                    throw new IllegalArgumentException("Cannot add not stopped service");
                 }
             }
             if (services == null) {
@@ -205,9 +205,9 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     public void remove(Service service) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Service manager is disposed");
+            throw new IllegalStateException("Service manager is disposed");
         }
-        if (service == null) {
+        if (service == null || services == null) {
             return;
         }
         synchronized (lifecycleLock) {
@@ -231,12 +231,12 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @Override
     public void remove(Iterable<Service> iterable) {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Manager is disposed");
+            throw new IllegalStateException("Service manager is disposed");
         }
         if (!state.isStopped()) {
             throw new IllegalStateException("Cannot remove multiple services when manager is started");
         }
-        if (iterable == null) {
+        if (iterable == null || services == null) {
             return;
         }
         var iterator = iterable.iterator();
@@ -267,10 +267,13 @@ public abstract class AbstractServiceManager extends AbstractService implements 
     @SuppressWarnings("unchecked")
     public Collection<Service> removeAll() {
         if (state == ServiceState.DISPOSED) {
-            throw new IllegalArgumentException("Service manager is disposed");
+            throw new IllegalStateException("Service manager is disposed");
         }
         if (!state.isStopped()) {
             throw new IllegalStateException("Cannot remove all services when manager is started");
+        }
+        if (services == null) {
+            return Collections.EMPTY_LIST;
         }
         synchronized (lifecycleLock) {
             if (state == ServiceState.STARTED) {
