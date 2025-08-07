@@ -1,6 +1,9 @@
 package io.github.amayaframework.core;
 
 final class LookupUtil {
+    private LookupUtil() {
+    }
+
     // Amaya DI
     private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
     private static final String AMAYA_SERVICE_PROVIDER = "io.github.amayaframework.di.core.ServiceProvider";
@@ -13,9 +16,6 @@ final class LookupUtil {
     // SLF4J
     private static final String SLF4J_MODULE = "org.slf4j";
     private static final String SLF4J_LOGGER = "org.slf4j.Logger";
-
-    private LookupUtil() {
-    }
 
     static boolean isModuleLoaded(String name) {
         var layer = ModuleLayer.boot();

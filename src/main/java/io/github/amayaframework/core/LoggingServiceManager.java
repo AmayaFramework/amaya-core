@@ -7,16 +7,15 @@ import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceCallback;
 import org.slf4j.Logger;
 
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.HashMap;
 
 final class LoggingServiceManager extends AbstractServiceManager {
     private final Logger logger;
 
-    LoggingServiceManager(Logger logger, Supplier<Map<Service, ?>> supplier) {
-        super(new Object(), Cancellation.source(), supplier, throwable -> {
-            logger.error("Critical failure during fail-stop phase. Initiating forced system halt", throwable);
-        });
+    LoggingServiceManager(Logger logger) {
+        super(new Object(), Cancellation.source(), HashMap::new, throwable ->
+                logger.error("Critical failure during fail-stop phase. Initiating forced system halt", throwable)
+        );
         this.logger = logger;
     }
 

@@ -13,12 +13,12 @@ final class LoggingApplication extends AbstractLoggingApplication {
     private final ServiceProvider provider;
 
     LoggingApplication(GroupOptionSet options,
-                              Environment environment,
-                              ServiceManager manager,
-                              TaskBuilder<HttpContext> builder,
-                              HttpServer server,
-                              ServiceProvider provider,
-                              Logger logger) {
+                       Environment environment,
+                       ServiceManager manager,
+                       TaskBuilder<HttpContext> builder,
+                       HttpServer server,
+                       ServiceProvider provider,
+                       Logger logger) {
         super(options, environment, manager, builder, server, logger);
         this.provider = provider;
     }

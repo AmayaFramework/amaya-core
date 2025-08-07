@@ -1,25 +1,40 @@
-module io.github.amayaframework.core {
+/**
+ * The core module of the Amaya Framework.
+ *
+ * <p>This module provides foundational implementations and factories for
+ * web applications, integrating components such as environment management,
+ * service lifecycle handling, HTTP server configuration, and logging support.
+ *
+ * <p>It depends on several other Amaya modules, including:
+ * <ul>
+ *     <li>{@code amayaframework.options} — for configuration options handling</li>
+ *     <li>{@code amayaframework.environment} — for environment abstractions</li>
+ *     <li>{@code amayaframework.service} — for service lifecycle management</li>
+ *     <li>{@code amayaframework.web} — for web application abstractions and implementations</li>
+ * </ul>
+ *
+ * <p>This module also optionally integrates with SLF4J for logging and
+ * optionally with Amaya's dependency injection modules {@code amayaframework.di} and
+ * {@code amayaframework.di.stub} if available at runtime.
+ *
+ * <p>The module exports the {@code io.github.amayaframework.core} package,
+ * containing the core implementations and utilities for building and running
+ * web applications using the Amaya Framework.
+ */
+module amayaframework.core {
     // Imports
     // Basic
-    requires com.github.romanqed.jfunc;
-    requires com.github.romanqed.juni;
-    requires com.github.romanqed.jconv;
-    requires com.github.romanqed.jct;
+    requires transitive com.github.romanqed.juni;
+    // Amaya modules
+    requires amayaframework.options;
+    requires amayaframework.environment;
+    requires amayaframework.service;
+    requires transitive amayaframework.web;
     // Logger
     requires static org.slf4j;
-    // Amaya modules
-    requires io.github.amayaframework.http;
-    requires io.github.amayaframework.options;
-    requires io.github.amayaframework.environment;
-    requires io.github.amayaframework.service;
-    requires io.github.amayaframework.context;
-    requires io.github.amayaframework.server;
-    requires io.github.amayaframework.application;
-    requires io.github.amayaframework.web;
     // Optional modules
-    requires static io.github.amayaframework.di;
-    requires static io.github.amayaframework.di.stub;
-    requires com.github.romanqed.jtype;
+    requires static amayaframework.di;
+    requires static amayaframework.di.stub;
     // Exports
     exports io.github.amayaframework.core;
 }

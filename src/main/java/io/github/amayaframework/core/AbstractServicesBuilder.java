@@ -6,7 +6,7 @@ import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.options.OptionSet;
 import io.github.amayaframework.service.ServiceManager;
 
-public abstract class AbstractServicesBuilder extends AbstractServicesConfigurer implements ServicesBuilder {
+abstract class AbstractServicesBuilder extends AbstractServicesConfigurer implements ServicesBuilder {
     protected final ServiceManagerFactory defaultFactory;
 
     protected AbstractServicesBuilder(ServiceManagerFactory defaultFactory) {

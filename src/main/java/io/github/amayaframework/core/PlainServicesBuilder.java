@@ -14,11 +14,6 @@ final class PlainServicesBuilder extends AbstractServicesBuilder {
     }
 
     @Override
-    protected void removeService(Type type) {
-        // Do nothing, no di
-    }
-
-    @Override
     public ServicesConfigurer register(Type type, Service service) {
         // Simple register in the service set
         addService(Objects.requireNonNull(service));

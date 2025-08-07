@@ -5,6 +5,5 @@ final class LogNames {
     }
 
     static final String WEB_APPLICATION = "WebApplication";
-
     static final String SERVICE_MANAGER = "ServiceManager";
 }

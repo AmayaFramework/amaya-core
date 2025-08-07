@@ -2,19 +2,13 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.application.ServiceManagerFactory;
 import io.github.amayaframework.options.OptionSet;
-import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceManager;
 import org.slf4j.ILoggerFactory;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
 final class PlainManagerFactory implements ServiceManagerFactory {
-    private final Supplier<Map<Service, ?>> mapSupplier;
     private final ILoggerFactory loggerFactory;
 
-    PlainManagerFactory(Supplier<Map<Service, ?>> mapSupplier, ILoggerFactory loggerFactory) {
-        this.mapSupplier = mapSupplier;
+    PlainManagerFactory(ILoggerFactory loggerFactory) {
         this.loggerFactory = loggerFactory;
     }
 
@@ -26,9 +20,9 @@ final class PlainManagerFactory implements ServiceManagerFactory {
     @Override
     public ServiceManager create() {
         if (loggerFactory == null) {
-            return new PlainServiceManager(mapSupplier);
+            return new PlainServiceManager();
         }
         var logger = loggerFactory.getLogger(LogNames.SERVICE_MANAGER);
-        return new LoggingServiceManager(logger, mapSupplier);
+        return new LoggingServiceManager(logger);
     }
 }

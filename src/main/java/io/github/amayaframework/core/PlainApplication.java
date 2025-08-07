@@ -13,11 +13,11 @@ final class PlainApplication extends AbstractWebApplication {
     private final ServiceProvider provider;
 
     PlainApplication(GroupOptionSet options,
-                            Environment environment,
-                            ServiceManager manager,
-                            TaskBuilder<HttpContext> builder,
-                            HttpServer server,
-                            ServiceProvider provider) {
+                     Environment environment,
+                     ServiceManager manager,
+                     TaskBuilder<HttpContext> builder,
+                     HttpServer server,
+                     ServiceProvider provider) {
         super(options, environment, manager, builder, server);
         this.provider = provider;
     }

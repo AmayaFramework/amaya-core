@@ -2,19 +2,22 @@ package io.github.amayaframework.core;
 
 import io.github.amayaframework.environment.NativeEnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
-import io.github.amayaframework.service.Service;
 import io.github.amayaframework.web.WebApplicationBuilder;
 import org.slf4j.ILoggerFactory;
 
-import java.util.Map;
-import java.util.function.Supplier;
-
+/**
+ * A simple {@link WebBuilderFactory} implementation that creates plain builders
+ * with no special dependency injection, using default environment and services.
+ */
 public final class PlainWebBuilderFactory implements WebBuilderFactory {
-    private final Supplier<Map<Service, ?>> mapSupplier;
     private final ILoggerFactory loggerFactory;
 
-    public PlainWebBuilderFactory(Supplier<Map<Service, ?>> mapSupplier, ILoggerFactory loggerFactory) {
-        this.mapSupplier = mapSupplier;
+    /**
+     * Constructs a PlainWebBuilderFactory with a logger factory.
+     *
+     * @param loggerFactory the SLF4J logger factory instance, must be non-null
+     */
+    public PlainWebBuilderFactory(ILoggerFactory loggerFactory) {
         this.loggerFactory = loggerFactory;
     }
 
@@ -27,7 +30,7 @@ public final class PlainWebBuilderFactory implements WebBuilderFactory {
 
     @Override
     public WebApplicationBuilder create() {
-        var managerFactory = new PlainManagerFactory(mapSupplier, loggerFactory);
+        var managerFactory = new PlainManagerFactory(loggerFactory);
         var envFactory = new NativeEnvironmentFactory();
         var servicesBuilder = new PlainServicesBuilder(managerFactory);
         return new PlainWebBuilder(servicesBuilder, envFactory, loggerFactory);

@@ -6,13 +6,12 @@ import io.github.amayaframework.service.AbstractServiceManager;
 import io.github.amayaframework.service.Service;
 import io.github.amayaframework.service.ServiceCallback;
 
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.HashMap;
 
 final class PlainServiceManager extends AbstractServiceManager {
 
-    PlainServiceManager(Supplier<Map<Service, ?>> supplier) {
-        super(new Object(), Cancellation.source(), supplier, null);
+    PlainServiceManager() {
+        super(new Object(), Cancellation.source(), HashMap::new, null);
     }
 
     @Override

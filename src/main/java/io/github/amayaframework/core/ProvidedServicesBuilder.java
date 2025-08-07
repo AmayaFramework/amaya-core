@@ -51,6 +51,7 @@ final class ProvidedServicesBuilder extends AbstractServicesBuilder {
 
     @Override
     protected void removeService(Type type) {
+        super.removeService(type);
         if (provided != null) {
             provided.remove(type);
             builder.remove(type);

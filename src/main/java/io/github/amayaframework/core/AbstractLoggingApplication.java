@@ -12,9 +12,30 @@ import io.github.amayaframework.service.ServiceManager;
 import io.github.amayaframework.web.AbstractWebApplication;
 import org.slf4j.Logger;
 
+/**
+ * An abstract web application implementation that adds logging capabilities
+ * around the lifecycle events: start, stop, and dispose.
+ * <p>
+ * Logs informational messages when the application starts and stops,
+ * as well as errors if the operations fail.
+ * Also log debug and warning messages during disposal.
+ */
 public abstract class AbstractLoggingApplication extends AbstractWebApplication {
+    /**
+     * Logger instance used to log lifecycle events.
+     */
     protected final Logger logger;
 
+    /**
+     * Constructs a new instance of AbstractLoggingApplication.
+     *
+     * @param options     the application options group set
+     * @param environment the environment instance used by the application
+     * @param manager     the service manager controlling application services
+     * @param builder     the task builder that creates the processing pipeline
+     * @param server      the HTTP server instance
+     * @param logger      the logger instance for lifecycle event logging
+     */
     protected AbstractLoggingApplication(GroupOptionSet options,
                                          Environment environment,
                                          ServiceManager manager,
