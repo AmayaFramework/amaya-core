@@ -112,6 +112,7 @@ public abstract class AbstractApplication<T> extends AbstractService implements 
      * Called when a service failure occurs. Can be overridden to handle errors more precisely.
      *
      * @param throwable the exception that caused the failure
+     * @throws Throwable if the failure handling itself throws an exception
      */
     protected abstract void onFailure(Throwable throwable) throws Throwable;
 
