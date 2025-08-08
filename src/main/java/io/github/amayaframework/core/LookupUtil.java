@@ -5,13 +5,11 @@ final class LookupUtil {
     }
 
     // Amaya DI
-    private static final String AMAYA_DI_MODULE = "io.github.amayaframework.di";
+    private static final String AMAYA_DI_MODULE = "amayaframework.di";
     private static final String AMAYA_SERVICE_PROVIDER = "io.github.amayaframework.di.core.ServiceProvider";
     // Amaya DI ASM
-    private static final String DI_ASM_MODULE = "io.github.amayaframework.di.asm";
     private static final String DI_ASM_FACTORY = "io.github.amayaframework.di.asm.AsmStubFactory";
     // Amaya DI Reflect
-    private static final String DI_REFLECT_MODULE = "io.github.amayaframework.di.reflect";
     private static final String DI_REFLECT_FACTORY = "io.github.amayaframework.di.reflect.ReflectStubFactory";
     // SLF4J
     private static final String SLF4J_MODULE = "org.slf4j";
@@ -45,13 +43,6 @@ final class LookupUtil {
         }
     }
 
-    static Class<?> tryLoadLibrary(String module, String type) {
-        if (!isModuleLoaded(module)) {
-            return null;
-        }
-        return loadClass(type);
-    }
-
     static boolean isDiLoaded() {
         return isLibraryLoaded(AMAYA_DI_MODULE, AMAYA_SERVICE_PROVIDER);
     }
@@ -61,10 +52,10 @@ final class LookupUtil {
     }
 
     static Class<?> lookupStubFactory() {
-        var clazz = tryLoadLibrary(DI_ASM_MODULE, DI_ASM_FACTORY);
+        var clazz = loadClass(DI_ASM_FACTORY);
         if (clazz != null) {
             return clazz;
         }
-        return tryLoadLibrary(DI_REFLECT_MODULE, DI_REFLECT_FACTORY);
+        return loadClass(DI_REFLECT_FACTORY);
     }
 }

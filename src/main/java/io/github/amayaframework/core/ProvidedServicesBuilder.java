@@ -33,6 +33,9 @@ final class ProvidedServicesBuilder extends AbstractServicesBuilder {
         if (provided == null) {
             return;
         }
+        if (services == null) {
+            services = new HashSet<>();
+        }
         for (var type : provided) {
             services.add(provider.get(type));
         }
