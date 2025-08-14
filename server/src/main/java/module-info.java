@@ -15,6 +15,7 @@ module amayaframework.server {
     requires com.github.romanqed.jfunc;
     requires com.github.romanqed.juni;
     requires com.github.romanqed.jct;
+    requires com.github.romanqed.jtype;
     // Servlets (transitive)
     requires transitive jakarta.servlet;
     // Amaya modules

@@ -1,6 +1,9 @@
 package io.github.amayaframework.server;
 
+import com.github.romanqed.jfunc.Runnable0;
+import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.http.HttpVersion;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 
 import java.net.InetSocketAddress;
@@ -24,11 +27,65 @@ public interface HttpServerConfig extends ServerConfig {
      * Returns the {@link ServletContext} associated with this server.
      * <p>
      * If the implementation does not support a {@code ServletContext}, this method returns {@code null}.
-     * Otherwise, the returned context is guaranteed to be fully initialized and ready for use.
+     * Otherwise, the returned context is guaranteed to be ready for use.
      *
      * @return the {@code ServletContext} if supported, or {@code null} otherwise
      */
     ServletContext servletContext();
+
+    /**
+     * Returns the callback that will be invoked when the underlying {@link jakarta.servlet.Servlet}
+     * of this HTTP server is initialized.
+     * <p>
+     * The callback, if set, will be called once for each initialization of the
+     * underlying servlet and will receive the {@link ServletConfig} associated with it.
+     * <p>
+     * If no callback has been set, this method returns {@code null}.
+     *
+     * @return the current initialization callback, or {@code null} if none is set
+     */
+    Runnable1<ServletConfig> onServletInit();
+
+    /**
+     * Sets the callback to be invoked when the underlying {@link jakarta.servlet.Servlet}
+     * of this HTTP server is initialized.
+     * <p>
+     * The callback will be called once for each initialization of the
+     * underlying servlet and will receive the {@link ServletConfig} associated with it.
+     * <p>
+     * Setting a new callback replaces any previously set one.
+     *
+     * @param action the initialization callback; may be {@code null} to clear it
+     */
+    void onServletInit(Runnable1<ServletConfig> action);
+
+    /**
+     * Returns the callback that will be invoked when the underlying {@link jakarta.servlet.Servlet}
+     * of this HTTP server is about to be destroyed.
+     * <p>
+     * The callback, if set, will be called once for each destruction of the
+     * underlying servlet, typically when the server is shutting down or the
+     * servlet is being reloaded.
+     * <p>
+     * If no callback has been set, this method returns {@code null}.
+     *
+     * @return the current destruction callback, or {@code null} if none is set
+     */
+    Runnable0 onServletDestroy();
+
+    /**
+     * Sets the callback to be invoked when the underlying {@link jakarta.servlet.Servlet}
+     * of this HTTP server is about to be destroyed.
+     * <p>
+     * The callback will be called once for each destruction of the
+     * underlying servlet, typically when the server is shutting down or the
+     * servlet is being reloaded.
+     * <p>
+     * Setting a new callback replaces any previously set one.
+     *
+     * @param action the destruction callback; may be {@code null} to clear it
+     */
+    void onServletDestroy(Runnable0 action);
 
     /**
      * Gets the HTTP protocol version used by the server.

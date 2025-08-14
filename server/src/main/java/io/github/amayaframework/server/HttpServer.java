@@ -40,7 +40,7 @@ public interface HttpServer extends Server<HttpContext> {
      * Returns the {@link ServletContext} associated with this server.
      * <p>
      * If the implementation does not support a {@code ServletContext}, this method will return {@code null}.
-     * Otherwise, the returned context is guaranteed to be fully initialized and ready for use.
+     * Otherwise, the returned context is guaranteed to be ready for use.
      *
      * @return the {@code ServletContext} if supported, or {@code null} otherwise
      */
