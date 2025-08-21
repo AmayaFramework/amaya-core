@@ -38,6 +38,15 @@ public interface HttpResponse extends Response, HttpTransaction {
     void setHeader(String name, String value);
 
     /**
+     * Sets a header in the HTTP response with a specified name and integer value.
+     * The value will be converted to its string representation.
+     *
+     * @param name  the name of the header to set
+     * @param value the integer value of the header
+     */
+    void setHeader(String name, int value);
+
+    /**
      * Sets a header in the HTTP response with a specified name and date value.
      *
      * @param name the name of the header to set
@@ -70,6 +79,15 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param value the header value as a {@link String}
      */
     void addHeader(String name, String value);
+
+    /**
+     * Adds a new header with the specified name and integer value. Unlike {@link #setHeader(String, int)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name  the name of the header
+     * @param value the integer value of the header
+     */
+    void addHeader(String name, int value);
 
     /**
      * Adds a new header with the specified name and date value. Unlike {@link #setHeader(String, Date)},
