@@ -15,38 +15,52 @@ import java.util.*;
  * {@link HttpRequest#getPathParameters()} and {@link HttpRequest#getPathParameter(String)}.
  */
 public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletRequest> implements HttpRequest {
+
     /**
      * Http version of this request.
      */
     protected final HttpVersion version;
+
     /**
      * Http method of this request.
      */
     protected HttpMethod method;
+
     /**
      * {@link URI} containing path from http request line.
      */
     protected URI uri;
+
     /**
      * {@link URL} containing full request path.
      */
     protected URL url;
+
     /**
      * Parsed segments of request path.
      */
     protected List<String> segments;
+
     /**
      * Parsed query parameters of this request.
      */
     protected Map<String, List<Object>> queries;
+
     /**
      * Cookies of this request.
      */
     protected Map<String, Cookie> cookies;
+
     /**
      * Headers of this request.
      */
     protected Map<String, String> headers;
+
+    /**
+     * Multi-value headers of this request.
+     */
+    protected Map<String, List<String>> multiHeaders;
+
     /**
      * Attributes of session associated with this request.
      */
@@ -65,11 +79,39 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public Map<String, String> headers() {
-        if (headers != null) {
-            return headers;
+        if (headers == null) {
+            headers = new RequestHeaderMap(request);
         }
-        headers = new RequestHeaderMap(request);
         return headers;
+    }
+
+    /**
+     * Collects all headers and their values from the underlying {@link HttpServletRequest}.
+     * Each header name maps to a list of all its values.
+     *
+     * @return a map of header names to lists of values
+     */
+    protected Map<String, List<String>> collectMultiHeaders() {
+        var ret = new HashMap<String, List<String>>();
+        var names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            var header = names.nextElement();
+            var headers = request.getHeaders(header);
+            var values = new ArrayList<String>();
+            while (headers.hasMoreElements()) {
+                values.add(headers.nextElement());
+            }
+            ret.put(header, values);
+        }
+        return ret;
+    }
+
+    @Override
+    public Map<String, List<String>> multiHeaders() {
+        if (multiHeaders == null) {
+            multiHeaders = collectMultiHeaders();
+        }
+        return multiHeaders;
     }
 
     @Override
@@ -116,10 +158,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public HttpMethod getMethod() {
-        if (method != null) {
-            return method;
+        if (method == null) {
+            method = parseHttpMethod(request.getMethod());
         }
-        method = parseHttpMethod(request.getMethod());
         return method;
     }
 
@@ -148,10 +189,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public URL getURL() {
-        if (url != null) {
-            return url;
+        if (url == null) {
+            url = createURL();
         }
-        url = createURL();
         return url;
     }
 
@@ -166,10 +206,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public URI getRequestURI() {
-        if (uri != null) {
-            return uri;
+        if (uri == null) {
+            uri = createURI();
         }
-        uri = createURI();
         return uri;
     }
 
@@ -188,10 +227,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public List<String> getPathSegments() {
-        if (segments != null) {
-            return segments;
+        if (segments == null) {
+            segments = splitPath(request.getRequestURI());
         }
-        segments = splitPath(request.getRequestURI());
         return segments;
     }
 
@@ -209,10 +247,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public Map<String, List<Object>> getQueryParameters() {
-        if (queries != null) {
-            return queries;
+        if (queries == null) {
+            queries = collectQueries();
         }
-        queries = collectQueries();
         return queries;
     }
 
@@ -240,10 +277,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public Map<String, Object> getSessionParameters() {
-        if (sessionAttributes != null) {
-            return sessionAttributes;
+        if (sessionAttributes == null) {
+            sessionAttributes = new SessionAttributeMap(request.getSession(true));
         }
-        sessionAttributes = new SessionAttributeMap(request.getSession(true));
         return sessionAttributes;
     }
 
@@ -277,10 +313,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     public Map<String, Cookie> cookies() {
-        if (cookies != null) {
-            return cookies;
+        if (cookies == null) {
+            cookies = collectCookies();
         }
-        cookies = collectCookies();
         return cookies;
     }
 

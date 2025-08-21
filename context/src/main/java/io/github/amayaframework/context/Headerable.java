@@ -1,6 +1,7 @@
 package io.github.amayaframework.context;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,11 +10,26 @@ import java.util.Map;
 public interface Headerable {
 
     /**
-     * Gets {@link Map} containing all object headers.
+     * Gets a {@link Map} containing all object headers, where each key corresponds to
+     * a header name and the value is the <b>first</b> header value associated with it.
+     * <p>
+     * If a header has multiple values, only the first one will be returned.
+     * For complete access to all values, use {@link #multiHeaders()}.
      *
-     * @return the {@link Map} instance
+     * @return a {@link Map} of header names to their first value
      */
     Map<String, String> headers();
+
+    /**
+     * Gets a {@link Map} containing all object headers, where each key corresponds to
+     * a header name and the value is a list of <b>all</b> values associated with it.
+     * <p>
+     * This method preserves the full multi-value semantics of HTTP headers
+     * (e.g. {@code Accept}, {@code Set-Cookie}).
+     *
+     * @return a {@link Map} of header names to lists of all their values
+     */
+    Map<String, List<String>> multiHeaders();
 
     /**
      * Checks if object containing header with given name.
