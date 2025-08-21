@@ -54,6 +54,42 @@ public interface HttpResponse extends Response, HttpTransaction {
     void setHeader(String name, long date);
 
     /**
+     * Adds a new header with the specified name and value. Unlike {@link #setHeader(String, Object)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name  the name of the header
+     * @param value the header value as an {@link Object} (converted to string)
+     */
+    void addHeader(String name, Object value);
+
+    /**
+     * Adds a new header with the specified name and string value. Unlike {@link #setHeader(String, String)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name  the name of the header
+     * @param value the header value as a {@link String}
+     */
+    void addHeader(String name, String value);
+
+    /**
+     * Adds a new header with the specified name and date value. Unlike {@link #setHeader(String, Date)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name the name of the header
+     * @param date the header value as a {@link Date}
+     */
+    void addHeader(String name, Date date);
+
+    /**
+     * Adds a new header with the specified name and long date value (epoch time). Unlike {@link #setHeader(String, long)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name the name of the header
+     * @param date the header value as epoch time
+     */
+    void addHeader(String name, long date);
+
+    /**
      * Gets the current HTTP status code of this response.
      *
      * @return the current {@link HttpCode} representing the status of the response.

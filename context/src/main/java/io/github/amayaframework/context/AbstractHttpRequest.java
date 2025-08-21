@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Skeletal implementation of {@link HttpRequest}. Provides implementations for all methods except
@@ -83,6 +80,16 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     @Override
     public String getHeader(String name) {
         return request.getHeader(name);
+    }
+
+    @Override
+    public Enumeration<String> getHeadersEnum(String name) {
+        return request.getHeaders(name);
+    }
+
+    @Override
+    public Iterable<String> getHeaders(String name) {
+        return () -> request.getHeaders(name).asIterator();
     }
 
     @Override

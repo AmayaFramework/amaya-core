@@ -7,10 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -70,6 +67,16 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
+    public Enumeration<String> getHeadersEnum(String name) {
+        return new IteratorEnumeration<>(response.getHeaders(name).iterator());
+    }
+
+    @Override
+    public Iterable<String> getHeaders(String name) {
+        return response.getHeaders(name);
+    }
+
+    @Override
     public Map<String, Cookie> cookies() {
         if (cookies == null) {
             cookies = new HashMap<>();
@@ -114,6 +121,26 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     @Override
     public void setHeader(String name, long date) {
         response.setDateHeader(name, date);
+    }
+
+    @Override
+    public void addHeader(String name, Object value) {
+        response.addHeader(name, value.toString());
+    }
+
+    @Override
+    public void addHeader(String name, String value) {
+        response.addHeader(name, value);
+    }
+
+    @Override
+    public void addHeader(String name, Date date) {
+        response.addDateHeader(name, date.getTime());
+    }
+
+    @Override
+    public void addHeader(String name, long date) {
+        response.addDateHeader(name, date);
     }
 
     @Override
