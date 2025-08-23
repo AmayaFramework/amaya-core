@@ -4,6 +4,7 @@ import io.github.amayaframework.http.HttpMethod;
 import io.github.amayaframework.http.HttpVersion;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -11,59 +12,27 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * Skeletal implementation of {@link HttpRequest}. Provides implementations for all methods except
- * {@link HttpRequest#pathParams()} and {@link HttpRequest#pathParam(String)}.
+ * Skeletal implementation of {@link HttpRequest}. Provides implementations for most methods
+ * common to HTTP requests, built on top of the underlying {@link HttpServletRequest}.
+ * <p>
+ * Subclasses must implement:
+ * <ul>
+ *   <li>{@link #pathParams()} and {@link #pathParam(String)} — path parameter parsing,</li>
+ *   <li>{@link #parseHttpMethod(String)} — conversion from raw HTTP method string to {@link HttpMethod},</li>
+ *   <li>{@link #splitPath(String)} — splitting a path string into segments,</li>
+ *   <li>{@link #collectQueries()} — query string parsing.</li>
+ * </ul>
  */
 public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletRequest> implements HttpRequest {
-
-    /**
-     * Http version of this request.
-     */
     protected final HttpVersion version;
-
-    /**
-     * Http method of this request.
-     */
     protected HttpMethod method;
-
-    /**
-     * {@link URI} containing path from http request line.
-     */
     protected URI uri;
-
-    /**
-     * {@link URL} containing full request path.
-     */
     protected URL url;
-
-    /**
-     * Parsed segments of request path.
-     */
     protected List<String> segments;
-
-    /**
-     * Parsed query parameters of this request.
-     */
     protected Map<String, List<Object>> queries;
-
-    /**
-     * Cookies of this request.
-     */
     protected Map<String, Cookie> cookies;
-
-    /**
-     * Headers of this request.
-     */
     protected Map<String, String> headers;
-
-    /**
-     * Multi-value headers of this request.
-     */
     protected Map<String, List<String>> multiHeaders;
-
-    /**
-     * Attributes of session associated with this request.
-     */
     protected Map<String, Object> sessionAttributes;
 
     /**
@@ -164,26 +133,26 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
         return method;
     }
 
-    private URL createUrl() {
-        var ret = new StringBuilder();
-        var scheme = request.getScheme();
-        var port = request.getServerPort();
-        ret.append(scheme);
-        ret.append("://");
-        ret.append(request.getServerName());
-        if ((scheme.equals("http") && port != 80) || (scheme.equals("https") && port != 443)) {
-            ret.append(':');
-            ret.append(port);
-        }
-        ret.append(request.getRequestURI());
+    /**
+     * Builds a full {@link URL} representing this request, including scheme,
+     * host, port (if non-default), path, and query string.
+     * <p>
+     * Uses the underlying {@link HttpServletRequest#getRequestURL()} and appends
+     * the query string if present.
+     *
+     * @return the constructed {@link URL}
+     * @throws IllegalStateException if the URL is malformed (should not normally happen)
+     */
+    protected URL createUrl() {
+        var buffer = request.getRequestURL();
         var query = request.getQueryString();
         if (query != null) {
-            ret.append('?').append(query);
+            buffer.append('?').append(query);
         }
         try {
-            return new URL(ret.toString());
+            return new URL(buffer.toString());
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -276,7 +245,47 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Map<String, Object> sessionsParams() {
+    public boolean hasSession() {
+        return request.getSession(false) != null;
+    }
+
+    @Override
+    public HttpSession session(boolean create) {
+        return request.getSession(create);
+    }
+
+    @Override
+    public HttpSession session() {
+        return request.getSession();
+    }
+
+    @Override
+    public String changeSessionId() {
+        return request.changeSessionId();
+    }
+
+    @Override
+    public String requestedSessionId() {
+        return request.getRequestedSessionId();
+    }
+
+    @Override
+    public boolean requestedSessionIdValid() {
+        return request.isRequestedSessionIdValid();
+    }
+
+    @Override
+    public boolean requestedSessionIdFromUrl() {
+        return request.isRequestedSessionIdFromURL();
+    }
+
+    @Override
+    public boolean requestedSessionIdFromCookie() {
+        return request.isRequestedSessionIdFromCookie();
+    }
+
+    @Override
+    public Map<String, Object> sessionParams() {
         if (sessionAttributes == null) {
             sessionAttributes = new SessionAttributeMap(request.getSession(true));
         }
@@ -286,7 +295,11 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     @Override
     @SuppressWarnings("unchecked")
     public <T> T sessionParam(String name) {
-        return (T) request.getSession(true).getAttribute(name);
+        var session = request.getSession(false);
+        if (session == null) {
+            return null;
+        }
+        return (T) session.getAttribute(name);
     }
 
     @Override

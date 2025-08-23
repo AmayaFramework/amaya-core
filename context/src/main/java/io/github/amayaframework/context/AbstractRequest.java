@@ -11,6 +11,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Skeletal implementation of {@link Request}. Built over underlying {@link ServletRequest} instance.
@@ -97,13 +98,15 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     @Override
     public Charset charset() {
         if (charset == null || !charset.name().equals(request.getCharacterEncoding())) {
-            charset = Charset.forName(request.getCharacterEncoding());
+            var encoding = request.getCharacterEncoding();
+            charset = encoding == null ? null : Charset.forName(encoding);
         }
         return charset;
     }
 
     @Override
     public void charset(Charset charset) {
+        Objects.requireNonNull(charset);
         try {
             request.setCharacterEncoding(charset.name());
         } catch (UnsupportedEncodingException e) {

@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * An interface describing the abstract http protocol request.
  */
-public interface HttpRequest extends Request, HttpTransaction {
+public interface HttpRequest extends Request, HttpTransaction, Sessionable {
 
     /**
      * Gets http method of this request.
@@ -63,16 +63,16 @@ public interface HttpRequest extends Request, HttpTransaction {
     // Headers
 
     /**
-     * Gets the value of the specified request header as a {@link Date} instance.
-     * Use this method with headers that contain dates, such as <code>If-Modified-Since</code>.
+     * Returns the value of the specified request header as a {@link Date} instance.
      * <p>
-     * If the request did not have a header of the specified name, this method returns null.
-     * If the header can't be converted to a date, the method throws an <code>IllegalArgumentException</code>.
+     * This method is intended for headers that contain date values, such as
+     * <code>If-Modified-Since</code>.
+     * </p>
      *
-     * @param name a <code>String</code> specifying the name of the header
-     * @return a <code>long</code> value representing the date specified in the header expressed as the number of
-     * milliseconds since January 1, 1970 GMT, or -1 if the named header was not included with the request
-     * @throws IllegalArgumentException If the header value can't be converted to a date
+     * @param name the name of the request header
+     * @return a {@link Date} representing the value of the header,
+     * or {@code null} if the header is not present
+     * @throws IllegalArgumentException if the header value cannot be converted to a date
      */
     Date dateHeader(String name);
 
@@ -135,32 +135,6 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @return the first value of the query parameter, or null if not found
      */
     <T> T queryParam(String name);
-
-    // Session parameters
-
-    /**
-     * Gets all session parameters as a map.
-     *
-     * @return a map containing session parameters and their values
-     */
-    Map<String, Object> sessionsParams();
-
-    /**
-     * Gets a specific session parameter by its name.
-     *
-     * @param name the name of the session parameter to retrieve
-     * @param <T>  the type of the parameter value
-     * @return the value of the session parameter, or null if not found
-     */
-    <T> T sessionParam(String name);
-
-    /**
-     * Sets a session parameter with a specified name and value.
-     *
-     * @param name  the name of the session parameter to set
-     * @param value the value to associate with the session parameter
-     */
-    void sessionParam(String name, Object value);
 
     // Trailer fields
 
