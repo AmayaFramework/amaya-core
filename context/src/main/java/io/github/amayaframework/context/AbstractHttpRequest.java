@@ -101,9 +101,9 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
             while (headers.hasMoreElements()) {
                 values.add(headers.nextElement());
             }
-            ret.put(header, values);
+            ret.put(header, Collections.unmodifiableList(values));
         }
-        return ret;
+        return Collections.unmodifiableMap(ret);
     }
 
     @Override

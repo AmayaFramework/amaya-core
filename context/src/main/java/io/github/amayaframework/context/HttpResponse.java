@@ -108,6 +108,22 @@ public interface HttpResponse extends Response, HttpTransaction {
     void addHeader(String name, long date);
 
     /**
+     * TODO
+     *
+     * @param name
+     * @param value
+     */
+    void extendHeader(String name, Object value);
+
+    /**
+     * TODO
+     *
+     * @param name
+     * @param value
+     */
+    void extendHeader(String name, String value);
+
+    /**
      * Gets the current HTTP status code of this response.
      *
      * @return the current {@link HttpCode} representing the status of the response.

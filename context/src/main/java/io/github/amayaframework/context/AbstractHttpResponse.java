@@ -15,18 +15,27 @@ import java.util.function.Supplier;
  * Requires to implement {@link AbstractResponse#formatMimeData(MimeData)}.
  */
 public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletResponse> implements HttpResponse {
+
     /**
      * Http version of this response.
      */
     protected final HttpVersion version;
+
     /**
      * Http status code of this response.
      */
     protected HttpCode status;
+
     /**
      * Headers of this response.
      */
     protected Map<String, String> headers;
+
+    /**
+     * Multi-value headers of this response.
+     */
+    protected Map<String, List<String>> multiHeaders;
+
     /**
      * Cookies of this response.
      */
@@ -49,11 +58,33 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     @Override
     public Map<String, String> headers() {
-        if (headers != null) {
-            return headers;
+        if (headers == null) {
+            headers = new ResponseHeaderMap(response);
         }
-        headers = new ResponseHeaderMap(response);
         return headers;
+    }
+
+    /**
+     * Collects all headers and their values from the underlying {@link HttpServletResponse}.
+     * Each header name maps to a list of all its values.
+     *
+     * @return a map of header names to lists of values
+     */
+    protected Map<String, List<String>> collectMultiHeaders() {
+        var map = new HashMap<String, List<String>>();
+        for (var header : response.getHeaderNames()) {
+            var values = new ArrayList<>(response.getHeaders(header));
+            map.put(header, new MultiHeaderList(values, header, response));
+        }
+        return new ResponseMultiHeaderMap(map, response);
+    }
+
+    @Override
+    public Map<String, List<String>> multiHeaders() {
+        if (multiHeaders == null) {
+            multiHeaders = collectMultiHeaders();
+        }
+        return multiHeaders;
     }
 
     @Override
@@ -114,6 +145,11 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
+    public void setHeader(String name, int value) {
+        response.setIntHeader(name, value);
+    }
+
+    @Override
     public void setHeader(String name, Date date) {
         response.setDateHeader(name, date.getTime());
     }
@@ -134,6 +170,11 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
+    public void addHeader(String name, int value) {
+        response.addIntHeader(name, value);
+    }
+
+    @Override
     public void addHeader(String name, Date date) {
         response.addDateHeader(name, date.getTime());
     }
@@ -141,6 +182,21 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     @Override
     public void addHeader(String name, long date) {
         response.addDateHeader(name, date);
+    }
+
+    @Override
+    public void extendHeader(String name, Object value) {
+        extendHeader(name, value.toString());
+    }
+
+    @Override
+    public void extendHeader(String name, String value) {
+        var oldValue = response.getHeader(name);
+        if (oldValue == null || oldValue.isBlank()) {
+            response.setHeader(name, value);
+        } else {
+            response.setHeader(name, oldValue + "," + value);
+        }
     }
 
     @Override
