@@ -312,12 +312,13 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
      *
      * @return {@link Map} instance containing all request cookies
      */
+    @SuppressWarnings("unchecked")
     protected Map<String, Cookie> collectCookies() {
-        var ret = new HashMap<String, Cookie>();
         var cookies = request.getCookies();
-        if (cookies == null) {
-            return ret;
+        if (cookies == null || cookies.length == 0) {
+            return Collections.EMPTY_MAP;
         }
+        var ret = new HashMap<String, Cookie>();
         for (var cookie : cookies) {
             ret.put(cookie.getName(), cookie);
         }
