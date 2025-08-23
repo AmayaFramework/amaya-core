@@ -17,65 +17,67 @@ public abstract class AbstractContext<RQ extends ServletRequest, RP extends Serv
     /**
      * The original, unwrapped servlet request instance provided by the servlet container.
      */
-    protected final RQ originalRequest;
+    protected final RQ servletRequest;
 
     /**
      * The original, unwrapped servlet response instance provided by the servlet container.
      */
-    protected final RP originalResponse;
+    protected final RP servletResponse;
 
     /**
      * The attribute map bound to the original servlet request.
      */
-    protected final RequestAttributeMap attributes;
+    protected RequestAttributeMap attributes;
 
     /**
      * Constructs a new instance of {@code AbstractContext} with the given original request and response.
      *
-     * @param originalRequest  the original servlet request provided by the servlet container
-     * @param originalResponse the original servlet response provided by the servlet container
+     * @param servletRequest  the original servlet request provided by the servlet container
+     * @param servletResponse the original servlet response provided by the servlet container
      */
-    protected AbstractContext(RQ originalRequest, RP originalResponse) {
-        this.originalRequest = originalRequest;
-        this.originalResponse = originalResponse;
-        this.attributes = new RequestAttributeMap(originalRequest);
+    protected AbstractContext(RQ servletRequest, RP servletResponse) {
+        this.servletRequest = servletRequest;
+        this.servletResponse = servletResponse;
     }
 
     @Override
-    public RQ originalRequest() {
-        return originalRequest;
+    public RQ servletRequest() {
+        return servletRequest;
     }
 
     @Override
-    public RP originalResponse() {
-        return originalResponse;
+    public RP servletResponse() {
+        return servletResponse;
     }
 
     @Override
     public Map<String, Object> attributes() {
+        if (attributes == null) {
+            attributes = new RequestAttributeMap(servletRequest);
+        }
         return attributes;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <V> V get(String key) {
-        return (V) originalRequest.getAttribute(key);
+        return (V) servletRequest.getAttribute(key);
     }
 
     @Override
     public void set(String key, Object value) {
-        originalRequest.setAttribute(key, value);
+        servletRequest.setAttribute(key, value);
     }
 
     @Override
     public Object remove(String key) {
-        var ret = originalRequest.getAttribute(key);
-        originalRequest.removeAttribute(key);
+        var ret = servletRequest.getAttribute(key);
+        servletRequest.removeAttribute(key);
         return ret;
     }
 
     @Override
     public boolean contains(String key) {
-        return originalRequest.getAttribute(key) != null;
+        return servletRequest.getAttribute(key) != null;
     }
 }
