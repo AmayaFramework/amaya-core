@@ -5,11 +5,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ListIterator;
 import java.util.function.Consumer;
 
+/**
+ * A {@link ListIterator} implementation for multi-value response headers.
+ * <p>
+ * Adding values appends them to both the underlying iterator and the {@link HttpServletResponse}.
+ * Removal and modification operations are not supported.
+ */
 public final class MultiHeaderListIterator implements ListIterator<String> {
     private final ListIterator<String> iterator;
     private final String header;
     private final HttpServletResponse response;
 
+    /**
+     * Constructs a new list iterator for a specific header.
+     *
+     * @param iterator the underlying list iterator
+     * @param header   the header name
+     * @param response the backing servlet response
+     */
     public MultiHeaderListIterator(ListIterator<String> iterator, String header, HttpServletResponse response) {
         this.iterator = iterator;
         this.header = header;
@@ -48,12 +61,12 @@ public final class MultiHeaderListIterator implements ListIterator<String> {
 
     @Override
     public void remove() {
-        throw new UnsupportedOperationException("remove: TODO MSG");
+        throw new UnsupportedOperationException("remove operation is not supported on MultiHeaderListIterator");
     }
 
     @Override
     public void set(String t) {
-        throw new UnsupportedOperationException("remove: TODO MSG");
+        throw new UnsupportedOperationException("set operation is not supported on MultiHeaderListIterator");
     }
 
     @Override

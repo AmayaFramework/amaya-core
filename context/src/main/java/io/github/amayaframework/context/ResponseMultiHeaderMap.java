@@ -5,11 +5,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.function.BiConsumer;
 
+/**
+ * A {@link Map} implementation representing multi-value response headers.
+ * <p>
+ * Backed by a {@link HttpServletResponse}, this map synchronizes all changes
+ * with the underlying response object.
+ */
 public final class ResponseMultiHeaderMap implements Map<String, List<String>> {
     private final Map<String, List<String>> body;
     private final HttpServletResponse response;
     private Map<String, List<String>> finalBody;
 
+    /**
+     * Constructs a new multi-header map bound to the given response.
+     *
+     * @param body     the backing map
+     * @param response the servlet response
+     */
     public ResponseMultiHeaderMap(Map<String, List<String>> body, HttpServletResponse response) {
         this.body = body;
         this.response = response;

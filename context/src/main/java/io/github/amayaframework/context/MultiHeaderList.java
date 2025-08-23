@@ -9,11 +9,25 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+/**
+ * A {@link List} implementation that represents multi-value headers
+ * bound to a {@link HttpServletResponse}.
+ * <p>
+ * Add operations append values to the servlet response header.
+ * Removal and modification operations are not supported.
+ */
 public final class MultiHeaderList implements List<String> {
     private final List<String> body;
     private final String header;
     private final HttpServletResponse response;
 
+    /**
+     * Constructs a new header list bound to a response.
+     *
+     * @param body     the backing list
+     * @param header   the header name
+     * @param response the backing servlet response
+     */
     public MultiHeaderList(List<String> body, String header, HttpServletResponse response) {
         this.body = body;
         this.header = header;
@@ -68,7 +82,7 @@ public final class MultiHeaderList implements List<String> {
 
     @Override
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("remove operation is not supported on MultiHeaderList");
     }
 
     @Override
@@ -97,32 +111,32 @@ public final class MultiHeaderList implements List<String> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("removeAll operation is not supported on MultiHeaderList");
     }
 
     @Override
     public boolean removeIf(Predicate<? super String> filter) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("removeIf operation is not supported on MultiHeaderList");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("retainAll operation is not supported on MultiHeaderList");
     }
 
     @Override
     public void replaceAll(UnaryOperator<String> operator) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("replaceAll operation is not supported on MultiHeaderList");
     }
 
     @Override
     public void sort(Comparator<? super String> c) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("sort operation is not supported on MultiHeaderList");
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("clear operation is not supported on MultiHeaderList");
     }
 
     @Override
@@ -132,7 +146,7 @@ public final class MultiHeaderList implements List<String> {
 
     @Override
     public String set(int index, String element) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("set operation is not supported on MultiHeaderList");
     }
 
     @Override
@@ -143,7 +157,7 @@ public final class MultiHeaderList implements List<String> {
 
     @Override
     public String remove(int index) {
-        throw new UnsupportedOperationException("TODO: MSG");
+        throw new UnsupportedOperationException("remove(index) operation is not supported on MultiHeaderList");
     }
 
     @Override
