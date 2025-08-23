@@ -18,7 +18,44 @@ public interface HttpResponse extends Response, HttpTransaction {
      *
      * @param cookie the {@link Cookie} instance to be set in the response.
      */
-    void setCookie(Cookie cookie);
+    void cookie(Cookie cookie);
+
+    /**
+     * Creates and sets a new cookie with the specified name and value.
+     * <p>
+     * The cookie is added to the HTTP response with default settings
+     * (no domain, no path, default max-age defined by the servlet container).
+     *
+     * @param name  the name of the cookie
+     * @param value the value of the cookie
+     */
+    default void cookie(String name, String value) {
+        cookie(new Cookie(name, value));
+    }
+
+    /**
+     * Creates and sets a new cookie with the specified name, value, and maximum age.
+     * <p>
+     * The cookie is added to the HTTP response with the provided max-age in seconds.
+     *
+     * @param name   the name of the cookie
+     * @param value  the value of the cookie
+     * @param maxAge the maximum age of the cookie in seconds; 0 deletes the cookie,
+     *               and a negative value indicates the cookie is not stored persistently
+     */
+    default void cookie(String name, String value, int maxAge) {
+        var cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie(cookie);
+    }
+
+    /**
+     * Sets a header in the HTTP response with a specified name and string value.
+     *
+     * @param name  the name of the header to set
+     * @param value the string value of the header
+     */
+    void header(String name, String value);
 
     /**
      * Sets a header in the HTTP response with a specified name and {@link Object} value that will be
@@ -27,15 +64,9 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param name  the name of the header to set
      * @param value the value of the header
      */
-    void setHeader(String name, Object value);
-
-    /**
-     * Sets a header in the HTTP response with a specified name and string value.
-     *
-     * @param name  the name of the header to set
-     * @param value the string value of the header
-     */
-    void setHeader(String name, String value);
+    default void header(String name, Object value) {
+        header(name, value.toString());
+    }
 
     /**
      * Sets a header in the HTTP response with a specified name and integer value.
@@ -44,15 +75,18 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param name  the name of the header to set
      * @param value the integer value of the header
      */
-    void setHeader(String name, int value);
+    void header(String name, int value);
 
     /**
-     * Sets a header in the HTTP response with a specified name and date value.
+     * Sets a header in the HTTP response with a specified name and long value.
+     * The value will be converted to its string representation.
      *
-     * @param name the name of the header to set
-     * @param date the date value of the header
+     * @param name  the name of the header to set
+     * @param value the integer value of the header
      */
-    void setHeader(String name, Date date);
+    default void header(String name, long value) {
+        header(name, Long.toString(value));
+    }
 
     /**
      * Sets a header in the HTTP response with a specified name and long date value (epoch time).
@@ -60,19 +94,20 @@ public interface HttpResponse extends Response, HttpTransaction {
      * @param name the name of the header to set
      * @param date the long date value of the header (epoch time)
      */
-    void setHeader(String name, long date);
+    void dateHeader(String name, long date);
 
     /**
-     * Adds a new header with the specified name and value. Unlike {@link #setHeader(String, Object)},
-     * this method does not overwrite existing values but appends the new one.
+     * Sets a header in the HTTP response with a specified name and date value.
      *
-     * @param name  the name of the header
-     * @param value the header value as an {@link Object} (converted to string)
+     * @param name the name of the header to set
+     * @param date the date value of the header
      */
-    void addHeader(String name, Object value);
+    default void dateHeader(String name, Date date) {
+        dateHeader(name, date.getTime());
+    }
 
     /**
-     * Adds a new header with the specified name and string value. Unlike {@link #setHeader(String, String)},
+     * Adds a new header with the specified name and string value. Unlike {@link #header(String, String)},
      * this method does not overwrite existing values but appends the new one.
      *
      * @param name  the name of the header
@@ -81,7 +116,18 @@ public interface HttpResponse extends Response, HttpTransaction {
     void addHeader(String name, String value);
 
     /**
-     * Adds a new header with the specified name and integer value. Unlike {@link #setHeader(String, int)},
+     * Adds a new header with the specified name and value. Unlike {@link #header(String, Object)},
+     * this method does not overwrite existing values but appends the new one.
+     *
+     * @param name  the name of the header
+     * @param value the header value as an {@link Object} (converted to string)
+     */
+    default void addHeader(String name, Object value) {
+        addHeader(name, value.toString());
+    }
+
+    /**
+     * Adds a new header with the specified name and integer value. Unlike {@link #header(String, int)},
      * this method does not overwrite existing values but appends the new one.
      *
      * @param name  the name of the header
@@ -90,52 +136,80 @@ public interface HttpResponse extends Response, HttpTransaction {
     void addHeader(String name, int value);
 
     /**
-     * Adds a new header with the specified name and date value. Unlike {@link #setHeader(String, Date)},
+     * Adds a new header with the specified name and long value. Unlike {@link #header(String, long)},
      * this method does not overwrite existing values but appends the new one.
      *
-     * @param name the name of the header
-     * @param date the header value as a {@link Date}
+     * @param name  the name of the header
+     * @param value the integer value of the header
      */
-    void addHeader(String name, Date date);
+    default void addHeader(String name, long value) {
+        addHeader(name, Long.toString(value));
+    }
 
     /**
-     * Adds a new header with the specified name and long date value (epoch time). Unlike {@link #setHeader(String, long)},
+     * Adds a new header with the specified name and long date value (epoch time). Unlike {@link #dateHeader(String, long)},
      * this method does not overwrite existing values but appends the new one.
      *
      * @param name the name of the header
      * @param date the header value as epoch time
      */
-    void addHeader(String name, long date);
+    void addDateHeader(String name, long date);
 
     /**
-     * TODO
+     * Adds a new header with the specified name and date value. Unlike {@link #dateHeader(String, Date)},
+     * this method does not overwrite existing values but appends the new one.
      *
-     * @param name
-     * @param value
+     * @param name the name of the header
+     * @param date the header value as a {@link Date}
      */
-    void extendHeader(String name, Object value);
+    default void addDateHeader(String name, Date date) {
+        addDateHeader(name, date.getTime());
+    }
 
     /**
-     * TODO
+     * Extends an existing response header by appending a new value,
+     * using a comma (",") as a delimiter if the header already exists.
+     * <p>
+     * This is useful for headers that support multiple comma-separated values
+     * (e.g., {@code Accept}, {@code Cache-Control}).
+     * <p>
+     * Unlike {@link #addHeader(String, String)}, which adds a separate header entry,
+     * this method merges the new value into the existing header line.
      *
-     * @param name
-     * @param value
+     * @param name  the name of the header
+     * @param value the value to append to the header
      */
     void extendHeader(String name, String value);
+
+    /**
+     * Extends an existing response header by appending a new value,
+     * using a comma (",") as a delimiter if the header already exists.
+     * <p>
+     * The provided {@link Object} is converted to a string using {@link Object#toString()}.
+     * <p>
+     * Unlike {@link #addHeader(String, Object)}, which adds a separate header entry,
+     * this method merges the new value into the existing header line.
+     *
+     * @param name  the name of the header
+     * @param value the value to append to the header
+     */
+    default void extendHeader(String name, Object value) {
+        extendHeader(name, value.toString());
+    }
 
     /**
      * Gets the current HTTP status code of this response.
      *
      * @return the current {@link HttpCode} representing the status of the response.
      */
-    HttpCode getStatus();
+    HttpCode status();
 
     /**
      * Sets the HTTP status code for this response.
      *
      * @param code the {@link HttpCode} to be set as the response status
      */
-    void setStatus(HttpCode code);
+    void status(HttpCode code);
 
     /**
      * <p>
@@ -235,7 +309,7 @@ public interface HttpResponse extends Response, HttpTransaction {
      *
      * @return {@link Supplier} of trailer headers
      */
-    Supplier<Map<String, String>> getTrailerFields();
+    Supplier<Map<String, String>> trailerFields();
 
     /**
      * Sets the supplier of trailer headers.
@@ -266,5 +340,5 @@ public interface HttpResponse extends Response, HttpTransaction {
      *                               supported in the request, for instance, the underlying protocol is HTTP 1.0,
      *                               or the response is not in chunked encoding in HTTP 1.1.
      */
-    void setTrailerFields(Supplier<Map<String, String>> supplier);
+    void trailerFields(Supplier<Map<String, String>> supplier);
 }

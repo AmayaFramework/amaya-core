@@ -1,7 +1,6 @@
 package io.github.amayaframework.context;
 
 import io.github.amayaframework.http.MimeData;
-import io.github.amayaframework.http.MimeType;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.ServletRequest;
 
@@ -19,25 +18,10 @@ import java.util.Map;
  * @param <T> the type of underlying request
  */
 public abstract class AbstractRequest<T extends ServletRequest> implements Request {
-    /**
-     * The underlying {@link ServletRequest} instance.
-     */
     protected final T request;
-    /**
-     * Local address.
-     */
     protected InetSocketAddress local;
-    /**
-     * Remote address.
-     */
     protected InetSocketAddress remote;
-    /**
-     * Request charset.
-     */
     protected Charset charset;
-    /**
-     * Request mime data.
-     */
     protected MimeData data;
 
     /**
@@ -50,89 +34,86 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     }
 
     @Override
-    public ServletInputStream getInputStream() throws IOException {
+    public ServletInputStream inputStream() throws IOException {
         return request.getInputStream();
     }
 
     @Override
-    public BufferedReader getReader() throws IOException {
+    public BufferedReader reader() throws IOException {
         return request.getReader();
     }
 
     @Override
-    public InetSocketAddress getLocalAddress() {
-        if (local != null) {
-            return local;
+    public InetSocketAddress localAddress() {
+        if (local == null) {
+            local = new InetSocketAddress(request.getLocalAddr(), request.getLocalPort());
         }
-        local = new InetSocketAddress(request.getLocalName(), request.getLocalPort());
         return local;
     }
 
     @Override
-    public String getLocalHost() {
+    public String localHost() {
         return request.getLocalName();
     }
 
     @Override
-    public InetSocketAddress getRemoteAddress() {
-        if (remote != null) {
-            return remote;
+    public InetSocketAddress remoteAddress() {
+        if (remote == null) {
+            remote = new InetSocketAddress(request.getRemoteAddr(), request.getRemotePort());
         }
-        remote = new InetSocketAddress(request.getRemoteHost(), request.getRemotePort());
         return remote;
     }
 
     @Override
-    public String getRemoteHost() {
+    public String remoteHost() {
         return request.getRemoteHost();
     }
 
     @Override
-    public Map<String, String[]> getParameters() {
+    public Map<String, String[]> params() {
         return request.getParameterMap();
     }
 
     @Override
-    public boolean containsParameter(String name) {
+    public boolean containsParam(String name) {
         return request.getParameter(name) != null;
     }
 
     @Override
-    public String getParameter(String name) {
+    public String param(String name) {
         return request.getParameter(name);
     }
 
     @Override
-    public String[] getParameters(String name) {
+    public String[] params(String name) {
         return request.getParameterValues(name);
     }
 
     @Override
-    public Iterable<Locale> getLocales() {
+    public Iterable<Locale> locales() {
         return () -> request.getLocales().asIterator();
     }
 
     @Override
-    public Charset getCharset() {
-        if (charset != null) {
-            return charset;
+    public Charset charset() {
+        if (charset == null || !charset.name().equals(request.getCharacterEncoding())) {
+            charset = Charset.forName(request.getCharacterEncoding());
         }
-        charset = Charset.forName(request.getCharacterEncoding());
         return charset;
     }
 
     @Override
-    public void setCharset(Charset charset) {
+    public void charset(Charset charset) {
         try {
             request.setCharacterEncoding(charset.name());
         } catch (UnsupportedEncodingException e) {
-            // Unreachable code
+            throw new IllegalArgumentException(e);
         }
         this.charset = charset;
     }
 
     @Override
-    public long getContentLength() {
+    public long contentLength() {
         return request.getContentLengthLong();
     }
 
@@ -145,7 +126,7 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     protected abstract MimeData parseMimeData(String data);
 
     @Override
-    public MimeData getMimeData() {
+    public MimeData mimeData() {
         if (data != null) {
             return data;
         }
@@ -158,31 +139,17 @@ public abstract class AbstractRequest<T extends ServletRequest> implements Reque
     }
 
     @Override
-    public void setMimeData(MimeData data) {
-        this.data = data;
-    }
-
-    @Override
-    public void setMimeType(MimeType type) {
-        if (type == null) {
-            this.data = null;
-            return;
-        }
-        this.data = new MimeData(type);
-    }
-
-    @Override
-    public String getProtocol() {
+    public String protocol() {
         return request.getProtocol();
     }
 
     @Override
-    public String getScheme() {
+    public String scheme() {
         return request.getScheme();
     }
 
     @Override
-    public Locale getLocale() {
+    public Locale locale() {
         return request.getLocale();
     }
 }

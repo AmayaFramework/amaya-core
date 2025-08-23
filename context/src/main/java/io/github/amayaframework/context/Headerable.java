@@ -45,7 +45,7 @@ public interface Headerable {
      * @param name the specified header name
      * @return string containing header value if it exists, null otherwise
      */
-    String getHeader(String name);
+    String header(String name);
 
     /**
      * Returns an enumeration of all values of the header with the specified name.
@@ -53,7 +53,7 @@ public interface Headerable {
      * @param name the specified header name
      * @return an {@link Enumeration} of all header values, or an empty enumeration if none exist
      */
-    Enumeration<String> getHeadersEnum(String name);
+    Enumeration<String> headersEnum(String name);
 
     /**
      * Returns an iterable collection of all values of the header with the specified name.
@@ -61,5 +61,5 @@ public interface Headerable {
      * @param name the specified header name
      * @return an {@link Iterable} over all header values, or an empty iterable if none exist
      */
-    Iterable<String> getHeaders(String name);
+    Iterable<String> headers(String name);
 }

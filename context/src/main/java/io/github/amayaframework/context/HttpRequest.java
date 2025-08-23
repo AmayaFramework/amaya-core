@@ -18,14 +18,14 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return the {@link HttpMethod} instance
      */
-    HttpMethod getMethod();
+    HttpMethod method();
 
     /**
      * Gets full request URL, including scheme, hostname, port, request uri and query string.
      *
      * @return the {@link URL} instance containing request URL
      */
-    URL getURL();
+    URL url();
 
     /**
      * Returns the part of this request's URL from the protocol name up to the query string in the first line of the
@@ -33,14 +33,14 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return the {@link URI} instance containing URI from http request line.
      */
-    URI getRequestURI();
+    URI requestUri();
 
     /**
      * Gets request path from http request line.
      *
      * @return a string containing request path
      */
-    String getPath();
+    String path();
 
     /**
      * Gets segments of request path.
@@ -49,7 +49,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return the {@link String} list containing path segments
      */
-    List<String> getPathSegments();
+    List<String> pathSegments();
 
     /**
      * Gets the query string that is contained in the request URL after the path.
@@ -58,7 +58,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @return a <code>String</code> containing the query string or <code>null</code> if the URL
      * contains no query string. The value is not decoded by the container.
      */
-    String getQueryString();
+    String queryString();
 
     // Headers
 
@@ -74,7 +74,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * milliseconds since January 1, 1970 GMT, or -1 if the named header was not included with the request
      * @throws IllegalArgumentException If the header value can't be converted to a date
      */
-    Date getDateHeader(String name);
+    Date dateHeader(String name);
 
     /**
      * Gets the value of the specified request header as an <code>int</code>. If the request does not have a header of
@@ -89,7 +89,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * if the request doesn't have a header of this name
      * @throws NumberFormatException If the header value can't be converted to an <code>int</code>
      */
-    int getIntHeader(String name);
+    int intHeader(String name);
 
     // Path parameters
 
@@ -98,7 +98,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return a map containing path parameters and their values
      */
-    Map<String, Object> getPathParameters();
+    Map<String, Object> pathParams();
 
     /**
      * Gets a specific path parameter by its name.
@@ -107,7 +107,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @param <T>  the type of the parameter value
      * @return the value of the path parameter, or null if not found
      */
-    <T> T getPathParameter(String name);
+    <T> T pathParam(String name);
 
     // Query parameters
 
@@ -116,7 +116,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return a map containing query parameters and their values
      */
-    Map<String, List<Object>> getQueryParameters();
+    Map<String, List<Object>> queryParams();
 
     /**
      * Gets a list of values for a specific query parameter by its name.
@@ -125,7 +125,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @param <T>  the type of the parameter values
      * @return a list of values for the query parameter, or null value if not found
      */
-    <T> List<T> getQueryParameters(String name);
+    <T> List<T> queryParams(String name);
 
     /**
      * Gets a value for a specific query parameter by its name.
@@ -134,7 +134,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @param <T>  the type of the parameter value
      * @return the first value of the query parameter, or null if not found
      */
-    <T> T getQueryParameter(String name);
+    <T> T queryParam(String name);
 
     // Session parameters
 
@@ -143,7 +143,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      *
      * @return a map containing session parameters and their values
      */
-    Map<String, Object> getSessionParameters();
+    Map<String, Object> sessionsParams();
 
     /**
      * Gets a specific session parameter by its name.
@@ -152,7 +152,7 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @param <T>  the type of the parameter value
      * @return the value of the session parameter, or null if not found
      */
-    <T> T getSessionParameter(String name);
+    <T> T sessionParam(String name);
 
     /**
      * Sets a session parameter with a specified name and value.
@@ -160,37 +160,37 @@ public interface HttpRequest extends Request, HttpTransaction {
      * @param name  the name of the session parameter to set
      * @param value the value to associate with the session parameter
      */
-    void setSessionParameter(String name, Object value);
+    void sessionParam(String name, Object value);
 
     // Trailer fields
 
     /**
      * Get the request trailer fields.
      * <p>
-     * {@link #isTrailerFieldsReady()} should be called first to determine if it is safe to call this method without
+     * {@link #trailerFieldsReady()} should be called first to determine if it is safe to call this method without
      * causing an exception.
      * </p>
      *
      * @return A map of trailer fields in which all the keys are in lowercase, regardless of the case they had at the
-     * protocol level. If there are no trailer fields, yet {@link #isTrailerFieldsReady} is returning true, the empty
+     * protocol level. If there are no trailer fields, yet {@link #trailerFieldsReady} is returning true, the empty
      * map is returned.
-     * @throws IllegalStateException if {@link #isTrailerFieldsReady()} is false
+     * @throws IllegalStateException if {@link #trailerFieldsReady()} is false
      */
-    Map<String, String> getTrailerFields();
+    Map<String, String> trailerFields();
 
     /**
-     * Checks if trailer fields are ready to read using {@link #getTrailerFields}.
+     * Checks if trailer fields are ready to read using {@link #trailerFields}.
      * These methods returns true immediately if it is known that there is no trailer in the request, for instance, the
      * underlying protocol (such as HTTP 1.0) does not support the trailer fields, or the request is not in chunked
      * encoding in HTTP 1.1. And the method also returns true if both of the following conditions are satisfied:
      * <ol type="a">
      * <li>the application has read all the request data and an EOF indication has been returned from the
-     * {@link #getReader} or {@link #getInputStream}.
+     * {@link #reader} or {@link #inputStream}.
      * <li>all the trailer fields sent by the client have been received. Note that it is possible that the client
      * has sent no trailer fields.
      * </ol>
      *
      * @return a boolean whether trailer fields are ready to read
      */
-    boolean isTrailerFieldsReady();
+    boolean trailerFieldsReady();
 }

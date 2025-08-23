@@ -15,42 +15,21 @@ import java.util.function.Supplier;
  * Requires to implement {@link AbstractResponse#formatMimeData(MimeData)}.
  */
 public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletResponse> implements HttpResponse {
-
-    /**
-     * Http version of this response.
-     */
     protected final HttpVersion version;
-
-    /**
-     * Http status code of this response.
-     */
     protected HttpCode status;
-
-    /**
-     * Headers of this response.
-     */
     protected Map<String, String> headers;
-
-    /**
-     * Multi-value headers of this response.
-     */
     protected Map<String, List<String>> multiHeaders;
-
-    /**
-     * Cookies of this response.
-     */
     protected Map<String, Cookie> cookies;
+    protected Map<String, Cookie> finalCookies;
 
     /**
-     * Constructs {@link AbstractHttpResponse} instance with given {@link HttpServletResponse},
-     * protocol, scheme and {@link HttpVersion}.
-     *
-     * @param response the underlying {@link HttpServletResponse} instance, must be non-null
-     * @param protocol the specified protocol string
-     * @param scheme   the specified scheme string
-     * @param version  the specified http protocol version, must be non-null
+     * TODO
+     * @param response
+     * @param version
+     * @param protocol
+     * @param scheme
      */
-    protected AbstractHttpResponse(HttpServletResponse response, String protocol, String scheme, HttpVersion version) {
+    protected AbstractHttpResponse(HttpServletResponse response, HttpVersion version, String protocol, String scheme) {
         super(response, protocol, scheme);
         this.version = version;
         this.status = HttpCode.OK;
@@ -93,75 +72,61 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public String getHeader(String name) {
+    public String header(String name) {
         return response.getHeader(name);
     }
 
     @Override
-    public Enumeration<String> getHeadersEnum(String name) {
+    public Enumeration<String> headersEnum(String name) {
         return new IteratorEnumeration<>(response.getHeaders(name).iterator());
     }
 
     @Override
-    public Iterable<String> getHeaders(String name) {
+    public Iterable<String> headers(String name) {
         return response.getHeaders(name);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Map<String, Cookie> cookies() {
-        if (cookies == null) {
-            cookies = new HashMap<>();
+        if (finalCookies == null) {
+            return Collections.EMPTY_MAP;
         }
-        return cookies;
+        return finalCookies;
     }
 
     @Override
-    public Cookie getCookie(String name) {
+    public Cookie cookie(String name) {
         if (cookies == null) {
-            cookies = new HashMap<>();
             return null;
         }
         return cookies.get(name);
     }
 
     @Override
-    public void setCookie(Cookie cookie) {
+    public void cookie(Cookie cookie) {
         Objects.requireNonNull(cookie);
         response.addCookie(cookie);
         if (cookies == null) {
             cookies = new HashMap<>();
+            finalCookies = Collections.unmodifiableMap(cookies);
         }
         cookies.put(cookie.getName(), cookie);
     }
 
     @Override
-    public void setHeader(String name, Object value) {
-        response.setHeader(name, value.toString());
-    }
-
-    @Override
-    public void setHeader(String name, String value) {
+    public void header(String name, String value) {
         response.setHeader(name, value);
     }
 
     @Override
-    public void setHeader(String name, int value) {
+    public void header(String name, int value) {
         response.setIntHeader(name, value);
     }
 
     @Override
-    public void setHeader(String name, Date date) {
-        response.setDateHeader(name, date.getTime());
-    }
-
-    @Override
-    public void setHeader(String name, long date) {
+    public void dateHeader(String name, long date) {
         response.setDateHeader(name, date);
-    }
-
-    @Override
-    public void addHeader(String name, Object value) {
-        response.addHeader(name, value.toString());
     }
 
     @Override
@@ -175,18 +140,8 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public void addHeader(String name, Date date) {
-        response.addDateHeader(name, date.getTime());
-    }
-
-    @Override
-    public void addHeader(String name, long date) {
+    public void addDateHeader(String name, long date) {
         response.addDateHeader(name, date);
-    }
-
-    @Override
-    public void extendHeader(String name, Object value) {
-        extendHeader(name, value.toString());
     }
 
     @Override
@@ -199,13 +154,23 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
         }
     }
 
+    /**
+     * TODO
+     * @param code
+     * @return
+     */
+    protected abstract HttpCode parseHttpCode(int code);
+
     @Override
-    public HttpCode getStatus() {
+    public HttpCode status() {
+        if (status == null || status.getCode() != response.getStatus()) {
+            status = parseHttpCode(response.getStatus());
+        }
         return status;
     }
 
     @Override
-    public void setStatus(HttpCode code) {
+    public void status(HttpCode code) {
         if (!code.isSupported(version)) {
             throw new UnsupportedHttpDefinition(version, code);
         }
@@ -242,17 +207,17 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     @Override
-    public Supplier<Map<String, String>> getTrailerFields() {
+    public Supplier<Map<String, String>> trailerFields() {
         return response.getTrailerFields();
     }
 
     @Override
-    public void setTrailerFields(Supplier<Map<String, String>> supplier) {
+    public void trailerFields(Supplier<Map<String, String>> supplier) {
         response.setTrailerFields(supplier);
     }
 
     @Override
-    public HttpVersion getHttpVersion() {
+    public HttpVersion httpVersion() {
         return version;
     }
 }

@@ -16,30 +16,13 @@ import java.util.Locale;
  * @param <T> the type of underlying response
  */
 public abstract class AbstractResponse<T extends ServletResponse> implements Response {
-    /**
-     * The underlying {@link ServletResponse} instance.
-     */
     protected final T response;
-    /**
-     * Response protocol.
-     */
     protected final String protocol;
-    /**
-     * Response scheme.
-     */
     protected final String scheme;
-    /**
-     * Response charset.
-     */
     protected Charset charset;
-    /**
-     * Length of response content.
-     */
     protected long length;
-    /**
-     * Response mime data.
-     */
     protected MimeData data;
+    protected String contentType;
 
     /**
      * Constructs {@link AbstractResponse} instance with given {@link ServletResponse} instance, protocol and scheme.
@@ -55,17 +38,17 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     }
 
     @Override
-    public ServletOutputStream getOutputStream() throws IOException {
+    public ServletOutputStream outputStream() throws IOException {
         return response.getOutputStream();
     }
 
     @Override
-    public PrintWriter getWriter() throws IOException {
+    public PrintWriter writer() throws IOException {
         return response.getWriter();
     }
 
     @Override
-    public boolean isSent() {
+    public boolean sent() {
         return response.isCommitted();
     }
 
@@ -75,12 +58,12 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     }
 
     @Override
-    public int getBufferSize() {
+    public int bufferSize() {
         return response.getBufferSize();
     }
 
     @Override
-    public void setBufferSize(int size) {
+    public void bufferSize(int size) {
         response.setBufferSize(size);
     }
 
@@ -95,44 +78,52 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     }
 
     @Override
-    public Charset getCharset() {
-        if (charset != null) {
-            return charset;
+    public Charset charset() {
+        if (charset == null || !charset.name().equals(response.getCharacterEncoding())) {
+            charset = Charset.forName(response.getCharacterEncoding());
         }
-        charset = Charset.forName(response.getCharacterEncoding());
         return charset;
     }
 
     @Override
-    public void setCharset(Charset charset) {
+    public void charset(Charset charset) {
         response.setCharacterEncoding(charset.name());
         this.charset = charset;
     }
 
     @Override
-    public long getContentLength() {
+    public long contentLength() {
         return length;
     }
 
     @Override
-    public void setContentLength(long length) {
+    public void contentLength(long length) {
         response.setContentLengthLong(length);
         this.length = length;
     }
 
-    @Override
-    public MimeData getMimeData() {
-        return data;
-    }
+    /**
+     * Parses {@link MimeData} from given qualifier.
+     *
+     * @param data the specified string containing mime data qualifier
+     * @return {@link MimeData} instance
+     */
+    protected abstract MimeData parseMimeData(String data);
 
     @Override
-    public void setMimeData(MimeData data) {
-        if (data == null) {
-            response.setContentType(null);
-        } else {
-            response.setContentType(formatMimeData(data));
+    public MimeData mimeData() {
+        if (data != null) {
+            return data;
         }
-        this.data = data;
+        var contentType = response.getContentType();
+        if (contentType == null) {
+            return null;
+        }
+        if (contentType.equals(this.contentType)) {
+            return data;
+        }
+        data = parseMimeData(contentType);
+        return data;
     }
 
     /**
@@ -144,31 +135,46 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     protected abstract String formatMimeData(MimeData data);
 
     @Override
-    public void setMimeType(MimeType type) {
-        if (type == null) {
-            setMimeData(null);
-            return;
+    public void mimeData(MimeData data) {
+        if (data == null) {
+            response.setContentType(null);
+            contentType = null;
+        } else {
+            var type = formatMimeData(data);
+            response.setContentType(type);
+            contentType = type;
         }
-        setMimeData(new MimeData(type));
+        this.data = data;
     }
 
     @Override
-    public String getProtocol() {
+    public void mimeType(MimeType type) {
+        if (type == null) {
+            response.setContentType(null);
+            contentType = null;
+            data = null;
+        } else {
+            mimeData(new MimeData(type));
+        }
+    }
+
+    @Override
+    public String protocol() {
         return protocol;
     }
 
     @Override
-    public String getScheme() {
+    public String scheme() {
         return scheme;
     }
 
     @Override
-    public Locale getLocale() {
+    public Locale locale() {
         return response.getLocale();
     }
 
     @Override
-    public void setLocale(Locale locale) {
+    public void locale(Locale locale) {
         response.setLocale(locale);
     }
 }

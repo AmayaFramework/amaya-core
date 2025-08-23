@@ -15,7 +15,7 @@ public interface HttpTransaction extends Transaction, Headerable {
      *
      * @return the {@link HttpVersion} instance
      */
-    HttpVersion getHttpVersion();
+    HttpVersion httpVersion();
 
     /**
      * Gets {@link Map} containing cookies of this transaction.
@@ -30,5 +30,5 @@ public interface HttpTransaction extends Transaction, Headerable {
      * @param name the specified cookie name
      * @return the {@link Cookie} instance if it exists, null otherwise
      */
-    Cookie getCookie(String name);
+    Cookie cookie(String name);
 }

@@ -15,47 +15,47 @@ public interface Request extends Transaction {
 
     /**
      * Retrieves the body of the request as binary data using a {@link ServletInputStream}.
-     * Either this method or {@link #getReader} may be called to read the body, not both.
+     * Either this method or {@link #reader} may be called to read the body, not both.
      *
      * @return a {@link ServletInputStream} object containing the body of the request
-     * @throws IllegalStateException if the {@link #getReader} method has already been called for this request
+     * @throws IllegalStateException if the {@link #reader} method has already been called for this request
      * @throws IOException           if an input or output exception occurred
      */
-    ServletInputStream getInputStream() throws IOException;
+    ServletInputStream inputStream() throws IOException;
 
     /**
      * Retrieves the body of the request as character data using a {@link BufferedReader}.
      * The reader translates the character data according to the character encoding used on the body.
-     * Either this method or {@link #getInputStream} may be called to read the body, not both.
+     * Either this method or {@link #inputStream} may be called to read the body, not both.
      *
      * @return a {@link BufferedReader} containing the body of the request
      * @throws java.io.UnsupportedEncodingException if the character set encoding used is not supported
      *                                              and the text cannot be decoded
-     * @throws IllegalStateException                if {@link #getInputStream} method has been called on this request
+     * @throws IllegalStateException                if {@link #inputStream} method has been called on this request
      * @throws IOException                          if an input or output exception occurred
      */
-    BufferedReader getReader() throws IOException;
+    BufferedReader reader() throws IOException;
 
     /**
      * Gets {@link InetSocketAddress} instance containing fully qualified local address: hostname and port.
      *
      * @return the {@link InetSocketAddress} instance
      */
-    InetSocketAddress getLocalAddress();
+    InetSocketAddress localAddress();
 
     /**
      * Returns the host name of the Internet Protocol (IP) interface on which the request was received.
      *
      * @return a string containing the host name of the IP on which the request was received.
      */
-    String getLocalHost();
+    String localHost();
 
     /**
      * Gets {@link InetSocketAddress} instance containing fully qualified remote address: hostname and port.
      *
      * @return the {@link InetSocketAddress} instance
      */
-    InetSocketAddress getRemoteAddress();
+    InetSocketAddress remoteAddress();
 
     /**
      * Returns the fully qualified name of the client or the last proxy that sent the request.
@@ -64,7 +64,7 @@ public interface Request extends Transaction {
      *
      * @return a string containing the fully qualified name of the client
      */
-    String getRemoteHost();
+    String remoteHost();
 
     /**
      * Gets a {@link Map} of the parameters of this request.
@@ -74,7 +74,7 @@ public interface Request extends Transaction {
      * @return an immutable java.util.Map containing parameter names as keys and parameter values as map values.
      * The keys in the parameter map are of type String. The values in the parameter map are of type String array.
      */
-    Map<String, String[]> getParameters();
+    Map<String, String[]> params();
 
     /**
      * Checks if request parameters contains parameter with given name.
@@ -82,7 +82,7 @@ public interface Request extends Transaction {
      * @param name the specified parameter name
      * @return true if request contains parameter, false otherwise
      */
-    boolean containsParameter(String name);
+    boolean containsParam(String name);
 
     /**
      * Gets value of request parameter with given name.
@@ -90,7 +90,7 @@ public interface Request extends Transaction {
      * @param name the specified parameter name
      * @return parameter value if it exists, null otherwise
      */
-    String getParameter(String name);
+    String param(String name);
 
     /**
      * Gets an array of {@link String} instances containing all the values the given request parameter has, or
@@ -101,7 +101,7 @@ public interface Request extends Transaction {
      * @param name the specified parameter name
      * @return an array of <code>String</code> objects containing the parameter's values
      */
-    String[] getParameters(String name);
+    String[] params(String name);
 
     /**
      * Returns an {@link Iterable} of {@link Locale} instances indicating, in decreasing order starting with the
@@ -111,5 +111,5 @@ public interface Request extends Transaction {
      *
      * @return an {@link Iterable} of preferred {@link Locale} instances for the client
      */
-    Iterable<Locale> getLocales();
+    Iterable<Locale> locales();
 }

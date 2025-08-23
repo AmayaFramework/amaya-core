@@ -12,21 +12,11 @@ public interface HttpContext extends Context {
 
     /**
      * Gets the {@link HttpRequest} instance representing the current http request.
-     * Changes made to {@link HttpRequest} reflects on {@link HttpServletRequest} and vice versa.
      *
      * @return the {@link HttpRequest} instance
      */
     @Override
     HttpRequest request();
-
-    /**
-     * Gets the {@link HttpServletRequest} instance representing the current http request at the servlet level.
-     * Changes made to {@link HttpServletRequest} reflects on {@link HttpRequest} and vice versa.
-     *
-     * @return the {@link HttpServletRequest} instance
-     */
-    @Override
-    HttpServletRequest servletRequest();
 
     /**
      * Returns the original, unwrapped {@link HttpServletRequest} instance as provided by the servlet container.
@@ -36,25 +26,15 @@ public interface HttpContext extends Context {
      * @return the original {@link HttpServletRequest} instance
      */
     @Override
-    HttpServletRequest originalRequest();
+    HttpServletRequest servletRequest();
 
     /**
      * Gets the {@link HttpResponse} instance representing the current http response.
-     * Changes made to {@link HttpResponse} reflects on {@link HttpServletResponse} and vice versa.
      *
      * @return the {@link HttpResponse} instance
      */
     @Override
     HttpResponse response();
-
-    /**
-     * Gets the {@link HttpServletResponse} instance representing the current http response at the servlet level.
-     * Changes made to {@link HttpServletResponse} reflects on {@link HttpResponse} and vice versa.
-     *
-     * @return the {@link HttpServletResponse} instance
-     */
-    @Override
-    HttpServletResponse servletResponse();
 
     /**
      * Returns the original, unwrapped {@link HttpServletResponse} instance as provided by the servlet container.
@@ -64,5 +44,5 @@ public interface HttpContext extends Context {
      * @return the original {@link HttpServletResponse} instance
      */
     @Override
-    HttpServletResponse originalResponse();
+    HttpServletResponse servletResponse();
 }

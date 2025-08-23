@@ -1,5 +1,7 @@
 package io.github.amayaframework.context;
 
+import io.github.amayaframework.http.MimeData;
+import io.github.amayaframework.http.MimeType;
 import jakarta.servlet.ServletOutputStream;
 
 import java.io.IOException;
@@ -12,31 +14,45 @@ import java.util.Locale;
 public interface Response extends Transaction {
 
     /**
+     * Sets the MIME data for the transaction.
+     *
+     * @param data the {@link MimeData} instance to be set for the transaction.
+     */
+    void mimeData(MimeData data);
+
+    /**
+     * Sets the MIME type for the transaction.
+     *
+     * @param type the {@link MimeType} object to be set for the transaction.
+     */
+    void mimeType(MimeType type);
+
+    /**
      * Returns a {@link ServletOutputStream} suitable for writing binary data in the response.
      * The servlet container does not encode the binary data.
      *
      * <p>
      * Calling flush() on the ServletOutputStream commits the response.
      * <p>
-     * Either this method or {@link #getWriter} may be called to write the body, not both, except when {@link #reset}
+     * Either this method or {@link #writer} may be called to write the body, not both, except when {@link #reset}
      * has been called.
      *
      * @return a {@link ServletOutputStream} for writing binary data
      * @throws IllegalStateException if the <code>getWriter</code> method has been called on this response
      * @throws IOException           if an input or output exception occurred
      */
-    ServletOutputStream getOutputStream() throws IOException;
+    ServletOutputStream outputStream() throws IOException;
 
     /**
      * Returns a <code>PrintWriter</code> object that can send character text to the client.
-     * The <code>PrintWriter</code> uses the character encoding returned by {@link #getCharset()}.
+     * The <code>PrintWriter</code> uses the character encoding returned by {@link #charset()}.
      * If the response's character encoding has not been specified as described in <code>getCharacterEncoding</code>
      * (i.e., the method just returns the default value <code>ISO-8859-1</code>), <code>getWriter</code> updates it
      * to <code>ISO-8859-1</code>.
      * <p>
      * Calling flush() on the <code>PrintWriter</code> commits the response.
      * <p>
-     * Either this method or {@link #getOutputStream} may be called to write the body, not both, except when
+     * Either this method or {@link #outputStream} may be called to write the body, not both, except when
      * {@link #reset} has been called.
      *
      * @return a <code>PrintWriter</code> object that can return character data to the client
@@ -46,7 +62,7 @@ public interface Response extends Transaction {
      *                                              for this response object
      * @throws IOException                          if an input or output exception occurred
      */
-    PrintWriter getWriter() throws IOException;
+    PrintWriter writer() throws IOException;
 
     /**
      * Sets the length of the content body in the response In HTTP servlets, this method sets the HTTP Content-Length
@@ -55,14 +71,14 @@ public interface Response extends Transaction {
      * @param length a long specifying the length of the content being returned to the client;
      *               sets the Content-Length header
      */
-    void setContentLength(long length);
+    void contentLength(long length);
 
     /**
      * Sets the locale of the response, if the response has not been committed yet.
      *
      * @param locale the locale of the response
      */
-    void setLocale(Locale locale);
+    void locale(Locale locale);
 
     /**
      * Returns a boolean indicating if the response has been sent.
@@ -70,13 +86,13 @@ public interface Response extends Transaction {
      *
      * @return a boolean indicating if the response has been sent
      */
-    boolean isSent();
+    boolean sent();
 
     /**
      * Clears any data that exists in the buffer as well as the status code, headers. The state of calling
-     * {@link #getWriter} or {@link #getOutputStream} is also cleared. It is legal, for instance, to call
-     * {@link #getWriter}, reset and then {@link #getOutputStream}. If {@link #getWriter} or
-     * {@link #getOutputStream} have been called before this method, then the corresponding returned
+     * {@link #writer} or {@link #outputStream} is also cleared. It is legal, for instance, to call
+     * {@link #writer}, reset and then {@link #outputStream}. If {@link #writer} or
+     * {@link #outputStream} have been called before this method, then the corresponding returned
      * Writer or OutputStream will be staled and the behavior of using the stale object is undefined.
      *
      * @throws IllegalStateException if the response has already been committed
@@ -88,7 +104,7 @@ public interface Response extends Transaction {
      *
      * @return the actual buffer size used
      */
-    int getBufferSize();
+    int bufferSize();
 
     /**
      * Sets the preferred buffer size for the body of the response. The servlet container will use a buffer at least as
@@ -102,7 +118,7 @@ public interface Response extends Transaction {
      * @param size the preferred buffer size
      * @throws IllegalStateException if this method is called after content has been written
      */
-    void setBufferSize(int size);
+    void bufferSize(int size);
 
     /**
      * Forces any content in the buffer to be written to the client.

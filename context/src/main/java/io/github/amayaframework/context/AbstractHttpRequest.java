@@ -12,7 +12,7 @@ import java.util.*;
 
 /**
  * Skeletal implementation of {@link HttpRequest}. Provides implementations for all methods except
- * {@link HttpRequest#getPathParameters()} and {@link HttpRequest#getPathParameter(String)}.
+ * {@link HttpRequest#pathParams()} and {@link HttpRequest#pathParam(String)}.
  */
 public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletRequest> implements HttpRequest {
 
@@ -120,22 +120,22 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public String getHeader(String name) {
+    public String header(String name) {
         return request.getHeader(name);
     }
 
     @Override
-    public Enumeration<String> getHeadersEnum(String name) {
+    public Enumeration<String> headersEnum(String name) {
         return request.getHeaders(name);
     }
 
     @Override
-    public Iterable<String> getHeaders(String name) {
+    public Iterable<String> headers(String name) {
         return () -> request.getHeaders(name).asIterator();
     }
 
     @Override
-    public Date getDateHeader(String name) {
+    public Date dateHeader(String name) {
         var ret = request.getDateHeader(name);
         if (ret < 0) {
             return null;
@@ -144,7 +144,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public int getIntHeader(String name) {
+    public int intHeader(String name) {
         return request.getIntHeader(name);
     }
 
@@ -157,14 +157,14 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     protected abstract HttpMethod parseHttpMethod(String method);
 
     @Override
-    public HttpMethod getMethod() {
+    public HttpMethod method() {
         if (method == null) {
             method = parseHttpMethod(request.getMethod());
         }
         return method;
     }
 
-    private URL createURL() {
+    private URL createUrl() {
         var ret = new StringBuilder();
         var scheme = request.getScheme();
         var port = request.getServerPort();
@@ -188,14 +188,14 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public URL getURL() {
+    public URL url() {
         if (url == null) {
-            url = createURL();
+            url = createUrl();
         }
         return url;
     }
 
-    private URI createURI() {
+    private URI createUri() {
         var path = request.getRequestURI();
         var query = request.getQueryString();
         if (query == null) {
@@ -205,15 +205,15 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public URI getRequestURI() {
+    public URI requestUri() {
         if (uri == null) {
-            uri = createURI();
+            uri = createUri();
         }
         return uri;
     }
 
     @Override
-    public String getPath() {
+    public String path() {
         return request.getRequestURI();
     }
 
@@ -226,7 +226,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     protected abstract List<String> splitPath(String path);
 
     @Override
-    public List<String> getPathSegments() {
+    public List<String> pathSegments() {
         if (segments == null) {
             segments = splitPath(request.getRequestURI());
         }
@@ -234,7 +234,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public String getQueryString() {
+    public String queryString() {
         return request.getQueryString();
     }
 
@@ -246,7 +246,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     protected abstract Map<String, List<Object>> collectQueries();
 
     @Override
-    public Map<String, List<Object>> getQueryParameters() {
+    public Map<String, List<Object>> queryParams() {
         if (queries == null) {
             queries = collectQueries();
         }
@@ -255,7 +255,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> List<T> getQueryParameters(String name) {
+    public <T> List<T> queryParams(String name) {
         if (queries == null) {
             queries = collectQueries();
         }
@@ -264,7 +264,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getQueryParameter(String name) {
+    public <T> T queryParam(String name) {
         if (queries == null) {
             queries = collectQueries();
         }
@@ -276,7 +276,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Map<String, Object> getSessionParameters() {
+    public Map<String, Object> sessionsParams() {
         if (sessionAttributes == null) {
             sessionAttributes = new SessionAttributeMap(request.getSession(true));
         }
@@ -285,12 +285,12 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getSessionParameter(String name) {
+    public <T> T sessionParam(String name) {
         return (T) request.getSession(true).getAttribute(name);
     }
 
     @Override
-    public void setSessionParameter(String name, Object value) {
+    public void sessionParam(String name, Object value) {
         request.getSession(true).setAttribute(name, value);
     }
 
@@ -308,7 +308,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
         for (var cookie : cookies) {
             ret.put(cookie.getName(), cookie);
         }
-        return ret;
+        return Collections.unmodifiableMap(ret);
     }
 
     @Override
@@ -320,7 +320,7 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Cookie getCookie(String name) {
+    public Cookie cookie(String name) {
         if (cookies == null) {
             cookies = collectCookies();
         }
@@ -328,17 +328,17 @@ public abstract class AbstractHttpRequest extends AbstractRequest<HttpServletReq
     }
 
     @Override
-    public Map<String, String> getTrailerFields() {
+    public Map<String, String> trailerFields() {
         return request.getTrailerFields();
     }
 
     @Override
-    public boolean isTrailerFieldsReady() {
+    public boolean trailerFieldsReady() {
         return request.isTrailerFieldsReady();
     }
 
     @Override
-    public HttpVersion getHttpVersion() {
+    public HttpVersion httpVersion() {
         return version;
     }
 }
