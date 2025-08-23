@@ -2,7 +2,6 @@ package io.github.amayaframework.context;
 
 import io.github.amayaframework.http.HttpCode;
 import io.github.amayaframework.http.HttpVersion;
-import io.github.amayaframework.http.MimeData;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -11,8 +10,18 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- * Skeletal implementation of {@link HttpRequest}. Provides implementations for all {@link HttpRequest} methods.
- * Requires to implement {@link AbstractResponse#formatMimeData(MimeData)}.
+ * Skeletal implementation of {@link HttpResponse}. Provides implementations for most methods
+ * common to HTTP responses, built on top of the underlying {@link HttpServletResponse}.
+ * <p>
+ * Subclasses must implement:
+ * <ul>
+ *   <li>{@link AbstractResponse#formatMimeData(io.github.amayaframework.http.MimeData)} — formatting of MIME data to string,</li>
+ *   <li>{@link #parseHttpCode(int)} — conversion from raw status code to {@link HttpCode}.</li>
+ * </ul>
+ * <p>
+ * This class follows a thin-wrap semantics: it delegates directly to the underlying
+ * {@link HttpServletResponse} whenever possible, while caching or wrapping values
+ * (headers, cookies, status) for convenience and consistency.
  */
 public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletResponse> implements HttpResponse {
     protected final HttpVersion version;
@@ -23,16 +32,26 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     protected Map<String, Cookie> finalCookies;
 
     /**
-     * TODO
-     * @param response
-     * @param version
-     * @param protocol
-     * @param scheme
+     * Constructs {@link AbstractHttpResponse} instance with given parameters.
+     *
+     * @param response the underlying {@link HttpServletResponse} instance, must be non-null
+     * @param version  the specified HTTP protocol version, must be non-null
+     * @param protocol the protocol string (e.g. "HTTP/1.1"), must be non-null
+     * @param scheme   the scheme string (e.g. "http" or "https"), must be non-null
      */
     protected AbstractHttpResponse(HttpServletResponse response, HttpVersion version, String protocol, String scheme) {
         super(response, protocol, scheme);
         this.version = version;
         this.status = HttpCode.OK;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.status = HttpCode.OK;
+        this.multiHeaders = null;
+        this.cookies = null;
+        this.finalCookies = null;
     }
 
     @Override
@@ -45,9 +64,15 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     /**
      * Collects all headers and their values from the underlying {@link HttpServletResponse}.
-     * Each header name maps to a list of all its values.
+     * Each header name maps to a list of all its values. The resulting map is wrapped in
+     * {@link ResponseMultiHeaderMap}, which allows controlled modifications that propagate
+     * back to the underlying response.
+     * <p>
+     * Note: this method creates a snapshot of the current headers at the moment of the first call.
+     * Changes made directly to the underlying {@link HttpServletResponse} after that will not be
+     * reflected in this map, unless {@link #multiHeaders} is reset and collected again.
      *
-     * @return a map of header names to lists of values
+     * @return a wrapped map of header names to lists of values
      */
     protected Map<String, List<String>> collectMultiHeaders() {
         var map = new HashMap<String, List<String>>();
@@ -155,9 +180,10 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
     }
 
     /**
-     * TODO
-     * @param code
-     * @return
+     * Parses {@link HttpCode} from the raw numeric status code of the response.
+     *
+     * @param code integer status code (e.g. 200, 404, 500)
+     * @return the corresponding {@link HttpCode} instance
      */
     protected abstract HttpCode parseHttpCode(int code);
 
