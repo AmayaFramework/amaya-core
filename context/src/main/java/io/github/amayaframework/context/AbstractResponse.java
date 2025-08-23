@@ -55,6 +55,10 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     @Override
     public void reset() {
         response.reset();
+        this.length = 0L;
+        this.charset = null;
+        this.data = null;
+        this.contentType = null;
     }
 
     @Override
@@ -80,14 +84,19 @@ public abstract class AbstractResponse<T extends ServletResponse> implements Res
     @Override
     public Charset charset() {
         if (charset == null || !charset.name().equals(response.getCharacterEncoding())) {
-            charset = Charset.forName(response.getCharacterEncoding());
+            var encoding = response.getCharacterEncoding();
+            charset = encoding == null ? null : Charset.forName(encoding);
         }
         return charset;
     }
 
     @Override
     public void charset(Charset charset) {
-        response.setCharacterEncoding(charset.name());
+        if (charset == null) {
+            response.setCharacterEncoding(null);
+        } else {
+            response.setCharacterEncoding(charset.name());
+        }
         this.charset = charset;
     }
 
