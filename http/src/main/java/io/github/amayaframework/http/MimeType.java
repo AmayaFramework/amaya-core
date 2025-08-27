@@ -19,11 +19,9 @@ import java.util.Map;
  *   <li>{@code "application/json"}</li>
  *   <li>{@code "multipart/form-data"}</li>
  * </ul>
- * </p>
  * <p>
  * This class provides a large set of predefined constants for common
  * MIME types and utility methods to look them up.
- * </p>
  */
 public final class MimeType {
 
