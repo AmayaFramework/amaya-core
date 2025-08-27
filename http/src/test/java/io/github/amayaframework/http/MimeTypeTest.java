@@ -13,14 +13,14 @@ public final class MimeTypeTest {
     public void testPredefined() {
         var text = MimeType.PLAIN;
         var json = MimeType.JSON;
-        assertEquals(text, MimeType.of("text/plain"));
-        assertEquals(text, MimeType.of("TEXT/PLAIN"));
-        assertEquals(text, MimeType.of("text", "plain"));
-        assertEquals(text, MimeType.of("TEXT", "PLAIN"));
-        assertEquals(json, MimeType.of("application/json"));
-        assertEquals(json, MimeType.of("APPLICATION/JSON"));
-        assertEquals(json, MimeType.of("application", "json"));
-        assertEquals(json, MimeType.of("APPLICATION", "JSON"));
+        assertEquals(text, MimeType.lookup("text/plain"));
+        assertEquals(text, MimeType.lookup("TEXT/PLAIN"));
+        assertEquals(text, MimeType.lookup("text", "plain"));
+        assertEquals(text, MimeType.lookup("TEXT", "PLAIN"));
+        assertEquals(json, MimeType.lookup("application/json"));
+        assertEquals(json, MimeType.lookup("APPLICATION/JSON"));
+        assertEquals(json, MimeType.lookup("application", "json"));
+        assertEquals(json, MimeType.lookup("APPLICATION", "JSON"));
     }
 
     @Test

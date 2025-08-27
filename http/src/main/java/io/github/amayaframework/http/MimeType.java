@@ -6,7 +6,24 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * A class that implements the information holder about the mime type.
+ * Represents a MIME type (also known as media type) consisting of a
+ * {@code group} (type), a {@code name} (subtype), and an optional
+ * {@code text} flag that indicates whether the type can be interpreted
+ * as textual data.
+ * <p>
+ * MIME types are usually used in HTTP headers such as
+ * {@code Content-Type}, {@code Accept}, and similar.
+ * Examples:
+ * <ul>
+ *   <li>{@code "text/html"}</li>
+ *   <li>{@code "application/json"}</li>
+ *   <li>{@code "multipart/form-data"}</li>
+ * </ul>
+ * </p>
+ * <p>
+ * This class provides a large set of predefined constants for common
+ * MIME types and utility methods to look them up.
+ * </p>
  */
 public final class MimeType {
 
@@ -97,35 +114,63 @@ public final class MimeType {
     public static final MimeType X_MS_VIDEO = new MimeType("video", "x-msvideo");
     public static final MimeType THREE_GPP = new MimeType("video", "3gpp");
     public static final MimeType THREE_GPP_2 = new MimeType("video", "3gpp2");
+
     private static final Map<String, MimeType> TYPES = getTypes();
+
     final String qualifier;
     final String group;
     final String name;
     final Boolean text;
 
     /**
-     * Constructs {@link MimeType} instance with given group, name and text flag.
+     * Constructs a new {@link MimeType} with the given group,
+     * name, and text flag.
      *
-     * @param group the specified mime group
-     * @param name  the specified mime name
-     * @param text  the specified text flag, if set true, then this type can be interpreted as string
+     * @param group the major type, e.g. {@code "application"}
+     * @param name  the subtype, e.g. {@code "json"}
+     * @param text  whether this MIME type should be considered textual
+     *              (useful for parsing/formatting purposes)
      */
     public MimeType(String group, String name, Boolean text) {
-        this.qualifier = (group + "/" + name).toLowerCase(Locale.ENGLISH);
+        this.qualifier = (group + '/' + name).toLowerCase(Locale.ENGLISH);
         this.group = group;
         this.name = name;
         this.text = text;
     }
 
     /**
-     * Constructs {@link MimeType} instance with given group and name.
-     * Sets that this type cannot be interpreted as string.
+     * Constructs a new {@link MimeType} with the given group and name.
+     * The {@code text} flag is set to {@code false}.
      *
-     * @param group the specified mime group
-     * @param name  the specified mime name
+     * @param group the major type, e.g. {@code "image"}
+     * @param name  the subtype, e.g. {@code "png"}
      */
     public MimeType(String group, String name) {
         this(group, name, false);
+    }
+
+    /**
+     * Factory method for creating a {@link MimeType}.
+     *
+     * @param group the major type, e.g. {@code "application"}
+     * @param name  the subtype, e.g. {@code "xml"}
+     * @param text  whether this MIME type should be considered textual
+     * @return a new {@link MimeType} instance
+     */
+    public static MimeType of(String group, String name, Boolean text) {
+        return new MimeType(group, name, text);
+    }
+
+    /**
+     * Factory method for creating a {@link MimeType} with
+     * {@code text = false}.
+     *
+     * @param group the major type, e.g. {@code "audio"}
+     * @param name  the subtype, e.g. {@code "mpeg"}
+     * @return a new {@link MimeType} instance
+     */
+    public static MimeType of(String group, String name) {
+        return new MimeType(group, name, false);
     }
 
     private static Map<String, MimeType> getTypes() {
@@ -206,9 +251,10 @@ public final class MimeType {
     }
 
     /**
-     * Returns {@link Map} instance containing all predefined mime types.
+     * Returns an unmodifiable map of all predefined MIME types,
+     * indexed by their lowercase qualifier.
      *
-     * @return an unmodifiable {@link Map} instance
+     * @return an unmodifiable {@link Map} of known types
      */
     public static Map<String, MimeType> all() {
         return TYPES;
@@ -220,7 +266,7 @@ public final class MimeType {
      * @param qualifier the specified qualifier of the mime type
      * @return {@link MimeType} instance if found, null otherwise
      */
-    public static MimeType of(String qualifier) {
+    public static MimeType lookup(String qualifier) {
         return TYPES.get(qualifier.toLowerCase(Locale.ENGLISH));
     }
 
@@ -231,8 +277,8 @@ public final class MimeType {
      * @param name  the specified mime name
      * @return {@link MimeType} instance if found, null otherwise
      */
-    public static MimeType of(String group, String name) {
-        var qualifier = group + "/" + name;
+    public static MimeType lookup(String group, String name) {
+        var qualifier = group + '/' + name;
         return TYPES.get(qualifier.toLowerCase(Locale.ENGLISH));
     }
 
