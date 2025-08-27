@@ -24,6 +24,7 @@ module amayaframework.server {
     requires transitive amayaframework.context;
     // Optional amaya modules
     requires static amayaframework.environment;
+    requires static amayaframework.tokenize;
     // Exports
     exports io.github.amayaframework.server;
 }

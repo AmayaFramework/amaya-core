@@ -26,12 +26,16 @@ dependencies {
     // Tests
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    testImplementation project(':http')
+    testImplementation project(':tokenizer')
     // JFunc & JUni
     api group: 'com.github.romanqed', name: 'jfunc', version: '1.2.0'
     api group: 'com.github.romanqed', name: 'jsync', version: '1.0.0'
     api group: 'com.github.romanqed', name: 'juni', version: '1.0.0'
     // CancelToken
     api group: 'com.github.romanqed', name: 'jct', version: '1.2.0'
+    // Tokenizer
+    compileOnly project(':tokenizer')
     // Servlets
     compileOnly group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '6.0.0'
     // Amaya environment
