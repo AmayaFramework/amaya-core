@@ -54,4 +54,64 @@ public final class ServerOptions {
      * Required type: {@link HttpVersion}.
      */
     public static final Key<HttpVersion> HTTP_VERSION = Key.of("http_version", HttpVersion.class);
+
+    /**
+     * Name of the option that controls whether the server includes the
+     * {@code Server} HTTP response header.
+     *
+     * <p>When enabled, the container will add its version information
+     * in the {@code Server} header of responses. Disabling this option
+     * suppresses the header, which is often desirable for security
+     * hardening or to reduce unnecessary information disclosure.
+     *
+     * <p>Required type: {@link Boolean}.
+     */
+    public static final String SEND_SERVER = "send_server";
+
+    /**
+     * Name of the option that controls whether the server includes the
+     * {@code X-Powered-By} HTTP response header.
+     *
+     * <p>When enabled, the container will add a {@code X-Powered-By}
+     * header to responses. Disabling this option suppresses the header,
+     * which is often desirable for security hardening or to reduce
+     * unnecessary information disclosure.
+     *
+     * <p>Required type: {@link Boolean}.
+     */
+    public static final String SEND_POWERED_BY = "send_powered_by";
+
+    /**
+     * The key for preferring asynchronous handling of requests.
+     * <br>
+     * Required type: {@link Boolean}.
+     * <p>
+     * If set to {@code true}, the server should prefer asynchronous
+     * execution where possible. In environments with Loom (virtual threads),
+     * this option may be ignored.
+     */
+    public static final Key<Boolean> PREFER_ASYNC = Key.of("prefer_async", Boolean.class);
+
+    /**
+     * The key for providing a pre-initialized {@link HttpMethodBuffer}.
+     * <br>
+     * Required type: {@link HttpMethodBuffer}.
+     * <p>
+     * This allows replacing the default method lookup strategy with
+     * a custom buffer implementation.
+     */
+    public static final Key<HttpMethodBuffer> HTTP_METHOD_BUFFER = Key.of(
+            "http_method_buffer",
+            HttpMethodBuffer.class
+    );
+
+    /**
+     * The key for providing a pre-initialized {@link HttpCodeBuffer}.
+     * <br>
+     * Required type: {@link HttpCodeBuffer}.
+     * <p>
+     * This allows replacing the default status code lookup strategy with
+     * a custom buffer implementation.
+     */
+    public static final Key<HttpCodeBuffer> HTTP_CODE_BUFFER = Key.of("http_code_buffer", HttpCodeBuffer.class);
 }
