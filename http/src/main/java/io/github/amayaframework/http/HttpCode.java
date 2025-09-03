@@ -83,7 +83,10 @@ public final class HttpCode implements HttpDefinition {
     public static final HttpCode NETWORK_AUTHENTICATION_REQUIRED =
             of11(511, "Network Authentication Required");
 
-    private static final Map<Integer, HttpCode> CODES = getCodes();
+    private static final int MIN = 100;
+    private static final int MAX = 511;
+    private static final HttpCode[] CODES = getCodeArray();
+
 
     final int code;
     final String description;
@@ -109,7 +112,10 @@ public final class HttpCode implements HttpDefinition {
      * @return {@link HttpCode} instance if found, null otherwise
      */
     public static HttpCode of(int code) {
-        return CODES.get(code);
+        if (code < MIN || code > MAX) {
+            return null;
+        }
+        return CODES[code - MIN];
     }
 
     /**
@@ -118,7 +124,14 @@ public final class HttpCode implements HttpDefinition {
      * @return an unmodifiable {@link Map} instance
      */
     public static Map<Integer, HttpCode> all() {
-        return CODES;
+        var ret = new HashMap<Integer, HttpCode>();
+        for (var i = 0; i < CODES.length; ++i) {
+            var code = CODES[i];
+            if (code != null) {
+                ret.put(i + MIN, code);
+            }
+        }
+        return Collections.unmodifiableMap(ret);
     }
 
     private static HttpCode of1(int code, String description) {
@@ -129,72 +142,78 @@ public final class HttpCode implements HttpDefinition {
         return new HttpCode(code, description, HttpVersion.HTTP_1_1);
     }
 
-    private static Map<Integer, HttpCode> getCodes() {
-        var ret = new HashMap<Integer, HttpCode>();
-        ret.put(100, CONTINUE);
-        ret.put(101, SWITCHING_PROTOCOLS);
-        ret.put(102, PROCESSING);
-        ret.put(103, EARLY_HINTS);
-        ret.put(200, OK);
-        ret.put(201, CREATED);
-        ret.put(202, ACCEPTED);
-        ret.put(203, NON_AUTHORITATIVE_INFORMATION);
-        ret.put(204, NO_CONTENT);
-        ret.put(205, RESET_CONTENT);
-        ret.put(206, PARTIAL_CONTENT);
-        ret.put(207, MULTI_STATUS);
-        ret.put(208, ALREADY_REPORTED);
-        ret.put(226, IM_USED);
-        ret.put(300, MULTIPLE_CHOICES);
-        ret.put(301, MOVED_PERMANENTLY);
-        ret.put(302, FOUND);
-        ret.put(303, SEE_OTHER);
-        ret.put(304, NOT_MODIFIED);
-        ret.put(305, USE_PROXY);
-        ret.put(306, SWITCH_PROXY);
-        ret.put(307, TEMPORARY_REDIRECT);
-        ret.put(308, PERMANENT_REDIRECT);
-        ret.put(400, BAD_REQUEST);
-        ret.put(401, UNAUTHORIZED);
-        ret.put(402, PAYMENT_REQUIRED);
-        ret.put(403, FORBIDDEN);
-        ret.put(404, NOT_FOUND);
-        ret.put(405, METHOD_NOT_ALLOWED);
-        ret.put(406, NOT_ACCEPTABLE);
-        ret.put(407, PROXY_AUTHENTICATION_REQUIRED);
-        ret.put(408, REQUEST_TIMEOUT);
-        ret.put(409, CONFLICT);
-        ret.put(410, GONE);
-        ret.put(411, LENGTH_REQUIRED);
-        ret.put(412, PRECONDITION_FAILED);
-        ret.put(413, PAYLOAD_TOO_LARGE);
-        ret.put(414, URI_TOO_LONG);
-        ret.put(415, UNSUPPORTED_MEDIA_TYPE);
-        ret.put(416, RANGE_NOT_SATISFIABLE);
-        ret.put(417, EXPECTATION_FAILED);
-        ret.put(418, I_AM_A_TEAPOT);
-        ret.put(421, MISDIRECTED_REQUEST);
-        ret.put(422, UNPROCESSABLE_ENTITY);
-        ret.put(423, LOCKED);
-        ret.put(424, FAILED_DEPENDENCY);
-        ret.put(425, TOO_EARLY);
-        ret.put(426, UPGRADE_REQUIRED);
-        ret.put(428, PRECONDITION_REQUIRED);
-        ret.put(429, TOO_MANY_REQUESTS);
-        ret.put(431, REQUEST_HEADER_FIELDS_TOO_LARGE);
-        ret.put(451, UNAVAILABLE_FOR_LEGAL_REASONS);
-        ret.put(500, INTERNAL_SERVER_ERROR);
-        ret.put(501, NOT_IMPLEMENTED);
-        ret.put(502, BAD_GATEWAY);
-        ret.put(503, SERVICE_UNAVAILABLE);
-        ret.put(504, GATEWAY_TIMEOUT);
-        ret.put(505, HTTP_VERSION_NOT_SUPPORTED);
-        ret.put(506, VARIANT_ALSO_NEGOTIATES);
-        ret.put(507, INSUFFICIENT_STORAGE);
-        ret.put(508, LOOP_DETECTED);
-        ret.put(510, NOT_EXTENDED);
-        ret.put(511, NETWORK_AUTHENTICATION_REQUIRED);
-        return Collections.unmodifiableMap(ret);
+    private static void put(HttpCode[] array, HttpCode code) {
+        array[code.code - MIN] = code;
+    }
+
+    private static HttpCode[] getCodeArray() {
+        var ret = new HttpCode[MAX - MIN + 1];
+        // noinspection DuplicatedCode
+        put(ret, CONTINUE);
+        put(ret, SWITCHING_PROTOCOLS);
+        put(ret, PROCESSING);
+        put(ret, EARLY_HINTS);
+        put(ret, OK);
+        put(ret, CREATED);
+        put(ret, ACCEPTED);
+        put(ret, NON_AUTHORITATIVE_INFORMATION);
+        put(ret, NO_CONTENT);
+        put(ret, RESET_CONTENT);
+        put(ret, PARTIAL_CONTENT);
+        put(ret, MULTI_STATUS);
+        put(ret, ALREADY_REPORTED);
+        put(ret, IM_USED);
+        put(ret, MULTIPLE_CHOICES);
+        put(ret, MOVED_PERMANENTLY);
+        put(ret, FOUND);
+        put(ret, SEE_OTHER);
+        put(ret, NOT_MODIFIED);
+        put(ret, USE_PROXY);
+        put(ret, SWITCH_PROXY);
+        put(ret, TEMPORARY_REDIRECT);
+        put(ret, PERMANENT_REDIRECT);
+        put(ret, BAD_REQUEST);
+        put(ret, UNAUTHORIZED);
+        put(ret, PAYMENT_REQUIRED);
+        put(ret, FORBIDDEN);
+        put(ret, NOT_FOUND);
+        put(ret, METHOD_NOT_ALLOWED);
+        put(ret, NOT_ACCEPTABLE);
+        put(ret, PROXY_AUTHENTICATION_REQUIRED);
+        // noinspection DuplicatedCode
+        put(ret, REQUEST_TIMEOUT);
+        put(ret, CONFLICT);
+        put(ret, GONE);
+        put(ret, LENGTH_REQUIRED);
+        put(ret, PRECONDITION_FAILED);
+        put(ret, PAYLOAD_TOO_LARGE);
+        put(ret, URI_TOO_LONG);
+        put(ret, UNSUPPORTED_MEDIA_TYPE);
+        put(ret, RANGE_NOT_SATISFIABLE);
+        put(ret, EXPECTATION_FAILED);
+        put(ret, I_AM_A_TEAPOT);
+        put(ret, MISDIRECTED_REQUEST);
+        put(ret, UNPROCESSABLE_ENTITY);
+        put(ret, LOCKED);
+        put(ret, FAILED_DEPENDENCY);
+        put(ret, TOO_EARLY);
+        put(ret, UPGRADE_REQUIRED);
+        put(ret, PRECONDITION_REQUIRED);
+        put(ret, TOO_MANY_REQUESTS);
+        put(ret, REQUEST_HEADER_FIELDS_TOO_LARGE);
+        put(ret, UNAVAILABLE_FOR_LEGAL_REASONS);
+        put(ret, INTERNAL_SERVER_ERROR);
+        put(ret, NOT_IMPLEMENTED);
+        put(ret, BAD_GATEWAY);
+        put(ret, SERVICE_UNAVAILABLE);
+        put(ret, GATEWAY_TIMEOUT);
+        put(ret, HTTP_VERSION_NOT_SUPPORTED);
+        put(ret, VARIANT_ALSO_NEGOTIATES);
+        put(ret, INSUFFICIENT_STORAGE);
+        put(ret, LOOP_DETECTED);
+        put(ret, NOT_EXTENDED);
+        put(ret, NETWORK_AUTHENTICATION_REQUIRED);
+        return ret;
     }
 
     /**
