@@ -39,8 +39,8 @@ dependencies {
     api group: 'io.github.amayaframework', name: 'amaya-service', version: '2.0.1'
     api group: 'io.github.amayaframework', name: 'amaya-application', version: '2.0.0'
     api group: 'io.github.amayaframework', name: 'amaya-http', version: '3.0.1'
-    api group: 'io.github.amayaframework', name: 'amaya-context', version: '3.0.1'
-    api group: 'io.github.amayaframework', name: 'amaya-server', version: '2.3.0'
+    api group: 'io.github.amayaframework', name: 'amaya-context', version: '3.1.0'
+    api group: 'io.github.amayaframework', name: 'amaya-server', version: '2.4.0'
     api group: 'io.github.amayaframework', name: 'amaya-web', version: '2.0.0'
     // Logger
     compileOnly group: 'org.slf4j', name: 'slf4j-api', version: '2.0.17'
