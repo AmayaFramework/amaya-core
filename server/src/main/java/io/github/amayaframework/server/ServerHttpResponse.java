@@ -25,16 +25,20 @@ public class ServerHttpResponse extends AbstractHttpResponse {
     protected final HttpCodeBuffer codeBuffer;
 
     /**
-     * Create a new {@code ServerHttpResponse}.
+     * Creates a new {@code ServerHttpResponse}.
      *
-     * @param response   the underlying servlet response
-     * @param errorHandler
-     * @param parser     the parser for {@link MimeData}
-     * @param formatter  the formatter for {@link MimeData}
-     * @param codeBuffer the buffer for resolving {@link HttpCode}
-     * @param version    the HTTP version of the response
-     * @param protocol   the raw protocol string (e.g. {@code "HTTP/1.1"})
-     * @param scheme     the request scheme (e.g. {@code "http"} or {@code "https"})
+     * @param response     the underlying servlet response, never {@code null}
+     * @param errorHandler the error handler to delegate to when sending errors,
+     *                     must not be {@code null}
+     * @param parser       the parser for {@link MimeData}, used to interpret MIME strings,
+     *                     must not be {@code null}
+     * @param formatter    the formatter for {@link MimeData}, used to serialize MIME values,
+     *                     must not be {@code null}
+     * @param codeBuffer   the buffer for resolving {@link HttpCode} instances from raw codes,
+     *                     must not be {@code null}
+     * @param version      the HTTP version of the response, must not be {@code null}
+     * @param protocol     the raw protocol string (e.g. {@code "HTTP/1.1"}), must not be {@code null}
+     * @param scheme       the request scheme (e.g. {@code "http"} or {@code "https"}), must not be {@code null}
      */
     public ServerHttpResponse(HttpServletResponse response,
                               HttpErrorHandler errorHandler,
