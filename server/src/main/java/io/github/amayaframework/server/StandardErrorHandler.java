@@ -27,6 +27,10 @@ public final class StandardErrorHandler implements HttpErrorHandler {
      */
     @Override
     public void handle(HttpServletResponse response, HttpCode code, String message) throws IOException {
-        response.sendError(code.getCode(), message);
+        if (message == null) {
+            response.sendError(code.getCode());
+        } else {
+            response.sendError(code.getCode(), message);
+        }
     }
 }
