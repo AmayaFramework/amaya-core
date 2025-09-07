@@ -1,5 +1,6 @@
 package io.github.amayaframework.server;
 
+import io.github.amayaframework.http.HttpMethod;
 import io.github.amayaframework.http.HttpVersion;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,9 @@ public final class ServerHttpRequestTest {
     private ServerHttpRequest newRequestWithQuery(String query) {
         var servletRequest = mock(HttpServletRequest.class);
         when(servletRequest.getQueryString()).thenReturn(query);
-        return new ServerHttpRequest(
+        return new DummyRequest(
                 servletRequest,
                 HttpVersion.HTTP_1_1,
-                m -> null,
                 new SplitPathTokenizer(),
                 data -> null
         );
@@ -68,5 +68,17 @@ public final class ServerHttpRequestTest {
     public void testEmptyKey() {
         var req = newRequestWithQuery(" =value");
         assertEquals(List.of("value"), req.queryParams().get(""));
+    }
+
+    private static final class DummyRequest extends ServerHttpRequest {
+
+        public DummyRequest(HttpServletRequest request, HttpVersion version, PathTokenizer tokenizer, MimeParser parser) {
+            super(request, version, tokenizer, parser);
+        }
+
+        @Override
+        protected HttpMethod parseHttpMethod(String method) {
+            return null;
+        }
     }
 }

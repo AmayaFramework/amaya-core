@@ -197,28 +197,32 @@ public abstract class AbstractHttpResponse extends AbstractResponse<HttpServletR
 
     @Override
     public void status(HttpCode code) {
-        if (!code.isSupported(version)) {
-            throw new UnsupportedHttpDefinition(version, code);
-        }
         response.setStatus(code.getCode());
         this.status = code;
     }
 
+    /**
+     * Handles an HTTP error by delegating to a concrete error handling strategy.
+     * <p>
+     * This method is invoked by {@link #sendError(HttpCode, String)} and
+     * {@link #sendError(HttpCode)}.
+     *
+     * @param code    the HTTP status code to send, must not be {@code null}
+     * @param message the optional error message to include in the response,
+     *                may be {@code null} if no custom message is provided
+     * @throws IOException if an I/O error occurs while writing the error response
+     */
+    protected abstract void handleError(HttpCode code, String message) throws IOException;
+
     @Override
     public void sendError(HttpCode code, String message) throws IOException {
-        if (!code.isSupported(version)) {
-            throw new UnsupportedHttpDefinition(version, code);
-        }
-        response.sendError(code.getCode(), message);
+        handleError(code, message);
         this.status = code;
     }
 
     @Override
     public void sendError(HttpCode code) throws IOException {
-        if (!code.isSupported(version)) {
-            throw new UnsupportedHttpDefinition(version, code);
-        }
-        response.sendError(code.getCode());
+        handleError(code, null);
         this.status = code;
     }
 

@@ -2,6 +2,7 @@ package io.github.amayaframework.server;
 
 import com.github.romanqed.jfunc.Runnable0;
 import com.github.romanqed.jfunc.Runnable1;
+import io.github.amayaframework.http.HttpCode;
 import io.github.amayaframework.http.HttpVersion;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -114,6 +115,30 @@ public interface HttpServerConfig extends ServerConfig {
      * @param version the {@link HttpVersion} to use for this address; must be non-null
      */
     void addAddress(InetSocketAddress address, HttpVersion version);
+
+    /**
+     * Returns the {@link HttpErrorHandler} currently configured for this server.
+     * <p>
+     * The error handler is responsible for generating error responses when
+     * {@link io.github.amayaframework.context.HttpResponse#sendError(HttpCode)} or
+     * {@link io.github.amayaframework.context.HttpResponse#sendError(HttpCode, String)} is invoked.
+     * <p>
+     * The default implementation depends on the server and may use
+     * {@link StandardErrorHandler}.
+     *
+     * @return the configured {@link HttpErrorHandler}, or {@code null} if none is set
+     */
+    HttpErrorHandler errorHandler();
+
+    /**
+     * Sets the {@link HttpErrorHandler} to be used by this server.
+     * <p>
+     * The error handler defines how error responses are generated and sent.
+     * Setting a new handler replaces the previous one.
+     *
+     * @param handler the {@link HttpErrorHandler} to set; may be {@code null} to clear
+     */
+    void errorHandler(HttpErrorHandler handler);
 
     /**
      * Gets the {@link MimeFormatter} instance used by the server for formatting MIME types.

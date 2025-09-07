@@ -1,7 +1,6 @@
 package io.github.amayaframework.server;
 
 import io.github.amayaframework.context.AbstractHttpRequest;
-import io.github.amayaframework.http.HttpMethod;
 import io.github.amayaframework.http.HttpVersion;
 import io.github.amayaframework.http.MimeData;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,15 +11,14 @@ import java.util.*;
  * Servlet-backed implementation of {@link AbstractHttpRequest}.
  * <p>
  * Wraps a {@link HttpServletRequest} and provides efficient parsing of
- * HTTP method, path segments, query parameters, and MIME data using
- * pluggable buffer and parser components.
+ * path segments, query parameters, and MIME data using pluggable
+ * buffer and parser components.
  * <p>
  * This class is designed for high-load scenarios: it avoids regular
  * expressions, minimizes allocations, and relies on tokenizer-based
  * parsing for request paths and query strings.
  */
-public class ServerHttpRequest extends AbstractHttpRequest {
-    protected final HttpMethodBuffer buffer;
+public abstract class ServerHttpRequest extends AbstractHttpRequest {
     protected final PathTokenizer tokenizer;
     protected final MimeParser parser;
     protected Map<String, Object> pathParams;
@@ -30,24 +28,16 @@ public class ServerHttpRequest extends AbstractHttpRequest {
      *
      * @param request   the underlying servlet request
      * @param version   the resolved HTTP version
-     * @param buffer    the method buffer used to resolve {@link HttpMethod}
      * @param tokenizer the tokenizer for splitting request paths
      * @param parser    the parser for {@link MimeData}
      */
     public ServerHttpRequest(HttpServletRequest request,
                              HttpVersion version,
-                             HttpMethodBuffer buffer,
                              PathTokenizer tokenizer,
                              MimeParser parser) {
         super(request, version);
-        this.buffer = buffer;
         this.tokenizer = tokenizer;
         this.parser = parser;
-    }
-
-    @Override
-    protected HttpMethod parseHttpMethod(String method) {
-        return buffer.get(method);
     }
 
     @Override

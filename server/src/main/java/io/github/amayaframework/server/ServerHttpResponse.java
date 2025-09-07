@@ -6,6 +6,8 @@ import io.github.amayaframework.http.HttpVersion;
 import io.github.amayaframework.http.MimeData;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+
 /**
  * Servlet-backed implementation of {@link AbstractHttpResponse}.
  * <p>
@@ -17,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * and leverages pre-initialized lookup buffers for fast status resolution.
  */
 public class ServerHttpResponse extends AbstractHttpResponse {
+    protected final HttpErrorHandler errorHandler;
     protected final MimeParser parser;
     protected final MimeFormatter formatter;
     protected final HttpCodeBuffer codeBuffer;
@@ -25,6 +28,7 @@ public class ServerHttpResponse extends AbstractHttpResponse {
      * Create a new {@code ServerHttpResponse}.
      *
      * @param response   the underlying servlet response
+     * @param errorHandler
      * @param parser     the parser for {@link MimeData}
      * @param formatter  the formatter for {@link MimeData}
      * @param codeBuffer the buffer for resolving {@link HttpCode}
@@ -33,6 +37,7 @@ public class ServerHttpResponse extends AbstractHttpResponse {
      * @param scheme     the request scheme (e.g. {@code "http"} or {@code "https"})
      */
     public ServerHttpResponse(HttpServletResponse response,
+                              HttpErrorHandler errorHandler,
                               MimeParser parser,
                               MimeFormatter formatter,
                               HttpCodeBuffer codeBuffer,
@@ -40,6 +45,7 @@ public class ServerHttpResponse extends AbstractHttpResponse {
                               String protocol,
                               String scheme) {
         super(response, version, protocol, scheme);
+        this.errorHandler = errorHandler;
         this.parser = parser;
         this.formatter = formatter;
         this.codeBuffer = codeBuffer;
@@ -48,6 +54,11 @@ public class ServerHttpResponse extends AbstractHttpResponse {
     @Override
     protected HttpCode parseHttpCode(int code) {
         return codeBuffer.get(code);
+    }
+
+    @Override
+    protected void handleError(HttpCode code, String message) throws IOException {
+        errorHandler.handle(response, code, message);
     }
 
     @Override
