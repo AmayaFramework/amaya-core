@@ -148,11 +148,10 @@ public final class SimpleHelloWorld {
         var app = WebBuilders.create()
                 .withServerFactory(new JettyServerFactory())
                 .build();
-        app.configurer().add((ctx, next) -> {
+        app.bind(8080);
+        app.run(ctx -> {
             ctx.response().writer().println("Hello from amaya");
         });
-        app.bind(8080);
-        app.run();
     }
 }
 ```
@@ -199,11 +198,10 @@ public final class SimpleHelloWorld {
         var app = WebBuilders.create(opts)
                 .withServerFactory(new JettyServerFactory())
                 .build();
-        app.configurer().add((ctx, next) -> {
+        app.bind(8080);
+        app.run(ctx -> {
             ctx.response().writer().println("Hello from amaya");
         });
-        app.bind(8080);
-        app.run();
     }
 }
 ```
