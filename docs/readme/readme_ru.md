@@ -121,7 +121,7 @@ dependencies {
 ```groovy
 dependencies {
     implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
-    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.1-12.0.26'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.2-12.0.26'
 }
 ```
 
@@ -191,11 +191,12 @@ import io.github.amayaframework.web.WebOptions;
 
 public final class SimpleHelloWorld {
     public static void main(String[] args) throws Throwable {
-        var opts = Options.createGrouped();
-        var serverOpts = opts.ensureGroup(WebOptions.SERVER_GROUP);
-        serverOpts.set(ServerOptions.SEND_SERVER, true);
-        serverOpts.set(ServerOptions.SEND_POWERED_BY, true);
-        var app = WebBuilders.create(opts)
+        var app = WebBuilders.create()
+                .configureOptions(opts -> {
+                    var serverOpts = opts.ensureGroup(WebOptions.SERVER_GROUP);
+                    serverOpts.set(ServerOptions.SEND_SERVER, true);
+                    serverOpts.set(ServerOptions.SEND_POWERED_BY, true);
+                })
                 .withServerFactory(new JettyServerFactory())
                 .build();
         app.bind(8080);
@@ -630,3 +631,153 @@ public static void main(String[] args) throws Throwable {
 >curl localhost:8081/count
 2
 ```
+
+## Hello, async world!
+
+Аналогично можно собрать асинхронный пайплайн, использующий CompletableFuture. Терминальное действие будет обработано
+сервером и вызвано сервером внутри моста к servlet async api. Покажем это на примере просто hello, world с обработкой
+ошибок.
+
+```java
+package io.github.amayaframework.examples;
+
+import com.github.romanqed.jfunc.Exceptions;
+import com.github.romanqed.jsync.Futures;
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.jetty.JettyServerFactory;
+
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+
+public final class AsyncHelloWorld {
+    public static void main(String[] args) throws Throwable {
+        var app = WebBuilders.create()
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.bind(8080);
+        app.configurer()
+                .add((ctx, next) -> {
+                    return next.runAsync(ctx).exceptionally(t -> {
+                        if (t != null) {
+                            try {
+                                ctx.response().writer().println("Sorry, some problems");
+                            } catch (IOException e) {
+                                System.out.println("Rlly big problems");
+                                Exceptions.throwAny(e);
+                            }
+                        }
+                        return null;
+                    });
+                })
+                .add((ctx, next) -> {
+                    return Futures.run(() -> {
+                        if (ThreadLocalRandom.current().nextBoolean()) {
+                            throw new IllegalStateException("Unlucky");
+                        }
+                        ctx.response().writer().println("Hello, world!");
+                    });
+                });
+        app.run();
+    }
+}
+```
+
+Проверим результат:
+
+```
+>curl localhost:8080
+Hello, world!
+
+>curl localhost:8080
+Sorry, some problems
+
+>curl localhost:8080
+Sorry, some problems
+
+>curl localhost:8080
+Hello, world!
+```
+
+**ВАЖНОЕ ЗАМЕЧАНИЕ!** Таски внутри пайплайна могут быть чисто синхронными, чисто асинхронными, универсальными или 
+"грязными". Пока сервер может однозначно определить модель исполнения, он всегда будет выбирать наиболее оптимальный
+вариант для типа таска и вашего окружения (зависит от реализации). Однако как только серверу попадается 
+"грязный" пайплайн, он откажется от попыток выбора и просто использует стандартную модель выполнения 
+(sync для jvm с Project Loom, async для остальных). 
+
+Наглядно продемонстрировать выбор модель выбора можно на следующем примере:
+
+```java
+package io.github.amayaframework.examples;
+
+import com.github.romanqed.jconv.Task;
+import com.github.romanqed.jsync.Futures;
+import io.github.amayaframework.context.HttpContext;
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.jetty.JettyServerFactory;
+
+import java.util.concurrent.CompletableFuture;
+
+public final class UniHelloWorld {
+    public static void main(String[] args) throws Throwable {
+        var app = WebBuilders.create()
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.bind(8080);
+        app.run(new UniHelloTask());
+    }
+
+    static final class UniHelloTask implements Task<HttpContext> {
+
+        @Override
+        public void run(HttpContext ctx) throws Throwable {
+            ctx.response().writer().println("Hello from sync, JVM = " + Runtime.version());
+        }
+
+        @Override
+        public CompletableFuture<Void> runAsync(HttpContext ctx) {
+            return Futures.run(() -> ctx.response().writer().println("Hello from async, JVM = " + Runtime.version()));
+        }
+
+        @Override
+        public boolean isSync() {
+            return true;
+        }
+
+        @Override
+        public boolean isAsync() {
+            return true;
+        }
+
+        @Override
+        public boolean isUni() {
+            return true;
+        }
+    }
+}
+```
+
+Теперь, если запустить этот код без каких-либо изменений, ответы будут следующими:
+
+1. На jvm <= 19 (или без project loom): 
+```
+>curl localhost:8080
+Hello from async, JVM = 17.0.16+8-LTS
+```
+2. На jvm >= 19:
+```
+>curl localhost:8080
+Hello from sync, JVM = 21.0.7+6-LTS
+```
+
+При этом сервер автоматически переходит на использование виртуальных потоков при их доступности.
+
+Для чистых sync/async тасков планирование не выполняется: они всегда будут выполняться как есть (из тех соображений,
+что обернуть sync в CompletableFuture или join'ить async дороже, чем выполнять таск нативно). Планирование же для 
+uni/mixed-тасков можно явно контролировать с помощью флага PREFER_ASYNC:
+
+```
+.configureOptions(opts -> {
+    opts.ensureGroup(WebOptions.SERVER_GROUP).set(ServerOptions.PREFER_ASYNC, true);
+})
+```
+

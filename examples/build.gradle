@@ -22,7 +22,7 @@ dependencies {
     // Dependencies
     // Core + server
     implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
-    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.1-12.0.26'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.2-12.0.26'
     implementation group: 'org.eclipse.jetty.http2', name: 'jetty-http2-server', version: '12.0.26'
     // DI
     implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
