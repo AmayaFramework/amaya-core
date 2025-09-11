@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="docs/img/logo.png" alt="logo" style="width: 200px; height: auto;">
+  <img src="../img/logo.png" alt="logo" style="width: 200px; height: auto;">
 </p>
 
-# amaya-core - TODO Motto
+# amaya-core - ядро современного, легковесного и быстрого web-фреймворка
 
-|      Module       |                                                                                                                                Version                                                                                                                                |
+|      Модуль       |                                                                                                                                Версия                                                                                                                                 |
 |:-----------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |   amaya-options   |         [![amaya-options](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-options?strategy=releaseProperty&style=for-the-badge&label=amaya-options&color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-options/)         |
 | amaya-environment | [![amaya-environment](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-environment?strategy=releaseProperty&style=for-the-badge&label=amaya-environment&color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-environment/) |
@@ -17,10 +17,25 @@
 |     amaya-web     |                 [![amaya-web](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-web?strategy=releaseProperty&style=for-the-badge&label=amaya-web&color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-web/)                 |
 |    amaya-core     |               [![amaya-core](https://img.shields.io/maven-central/v/io.github.amayaframework/amaya-core?strategy=releaseProperty&style=for-the-badge&label=amaya-core&color=blue)](https://repo1.maven.org/maven2/io/github/amayaframework/amaya-core/)               |
 
-- English
-- [Русский](docs/readme/readme_ru.md)
-- [简体中文](docs/readme/readme_zh_cn.md)
-- [正體中文](docs/readme/readme_zh_tw.md)
-- [日本語](docs/readme/readme_jp.md)
-- [Deutsch](docs/readme/readme_de.md)
-- [Français](docs/readme/readme_fr.md)
+- [English](../../README.md)
+- Русский
+- [简体中文](readme_zh_cn.md)
+- [正體中文](readme_zh_tw.md)
+- [日本語](readme_jp.md)
+- [Deutsch](readme_de.md)
+- [Français](readme_fr.md)
+
+Amaya Core — основа Amaya Framework. Оно представляет собой модульное ядро, состоящее из отдельных логических подмодулей,
+объединяемых в единую зависимость центральным модулем amaya-core. Ядро включает в себя следующий функционал:
+
+* amaya-options — типизированные словари конфигурации вида "строковый ключ->значение";
+* amaya-environment — виртуальная точка монтирования в файловой системе (на основе java.nio.file API);
+* amaya-service — управляемые сервисы с полностью консистентным жизненным циклом на основе машины состояний;
+* amaya-application — абстрактное приложение-сервис; объединяет все компоненты фреймворка и является единой точкой входа, 
+после запуска отслеживает системные сигналы (через jvm shutdown hooks) и обеспечивает ожидаемую реакцию.
+* amaya-http — набор сущностей, описывающих некоторые понятия из HTTP RFC (http version, http status code, http method, 
+mime type)
+* amaya-context — универсальный контекст запроса для 
+* amaya-server —
+* amaya-web —
+* amaya-di — 
