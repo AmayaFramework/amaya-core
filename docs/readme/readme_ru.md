@@ -179,7 +179,7 @@ public final class SimpleHelloWorld {
 Hello from amaya
 ```
 
-Для демонстрации основного принципа конфигурации в фреймворке включим отправку заголовков `Server` и `X-Powered-By`:
+Для демонстрации конфигурации через именованные параметры включим отправку заголовков `Server` и `X-Powered-By`:
 
 ```java
 package io.github.amayaframework.examples;
@@ -233,3 +233,319 @@ public final class SimpleHelloWorld {
 Hello from amaya
 ```
 
+## Hello, services and multibinding!
+
+Рассмотрим более комплексный пример. Пусть наше приложение:
+
+1. слушает порт 8081 с протоколом HTTP/1.1;
+2. слушает порт 8082 с протоколом HTTP/2 (h2c);
+3. на запрос GET /echo?msg отвечает значение параметра `msg`;
+4. на запрос GET /random отвечает псевдослучайным числом;
+5. на запрос GET /count возвращает текущий счетчик запросов /count;
+6. на любой другой запрос отвечает 404.
+
+Для работы с http 2 подключим доп. модуль jetty в build.gradle: 
+```groovy
+implementation group: 'org.eclipse.jetty.http2', name: 'jetty-http2-server', version: '12.0.26'
+```
+
+Соберем приложение и укажем в конфиге HTTP/2 как целевую версию протокола сервера. Настроим бинды на нужные порты,
+причем для 8081 укажем HTTP/1.1:
+
+```
+var app = WebBuilders.create()
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.serverConfig().httpVersion(HttpVersion.HTTP_2_0);
+        app.bind(8081, HttpVersion.HTTP_1_1);
+        app.bind(8082);
+```
+
+Теперь для п. 5 реализуем сервис-счетчик:
+
+```java
+static final class CounterService extends AbstractService {
+    private AtomicInteger counter;
+    
+    public int count() {
+        return counter.getAndIncrement();
+    }   
+
+    @Override
+    protected void doStart(CancelToken token, ServiceCallback callback) {
+        if (counter == null) {
+            counter = new AtomicInteger();
+        }
+    }
+
+    @Override
+    protected void doStop(CancelToken token) {
+        if (counter != null) {
+            counter.set(0);
+        }
+    }
+
+    @Override
+    protected void doDispose() {
+        counter = null;
+    }
+}
+```
+
+Создадим его и зарегистрируем в менеджере приложения:
+
+```
+var counter = new CounterService();
+app.manager().add(counter);
+```
+
+Реализуем с помощью middleware-пайплайна примитивный роутинг:
+
+```
+static Predicate<HttpContext> get(String path) {
+    return ctx -> {
+        var req = ctx.request();
+        return req.method() == HttpMethod.GET && path.equals(req.path());
+    };
+}
+...
+app.configurer()
+        .mapWhen(get("/echo"), (HttpContext ctx) -> {
+            // TODO echo
+        })
+        .mapWhen(get("/random"), (HttpContext ctx) -> {
+            // TODO random
+        })
+        .mapWhen(get("/count"), (HttpContext ctx) -> {
+            // TODO count
+        })
+        .add((ctx, next) -> {
+            ctx.response().sendError(HttpCode.NOT_FOUND);
+        });
+```
+
+И подготовим каждый эндпоинт согласно нашему ТЗ:
+
+```
+.mapWhen(get("/echo"), (HttpContext ctx) -> {
+    ctx.response().writer().println(ctx.request().<String>queryParam("msg"));
+})
+.mapWhen(get("/random"), (HttpContext ctx) -> {
+    ctx.response().writer().println(ThreadLocalRandom.current().nextInt());
+})
+.mapWhen(get("/count"), (HttpContext ctx) -> {
+    ctx.response().writer().println(counter.count());
+})
+```
+
+В результате получаем такой код:
+
+```java
+package io.github.amayaframework.examples;
+
+import com.github.romanqed.jct.CancelToken;
+import io.github.amayaframework.context.HttpContext;
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.http.HttpCode;
+import io.github.amayaframework.http.HttpMethod;
+import io.github.amayaframework.http.HttpVersion;
+import io.github.amayaframework.jetty.JettyServerFactory;
+import io.github.amayaframework.service.AbstractService;
+import io.github.amayaframework.service.ServiceCallback;
+
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+
+public final class ComplexHelloWorld {
+    public static void main(String[] args) throws Throwable {
+        var app = WebBuilders.create()
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.serverConfig().httpVersion(HttpVersion.HTTP_2_0);
+        app.bind(8081, HttpVersion.HTTP_1_1);
+        app.bind(8082);
+        var counter = new CounterService();
+        app.manager().add(counter);
+        app.configurer()
+                .mapWhen(get("/echo"), (HttpContext ctx) -> {
+                    ctx.response().writer().println(ctx.request().<String>queryParam("msg"));
+                })
+                .mapWhen(get("/random"), (HttpContext ctx) -> {
+                    ctx.response().writer().println(ThreadLocalRandom.current().nextInt());
+                })
+                .mapWhen(get("/count"), (HttpContext ctx) -> {
+                    ctx.response().writer().println(counter.count());
+                })
+                .add((ctx, next) -> {
+                    ctx.response().sendError(HttpCode.NOT_FOUND);
+                });
+        app.run();
+    }
+
+    static Predicate<HttpContext> get(String path) {
+        return ctx -> {
+            var req = ctx.request();
+            return req.method() == HttpMethod.GET && path.equals(req.path());
+        };
+    }
+
+    static final class CounterService extends AbstractService {
+        private AtomicInteger counter;
+
+        public int count() {
+            return counter.getAndIncrement();
+        }
+
+        @Override
+        protected void doStart(CancelToken token, ServiceCallback callback) {
+            if (counter == null) {
+                counter = new AtomicInteger();
+            }
+        }
+
+        @Override
+        protected void doStop(CancelToken token) {
+            if (counter != null) {
+                counter.set(0);
+            }
+        }
+
+        @Override
+        protected void doDispose() {
+            counter = null;
+        }
+    }
+}
+```
+
+Запустим его и протестируем порт 8081 (HTTP/1.1):
+
+```
+>curl localhost:8081/echo?msg=hello
+hello
+
+>curl localhost:8081/random
+1287675387
+
+>curl localhost:8081/count
+0
+
+>curl localhost:8081/count
+1
+
+>curl localhost:8081/somepath
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
+<title>Error 404 Not Found</title>
+</head>
+<body>
+<h2>HTTP ERROR 404 Not Found</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:8081/somepath</td></tr>
+<tr><th>STATUS:</th><td>404</td></tr>
+<tr><th>MESSAGE:</th><td>Not Found</td></tr>
+</table>
+
+</body>
+</html>
+
+>curl localhost:8081/
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
+<title>Error 404 Not Found</title>
+</head>
+<body>
+<h2>HTTP ERROR 404 Not Found</h2>
+<table>
+<tr><th>URI:</th><td>http://localhost:8081/</td></tr>
+<tr><th>STATUS:</th><td>404</td></tr>
+<tr><th>MESSAGE:</th><td>Not Found</td></tr>
+</table>
+
+</body>
+</html>
+```
+
+Проверим для порта 8082 (HTTP/2). Он может принимать как HTTP/1.1 запросы, так и HTTP/2 (upgrade или prior):
+
+```
+>curl localhost:8082/echo?msg=hello
+hello
+
+>curl --http2 --http2-prior-knowledge localhost:8082/echo?msg=hello
+hello
+
+>curl --http2 localhost:8082/echo?msg=hello
+hello
+```
+
+Сэмулируем "падение" сервиса-счетчика после достижения 5+ вызовов count:
+
+```java
+static final class CounterService extends AbstractService {
+    private AtomicInteger counter;
+    private ServiceCallback callback;
+
+    public int count() {
+        var ret = counter.getAndIncrement();
+        if (ret >= 5 && callback != null) {
+            callback.fail(new IllegalStateException("Count >= 5"));
+        }
+        return ret;
+    }
+
+    @Override
+    protected void doStart(CancelToken token, ServiceCallback callback) {
+        if (counter == null) {
+            counter = new AtomicInteger();
+        }
+        this.callback = callback;
+    }
+
+    @Override
+    protected void doStop(CancelToken token) {
+        if (counter != null) {
+            counter.set(0);
+        }
+        callback = null;
+    }
+
+    @Override
+    protected void doDispose() {
+        counter = null;
+        callback = null;
+    }
+}
+```
+
+В результате получим это:
+
+```
+>curl localhost:8081/count
+0
+
+>curl localhost:8081/count
+1
+
+>curl localhost:8081/count
+2
+
+>curl localhost:8081/count
+3
+
+>curl localhost:8081/count
+4
+
+>curl localhost:8081/count
+curl: (52) Empty reply from server
+
+>curl localhost:8081/count
+curl: (7) Failed to connect to localhost port 8081 after 1337 ms: Could not connect to server
+```
+
+## Hello, DI!
+
+Повторим 
