@@ -548,4 +548,87 @@ curl: (7) Failed to connect to localhost port 8081 after 1337 ms: Could not conn
 
 ## Hello, DI!
 
-Повторим 
+Повторим все то же самое, только теперь добавим DI. Для начала для наглядности разделим count-интерфейс и count-service,
+а также сделаем CounterService public для того, чтобы встроенный генератор схем инжекта его увидел:
+
+```java
+interface Counter {
+    int count();
+}
+
+public static final class CounterService extends AbstractService implements Counter {
+    private AtomicInteger counter;
+
+    public int count() {
+        return counter.getAndIncrement();
+    }
+
+    @Override
+    protected void doStart(CancelToken token, ServiceCallback callback) {
+        if (counter == null) {
+            counter = new AtomicInteger();
+        }
+    }
+
+    @Override
+    protected void doStop(CancelToken token) {
+        if (counter != null) {
+            counter.set(0);
+        }
+    }
+
+    @Override
+    protected void doDispose() {
+        counter = null;
+    }
+}
+```
+
+Подключим зависимости для работы DI:
+
+```groovy
+implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
+implementation group: 'io.github.amayaframework', name: 'amaya-di-reflect', version: '2.1.0'
+```
+
+```java
+open module amayaframework.examples {
+    ...
+    requires amayaframework.di;
+    ...
+}
+```
+
+И зарегистрируем сервис через билдер:
+
+```
+public static void main(String[] args) throws Throwable {
+    var app = WebBuilders.create()
+            .configureServices(cfg -> cfg.register(Counter.class, CounterService.class))
+            .withServerFactory(new JettyServerFactory())
+            .build();
+    app.bind(8081);
+    var counter = app.provider().get(Counter.class);
+    app.configurer()
+            .mapWhen(get("/count"), (HttpContext ctx) -> {
+                ctx.response().writer().println(counter.count());
+            })
+            .add((ctx, next) -> {
+                ctx.response().sendError(HttpCode.NOT_FOUND);
+            });
+    app.run();
+}
+```
+
+Теперь после запуска приложения можем убедиться в работе эндпоинта:
+
+```
+>curl localhost:8081/count
+0
+
+>curl localhost:8081/count
+1
+
+>curl localhost:8081/count
+2
+```

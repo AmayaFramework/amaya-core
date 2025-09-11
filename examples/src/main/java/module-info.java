@@ -3,5 +3,6 @@ open module amayaframework.examples {
     requires amayaframework.jetty;
     requires amayaframework.options;
     requires amayaframework.service;
+    requires amayaframework.di;
     exports io.github.amayaframework.examples;
 }
