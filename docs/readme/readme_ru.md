@@ -35,7 +35,7 @@ Amaya Core — основа Amaya Framework. Оно представляет с�
 после запуска отслеживает системные сигналы (через jvm shutdown hooks) и обеспечивает ожидаемую реакцию.
 * amaya-http — набор сущностей, описывающих некоторые понятия из HTTP RFC (http version, http status code, http method, 
 mime type)
-* amaya-context — универсальный контекст запроса для 
-* amaya-server —
+* amaya-context — универсальный контекст запроса для веб-сервера (в т.ч. и http сервера);
+* amaya-server — абстрактный сервер-сервис, 
 * amaya-web —
 * amaya-di — 
