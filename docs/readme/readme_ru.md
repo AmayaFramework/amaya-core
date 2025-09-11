@@ -120,7 +120,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
     implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.1-12.0.26'
 }
 ```
