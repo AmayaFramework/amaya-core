@@ -1,0 +1,60 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    compileJava.options.encoding('UTF-8')
+}
+
+group = 'io.github.amayaframework'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Dependencies
+    // Core + server
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.1-12.0.26'
+    implementation group: 'org.eclipse.jetty.http2', name: 'jetty-http2-server', version: '12.0.26'
+    implementation group: 'org.eclipse.jetty.http3', name: 'jetty-http3-server', version: '12.0.26'
+    // DI
+    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-di-reflect', version: '2.1.0'
+}
+
+shadowJar {
+    manifest {
+        var date = new Date()
+        var javaVersion = System.getProperty("java.version")
+        var vmVendor = System.getProperty("java.vm.vendor")
+        var vmVersion = System.getProperty("java.vm.version")
+
+        attributes(
+                'Main-Class': 'io.github.amayaframework.examples.ComplexHelloWorld',
+                'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
+                'Gradle-Version': "Gradle $gradle.gradleVersion",
+                'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
+                'Build-Time': new SimpleDateFormat("HH:mm:ss.SSSZ").format(date),
+                'Bundle-Name': 'Examples',
+                'Bundle-Version': archiveVersion,
+                'Bundle-SymbolicName': archivesBaseName,
+                'Implementation-Title': archivesBaseName,
+                'Implementation-Vendor': 'github.com/romanqed',
+                'Implementation-Version': archiveVersion,
+                'Specification-Title': archivesBaseName,
+                'Specification-Vendor': 'github.com/romanqed',
+                'Specification-Version': archiveVersion
+        )
+    }
+    archiveBaseName.set(archivesBaseName)
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}

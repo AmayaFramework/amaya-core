@@ -111,3 +111,125 @@ dependencies {
 
 ## Hello, world!
 
+Стандартным способом собрать приложение является получение инстанса `WebApplicationBuilder`, конфигурация компонентов
+приложения и получение готового инстанса `WebApplication`. Далее производится настройка уже самого приложения и его
+запуск (`app.run()`). После вызова `run` приложение производит запуск управляемых сервисов (сервер, менеджер сервисов)
+и начинает отслеживать системные сигналы.
+
+Для примера соберем приложение на Java 17 и amaya-jetty, без di. Установим зависимости:
+
+```groovy
+dependencies {
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.1-12.0.26'
+}
+```
+
+Если используется JPMS, добавим зависимости в модуль:
+
+```java
+open module amayaframework.examples {
+    requires amayaframework.core;
+    requires amayaframework.jetty;
+    exports io.github.amayaframework.examples;
+}
+```
+
+И соберем простейшее приложение:
+
+```java
+package io.github.amayaframework.examples;
+
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.jetty.JettyServerFactory;
+
+public final class SimpleHelloWorld {
+    public static void main(String[] args) throws Throwable {
+        var app = WebBuilders.create()
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.configurer().add((ctx, next) -> {
+            ctx.response().writer().println("Hello from amaya");
+        });
+        app.bind(8080);
+        app.run();
+    }
+}
+```
+
+Теперь после запуска можно отправить запрос и увидеть ответ:
+
+```
+>curl -v http://localhost:8080
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.13.0
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< Date: ???, ?? ??? 2025 XX:YY:ZZ GMT
+< Content-Length: 18
+<
+Hello from amaya
+```
+
+Для демонстрации основного принципа конфигурации в фреймворке включим отправку заголовков `Server` и `X-Powered-By`:
+
+```java
+package io.github.amayaframework.examples;
+
+import io.github.amayaframework.core.WebBuilders;
+import io.github.amayaframework.jetty.JettyServerFactory;
+import io.github.amayaframework.options.Options;
+import io.github.amayaframework.server.ServerOptions;
+import io.github.amayaframework.web.WebOptions;
+
+public final class SimpleHelloWorld {
+    public static void main(String[] args) throws Throwable {
+        var opts = Options.createGrouped();
+        var serverOpts = opts.ensureGroup(WebOptions.SERVER_GROUP);
+        serverOpts.set(ServerOptions.SEND_SERVER, true);
+        serverOpts.set(ServerOptions.SEND_POWERED_BY, true);
+        var app = WebBuilders.create(opts)
+                .withServerFactory(new JettyServerFactory())
+                .build();
+        app.configurer().add((ctx, next) -> {
+            ctx.response().writer().println("Hello from amaya");
+        });
+        app.bind(8080);
+        app.run();
+    }
+}
+```
+
+И отправим запрос:
+
+```
+>curl -v http://localhost:8080
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.13.0
+> Accept: */*
+>
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Server: Jetty(12.0.26)
+< X-Powered-By: Jetty(12.0.26)
+< Date: ???, ?? ??? 2025 XX:YY:ZZ GMT
+< Content-Length: 18
+<
+Hello from amaya
+```
+

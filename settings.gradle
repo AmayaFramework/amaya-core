@@ -9,3 +9,5 @@ include 'server'
 include 'application'
 include 'web'
 
+
+include 'examples'
