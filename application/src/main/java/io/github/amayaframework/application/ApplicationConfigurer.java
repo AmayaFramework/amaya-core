@@ -1,7 +1,7 @@
 package io.github.amayaframework.application;
 
 import com.github.romanqed.jfunc.Runnable1;
-import io.github.amayaframework.di.ScopedProviderBuilder;
+import io.github.amayaframework.di.ScopedProviderConfigurer;
 import io.github.amayaframework.di.core.ServiceProvider;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
@@ -16,8 +16,7 @@ import io.github.amayaframework.options.GroupOptionSet;
  * @param <A> the type of {@link Application} being configured
  * @param <C> the type of the concrete {@link ApplicationConfigurer} implementation
  */
-public interface ApplicationConfigurer<A extends Application<?>, C extends ApplicationConfigurer<A, C>>
-        extends Resettable {
+public interface ApplicationConfigurer<A extends Application<?>, C extends ApplicationConfigurer<A, C>> extends Resettable {
 
     /**
      * Gets the {@link GroupOptionSet} instance.
@@ -87,19 +86,19 @@ public interface ApplicationConfigurer<A extends Application<?>, C extends Appli
     ApplicationConfigurer<A, C> configureServices(Runnable1<ServicesConfigurer> action);
 
     /**
-     * Gets the {@link ScopedProviderBuilder} instance.
+     * Gets the {@link ScopedProviderConfigurer} instance.
      *
-     * @return the {@link ScopedProviderBuilder} instance if amaya di module loaded, null otherwise
+     * @return the {@link ScopedProviderConfigurer} instance if amaya di module loaded, null otherwise
      */
-    ScopedProviderBuilder providerBuilder();
+    ScopedProviderConfigurer providerBuilder();
 
     /**
-     * Applies given action to the {@link ScopedProviderBuilder}. Do nothing if amaya di module not loaded.
+     * Applies given action to the {@link ScopedProviderConfigurer}. Do nothing if amaya di module not loaded.
      *
-     * @param action the specified action to be applied to {@link ScopedProviderBuilder} instance, must be non-null
+     * @param action the specified action to be applied to {@link ScopedProviderConfigurer} instance, must be non-null
      * @return this configurer instance for chaining
      */
-    ApplicationConfigurer<A, C> configureProviderBuilder(Runnable1<ScopedProviderBuilder> action);
+    ApplicationConfigurer<A, C> configureProviderBuilder(Runnable1<ScopedProviderConfigurer> action);
 
     /**
      * Applies given action to the {@link ServiceProvider} instance after it will be built.

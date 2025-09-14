@@ -24,6 +24,18 @@ final class LoggingApplication extends AbstractLoggingApplication {
     }
 
     @Override
+    protected void doAppDispose() {
+        super.doAppDispose();
+        provider.close();
+    }
+
+    @Override
+    protected void onHalt(Throwable throwable) {
+        super.onHalt(throwable);
+        provider.close();
+    }
+
+    @Override
     public ServiceProvider provider() {
         return provider;
     }

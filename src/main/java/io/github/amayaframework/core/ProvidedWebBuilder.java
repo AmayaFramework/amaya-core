@@ -3,6 +3,7 @@ package io.github.amayaframework.core;
 import com.github.romanqed.jfunc.Exceptions;
 import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.di.ScopedProviderBuilder;
+import io.github.amayaframework.di.ScopedProviderConfigurer;
 import io.github.amayaframework.di.core.ServiceProvider;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.environment.EnvironmentFactory;
@@ -49,12 +50,12 @@ final class ProvidedWebBuilder extends CommonWebBuilder {
     }
 
     @Override
-    public ScopedProviderBuilder providerBuilder() {
+    public ScopedProviderConfigurer providerBuilder() {
         return ensureBuilder();
     }
 
     @Override
-    public WebApplicationBuilder configureProviderBuilder(Runnable1<ScopedProviderBuilder> action) {
+    public WebApplicationBuilder configureProviderBuilder(Runnable1<ScopedProviderConfigurer> action) {
         Objects.requireNonNull(action);
         var builder = ensureBuilder();
         try {
