@@ -1,7 +1,7 @@
 package io.github.amayaframework.core;
 
 import com.github.romanqed.jfunc.Runnable1;
-import io.github.amayaframework.di.ScopedProviderBuilder;
+import io.github.amayaframework.di.ScopedProviderConfigurer;
 import io.github.amayaframework.di.core.ServiceProvider;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.environment.EnvironmentFactory;
@@ -23,13 +23,13 @@ final class PlainWebBuilder extends CommonWebBuilder {
     }
 
     @Override
-    public ScopedProviderBuilder providerBuilder() {
+    public ScopedProviderConfigurer providerBuilder() {
         // Amaya DI module not loaded, so return null
         return null;
     }
 
     @Override
-    public WebApplicationBuilder configureProviderBuilder(Runnable1<ScopedProviderBuilder> action) {
+    public WebApplicationBuilder configureProviderBuilder(Runnable1<ScopedProviderConfigurer> action) {
         // Amaya DI module not loaded, do nothing
         return this;
     }
