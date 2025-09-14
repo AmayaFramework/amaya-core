@@ -3,7 +3,7 @@ package io.github.amayaframework.web;
 import com.github.romanqed.jfunc.Runnable1;
 import io.github.amayaframework.application.ApplicationConfigurer;
 import io.github.amayaframework.application.ServicesConfigurer;
-import io.github.amayaframework.di.ScopedProviderBuilder;
+import io.github.amayaframework.di.ScopedProviderConfigurer;
 import io.github.amayaframework.di.core.ServiceProvider;
 import io.github.amayaframework.environment.EnvironmentFactory;
 import io.github.amayaframework.options.GroupOptionSet;
@@ -33,7 +33,7 @@ public interface WebApplicationConfigurer extends ApplicationConfigurer<WebAppli
     WebApplicationConfigurer configureServices(Runnable1<ServicesConfigurer> action);
 
     @Override
-    WebApplicationConfigurer configureProviderBuilder(Runnable1<ScopedProviderBuilder> action);
+    WebApplicationConfigurer configureProviderBuilder(Runnable1<ScopedProviderConfigurer> action);
 
     @Override
     WebApplicationConfigurer configureProvider(Runnable1<ServiceProvider> action);
