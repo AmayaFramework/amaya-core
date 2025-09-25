@@ -28,13 +28,13 @@
 Amaya Core — основа Amaya Framework. Оно представляет собой модульное ядро, состоящее из отдельных логических подмодулей,
 объединяемых в единую зависимость центральным модулем amaya-core. Ядро включает в себя следующий функционал:
 
-* amaya-options — типизированные словари конфигурации вида "строковый ключ->значение";
+* amaya-options — типизированные словари конфигурации вида "строковый типизированный ключ->значение";
 * amaya-environment — виртуальная точка монтирования в файловой системе (на основе java.nio.file API);
 * amaya-service — управляемые сервисы с полностью консистентным жизненным циклом на основе машины состояний;
 * amaya-application — абстрактное приложение-сервис; объединяет все компоненты фреймворка и является единой точкой входа, 
-после запуска отслеживает системные сигналы (через jvm shutdown hooks) и обеспечивает ожидаемую реакцию.
+после запуска отслеживает системные сигналы (через jvm shutdown hooks) и обеспечивает ожидаемую реакцию;
 * amaya-http — набор сущностей, описывающих некоторые понятия из HTTP RFC (http version, http status code, http method, 
-mime type)
+mime type);
 * amaya-context — универсальный контекст запроса для веб-сервера (в т.ч. и http сервера); основан на [servlet api 6.0](https://jakarta.ee/specifications/servlet/6.0);
 * amaya-server — абстрактный сервер-сервис, использующий amaya-context; объявляет базовое API конфигурации;
 * amaya-web — абстрактное веб-приложение, расширяющее amaya-application, включает в себя amaya-server;
@@ -69,11 +69,11 @@ mime type)
 
 ```groovy
 dependencies {
-    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.7.0'
     // Любая реализация amaya-server
     implementation group: 'io.github.amayaframework', name: 'amaya-<server-name>', version: '<server-version>'
     // DI (опционально)
-    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.2.0'
     // Реализация stub-фабрики (опционально)
     implementation group: 'io.github.amayaframework', name: 'amaya-di-<stub-impl-name>', version: '<stub-impl-version>'
 }
@@ -86,7 +86,7 @@ dependencies {
     <dependency>
         <groupId>io.github.amayaframework</groupId>
         <artifactId>amaya-core</artifactId>
-        <version>3.6.1</version>
+        <version>3.7.0</version>
     </dependency>
     <!--Любая реализация amaya-server-->
     <dependency>
@@ -98,7 +98,7 @@ dependencies {
     <dependency>
         <groupId>io.github.amayaframework</groupId>
         <artifactId>amaya-di</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
     </dependency>
     <!--Реализация stub-фабрики (опционально)-->
     <dependency>
@@ -120,8 +120,8 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.6.1'
-    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.2-12.0.26'
+    implementation group: 'io.github.amayaframework', name: 'amaya-core', version: '3.7.0'
+    implementation group: 'io.github.amayaframework', name: 'amaya-jetty', version: '3.3.3-12.1.1'
 }
 ```
 
@@ -238,14 +238,14 @@ Hello from amaya
 
 1. слушает порт 8081 с протоколом HTTP/1.1;
 2. слушает порт 8082 с протоколом HTTP/2 (h2c);
-3. на запрос GET /echo?msg отвечает значение параметра `msg`;
+3. на запрос GET /echo?msg отвечает значением параметра `msg`;
 4. на запрос GET /random отвечает псевдослучайным числом;
 5. на запрос GET /count возвращает текущий счетчик запросов /count;
 6. на любой другой запрос отвечает 404.
 
 Для работы с http 2 подключим доп. модуль jetty в build.gradle: 
 ```groovy
-implementation group: 'org.eclipse.jetty.http2', name: 'jetty-http2-server', version: '12.0.26'
+implementation group: 'org.eclipse.jetty.http2', name: 'jetty-http2-server', version: '12.1.1'
 ```
 
 Соберем приложение и укажем в конфиге HTTP/2 как целевую версию протокола сервера. Настроим бинды на нужные порты,
@@ -468,7 +468,7 @@ hello
 </html>
 ```
 
-Проверим для порта 8082 (HTTP/2). Он может принимать как HTTP/1.1 запросы, так и HTTP/2 (upgrade или prior):
+Проверим порт 8082 (HTTP/2). Он может принимать как HTTP/1.1 запросы, так и HTTP/2 (upgrade или prior):
 
 ```
 >curl localhost:8082/echo?msg=hello
@@ -481,7 +481,7 @@ hello
 hello
 ```
 
-Сэмулируем "падение" сервиса-счетчика после достижения 5+ вызовов count:
+Эмулируем "падение" сервиса-счетчика после достижения 5+ вызовов count:
 
 ```java
 static final class CounterService extends AbstractService {
@@ -586,7 +586,7 @@ public static final class CounterService extends AbstractService implements Coun
 Подключим зависимости для работы DI:
 
 ```groovy
-implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.1.0'
+implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '3.2.0'
 implementation group: 'io.github.amayaframework', name: 'amaya-di-reflect', version: '2.1.0'
 ```
 
@@ -635,7 +635,7 @@ public static void main(String[] args) throws Throwable {
 ## Hello, async world!
 
 Аналогично можно собрать асинхронный пайплайн, использующий CompletableFuture. Терминальное действие будет обработано
-сервером и вызвано сервером внутри моста к servlet async api. Покажем это на примере просто hello, world с обработкой
+сервером и вызвано внутри моста к servlet async api. Покажем это на примере простого "hello, world" с обработкой
 ошибок.
 
 ```java
@@ -704,7 +704,7 @@ Hello, world!
 "грязный" пайплайн, он откажется от попыток выбора и просто использует стандартную модель выполнения 
 (sync для jvm с Project Loom, async для остальных). 
 
-Наглядно продемонстрировать выбор модель выбора можно на следующем примере:
+Наглядно продемонстрировать работу схемы выбора можно на следующем примере:
 
 ```java
 package io.github.amayaframework.examples;
