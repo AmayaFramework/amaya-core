@@ -28,8 +28,10 @@ public interface Server<T extends Context> extends Service {
      *
      * @param address the address the server will listen on; must not be {@code null}
      * @throws IllegalArgumentException if the address is {@code null}
+     *
+     * @return TODO
      */
-    void bind(InetSocketAddress address);
+    Connector bind(InetSocketAddress address);
 
     /**
      * Binds the server to the specified port on all local interfaces (usually 0.0.0.0).
@@ -40,8 +42,10 @@ public interface Server<T extends Context> extends Service {
      * If the server is currently stopped, calling this method does not start listening.
      *
      * @param port the port number to bind the server to; must be in valid port range (0-65535)
+     *
+     * @return TODO
      */
-    void bind(int port);
+    Connector bind(int port);
 
     /**
      * Gets the current server configuration.

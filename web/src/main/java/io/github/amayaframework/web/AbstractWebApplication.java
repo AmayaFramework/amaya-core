@@ -8,6 +8,7 @@ import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.environment.Environment;
 import io.github.amayaframework.http.HttpVersion;
 import io.github.amayaframework.options.GroupOptionSet;
+import io.github.amayaframework.server.HttpConnector;
 import io.github.amayaframework.server.HttpServer;
 import io.github.amayaframework.server.HttpServerConfig;
 import io.github.amayaframework.service.ServiceCallback;
@@ -91,35 +92,35 @@ public abstract class AbstractWebApplication extends AbstractApplication<HttpCon
     }
 
     @Override
-    public void bind(InetSocketAddress address, HttpVersion version) {
-        server.config().addAddress(address, version);
+    public HttpConnector bind(InetSocketAddress address, HttpVersion version) {
+        return server.config().addAddress(address, version);
     }
 
     @Override
-    public void bind(InetSocketAddress address) {
-        server.config().addAddress(address);
+    public HttpConnector bind(InetSocketAddress address) {
+        return server.config().addAddress(address);
     }
 
     @Override
-    public void bind(String host, int port, HttpVersion version) {
-        server.config().addAddress(createAddress(host, port), version);
+    public HttpConnector bind(String host, int port, HttpVersion version) {
+        return server.config().addAddress(createAddress(host, port), version);
     }
 
     @Override
-    public void bind(String host, int port) {
-        server.config().addAddress(createAddress(host, port));
+    public HttpConnector bind(String host, int port) {
+        return server.config().addAddress(createAddress(host, port));
     }
 
     @Override
-    public void bind(int port, HttpVersion version) {
+    public HttpConnector bind(int port, HttpVersion version) {
         checkPort(port);
-        server.config().addAddress(new InetSocketAddress(port), version);
+        return server.config().addAddress(new InetSocketAddress(port), version);
     }
 
     @Override
-    public void bind(int port) {
+    public HttpConnector bind(int port) {
         checkPort(port);
-        server.config().addAddress(new InetSocketAddress(port));
+        return server.config().addAddress(new InetSocketAddress(port));
     }
 
     @Override

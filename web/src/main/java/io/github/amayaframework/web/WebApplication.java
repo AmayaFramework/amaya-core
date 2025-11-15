@@ -3,6 +3,7 @@ package io.github.amayaframework.web;
 import io.github.amayaframework.application.Application;
 import io.github.amayaframework.context.HttpContext;
 import io.github.amayaframework.http.HttpVersion;
+import io.github.amayaframework.server.HttpConnector;
 import io.github.amayaframework.server.HttpServerConfig;
 import jakarta.servlet.ServletContext;
 
@@ -44,8 +45,10 @@ public interface WebApplication extends Application<HttpContext> {
      *
      * @param address the address to bind to, must be non-null
      * @param version the HTTP version to use, must be non-null
+     *
+     * @return TODO
      */
-    void bind(InetSocketAddress address, HttpVersion version);
+    HttpConnector bind(InetSocketAddress address, HttpVersion version);
 
     /**
      * Binds this web application to the specified {@link InetSocketAddress} using
@@ -54,8 +57,10 @@ public interface WebApplication extends Application<HttpContext> {
      * If the implementation supports it, multiple bindings are allowed.
      *
      * @param address the address to bind to, must be non-null
+     *
+     * @return TODO
      */
-    void bind(InetSocketAddress address);
+    HttpConnector bind(InetSocketAddress address);
 
     /**
      * Binds this web application to the given host and port with the specified
@@ -67,8 +72,10 @@ public interface WebApplication extends Application<HttpContext> {
      * @param host    the host to bind to, may be {@code null}
      * @param port    the port to bind to
      * @param version the HTTP version to use, must be non-null
+     *
+     * @return TODO
      */
-    void bind(String host, int port, HttpVersion version);
+    HttpConnector bind(String host, int port, HttpVersion version);
 
     /**
      * Binds this web application to the given host and port using the default
@@ -79,8 +86,10 @@ public interface WebApplication extends Application<HttpContext> {
      *
      * @param host the host to bind to, may be {@code null}
      * @param port the port to bind to
+     *
+     * @return TODO
      */
-    void bind(String host, int port);
+    HttpConnector bind(String host, int port);
 
     /**
      * Binds this web application to the specified port with the given HTTP version.
@@ -89,8 +98,10 @@ public interface WebApplication extends Application<HttpContext> {
      *
      * @param port    the port to bind to
      * @param version the HTTP version to use, must be non-null
+     *
+     * @return TODO
      */
-    void bind(int port, HttpVersion version);
+    HttpConnector bind(int port, HttpVersion version);
 
     /**
      * Binds this web application to the specified port using the default HTTP version.
@@ -98,6 +109,8 @@ public interface WebApplication extends Application<HttpContext> {
      * If the implementation supports it, multiple bindings are allowed.
      *
      * @param port the port to bind to
+     *
+     * @return TODO
      */
-    void bind(int port);
+    HttpConnector bind(int port);
 }

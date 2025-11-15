@@ -8,6 +8,7 @@ import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 /**
  * An interface describing the configuration options for an HTTP server.
@@ -23,6 +24,21 @@ import java.net.InetSocketAddress;
  * Provides access to the underlying {@link jakarta.servlet.ServletContext} if available.
  */
 public interface HttpServerConfig extends ServerConfig {
+
+    /**
+     * TODO
+     * @return
+     */
+    @Override
+    List<HttpConnector> connectors();
+
+    /**
+     * TODO
+     * @param address the address to add; must not be {@code null}
+     * @return
+     */
+    @Override
+    HttpConnector addAddress(InetSocketAddress address);
 
     /**
      * Returns the {@link ServletContext} associated with this server.
@@ -114,7 +130,7 @@ public interface HttpServerConfig extends ServerConfig {
      * @param address the {@link InetSocketAddress} to listen on; must be non-null
      * @param version the {@link HttpVersion} to use for this address; must be non-null
      */
-    void addAddress(InetSocketAddress address, HttpVersion version);
+    HttpConnector addAddress(InetSocketAddress address, HttpVersion version);
 
     /**
      * Returns the {@link HttpErrorHandler} currently configured for this server.
