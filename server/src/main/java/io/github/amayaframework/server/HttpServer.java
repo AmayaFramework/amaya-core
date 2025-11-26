@@ -46,6 +46,12 @@ public interface HttpServer extends Server<HttpContext> {
      */
     ServletContext servletContext();
 
+    @Override
+    HttpConnector bind(InetSocketAddress address);
+
+    @Override
+    HttpConnector bind(int port);
+
     /**
      * Binds server to given {@link InetSocketAddress} address with the specified HTTP version.
      * If the implementation supports it, multiple bindings are possible.
@@ -56,7 +62,7 @@ public interface HttpServer extends Server<HttpContext> {
      * @param address the specified address that the server will listen to, must be non-null
      * @param version the specified HTTP version, must be non-null
      */
-    void bind(InetSocketAddress address, HttpVersion version);
+    HttpConnector bind(InetSocketAddress address, HttpVersion version);
 
     /**
      * Binds server to given port with the specified HTTP version.
@@ -68,7 +74,7 @@ public interface HttpServer extends Server<HttpContext> {
      * @param port    the specified port that the server will listen to
      * @param version the specified HTTP version, must be non-null
      */
-    void bind(int port, HttpVersion version);
+    HttpConnector bind(int port, HttpVersion version);
 
     /**
      * Gets HTTP server config. Any config changes are reflected on the server and vice versa.
